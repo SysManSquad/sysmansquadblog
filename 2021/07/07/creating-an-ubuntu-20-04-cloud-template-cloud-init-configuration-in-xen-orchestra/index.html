@@ -1,0 +1,156 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Creating an Ubuntu 20.04 cloud template & cloud-init configuration in Xen Orchestra-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2021/07/07/creating-an-ubuntu-20-04-cloud-template-cloud-init-configuration-in-xen-orchestra/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Creating an Ubuntu 20.04 cloud template & cloud-init configuration in Xen Orchestra">
+<meta name=twitter:description content="I had a need in my home lab to quickly deploy a bunch of thin clones of Ubuntu&rsquo;s cloud image. I chose to use the cloud images Ubuntu provides instead of building a custom template.
+Xen Orchestra has had support for cloud-init since 2015.
+Quick Walkthrough Here is the short version of how this works:
+ Download the current 20.04 ubuntu cloud image OVA file, there should only be 1 on each build&rsquo;s page.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Creating an Ubuntu 20.04 cloud template & cloud-init configuration in Xen Orchestra</h1>
+<span class=post-date>July 7, 2021</span>
+</div>
+<div class=post-entry>
+<p>I had a need in my home lab to quickly deploy a bunch of thin clones of Ubuntu&rsquo;s cloud image. I chose to use the cloud images Ubuntu <a href=https://cloud-images.ubuntu.com/>provides</a> instead of building a custom template.</p>
+<p>Xen Orchestra has had support for cloud-init <a href=https://xen-orchestra.com/blog/cloudinit-support-for-xenserver/>since 2015</a>.</p>
+<h2 id=quick-walkthrough>Quick Walkthrough</h2>
+<p>Here is the short version of how this works:</p>
+<ol>
+<li>Download the current 20.04 ubuntu cloud image OVA file, there should only be 1 on each build&rsquo;s page. I used <a href=https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.ova>focal-server-cloudimg-amd64.ova</a></li>
+<li>In Xen Orchestra, Import -> VM, then drag & drop your ova onto the obvious place. Set the default CPU, Memory, and target VM Network settings & click Import</li>
+<li>When it&rsquo;s finished, you can click on Home -> VMs, and clear the &ldquo;power_state:running&rdquo; filter from the display.</li>
+<li>Select the powered-off vm, and rename it whatever you want.</li>
+<li>On the Advanced tab, click &ldquo;Convert to template&rdquo;</li>
+<li>Click the &ldquo;New VM&rdquo; button in the top-right corner</li>
+<li>Choose a pool</li>
+<li>Select your newly-created template from the list</li>
+<li>Adjust CPU, Ram, etc as necessary.</li>
+<li>Under the &ldquo;Install settings&rdquo; header, choose a custom config</li>
+<li>Paste your customized User and Network config</li>
+<li>Click &ldquo;Create&rdquo;</li>
+</ol>
+<h2 id=example-cloud-init-configs>Example cloud-init configs:</h2>
+<p>ca-certs:
+trusted:</p>
+<ul>
+<li>|
+&mdash;&ndash;BEGIN CERTIFICATE&mdash;&ndash;
+<h1 id=the-indented-contents-of-your-ca-cert-go-here>The indented contents of your CA cert go here:</h1>
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+&mdash;&ndash;END CERTIFICATE&mdash;&ndash;</li>
+</ul>
+<h2 id=caveats>Caveats</h2>
+<p>This approach is fast, but doesn&rsquo;t properly install the xcp-ng guest tools. You&rsquo;ll probably want those if you want XCP-NG or Xen-Orchestra to be able to dive into each guest VM and display a useful level of detail about the guest. You can do a normal install from an iso, install some packages and run &ldquo;cloud-init clean&rdquo;, then immediately shut down the VM. This will force cloud init to run the same way it would if this were a fresh machine - generating host keys, naming the machine and applying any other config you pass in.</p>
+</div>
+<div class=post-share>
+<div class="post-share-box share-comments">
+hello
+</div>
+</div>
+<div class=post-author>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

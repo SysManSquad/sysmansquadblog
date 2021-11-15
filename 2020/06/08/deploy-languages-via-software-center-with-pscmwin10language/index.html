@@ -1,0 +1,304 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Deploy languages via Software Center with PSCMWin10Language-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/06/08/deploy-languages-via-software-center-with-pscmwin10language/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Deploy languages via Software Center with PSCMWin10Language">
+<meta name=twitter:description content="<p> This post complements <a rel=&#34;noreferrer noopener&#34; href=&#34;https://sysmansquad.com/2020/06/02/language-packs,-language-experience-packs,-language-interface-packs-what?!&#34; target=&#34;_blank&#34;>my other post</a>, where I walk-through the differences of LP, LIP, LXP and FoD. </p> <p> Here I will show you how to use a PowerShell module I wrote, <a href=&#34;https://github.com/codaamok/PSCMWin10Language&#34; target=&#34;_blank&#34; rel=&#34;noreferrer noopener&#34;>PSCMWin10Languages</a>, to create Microsoft Endpoint Manager Configuration Manager Applications for each language you want to deploy via the Software Center. </p> <p> These Applications are not for OSD. It changes the language only for the user who installs the Application via the Software Center.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Deploy languages via Software Center with PSCMWin10Language</h1>
+<span class=post-date>June 8, 2020</span>
+</div>
+<div class=post-entry>
+<pre><code>          &lt;p&gt;
+            This post complements &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://sysmansquad.com/2020/06/02/language-packs,-language-experience-packs,-language-interface-packs-what?!&quot; target=&quot;_blank&quot;&gt;my other post&lt;/a&gt;, where I walk-through the differences of LP, LIP, LXP and FoD.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            Here I will show you how to use a PowerShell module I wrote, &lt;a href=&quot;https://github.com/codaamok/PSCMWin10Language&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;PSCMWin10Languages&lt;/a&gt;, to create Microsoft Endpoint Manager Configuration Manager Applications for each language you want to deploy via the Software Center.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            These Applications are not for OSD. It changes the language only for the user who installs the Application via the Software Center. They will not work for OSD via task sequence.
+          &lt;/p&gt;
+          
+          &lt;h2&gt;
+            Install the module
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            The module can be found on &lt;a href=&quot;https://github.com/codaamok/PSCMWin10Language&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;GitHub&lt;/a&gt; or the &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://www.powershellgallery.com/packages/PSCMWin10Language/0.0.1&quot; target=&quot;_blank&quot;&gt;PowerShell Gallery&lt;/a&gt;. You can install it like so:
+          &lt;/p&gt;
+          
+          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;Install-Module &quot;PSCMWin10Language&quot; -Scope CurrentUser&lt;/pre&gt;
+          &lt;/div&gt;
+          
+          &lt;p&gt;
+            Check out what functions are given to you:
+          &lt;/p&gt;
+          
+          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;Import-Module &quot;PSCMWin10Language&quot;
+</code></pre>
+<p>Get-Command -Module &ldquo;PSCMWin10Language&rdquo;
+</p>
+<pre><code>          &lt;h2&gt;
+            Create LP, LXP and FoD repositories
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            We need to form the source folders for each of our Applications (in other words, for each language we want to support). The source folders will contain the needed LP, LXP and FoD files for each language - a mix of .cab and .appx files.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            Using the below functions, we can create the need folders and populate them with the files by extracting them from the ISOs downloaded from VLSC / Visual Studio subscription download portal (MSDN).
+          &lt;/p&gt;
+          
+          &lt;ul&gt;
+            &lt;li&gt;
+              New-LPRepository
+            &lt;/li&gt;
+            &lt;li&gt;
+              New-LXPRepository
+            &lt;/li&gt;
+            &lt;li&gt;
+              New-FoDLanguageFeaturesRepository
+            &lt;/li&gt;
+          &lt;/ul&gt;
+          
+          &lt;p&gt;
+            &lt;strong&gt;Note:&lt;/strong&gt; New-FoDLanguageFeaturesRepository only extracts &quot;LanguageFeature&quot; FoDs. If you want to include more FoDs than these, you'll have to arrange something yourself.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            If you want to support fewer than a handful of languages, then this process is typically just about OK being completed manually. However, you will have to repeat this for each new version of Windows 10 which will quickly become a drag. Especially if you want to support many more languages. This is what inspired me to write these functions.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            Let's assume I want to support languages French and German. Our end goal is to create a folder structure that looks something like this:
+          &lt;/p&gt;
+          
+          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:false,&amp;quot;styleActiveLine&amp;quot;:false,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; tree &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot; | Select-Object -Skip 2
+</code></pre>
+<p>\SCCM.ACC.LOCAL\OSD\SOURCE\1909-LANGUAGES
++&mdash;de-de
+¦ +&mdash;FoD
+¦ +&mdash;LP
+¦ +&mdash;LXP
++&mdash;fr-fr
++&mdash;FoD
++&mdash;LP
++&mdash;LXP
+</p>
+<pre><code>          &lt;p&gt;
+            Start off by going to VLSC or MSDN and downloading the following ISOs for your target Windows 10 version:
+          &lt;/p&gt;
+          
+          &lt;ul&gt;
+            &lt;li&gt;
+              Language Pack
+            &lt;/li&gt;
+            &lt;li&gt;
+              Features on Demand (part 1)
+            &lt;/li&gt;
+          &lt;/ul&gt;
+          
+          &lt;p&gt;
+            Once downloaded, mount them all and go back to the PowerShell prompt where we imported PSCMWin10Language, and execute the following (replace the appropriate drive letters):
+          &lt;/p&gt;
+          
+          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;New-LPRepository -Language &quot;fr-FR&quot;, &quot;de-DE&quot; -SourcePath &quot;I:\x64\langpacks&quot; -TargetPath &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot;
+</code></pre>
+<p>New-LXPRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rdquo; -SourcePath &ldquo;I:\LocalExperiencePack" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\1909-Languages&rdquo;
+New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rdquo; -SourcePath &ldquo;J:" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\1909-Languages&rdquo;
+</p>
+<pre><code>          &lt;h2&gt;
+            Create the Applications
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            With the LP, LXP and FoD repositories set up, we're now ready to create our ConfigMgr Application(s)
+          &lt;/p&gt;
+          
+          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;New-CMLanguagePackApplication -SiteServer &quot;cm.contoso.com&quot; -SiteCode &quot;P01&quot; -SourcePath &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot; -Languages &quot;fr-fr&quot;, &quot;de-de&quot; -WindowsVersion @{ &quot;Version&quot; = &quot;1909&quot;; &quot;Build&quot; = &quot;18363&quot; } -GlobalConditionName &quot;Operating System build&quot; -CreateAppIfMissing -CreateGlobalConditionIfMissing&lt;/pre&gt;
+          &lt;/div&gt;
+          
+          &lt;p&gt;
+            There's quite a few parameters used here so let me explain them:
+          &lt;/p&gt;
+          
+          &lt;ul&gt;
+            &lt;li&gt;
+              Site server and site code of your hierarchy, standard stuff
+            &lt;/li&gt;
+            &lt;li&gt;
+              &lt;code&gt;-SourcePath&lt;/code&gt; of where we exported all our languages' LP, LXP and FoDs to
+            &lt;/li&gt;
+            &lt;li&gt;
+              &lt;code&gt;-Languages&lt;/code&gt; an array of Language tags of which we want to create Applications for. The elements of this array will correlate with the folders directly beneath the given -SouthPath
+            &lt;/li&gt;
+            &lt;li&gt;
+              &lt;code&gt;-WindowsVersion&lt;/code&gt; a hashtable which denoates the version and build number of Windows 10 you're deploying language items for. Must contain two keys: &quot;Version&quot; and &quot;Build&quot;.
+            &lt;/li&gt;
+            &lt;li&gt;
+              &lt;code&gt;-GlobalConditionName&lt;/code&gt; name of the Global Condition which queries the WMI class Win32_OperatingSystem for property Build. If a Global Condition with the given name does not exist, a terminating error is thrown. If it does exist, but it does not query the Win32_OperatingSystem class for the Build property, a terminating error is thrown.
+            &lt;/li&gt;
+            &lt;li&gt;
+              Lastly, the two switches &lt;code&gt;-CreateAppIfMissing&lt;/code&gt; and &lt;code&gt;-CreateGlobalConditionIfMissing&lt;/code&gt; does pretty much it says on the tin; creates those items if they're missing.
+            &lt;/li&gt;
+          &lt;/ul&gt;
+          
+          &lt;p&gt;
+            This is what the end result looks like:
+          &lt;/p&gt;
+          
+          &lt;div class=&quot;wp-block-image&quot;&gt;
+            &lt;figure class=&quot;aligncenter size-large&quot;&gt;&lt;a href=&quot;https://sysmansquad.com/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new.jpg&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;658&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-1024x658.jpg&quot; alt=&quot;&quot; class=&quot;wp-image-1319&quot; srcset=&quot;https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-1024x658.jpg 1024w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-300x193.jpg 300w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-768x493.jpg 768w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-1536x986.jpg 1536w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-2048x1315.jpg 2048w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-100x64.jpg 100w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-855x549.jpg 855w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-1234x792.jpg 1234w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/a&gt;&lt;/figure&gt;
+          &lt;/div&gt;
+          
+          &lt;p&gt;
+            There are two deployment types: one which runs as user and the other which runs as system. The system deployment type installs LP, LXP and FoD. Whereas the user deployment type registers the LXP, configures the user's language and prompts a reboot is required by returning exit code 3010.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            The user deployment type depends on the system deployment type.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            Poking around, you'll notice the requirements for all deployment types are that of what you used in the &lt;code&gt;-WindowsVersion&lt;/code&gt; parameter.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            When you're ready to support another OS, or another language, just repeat these instructions with that context in mind and you're good to go!
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            For example, I used the same process again to create deployment types on the existing Applications for Windows 10 2004:
+          &lt;/p&gt;
+          
+          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;New-LXPRepository -Language &quot;fr-fr&quot;, &quot;de-de&quot; -SourcePath &quot;I:\LocalExperiencePack\&quot; -TargetPath &quot;\\sccm.acc.local\OSD\Source\2004-Languages&quot;
+</code></pre>
+<p>New-LPRepository -Language &ldquo;fr-fr&rdquo;, &ldquo;de-de&rdquo; -SourcePath &ldquo;I:\x64\langpacks" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\2004-Languages&rdquo;
+New-FoDLanguageFeaturesRepository -Language &ldquo;fr-fr&rdquo;, &ldquo;de-de&rdquo; -SourcePath &ldquo;I:" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\2004-Languages&rdquo;
+New-CMLanguagePackApplication -SiteServer &ldquo;cm.contoso.com&rdquo; -SiteCode &ldquo;P01&rdquo; -SourcePath &ldquo;\sccm.acc.local\OSD\Source\2004-Languages&rdquo; -Languages &ldquo;fr-fr&rdquo;, &ldquo;de-de&rdquo; -WindowsVersion @{ &ldquo;Version&rdquo; = &ldquo;2004&rdquo;; &ldquo;Build&rdquo; = &ldquo;19041&rdquo; } -GlobalConditionName &ldquo;Operating System build&rdquo; -CreateAppIfMissing -CreateGlobalConditionIfMissing
+</p>
+<pre><code>          &lt;a href=&quot;https://sysmansquad.com/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new.jpg&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;658&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-1024x658.jpg&quot; alt=&quot;&quot; class=&quot;wp-image-1320&quot; srcset=&quot;https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-1024x658.jpg 1024w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-300x193.jpg 300w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-768x493.jpg 768w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-1536x987.jpg 1536w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-2048x1316.jpg 2048w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-100x64.jpg 100w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-855x549.jpg 855w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-1234x793.jpg 1234w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/a&gt;&lt;/figure&gt; &lt;h2&gt;
+            Support
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            If you have any issues with the module, please do open an issue on the &lt;a href=&quot;https://github.com/codaamok/PSCMWin10Language&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;PSCMWin10Language GitHub repository&lt;/a&gt;!
+          &lt;/p&gt;</code></pre>
+</div>
+<div class=post-share>
+<div class="post-share-box share-comments">
+hello
+</div>
+</div>
+<div class=post-author>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

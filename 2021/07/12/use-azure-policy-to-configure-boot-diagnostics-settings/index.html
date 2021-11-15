@@ -1,0 +1,350 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Use Azure Policy to configure Boot Diagnostics Settings-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2021/07/12/use-azure-policy-to-configure-boot-diagnostics-settings/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Use Azure Policy to configure Boot Diagnostics Settings">
+<meta name=twitter:description content="I found several posts about configuring Diagnostic Settings on VMs, but none that specified or included boot diagnostics.
+With this Azure Policy you can automatically enable Boot Diagnostics and apply a storage account to it. This is also a great base if you want to start testing out your own policies.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Use Azure Policy to configure Boot Diagnostics Settings</h1>
+<span class=post-date>July 12, 2021</span>
+</div>
+<div class=post-entry>
+<p>I found several posts about configuring Diagnostic Settings on VMs, but none that specified or included <strong>boot diagnostics</strong>.</p>
+<p>With this Azure Policy you can automatically enable Boot Diagnostics and apply a storage account to it. This is also a great base if you want to start testing out your own policies.</p>
+<pre><code>      &lt;li class=&quot;uagb-toc__list&quot;&gt;
+        &lt;a href=&quot;#4-create-remediation-task&quot;&gt;4. Create Remediation Task&lt;/a&gt;&lt;li class=&quot;uagb-toc__list&quot;&gt;
+          &lt;a href=&quot;#5-be-patient-and-enjoy&quot;&gt;5. Be Patient and Enjoy&lt;/a&gt;&lt;li class=&quot;uagb-toc__list&quot;&gt;
+            &lt;a href=&quot;#6-optional-export-to-github&quot;&gt;6. Optional: Export to GitHub&lt;/a&gt;
+          &lt;/li&gt;&lt;/ul&gt;&lt;/ol&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; 
+          &lt;div class=&quot;wp-block-group&quot;&gt;
+            &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+              &lt;h2 class=&quot;has-large-font-size&quot;&gt;
+                &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;1.&lt;/span&gt; Overview
+              &lt;/h2&gt;
+              
+              &lt;p&gt;
+                Our process will have several major parts
+              &lt;/p&gt;
+              
+              &lt;ul&gt;
+                &lt;li&gt;
+                  Create a Custom Azure Policy Definition
+                &lt;/li&gt;
+                &lt;li&gt;
+                  Assign to a Subscription or Resource Group&lt;ul&gt;
+                    &lt;li&gt;
+                      Find the Blob Storage URI to use
+                    &lt;/li&gt;
+                  &lt;/ul&gt;
+                &lt;/li&gt;
+                
+                &lt;li&gt;
+                  Create a Remediation task to Apply the changes
+                &lt;/li&gt;
+                &lt;li&gt;
+                  Optional: Link to GitHub for versioning
+                &lt;/li&gt;
+              &lt;/ul&gt;
+              
+              &lt;p&gt;
+              &lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;h2 class=&quot;has-large-font-size&quot;&gt;
+            &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;2.&lt;/span&gt; Create a Custom Policy Definition
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            First we will need to Create a Custom Definition. To start with head to Portal.Azure.com &gt; &lt;a href=&quot;https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Definitions&quot;&gt;Azure Policy | Definitions&lt;/a&gt;.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            From here, we will need to create a new Policy Definition
+          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+          
+          &lt;img src=&quot;https://i.imgur.com/7ANVOqt.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+            Fill in several fields
+          &lt;/p&gt;
+          
+          &lt;ul&gt;
+            &lt;li&gt;
+              &quot;Definition Location&quot; - which will be the Subscription.
+            &lt;/li&gt;
+            &lt;li&gt;
+              Give it a name
+            &lt;/li&gt;
+            &lt;li&gt;
+              Create a custom category, or select an existing one
+            &lt;/li&gt;
+          &lt;/ul&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+          
+          &lt;img src=&quot;https://i.imgur.com/BRJEnNY.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+            For the Policy Rule Definition, you should be able to copy over this JSON below, or use &lt;a href=&quot;https://gist.github.com/PsychoData/27c5028a5a78237f9910d4f652f6b269#file-enable_boot_diagnostics-json&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;this JSON&lt;/a&gt;. Note: Later on, you can configure this to be deployed from a GitHub repo directly, though GitHub actions, but we will talk about that in a later section.
+          &lt;/p&gt;
+          
+          &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;javascript&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/json&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;u003ca href=u0022http://Enable_Boot_Diagnostics.jsonu0022 target=u0022_blanku0022 rel=u0022noreferrer noopeneru0022u003eEnable_Boot_Diagnostics.jsonu003c/au003e&amp;quot;,&amp;quot;align&amp;quot;:&amp;quot;wide&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;JSON&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;json&amp;quot;}&quot;&gt;{
+</code></pre>
+<p>&ldquo;mode&rdquo;: &ldquo;All&rdquo;,
+&ldquo;policyRule&rdquo;: {
+&ldquo;if&rdquo;: {
+&ldquo;allOf&rdquo;: [
+{
+&ldquo;field&rdquo;: &ldquo;type&rdquo;,
+&ldquo;equals&rdquo;: &ldquo;Microsoft.Compute/virtualMachines&rdquo;
+},
+{
+&ldquo;field&rdquo;: &ldquo;tags&rdquo;,
+&ldquo;notContains&rdquo;: &ldquo;IgnoreBootDiagnostics&rdquo;
+},
+{
+&ldquo;field&rdquo;: &ldquo;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.storageUri&rdquo;,
+&ldquo;notContains&rdquo;: &ldquo;[parameters(&lsquo;StorageURI&rsquo;)]&rdquo;
+},
+{
+&ldquo;not&rdquo;: {
+&ldquo;field&rdquo;: &ldquo;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.storageUri&rdquo;,
+&ldquo;equals&rdquo;: ""
+}
+}
+]
+},
+&ldquo;then&rdquo;: {
+&ldquo;effect&rdquo;: &ldquo;modify&rdquo;,
+&ldquo;details&rdquo;: {
+&ldquo;roleDefinitionIds&rdquo;: [
+&ldquo;/providers/Microsoft.Authorization/roleDefinitions/9980e02c-c2be-4d73-94e8-173b1dc7cf3c&rdquo;
+],
+&ldquo;conflictEffect&rdquo;: &ldquo;audit&rdquo;,
+&ldquo;operations&rdquo;: [
+{
+&ldquo;operation&rdquo;: &ldquo;addOrReplace&rdquo;,
+&ldquo;field&rdquo;: &ldquo;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.storageUri&rdquo;,
+&ldquo;value&rdquo;: &ldquo;[parameters(&lsquo;StorageURI&rsquo;)]&rdquo;
+},
+{
+&ldquo;operation&rdquo;: &ldquo;addOrReplace&rdquo;,
+&ldquo;field&rdquo;: &ldquo;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.enabled&rdquo;,
+&ldquo;value&rdquo;: true
+}
+]
+}
+}
+},
+&ldquo;parameters&rdquo;: {
+&ldquo;StorageURI&rdquo;: {
+&ldquo;type&rdquo;: &ldquo;String&rdquo;,
+&ldquo;metadata&rdquo;: {
+&ldquo;displayName&rdquo;: &ldquo;StorageURI&rdquo;,
+&ldquo;description&rdquo;: &ldquo;Storage Account that will be applied to any account that does not already have one applied.&rdquo;
+},
+&ldquo;defaultValue&rdquo;: &ldquo;<a href=https://YourBlobStorage.blob.core.windows.net>https://YourBlobStorage.blob.core.windows.net</a>&rdquo;
+}
+}
+}
+</p>
+<pre><code>          &lt;h2 class=&quot;has-large-font-size&quot;&gt;
+            &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;3.&lt;/span&gt; Assign Policy to Resources
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            Next you can select a Resource Group or entire Subscription to apply to.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            By default, the JSON policy provided will ignore any resources with the tag &lt;strong&gt;IgnoreBootDiagnostics &lt;/strong&gt;, but you can also add &lt;strong&gt;Exclusions&lt;/strong&gt; here, as well.
+          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+          
+          &lt;img src=&quot;https://i.imgur.com/1lJbBMM.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+            For the parameter, you need to fill in the URL to a Azure Blob storage service.
+          &lt;/p&gt;
+          
+          &lt;h3&gt;
+            Get your Blob Storage Endpoint
+          &lt;/h3&gt;
+          
+          &lt;p&gt;
+            My example is &lt;a href=&quot;https://YourBlobStorage.blob.core.windows.net&quot;&gt;https://YourBlobStorage.blob.core.windows.net&lt;/a&gt; , but you can find the endpoint for your Storage Account by opening your &lt;a href=&quot;https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/Microsoft.Storage%2FStorageAccounts&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Storage Accounts&lt;/a&gt; &gt; Select or Create Relevant Storage account &gt; Settings &gt; Endpoints
+          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+          
+          &lt;img src=&quot;https://i.imgur.com/XIQQYC4.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
+            &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;4.&lt;/span&gt; Create Remediation Task
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            Part of the assignment process will give you the option to create the Remediation Task.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            Since the policy specifies the access needed, it will default to creating a managed Identity to remediate the issues.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            Without the Remediation Task, the Policy will just Report Compliance or failure, but you can always start with no Remediation and then add it back later.
+          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+          
+          &lt;img src=&quot;https://i.imgur.com/4Ndafmo.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
+            &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;5.&lt;/span&gt; Be Patient and Enjoy
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            In my experience, the policy will take around 15-45 minutes to evaluate, depending on the amount of resources it is checking over.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            From there it usually takes &lt;em&gt;another&lt;/em&gt; 30 minutes to multiple hours before the remediation runs. These are not the most immediate methods to apply the policy, but they can be fully automatic!
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            You can check your Remediation status by going to &lt;a href=&quot;https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Policy Assignments &lt;/a&gt;&gt; Select your policy name &gt; Remediation tab
+          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+          
+          &lt;img src=&quot;https://i.imgur.com/JtkoH2i.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+            To see the details, use the three-dots menu on the right to View remediation task
+          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+          
+          &lt;img src=&quot;https://i.imgur.com/qESeb98.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
+            &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;6.&lt;/span&gt; Optional: Export to GitHub
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            Modifying the Azure Policies can be a highly iterative process, so being able to reference or revert to previous versions can be an &lt;strong&gt;enormous&lt;/strong&gt; benefit.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            Azure Policies has this built in, including Automated Deployment from GitHub with GitHub Actions! You can read more about that &lt;a href=&quot;https://docs.microsoft.com/azure/governance/policy/tutorials/policy-as-code-github?WT.mc_id=Portal-AzureTfsExtension#export-azure-policy-objects-from-the-azure-portal&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;here&lt;/a&gt;, but the basic process is shown below.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            Open &lt;a href=&quot;https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Azure Policy Assignments&lt;/a&gt; &gt; Select your assignment &gt; &lt;strong&gt;View Definition&lt;/strong&gt; button near the top &gt; &lt;strong&gt;Export Definition&lt;/strong&gt; button
+          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+          
+          &lt;img src=&quot;https://i.imgur.com/KGmXwlg.gif&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+            From there, you will need to authorize a connection to a GitHub account with rights to the Account/Repo you want to store the policy in.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            Now, I would mention the important difference that the GitHub repo stores the Rules, Parameters, and any remaining parts into separate files within that Repo. Don't be surprised that it took your glorious new policy and chopped it up into different sections, and fills out a few metadata attributes.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            If you aren't familiar with &lt;a href=&quot;https://github.com/features/actions&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;GitHub Actions&lt;/a&gt;, the export process will create a &lt;strong&gt;.github/workflows/manage_azure_policy_xxxxxx.yml&lt;/strong&gt; that will outline the Workflow and use secrets to securely connect back to Azure.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            To make future changes, commit them to the Repository and the GitHub Action will try to build the policy, apply it, and let you know if it was able to apply successfully.
+          &lt;/p&gt;</code></pre>
+</div>
+<div class=post-share>
+<div class="post-share-box share-comments">
+hello
+</div>
+</div>
+<div class=post-author>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

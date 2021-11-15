@@ -1,0 +1,208 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Dynamic Outlook Email Signature Using with Intune Endpoint Analytics Proactive Remediations-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/07/08/dynamic-outlook-email-signature-using-with-intune-endpoint-analytics-proactive-remediations/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Dynamic Outlook Email Signature Using with Intune Endpoint Analytics Proactive Remediations">
+<meta name=twitter:description content="Howdy y&rsquo;all!
+Since you have already read señor Shackelfords blog poston setting up Endpoint Analytics Proactive remediations, we can skip the intro and dive right in.
+In this blog post we will be get familiar with a somewhat novel idea that proactive remediation&rsquo;s can be used for. Which, as the title of this post suggests, is the creation of a dynamic email signature in the form of a .html file using Microsoft Graph.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Dynamic Outlook Email Signature Using with Intune Endpoint Analytics Proactive Remediations</h1>
+<span class=post-date>July 9, 2020</span>
+</div>
+<div class=post-entry>
+<p>Howdy y&rsquo;all!</p>
+<p>Since you have already read señor Shackelfords blog post on setting up Endpoint Analytics Proactive remediations, we can skip the intro and dive right in.</p>
+<p>In this blog post we will be get familiar with a somewhat novel idea that proactive remediation&rsquo;s can be used for. Which, as the title of this post suggests, is the creation of a dynamic email signature in the form of a .html file using Microsoft Graph.</p>
+<h2 id=getting-started>Getting Started</h2>
+<p>To get started you need to familiarize your self with how to connect to the Microsoft Graph and query for data. Luckily Brad Wyatt has made an excellent blog post on the subject, so go read it before you read the rest of this post. Follow the steps he lists to create a new Azure application. When you get to the Client Credentials section, see below.</p>
+<p>Welcome back. Now that we are on the same page, let&rsquo;s continue. The application we create in Azure needs to be granted the User.Read.All permission. don&rsquo;t forget to grant consent if prompted.</p>
+<h2 id=discovery>Discovery</h2>
+<p>Now on to the fun part. We need a discovery script that will checks if the Outlook signature file exists, how old it is and if no file exists, report non-compliance. If the file is older than current day, its also non compliant.</p>
+<p>Note the <code>$signatureFileName</code> variable on line 2, you need to decide on the signature name. It can be anything you want.</p>
+<h1 id=check-if-signaturefile-even-exists>check if signaturefile even exists</h1>
+<p>try {
+if ( (Test-Path $env:APPDATA\microsoft\signatures$signatureFileName -ErrorAction stop) -eq $false) {</p>
+<pre><code>    Write-Host &quot;$signatureFileName does not exist&quot;
+    exit 1
+
+}
+</code></pre>
+<p>}</p>
+<p>catch {
+$errmeg = $_.exception.message
+Write-Error $errmeg
+exit 1
+}</p>
+<h1 id=check-if-the-file-is-out-of-date>check if the file is out of date</h1>
+<p>try {
+# check date
+$lastwritetimeday = (Get-ItemProperty -Path &ldquo;$env:APPDATA\microsoft\signatures$signatureFileName&rdquo;).LastWriteTime.DayOfYear
+$today = (Get-Date).DayOfYear</p>
+<pre><code>if ($lastwritetimeday -lt $today) {
+    Write-Host &quot;signature is out of date&quot;
+    exit 1
+}
+</code></pre>
+<p>}</p>
+<p>catch {
+$errmeg = $_.exception.message
+Write-Error $errmeg
+exit 1
+}</p>
+<h2 id=remediation>Remediation</h2>
+<p>Now on to the remediation part. You will need to populate a few variables.</p>
+<p><code>$signatureFileName</code> (same as in the discovery script)</p>
+<p>The information required for these can be found in Azure AD in the app properties, as detailed in Brads blog:<br>
+<code>$clientId</code><br>
+<code>$tenantName</code><br>
+<code>$clientSecret</code></p>
+<h1 id=application-client-id-tenant-name-and-secret>Application (client) ID, tenant Name and secret</h1>
+<p>$clientId = ""
+$tenantName = &ldquo;contoso.onmicrosoft.com&rdquo;
+$clientSecret = &ldquo;Hunter2&rdquo;
+$resource = &ldquo;<a href=https://graph.microsoft.com/%22>https://graph.microsoft.com/"</a></p>
+<p>$ReqTokenBody = @{
+Grant_Type = &ldquo;client_credentials&rdquo;
+Scope = &ldquo;<a href=https://graph.microsoft.com/.default%22>https://graph.microsoft.com/.default"</a>
+client_Id = $clientID
+Client_Secret = $clientSecret
+}</p>
+<p>$TokenResponse = Invoke-RestMethod -Uri &ldquo;<a href=https://login.microsoftonline.com/$TenantName/oauth2/v2.0/token%22>https://login.microsoftonline.com/$TenantName/oauth2/v2.0/token"</a> -Method POST -Body $ReqTokenBody</p>
+<h1 id=apiurl--httpsgraphmicrosoftcombetausers7b613445-d1b8-4af3-938b-c08a4e5b1160>$apiUrl = &lsquo;<a href="https://graph.microsoft.com/beta/users/7b613445-d1b8-4af3-938b-c08a4e5b1160'">https://graph.microsoft.com/beta/users/7b613445-d1b8-4af3-938b-c08a4e5b1160'</a></h1>
+<h1 id=who-is-currently-logged-on-to-the-system>who is currently logged on to the system</h1>
+<p>$upn = whoami /upn
+$apiUrl = &lsquo;<a href="https://graph.microsoft.com/v1.0/users/%7B0%7D'">https://graph.microsoft.com/v1.0/users/{0}'</a> -f $upn</p>
+<p>$Data = Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Tokenresponse.access_token)&rdquo; } -Uri $apiUrl -Method Get</p>
+<p>#EndRegion Microsoft Graph</p>
+<p>#Region Variables</p>
+<h1 id=lets-put-the-data-into-variables-so-easier-placement-in-the-html>lets put the data into variables so easier placement in the HTML</h1>
+<p>$displayname = $data.displayName
+$jobtitle = $data.jobTitle
+$businessphone = $data.businessPhones
+$mail = $data.mail
+$officelocation = $data.officeLocation
+#EndRegion Variables</p>
+<p>#Region HTML</p>
+<h1 id=keep-in-mind-that-if-you-use-css-you-need-to-put-it-its-own-here-string-as-the--in-css-dont-mix-well-with-the--f-format-operator>keep in mind that if you use CSS, you need to put it its own here string, as the {} in CSS don&rsquo;t mix well with the -f format operator</h1>
+<p>$HTML = @&rsquo;
+&lt;p>displayname: {0} &lt;/p>
+&lt;p>jobtitle: {1} &lt;/p>
+&lt;p>phone: {2} &lt;/p>
+&lt;p>email: {3} &lt;/p>
+&lt;p>location: {4} &lt;/p>
+&lsquo;@ -f $displayname, $jobtitle, $($businessphone), $mail, $officelocation
+#EndRegion HTML</p>
+<p>#Region Output</p>
+<h1 id=check-if-the-signatures-directory-exists-if-not-create-it>check if the signatures directory exists, if not, create it</h1>
+<p>if ((Test-Path $env:APPDATA\microsoft\signatures) -eq $false) {new-item -ItemType directory -Name &ldquo;signatures&rdquo; -Path $env:APPDATA\microsoft}</p>
+<h1 id=output-the-htm-signature-file>output the .htm signature file</h1>
+<p>$html | out-file $env:APPDATA\microsoft\signatures$signatureFileName -Force</p>
+<p>#EndRegion Output</p>
+<h2 id=deployment>Deployment</h2>
+<p>Now you just need to deploy the script package to a group, make sure its set to run with the logged-on credentials and use 64-bit PowerShell. Follow the steps in Jake&rsquo;s post to create a new script and deploy it.</p>
+<p>Once the script package is on a client, the signature will appear in Outlook, though Outlook will not configure it as a default on its own. (perhaps an idea for another blog post).</p>
+<h3 id=questionsissues>Questions/Issues?</h3>
+<p>If you run into any issues or have questions about anything Intune head over to the WinAdmins discord community and go to the <code>#Intune</code> channel, and ask Jake to help you.</p>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

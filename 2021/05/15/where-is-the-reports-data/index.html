@@ -1,0 +1,658 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Where is the report’s data??-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2021/05/15/where-is-the-reports-data/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Where is the report’s data??">
+<meta name=twitter:description content="Have you ever looked at a report on a Portal Page and wanted to know just WHERE the data just came from?
+Well you can - and finding the information can be so easy. Read on below to see how.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Where is the report’s data??</h1>
+<span class=post-date>May 16, 2021</span>
+</div>
+<div class=post-entry>
+<p>Have you ever looked at a report on a Portal Page and wanted to know just <em><strong>WHERE</strong></em> the data just came from?</p>
+<p>Well you can - and finding the information can be so easy. Read on below to see how.</p>
+<pre><code>&lt;span class=&quot;uag-toc__collapsible-wrap&quot;&gt; &lt;svg xmlns=&quot;https://www.w3.org/2000/svg&quot; viewBox= &quot;0 0 320 512&quot;&gt;&lt;path d=&quot;M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z&quot;&gt;&lt;/path&gt;&lt;/svg&gt; &lt;/span&gt;
+</code></pre>
+<pre><code>                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h2&gt;
+                            Introduction
+                          &lt;/h2&gt;
+                          
+                          &lt;p&gt;
+                            Take for example this report on a &lt;a href=&quot;https://endpoint.microsoft.com/#blade/Microsoft_Intune_Enrollment/UXAnalyticsMenu/proactiveRemediations&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Proactive Remediation&lt;/a&gt;. I used one of the built in Proactive Remediations for the example, but it could easily be one of our other &lt;a href=&quot;https://sysmansquad.com/category/endpoint-management/proactive-remediation/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Proactive Remediation&lt;/a&gt; posts, like &lt;a href=&quot;https://sysmansquad.com/2020/07/08/dynamic-outlook-email-signature-using-with-intune-endpoint-analytics-proactive-remediations/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Dynamic Outlook Signatures&lt;/a&gt;, &lt;a href=&quot;https://sysmansquad.com/2020/07/07/intune-autopilot-proactive-remediation/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Building VPN Connections&lt;/a&gt;, or &lt;a href=&quot;https://sysmansquad.com/2020/07/27/setting-acl-using-intune-endpoint-analytics-proactive-remediations/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Repairing Folder permissions&lt;/a&gt;.
+                          &lt;/p&gt;&lt;figure class=&quot;wp-block-image alignwide&quot;&gt;
+                          
+                          &lt;img src=&quot;https://i.imgur.com/Zffu5T5.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; 
+                          
+                          &lt;p&gt;
+                            This data is generally all exposed by Graph or a similar Microsoft API, it is just a matter of finding the right endpoints.
+                          &lt;/p&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h2 id=&quot;api-endpoint-hell&quot;&gt;
+                            So, wandering API Endpoint Hell?
+                          &lt;/h2&gt;
+                          
+                          &lt;p&gt;
+                            You could absolutely go through the docs pages for &lt;a href=&quot;https://docs.microsoft.com/en-us/graph/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Microsoft Graph&lt;/a&gt; or other APIs and find the &lt;a href=&quot;https://docs.microsoft.com/graph/api/intune-devices-devicehealthscriptrunsummary-get?view=graph-rest-beta&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Get deviceHealthScriptRunSummary&lt;/a&gt; - but the Portal is already fetching the information somehow - a lot of times you can just look at how the Portal fetches the information, and do the same thing yourself.
+                          &lt;/p&gt;
+                          
+                          &lt;p&gt;
+                            Instead or blindly wandering the several levels of API Docs, let's use some of the tools built-in to Modern Browsers like Edge and Google Chrome to observe how the Web Portal fetches the information internally.
+                          &lt;/p&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h2 id=&quot;watching-the-portal-work&quot;&gt;
+                            Watching how the Portal works
+                          &lt;/h2&gt;
+                          
+                          &lt;p&gt;
+                            First up, let's open the &lt;a href=&quot;https://endpoint.microsoft.com/#blade/Microsoft_Intune_Enrollment/UXAnalyticsMenu/proactiveRemediations&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Proactive Remediations area&lt;/a&gt; and navigate down to the &lt;strong&gt;Restart stopped Office C2R svc&lt;/strong&gt;.
+                          &lt;/p&gt;
+                          
+                          &lt;p&gt;
+                            From there we can follow a few steps to observe what the portal does while we load in some information.
+                          &lt;/p&gt;
+                          
+                          &lt;ol&gt;
+                            &lt;li&gt;
+                              Press F12 to Open DevTools&lt;ul&gt;
+                                &lt;li&gt;
+                                  Open DevTools and switch to the Network tab
+                                &lt;/li&gt;
+                              &lt;/ul&gt;
+                            &lt;/li&gt;
+                            
+                            &lt;li&gt;
+                              Adjust / Check some settings&lt;ul&gt;
+                                &lt;li&gt;
+                                  Make sure you are recording
+                                &lt;/li&gt;
+                                &lt;li&gt;
+                                  Ensure Preserve Log is enabled
+                                &lt;/li&gt;
+                                &lt;li&gt;
+                                  Disable Cache
+                                &lt;/li&gt;
+                                &lt;li&gt;
+                                  If there are still a lot of entries, Filtering to &lt;strong&gt;XHR&lt;/strong&gt; type can be useful
+                                &lt;/li&gt;
+                              &lt;/ul&gt;
+                            &lt;/li&gt;
+                            
+                            &lt;li&gt;
+                              Clear the existing history, which often still shows leftover entries from loading the page
+                            &lt;/li&gt;
+                            &lt;li&gt;
+                              Refresh the Report
+                            &lt;/li&gt;
+                            &lt;li&gt;
+                              Report URLs are shown down below in the Log
+                            &lt;/li&gt;
+                          &lt;/ol&gt;&lt;figure class=&quot;wp-block-image alignwide size-large&quot;&gt;
+                          
+                          &lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;584&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/05/image-1024x584.png&quot; alt=&quot;&quot; class=&quot;wp-image-2744&quot; srcset=&quot;https:/wp-content/uploads/2021/05/image-1024x584.png 1024w, https:/wp-content/uploads/2021/05/image-300x171.png 300w, https:/wp-content/uploads/2021/05/image-768x438.png 768w, https:/wp-content/uploads/2021/05/image-100x57.png 100w, https:/wp-content/uploads/2021/05/image-855x488.png 855w, https:/wp-content/uploads/2021/05/image.png 1103w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/figure&gt; 
+                          
+                          &lt;p&gt;
+                          &lt;/p&gt;
+                          
+                          &lt;p id=&quot;queryURL-example&quot;&gt;
+                            So, here we can easily see that our URL that the report is referencing is
+                          &lt;/p&gt;
+                          
+                          &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
+                            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;webidl&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;text/x-webidl&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;QueryURL&amp;quot;,&amp;quot;align&amp;quot;:&amp;quot;wide&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;Web IDL&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;webidl&amp;quot;}&quot;&gt;https://graph.microsoft.com/beta/deviceManagement/deviceHealthScripts/02a4e7e8-195a-4824-8044-08b3a7f2d555/runSummary&lt;/pre&gt;
+                          &lt;/div&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h2 id=&quot;using-the-documentation&quot;&gt;
+                            Using the Documentation
+                          &lt;/h2&gt;
+                          
+                          &lt;p&gt;
+                            So, from our URL - we have three key terms to look up
+                          &lt;/p&gt;
+                          
+                          &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
+                            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;webidl&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;text/x-webidl&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;align&amp;quot;:&amp;quot;wide&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;Web IDL&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;webidl&amp;quot;}&quot;&gt;https://graph.microsoft.com/beta/deviceManagement/deviceHealthScripts/02a4e7e8-195a-4824-8044-08b3a7f2d555/runSummary&lt;/pre&gt;
+                          &lt;/div&gt;
+                          
+                          &lt;ul&gt;
+                            &lt;li&gt;
+                              deviceManagement
+                            &lt;/li&gt;
+                            &lt;li&gt;
+                              deviceHealthScripts
+                            &lt;/li&gt;
+                            &lt;li&gt;
+                              runSummary
+                            &lt;/li&gt;
+                          &lt;/ul&gt;
+                          
+                          &lt;p&gt;
+                            In general, the further to the right, the more specific area you are looking for. So here we are doing the action &lt;strong&gt;runSummary&lt;/strong&gt; on a specific &lt;strong&gt;deviceHealthScripts&lt;/strong&gt;. If you search these up, you can find the MS Graph endpoint &lt;a href=&quot;https://docs.microsoft.com/graph/api/intune-devices-devicehealthscriptrunsummary-get?view=graph-rest-beta&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Get deviceHealthScriptRunSummary&lt;/a&gt;.
+                          &lt;/p&gt;
+                          
+                          &lt;p&gt;
+                            Now, right at the top of that page, it will tell you what API Permissions you need in the &lt;a href=&quot;https://docs.microsoft.com/graph/api/intune-devices-devicehealthscriptrunsummary-get?view=graph-rest-beta#prerequisites&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Prerequisites section&lt;/a&gt;. A screenshot of this node is below.
+                          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+                          
+                          &lt;img loading=&quot;lazy&quot; width=&quot;749&quot; height=&quot;370&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/05/image-1.png&quot; alt=&quot;&quot; class=&quot;wp-image-2747&quot; srcset=&quot;https:/wp-content/uploads/2021/05/image-1.png 749w, https:/wp-content/uploads/2021/05/image-1-300x148.png 300w, https:/wp-content/uploads/2021/05/image-1-100x49.png 100w&quot; sizes=&quot;(max-width: 749px) 100vw, 749px&quot; /&gt;&lt;/figure&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h2 id=&quot;getting-a-token&quot;&gt;
+                            Getting a token for your API calls
+                          &lt;/h2&gt;
+                          
+                          &lt;p&gt;
+                            Now that we know what Permissions Scopes we need to use, we can work on setting up our access methods to use this information in a script.
+                          &lt;/p&gt;
+                          
+                          &lt;p&gt;
+                            For simple testing, it is often convenient to just use the &lt;a href=&quot;https://developer.microsoft.com/graph/graph-explorer&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;MS Graph Explorer&lt;/a&gt; or other &lt;a href=&quot;#api-explorer-sites&quot;&gt;API Explorer Sites&lt;/a&gt; to test and workshop a query, and you can find more intro to that &lt;a href=&quot;https://docs.microsoft.com/graph/graph-explorer/graph-explorer-overview&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;here&lt;/a&gt;, but when you want to automate something with minimal user interaction, a quick and easy way to get a token is through &lt;a href=&quot;https://docs.microsoft.com/azure/active-directory/develop/msal-overview&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;MSAL&lt;/a&gt; or the Microsoft Authentication Library.
+                          &lt;/p&gt;
+                          
+                          &lt;p id=&quot;using-a-token&quot;&gt;
+                            Since PowerShell is my language of choice, I reach for &lt;a href=&quot;https://www.powershellgallery.com/packages/MSAL.PS&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;MSAL.PS&lt;/a&gt;.
+                          &lt;/p&gt;
+                          
+                          &lt;p&gt;
+                            Here is what a full script to implement the above query might look like
+                          &lt;/p&gt;
+                          
+                          &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
+                            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;QueryUserAuthenticationMethods.ps1&amp;quot;,&amp;quot;align&amp;quot;:&amp;quot;wide&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;Install-Module MSAL.PS
+</code></pre>
+<p>$AuthParams = @{
+ClientID = $YourAppID
+TenantID = &lsquo;contoso.one&rsquo; #Also could use the GUID form from decoding your JWT token, like &lsquo;492d0e46-26b0-475c-82d0-102c962ea477&rsquo;
+Scopes = &lsquo;DeviceManagementConfiguration.Read.All&rsquo;
+LoginHint = &lsquo;<a href=mailto:YourUPN@Contoso.one>YourUPN@Contoso.one</a>&rsquo;
+}</p>
+<p>$Token = Get-MSALToken @AuthParams</p>
+<p>$QueryParams = @{
+queryURL = &lsquo;<a href="https://graph.microsoft.com/beta/deviceManagement/deviceHealthScripts/02a4e7e8-195a-4824-8044-08b3a7f2d555/runSummary'">https://graph.microsoft.com/beta/deviceManagement/deviceHealthScripts/02a4e7e8-195a-4824-8044-08b3a7f2d555/runSummary'</a>
+Method = &lsquo;GET&rsquo;
+}
+Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)"} @QueryParams
+</p>
+<pre><code>                          &lt;p&gt;
+                          &lt;/p&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h2&gt;
+                            Another Example with a Less Common API
+                          &lt;/h2&gt;
+                          
+                          &lt;p&gt;
+                            Let's find the &lt;strong&gt;&lt;a href=&quot;https://portal.azure.com/#blade/Microsoft_AAD_IAM/AuthenticationMethodsMenuBlade/UserRegistrationDetails/menuId/UserRegistrationDetails&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Authentication Methods Registration Detail&lt;/a&gt;&lt;/strong&gt; report data.
+                          &lt;/p&gt;&lt;figure class=&quot;wp-block-image alignwide size-large&quot;&gt;
+                          
+                          &lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;376&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/04/image-10-1024x376.png&quot; alt=&quot;&quot; class=&quot;wp-image-2670&quot; srcset=&quot;https:/wp-content/uploads/2021/04/image-10-1024x376.png 1024w, https:/wp-content/uploads/2021/04/image-10-300x110.png 300w, https:/wp-content/uploads/2021/04/image-10-768x282.png 768w, https:/wp-content/uploads/2021/04/image-10-100x37.png 100w, https:/wp-content/uploads/2021/04/image-10-855x314.png 855w, https:/wp-content/uploads/2021/04/image-10-1234x453.png 1234w, https:/wp-content/uploads/2021/04/image-10.png 1328w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/figure&gt; 
+                          
+                          &lt;p&gt;
+                            We go through the same DevTools process that we outlined above in &lt;strong&gt;&lt;a href=&quot;#watching-the-portal-work&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Watching How the Portal Works&lt;/a&gt;&lt;/strong&gt;.
+                          &lt;/p&gt;&lt;figure class=&quot;wp-block-image alignwide&quot;&gt;
+                          
+                          &lt;img src=&quot;https://sysmansquad.com/wp-content/uploads/2021/04/image-11.png&quot; alt=&quot;This image has an empty alt attribute; its file name is image-11.png&quot; /&gt;&lt;/figure&gt; 
+                          
+                          &lt;p&gt;
+                            This gives us the Query URL below.
+                          &lt;/p&gt;
+                          
+                          &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
+                            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;QueryURL&amp;quot;,&amp;quot;align&amp;quot;:&amp;quot;wide&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;https://graph.windows.net/myorganization/activities/authenticationMethodUserDetails?$orderby=userPrincipalName%20asc&amp;api-version=beta&lt;/pre&gt;
+                          &lt;/div&gt;
+                          
+                          &lt;p&gt;
+                            Voila! Well... somewhat. Most people know of Microsoft Graph, but there are other Microsoft APIs that are available. Some variations include:
+                          &lt;/p&gt;&lt;section class=&quot;wp-block-uagb-columns uagb-columns__wrap uagb-columns__background-undefined uagb-columns__stack-mobile uagb-columns__valign-undefined uagb-columns__gap-10 alignwide uagb-block-6aff5a46&quot; id=&quot;various-apis&quot;&gt;
+                          
+                          &lt;div class=&quot;uagb-columns__overlay&quot;&gt;
+                          &lt;/div&gt;
+                          
+                          &lt;div class=&quot;uagb-columns__inner-wrap uagb-columns__columns-2&quot;&gt;
+                            &lt;div class=&quot;wp-block-uagb-column uagb-column__wrap uagb-column__background-undefined uagb-block-bd0858c7&quot;&gt;
+                              &lt;div class=&quot;uagb-column__overlay&quot;&gt;
+                              &lt;/div&gt;
+                              
+                              &lt;div class=&quot;uagb-column__inner-wrap&quot;&gt;
+                                &lt;ul&gt;
+                                  &lt;li&gt;
+                                    &lt;a href=&quot;https://docs.microsoft.com/graph/overview&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Microsoft Graph APIs&lt;/a&gt;
+                                  &lt;/li&gt;
+                                  &lt;li&gt;
+                                    &lt;a href=&quot;https://docs.microsoft.com/microsoft-365/security/defender/api-overview&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Microsoft 365 Defender APIs&lt;/a&gt;
+                                  &lt;/li&gt;
+                                  &lt;li&gt;
+                                    &lt;a href=&quot;https://docs.microsoft.com/rest/api/azure/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Azure REST APIs&lt;/a&gt;
+                                  &lt;/li&gt;
+                                  &lt;li&gt;
+                                    &lt;a href=&quot;https://docs.microsoft.com/dynamics-nav/fin-graph&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Dynamics APIs&lt;/a&gt;
+                                  &lt;/li&gt;
+                                  &lt;li&gt;
+                                    &lt;a href=&quot;https://docs.microsoft.com/en-us/mem/intune/developer/intune-graph-apis&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Intune API&lt;/a&gt;
+                                  &lt;/li&gt;
+                                  &lt;li&gt;
+                                    &lt;a href=&quot;https://msdn.microsoft.com/office-365/office-365-management-activity-api-reference&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Office 365 Management APIs&lt;/a&gt;
+                                  &lt;/li&gt;
+                                  &lt;li&gt;
+                                    &lt;a href=&quot;https://docs.microsoft.com/azure/information-protection/develop/developers-guide&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Azure Rights Management SDK&lt;/a&gt;
+                                  &lt;/li&gt;
+                                  &lt;li&gt;
+                                    &lt;a href=&quot;https://docs.microsoft.com/rest/api/storagerp/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Azure Storage Resource API&lt;/a&gt;
+                                  &lt;/li&gt;
+                                  &lt;li&gt;
+                                    The list could go on for dozens of entries
+                                  &lt;/li&gt;
+                                &lt;/ul&gt;
+                                
+                                &lt;p&gt;
+                                &lt;/p&gt;
+                              &lt;/div&gt;
+                            &lt;/div&gt;
+                            
+                            &lt;div class=&quot;wp-block-uagb-column uagb-column__wrap uagb-column__background-undefined uagb-block-e8d1b750&quot;&gt;
+                              &lt;div class=&quot;uagb-column__overlay&quot;&gt;
+                              &lt;/div&gt;
+                              
+                              &lt;div class=&quot;uagb-column__inner-wrap&quot;&gt;
+                                &lt;figure class=&quot;wp-block-image size-large&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;510&quot; height=&quot;536&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/04/image-12.png&quot; alt=&quot;&quot; class=&quot;wp-image-2672&quot; srcset=&quot;https:/wp-content/uploads/2021/04/image-12.png 510w, https:/wp-content/uploads/2021/04/image-12-285x300.png 285w, https:/wp-content/uploads/2021/04/image-12-100x105.png 100w&quot; sizes=&quot;(max-width: 510px) 100vw, 510px&quot; /&gt;&lt;/figure&gt;
+                              &lt;/div&gt;
+                            &lt;/div&gt;
+                          &lt;/div&gt;&lt;/section&gt; 
+                          
+                          &lt;p&gt;
+                            In general terms &lt;a href=&quot;https://docs.microsoft.com/graph/overview&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Microsoft Graph&lt;/a&gt; is the main one and is slowly replacing some of the others to consolidate into one large API.
+                          &lt;/p&gt;
+                          
+                          &lt;p&gt;
+                            However, this example above references &lt;strong&gt;graph.windows.net&lt;/strong&gt; - which I know means it is using the &lt;a href=&quot;https://docs.microsoft.com/azure/active-directory/develop/active-directory-graph-api&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Legacy Azure AD Graph&lt;/a&gt;. Now this is currently supported, but is actually already recommending to &lt;a href=&quot;https://go.microsoft.com/fwlink/?linkid=2132805&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;migrate to Microsoft Graph&lt;/a&gt;. For this example, I am focusing on recreating what the Portal is actively doing, so I won't look at the Microsoft Graph equivalent here (though it looks like this might be fairly similar - &lt;a href=&quot;https://docs.microsoft.com/graph/api/reportroot-list-credentialuserregistrationdetails&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;credentialUserRegistrationDetails&lt;/a&gt;)
+                          &lt;/p&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h3 id=&quot;what-api-is-it&quot;&gt;
+                            OK - so what API &lt;em&gt;IS&lt;/em&gt; it using?
+                          &lt;/h3&gt;
+                          
+                          &lt;p&gt;
+                            Well - for the more obscure APIs - this can be a bit hard to find, and so hard to look up documentation for. Sometimes, there just isn't really public documentation for it.
+                          &lt;/p&gt;
+                          
+                          &lt;p&gt;
+                            If you are stuck trying to figure out what you are using, some very useful information can be gathered from your &lt;strong&gt;Bearer Token&lt;/strong&gt;. But first, we need to get one.
+                          &lt;/p&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h4 id=&quot;finding-your-token&quot;&gt;
+                            Finding your Token
+                          &lt;/h4&gt;
+                          
+                          &lt;p&gt;
+                            Now, you can get tokens lots of ways, like &lt;a href=&quot;https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-overview&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;MSAL&lt;/a&gt;, a number of &lt;a href=&quot;https://docs.microsoft.com/en-us/azure/active-directory/develop/authentication-flows-app-scenarios&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;assorted Authentication Flows&lt;/a&gt;, but we're watching the portal right now, and we already logged in. If we jump back to our F12 DevTools &gt; Network Tab - we can click on the entry we found before in &lt;a href=&quot;#watching-the-portal-work&quot;&gt;this section&lt;/a&gt;, open the &lt;strong&gt;Headers&lt;/strong&gt; &gt; Scroll to the &lt;strong&gt;Request Headers&lt;/strong&gt; section &gt; &lt;strong&gt;Authorization&lt;/strong&gt;
+                          &lt;/p&gt;
+                          
+                          &lt;p&gt;
+                            This will give you a big beautiful base64 &lt;strong&gt;Bearer &lt;/strong&gt;blob, which is how the Portal authenticates for it's API calls in the background. You just have to de-crumple it into a usable state.
+                          &lt;/p&gt;
+                          
+                          &lt;div class=&quot;wp-block-image&quot;&gt;
+                            &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;&lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/04/image-14-edited.png&quot; alt=&quot;&quot; class=&quot;wp-image-2675&quot; width=&quot;516&quot; height=&quot;386&quot; /&gt;&lt;/figure&gt;
+                          &lt;/div&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;p&gt;
+                      &lt;/p&gt;
+                      
+                      &lt;div class=&quot;wp-block-group&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h4 id=&quot;decoding-your-token&quot;&gt;
+                            Decoding your Token
+                          &lt;/h4&gt;
+                          
+                          &lt;p&gt;
+                            Now, usually when you get a token for these APIs, it is a &lt;strong&gt;Bearer&lt;/strong&gt; token and a &lt;strong&gt;JSON Web Token&lt;/strong&gt; or &lt;strong&gt;JWT&lt;/strong&gt;. Now JWT's are an excellent and open standard you can read more about &lt;a href=&quot;https://jwt.io/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;here&lt;/a&gt;, but the short version is that inside this big beautiful base64 blob are three parts.
+                          &lt;/p&gt;
+                          
+                          &lt;ul&gt;
+                            &lt;li&gt;
+                              Header
+                            &lt;/li&gt;
+                            &lt;li&gt;
+                              Claims/Payload
+                            &lt;/li&gt;
+                            &lt;li&gt;
+                              Signature
+                            &lt;/li&gt;
+                          &lt;/ul&gt;
+                          
+                          &lt;p&gt;
+                            The &lt;strong&gt;Bearer&lt;/strong&gt; at the beginning just references the type of token, but everything bolded below is one big chunk with all three parts. Well - if you want you can run it through a &lt;a href=&quot;https://www.base64decode.org/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Base64Decoder&lt;/a&gt; - but the Signature part at the end comes out looking like random high ASCII.
+                          &lt;/p&gt;
+                          
+                          &lt;pre id=&quot;bearer-example&quot; class=&quot;wp-block-preformatted&quot;&gt;Bearer&amp;nbsp;&lt;strong&gt;e01lc3NhZ2U6ICJEaWQgeW91IHRoaW5rIHRoaXMgd2FzIGdvaW5nIHRvIGhhdmUgYW4gYWN0dWFsIHJlYWwgdG9rZW4gaW4gaXQ/IEhhISAKV2VsbCBhcyBsb25nIGFzIHlvdSdyZSBoZXJlIC0gV2hhdCBpcyB5b3VyIGZhdm9yaXRlIGNvbG9yPyBPaC4uLiBobW1tLi4uIEkgd29uJ3QgcmVhbGx5IHNlZSB5b3VyIHJlc3BvbnNlIGhlcmUuIERhbW4uIFdlbGwgLSB0aGUgYmVzdCB3YXkgdG8gY2hhdCB3aXRoIG1lIGlzIHRvIGNvbWUgYnkgdGhlIFdpbkFkbWlucyBEaXNjb3JkLiBZb3UgY2FuIGdldCBhbiBpbnZpdGUgb3ZlciBoZXJlIGh0dHBzOi8vd2luYWRtaW5zLmlvL2Rpc2NvcmQgLiBDb21lIG9uIGJ5IHNvbWV0aW1lLCBhbmQgZmVlbCBmcmVlIHRvIHRhZyBtZSBhdCBAUHN5Y2hvRGF0YSBhbmQgdGVsbCBtZSB5b3VyIGZhdm9yaXRlIGNvbG9yISAKCkJldHRlciB5ZXQsIHNvbWV0aGluZyBmdW4uLi4uLiB0ZWxsIG1lIHlvdSBmb3VuZCBteSBsb3N0IHNvY2shIEl0IHdpbGwgY29uZnVzZSBldmVyeW9uZSBlbHNlIGFuZCBiZSBsb3RzIG9mIGdvb2QgZnVuISAKCldlbGwsIEknbSBhYm91dCBvdXQgb2YgdGhpbmdzIHRvIHJhbWJsZSBhYm91dC4uLiBTby4uIHVoaCBibHVyLXBsZT8gTW9udGdvbWVyeS4gVHVybnBpa2UuIFRoYXQncyBhbGwgSSBoYXZlIHNvIGhvcGUgdG8gY2hhdCBpbiBEaXNjb3JkIHNvbWUgdGltZSEiIH0KJeGIadj0TKLmjz_kgjH0byyuyGZA0CSRQDOP3tbP27tGoERHMQcyyWxv1J0ZtCDbAC7OWRQdxsf6YmcgKNmvyWCZDac2p6e2HGf9ZESfOCj6iFIQBR05FvByqudE_tPZlQgQk0wotkr3oQoxJQ&lt;/strong&gt;&lt;/pre&gt;
+                          
+                          &lt;p&gt;
+                            However, there are services that know how to gracefully decode all the Microsoft Style bits and bobs. There is one public JWT decoder that you can paste your token into &lt;a href=&quot;https://jwt.io/#debugger-io&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;here&lt;/a&gt;, but Microsoft actually runs one of their own, and it will automatically identify the issuer of certain types of the tokens as well.
+                          &lt;/p&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h2 id=&quot;jwt-decoder&quot;&gt;
+                            Useful Tools: Microsoft's JWT Decoder
+                          &lt;/h2&gt;
+                          
+                          &lt;p class=&quot;has-text-align-center&quot;&gt;
+                            &lt;a href=&quot;https://jwt.ms&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;jwt.ms&lt;/a&gt;
+                          &lt;/p&gt;
+                          
+                          &lt;p&gt;
+                            The tool is very simple to use. Just paste your token (from a &lt;a href=&quot;#finding-your-token&quot;&gt;browser session&lt;/a&gt; or a token you &lt;a href=&quot;#getting-a-token&quot;&gt;fetched yourself&lt;/a&gt;) in the top of the page, and it is decoded on the bottom half.
+                          &lt;/p&gt;
+                          
+                          &lt;p&gt;
+                            This will also split out the different sections for you, and let you see helpful information like
+                          &lt;/p&gt;&lt;figure class=&quot;wp-block-image alignwide size-large&quot;&gt;
+                          
+                          &lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;572&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/04/image-13-1024x572.png&quot; alt=&quot;&quot; class=&quot;wp-image-2673&quot; srcset=&quot;https:/wp-content/uploads/2021/04/image-13-1024x572.png 1024w, https:/wp-content/uploads/2021/04/image-13-300x168.png 300w, https:/wp-content/uploads/2021/04/image-13-768x429.png 768w, https:/wp-content/uploads/2021/04/image-13-100x56.png 100w, https:/wp-content/uploads/2021/04/image-13-855x478.png 855w, https:/wp-content/uploads/2021/04/image-13.png 1026w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/figure&gt; &lt;figure class=&quot;wp-block-image size-large&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;94&quot; height=&quot;85&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/05/image-2.png&quot; alt=&quot;&quot; class=&quot;wp-image-2758&quot; /&gt;&lt;/figure&gt; 
+                          
+                          &lt;ul&gt;
+                            &lt;li&gt;
+                              what scopes (&lt;strong&gt;scp&lt;/strong&gt;) you have issued &lt;ul&gt;
+                                &lt;li&gt;
+                                  These are roughly equivalent to the permissions that you are requesting to use
+                                &lt;/li&gt;
+                              &lt;/ul&gt;
+                            &lt;/li&gt;
+                            
+                            &lt;li&gt;
+                              from what issuer (&lt;strong&gt;iss&lt;/strong&gt;) &lt;ul&gt;
+                                &lt;li&gt;
+                                  This is the authority that issued a token. Most times you will see &quot;STS&quot; which stands for Security Token Service
+                                &lt;/li&gt;
+                                &lt;li&gt;
+                                  This often relates to the tenant that is verifying you for example a issuer of https://sts.windows.net/efff978e-7235-6548-2347-09b768955994/ is issuing the token from tenant ID &lt;strong&gt;efff978e-7235-6548-2347-09b768955994&lt;/strong&gt;
+                                &lt;/li&gt;
+                              &lt;/ul&gt;
+                            &lt;/li&gt;
+                            
+                            &lt;li&gt;
+                              for what site/service or audience (&lt;strong&gt;aud&lt;/strong&gt;) &lt;ul&gt;
+                                &lt;li&gt;
+                                  The Audience is often related closely to the API or Service that you are signing into, and is often related to the domain-portion of the Query URL you find in the DevTools Network tab.
+                                &lt;/li&gt;
+                              &lt;/ul&gt;
+                            &lt;/li&gt;
+                            
+                            &lt;li&gt;
+                              what tenant ID you authenticated from (&lt;strong&gt;tid&lt;/strong&gt;)&lt;ul&gt;
+                                &lt;li&gt;
+                                  This often relates to the STS mentioned above
+                                &lt;/li&gt;
+                              &lt;/ul&gt;
+                            &lt;/li&gt;
+                            
+                            &lt;li&gt;
+                              the authentication methods for this token (&lt;strong&gt;amr&lt;/strong&gt;)&lt;ul&gt;
+                                &lt;li&gt;
+                                  This can sometimes be used to tell if someone has entered a password, or especially if the user's session is verified with MFA
+                                &lt;/li&gt;
+                              &lt;/ul&gt;
+                            &lt;/li&gt;
+                            
+                            &lt;li&gt;
+                              the expiration timestamp of the token (&lt;strong&gt;exp&lt;/strong&gt;)&lt;ul&gt;
+                                &lt;li&gt;
+                                  If you are testing, particularly if you got a token manually, your token might have expired on you. The error messages will usually help identify this, but you can pop it into the decoder to check
+                                &lt;/li&gt;
+                                &lt;li&gt;
+                                  These are given in Epoch time, and for one-off I would use &lt;a href=&quot;https://www.epochconverter.com/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener nofollow&quot;&gt;EpochConverter.com&lt;/a&gt; or &lt;a href=&quot;https://www.epoch101.com/Powershell#epoch-to-date-powershell&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;in PowerShell&lt;/a&gt;.
+                                &lt;/li&gt;
+                              &lt;/ul&gt;
+                            &lt;/li&gt;
+                          &lt;/ul&gt;
+                          
+                          &lt;p&gt;
+                            A lot of this information can be helpful when you are dealing with some of these &lt;a href=&quot;#various-apis&quot;&gt;less common APIs&lt;/a&gt; besides common Microsoft Graph and when looking for documentation or troubleshooting.
+                          &lt;/p&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h2 id=&quot;api-explorer-sites&quot;&gt;
+                            Useful Tools: API Explorer websites
+                          &lt;/h2&gt;
+                          
+                          &lt;p&gt;
+                            Several APIs have explorer websites. Here are several below, and there are probably more, and if you know of some, come by the &lt;a href=&quot;https://winadmins.io/discord&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;WinAdmins Discord&lt;/a&gt;, and tag me there &lt;a href=&quot;https://discordapp.com/users/264652399824601088&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;@PsychoData&lt;/a&gt; or on &lt;a href=&quot;https://twitter.com/psychodata&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Twitter @PsychoData&lt;/a&gt; to let me know!
+                          &lt;/p&gt;
+                          
+                          &lt;ul&gt;
+                            &lt;li&gt;
+                              &lt;a href=&quot;https://developer.microsoft.com/en-us/graph/graph-explorer&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Microsoft Graph Explorer&lt;/a&gt;
+                            &lt;/li&gt;
+                            &lt;li&gt;
+                              &lt;a href=&quot;https://graphexplorer.azurewebsites.net/#&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Azure Graph Explorer&lt;/a&gt;
+                            &lt;/li&gt;
+                            &lt;li&gt;
+                              &lt;a href=&quot;https://resources.azure.com/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Azure Resource Explorer&lt;/a&gt;
+                            &lt;/li&gt;
+                          &lt;/ul&gt;
+                          
+                          &lt;p&gt;
+                            You can search for more API and other resources here on this community listing of various &lt;a href=&quot;https://msportals.io/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;MS Portals&lt;/a&gt; - here are a couple searches that may be useful - &lt;a href=&quot;https://msportals.io/?search=explorer&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Explorer Sites&lt;/a&gt; - &lt;a href=&quot;https://msportals.io/?search=playground&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Playground sites&lt;/a&gt;.
+                          &lt;/p&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h2&gt;
+                            Conclusion
+                          &lt;/h2&gt;
+                          
+                          &lt;p&gt;
+                            With these processes, we have talked about how you can
+                          &lt;/p&gt;
+                          
+                          &lt;ul&gt;
+                            &lt;li&gt;
+                              &lt;a href=&quot;#watching-the-portal-work&quot;&gt;Watch how the Portal is fetching information&lt;/a&gt;&lt;ul&gt;
+                                &lt;li&gt;
+                                  &lt;a href=&quot;#finding-your-token&quot;&gt;See the tokens that the browser used&lt;/a&gt; to fetch the data and
+                                &lt;/li&gt;
+                                &lt;li&gt;
+                                  &lt;a href=&quot;#decoding-your-token&quot;&gt;decode the data in them&lt;/a&gt;
+                                &lt;/li&gt;
+                              &lt;/ul&gt;
+                            &lt;/li&gt;
+                            
+                            &lt;li&gt;
+                              Find what APIs &amp; Scopes you need for these reports&lt;ul&gt;
+                                &lt;li&gt;
+                                  &lt;a href=&quot;http://using-the-documentation&quot;&gt;using the&lt;/a&gt;&lt;a href=&quot;#using-the-documentation&quot;&gt; &lt;/a&gt;&lt;a href=&quot;http://using-the-documentation&quot;&gt;documentation&lt;/a&gt;
+                                &lt;/li&gt;
+                                &lt;li&gt;
+                                  using the &lt;a href=&quot;#decoding-your-token&quot;&gt;browser tools&lt;/a&gt;
+                                &lt;/li&gt;
+                              &lt;/ul&gt;
+                            &lt;/li&gt;
+                            
+                            &lt;li&gt;
+                              Authenticate to APIs and &lt;a href=&quot;#getting-a-token&quot;&gt;get your own Bearer tokens&lt;/a&gt;
+                            &lt;/li&gt;
+                            &lt;li&gt;
+                              Using a token &lt;a href=&quot;#using-a-token&quot;&gt;in a script&lt;/a&gt; to expand your capabilities
+                            &lt;/li&gt;
+                          &lt;/ul&gt;
+                          
+                          &lt;p&gt;
+                            There are thousands of API Endpoints, and they are adding more all the time, with all sorts of detailed information and functions available. What kind of things would you like to find out how the Portal Web-UI does?
+                          &lt;/p&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          &lt;h4&gt;
+                            Where to find me
+                          &lt;/h4&gt;
+                          
+                          &lt;div class=&quot;wp-block-columns are-vertically-aligned-center&quot;&gt;
+                            &lt;div class=&quot;wp-block-column is-vertically-aligned-center&quot; style=&quot;flex-basis:66.66%&quot;&gt;
+                              &lt;p&gt;
+                                If you have questions, are having problems, or just want to chat over something, you can leave a comment below or reach me on the&amp;nbsp;&lt;a href=&quot;https://discord.com/invite/winadmins&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;WinAdmins Discord&lt;/a&gt;&amp;nbsp;at&amp;nbsp;&lt;a href=&quot;https://discordapp.com/users/264652399824601088&quot;&gt;@PsychoData&lt;/a&gt;
+                              &lt;/p&gt;
+                            &lt;/div&gt;
+                            
+                            &lt;div class=&quot;wp-block-column is-vertically-aligned-center&quot; style=&quot;flex-basis:33.33%&quot;&gt;
+                              &lt;div class=&quot;wp-block-buttons&quot;&gt;
+                                &lt;div class=&quot;wp-block-button is-style-fill&quot;&gt;
+                                  &lt;a class=&quot;wp-block-button__link&quot; href=&quot;https://discord.com/invite/winadmins&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;WinAdmins Discord&lt;/a&gt;
+                                &lt;/div&gt;
+                              &lt;/div&gt;
+                            &lt;/div&gt;
+                          &lt;/div&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;</code></pre>
+</div>
+<div class=post-share>
+<div class="post-share-box share-comments">
+hello
+</div>
+</div>
+<div class=post-author>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

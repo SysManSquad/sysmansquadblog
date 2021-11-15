@@ -1,0 +1,387 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Find Microsoft Accounts on Company Domains-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/11/23/find-microsoft-accounts/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Find Microsoft Accounts on Company Domains">
+<meta name=twitter:description content="The other day I was helping someone over in the WinAdmins Discord. Their users kept getting confused about what their passwords were, and it was causing a lot of HelpDesk tickets. Let&rsquo;s find out what users have Microsoft accounts on the company domain so we can help move those accounts elsewhere to streamline the user experience.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Find Microsoft Accounts on Company Domains</h1>
+<span class=post-date>November 23, 2020</span>
+</div>
+<div class=post-entry>
+<p>The other day I was helping someone over in the <a href=https://aka.ms/WinAdmins>WinAdmins Discord</a>. Their users kept getting confused about what their passwords were, and it was causing a lot of HelpDesk tickets. Let&rsquo;s find out what users have Microsoft accounts on the company domain so we can help move those accounts elsewhere to streamline the user experience.</p>
+<pre><code>                        &lt;blockquote class=&quot;wp-block-quote&quot;&gt;
+                          &lt;p&gt;
+                            Microsoft has introduced some changes that at least seem to prevent &lt;em&gt;NEW &lt;/em&gt;Microsoft Accounts on Company Domains. I added more details in the &lt;a href=&quot;#preventing&quot;&gt;Preventing&lt;/a&gt; section if you want to read more about this. If you just want to find the accounts, jump to &lt;a href=&quot;#identifying-the-problem&quot;&gt;Identifying the Problem&lt;/a&gt;.
+                          &lt;/p&gt;
+                        &lt;/blockquote&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;h3 id=&quot;preventing&quot;&gt;
+                      Preventing new registration
+                    &lt;/h3&gt;
+                    
+                    &lt;p&gt;
+                      Microsoft has introduced some changes that at least seem to prevent &lt;em&gt;NEW &lt;/em&gt;Microsoft Accounts on Company Domains. I haven't been able to find any specific announcement about this feature/capability, but supposedly all you need to do is have the relevant domain in your Office 365 Domains as Managed.
+                    &lt;/p&gt;
+                    
+                    &lt;h3&gt;
+                      What the blocking looks like
+                    &lt;/h3&gt;
+                    
+                    &lt;p&gt;
+                      So far, it seems that the blocking will prevent them from Registering a new account with a validated work email domain, or from adding that email as an alias.
+                    &lt;/p&gt;
+                    
+                    &lt;div class=&quot;wp-block-jetpack-slideshow aligncenter&quot; data-effect=&quot;slide&quot;&gt;
+                      &lt;div class=&quot;wp-block-jetpack-slideshow_container swiper-container&quot;&gt;
+                        &lt;ul class=&quot;wp-block-jetpack-slideshow_swiper-wrapper swiper-wrapper&quot;&gt;
+                          &lt;li class=&quot;wp-block-jetpack-slideshow_slide swiper-slide&quot;&gt;
+                            &lt;figure&gt;&lt;img loading=&quot;lazy&quot; width=&quot;489&quot; height=&quot;437&quot; alt=&quot;&quot; class=&quot;wp-block-jetpack-slideshow_image wp-image-2978&quot; data-id=&quot;2978&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/09/image-2.png&quot; srcset=&quot;https:/wp-content/uploads/2021/09/image-2.png 489w, https:/wp-content/uploads/2021/09/image-2-300x268.png 300w, https:/wp-content/uploads/2021/09/image-2-100x89.png 100w&quot; sizes=&quot;(max-width: 489px) 100vw, 489px&quot; /&gt;&lt;figcaption class=&quot;wp-block-jetpack-slideshow_caption gallery-caption&quot;&gt;Blocked from registering from a new Microsoft Account with Company Email&lt;/figcaption&gt;&lt;/figure&gt;
+                          &lt;/li&gt;
+                          &lt;li class=&quot;wp-block-jetpack-slideshow_slide swiper-slide&quot;&gt;
+                            &lt;figure&gt;&lt;img loading=&quot;lazy&quot; width=&quot;780&quot; height=&quot;382&quot; alt=&quot;&quot; class=&quot;wp-block-jetpack-slideshow_image wp-image-2977&quot; data-id=&quot;2977&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/09/image-1.png&quot; srcset=&quot;https:/wp-content/uploads/2021/09/image-1.png 780w, https:/wp-content/uploads/2021/09/image-1-300x147.png 300w, https:/wp-content/uploads/2021/09/image-1-768x376.png 768w, https:/wp-content/uploads/2021/09/image-1-100x49.png 100w&quot; sizes=&quot;(max-width: 780px) 100vw, 780px&quot; /&gt;&lt;figcaption class=&quot;wp-block-jetpack-slideshow_caption gallery-caption&quot;&gt;Blocked from adding the company email as an alias on a current account&lt;/figcaption&gt;&lt;/figure&gt;
+                          &lt;/li&gt;
+                          &lt;li class=&quot;wp-block-jetpack-slideshow_slide swiper-slide&quot;&gt;
+                            &lt;figure&gt;&lt;img loading=&quot;lazy&quot; width=&quot;474&quot; height=&quot;426&quot; alt=&quot;&quot; class=&quot;wp-block-jetpack-slideshow_image wp-image-2979&quot; data-id=&quot;2979&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/11/zgvcQSD1.png&quot; srcset=&quot;https:/wp-content/uploads/2020/11/zgvcQSD1.png 474w, https:/wp-content/uploads/2020/11/zgvcQSD1-300x270.png 300w, https:/wp-content/uploads/2020/11/zgvcQSD1-100x90.png 100w&quot; sizes=&quot;(max-width: 474px) 100vw, 474px&quot; /&gt;&lt;figcaption class=&quot;wp-block-jetpack-slideshow_caption gallery-caption&quot;&gt;Seems to work off Domain, not specific Email Addresses&lt;/figcaption&gt;&lt;/figure&gt;
+                          &lt;/li&gt;
+                        &lt;/ul&gt;
+                        
+                        &lt;a class=&quot;wp-block-jetpack-slideshow_button-prev swiper-button-prev swiper-button-white&quot; role=&quot;button&quot;&gt;&lt;/a&gt;&lt;a class=&quot;wp-block-jetpack-slideshow_button-next swiper-button-next swiper-button-white&quot; role=&quot;button&quot;&gt;&lt;/a&gt;&lt;a aria-label=&quot;Pause Slideshow&quot; class=&quot;wp-block-jetpack-slideshow_button-pause&quot; role=&quot;button&quot;&gt;&lt;/a&gt;
+                        
+                        &lt;div class=&quot;wp-block-jetpack-slideshow_pagination swiper-pagination swiper-pagination-white&quot;&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;h2&gt;
+                      Identifying the Problem
+                    &lt;/h2&gt;
+                    
+                    &lt;p&gt;
+                      This prompt is the main source of the user’s confusion; the email address is the same for the user’s Work/School account and a Microsoft account. When an app supports signing in with both a Work/School and Personal account, it prompts the user for which type of account they want to use. Most users don't know what the difference is, or where the Microsoft account came from.
+                    &lt;/p&gt;
+                    
+                    &lt;div class=&quot;wp-block-image image-shadow&quot;&gt;
+                      &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;&lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/11/image-1-edited.png&quot; alt=&quot;Screenshot showing a choice between work / School account and Personal / Microsoft Account&quot; class=&quot;wp-image-1900&quot; width=&quot;344&quot; height=&quot;363&quot; srcset=&quot;https:/wp-content/uploads/2020/11/image-1-edited.png 344w, https:/wp-content/uploads/2020/11/image-1-edited-284x300.png 284w, https:/wp-content/uploads/2020/11/image-1-edited-100x106.png 100w&quot; sizes=&quot;(max-width: 344px) 100vw, 344px&quot; /&gt;&lt;/figure&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;p&gt;
+                      As that link in the screenshot says, you can &lt;a href=&quot;https://go.microsoft.com/fwlink/p/?LinkID=733247&quot;&gt;Rename the personal Microsoft &lt;/a&gt;&lt;a href=&quot;https://go.microsoft.com/fwlink/p/?LinkID=733247&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;account&lt;/a&gt;, but how can you know which users have a conflicting Microsoft account?
+                    &lt;/p&gt;
+                    
+                    &lt;h2&gt;
+                      Designing a Solution
+                    &lt;/h2&gt;
+                    
+                    &lt;p&gt;
+                      To find these conflicting Microsoft accounts, we can ... abuse... an Azure App Registrations capabilities. We create a custom application that we register to only accept Microsoft accounts, not AzureAD/Work/School accounts. – if you try to use an email for your domain that doesn’t have a Microsoft account, it will just throw back an error that no Microsoft account could be found.
+                    &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large image-shadow&quot;&gt;
+                    
+                    &lt;img loading=&quot;lazy&quot; width=&quot;336&quot; height=&quot;171&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/11/image-2-edited.png&quot; alt=&quot;This screenshot shows that a microsoft Account sign in prompt will return a warning if you give it an email address with no Microsoft Account associated &quot; class=&quot;wp-image-1901&quot; srcset=&quot;https:/wp-content/uploads/2020/11/image-2-edited.png 336w, https:/wp-content/uploads/2020/11/image-2-edited-300x153.png 300w, https:/wp-content/uploads/2020/11/image-2-edited-100x51.png 100w&quot; sizes=&quot;(max-width: 336px) 100vw, 336px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+                      Even better! We can leverage this, along with &lt;strong&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-optional-claims#:~:text=app%2Buser%20token.-,login_hint,-Login%20hint&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;login hints&lt;/a&gt;&lt;/strong&gt;, to scale this up and make a scriptable solution to find any domain emails that have a Microsoft account conflicting with their Work account.
+                    &lt;/p&gt;
+                    
+                    &lt;p&gt;
+                      At this time, I don’t know of a way to prevent Microsoft accounts on the company domain, or automatically move them - but we can at least find the conflicts. This will allow the Help Desk to contact the end-user and help them relocate the personal account.
+                    &lt;/p&gt;
+                    
+                    &lt;h2 id=&quot;Creating-App-Registration&quot;&gt;
+                      Setting up your App Registration
+                    &lt;/h2&gt;
+                    
+                    &lt;p&gt;
+                      To set this up, we need to head to the &lt;a href=&quot;https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps&quot;&gt;Azure Portal&lt;/a&gt; and create a new &lt;strong&gt;app registration&lt;/strong&gt;
+                    &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large image-shadow&quot;&gt;
+                    
+                    &lt;img loading=&quot;lazy&quot; width=&quot;453&quot; height=&quot;291&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/11/image-3.png&quot; alt=&quot;Navigate to portal.azure.com, search for App Registrations, and select New Registration&quot; class=&quot;wp-image-1886&quot; srcset=&quot;https:/wp-content/uploads/2020/11/image-3.png 453w, https:/wp-content/uploads/2020/11/image-3-300x193.png 300w, https:/wp-content/uploads/2020/11/image-3-100x64.png 100w&quot; sizes=&quot;(max-width: 453px) 100vw, 453px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+                      We need a name for the consumers to see if they authorize our test application. I used: &lt;code&gt;ContosoMicrosoftAccountVerifier&lt;/code&gt;
+                    &lt;/p&gt;
+                    
+                    &lt;p&gt;
+                      For supported account types, we cannot use the first three options because they all support tenant/company logins, but the fourth type will serve our purposes.
+                    &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large image-shadow&quot;&gt;
+                    
+                    &lt;img loading=&quot;lazy&quot; width=&quot;624&quot; height=&quot;141&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/11/image-4.png&quot; alt=&quot;We cannot support account types from regular tenants, and instead only support Personal / Microsoft Accounts&quot; class=&quot;wp-image-1887&quot; srcset=&quot;https:/wp-content/uploads/2020/11/image-4.png 624w, https:/wp-content/uploads/2020/11/image-4-300x68.png 300w, https:/wp-content/uploads/2020/11/image-4-100x23.png 100w&quot; sizes=&quot;(max-width: 624px) 100vw, 624px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+                      We do not need a redirect URL for this setup.
+                    &lt;/p&gt;
+                    
+                    &lt;p&gt;
+                      Next, we need to setup a few aspects of the application, to use for dummy information.
+                    &lt;/p&gt;
+                    
+                    &lt;p&gt;
+                      Under &lt;strong&gt;API Permissions&lt;/strong&gt;, we need to add a permission of some sort for it to request access to. The least amount of permissions was just the &lt;strong&gt;Profile&lt;/strong&gt; permission.
+                    &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large image-shadow&quot;&gt;
+                    
+                    &lt;img loading=&quot;lazy&quot; width=&quot;495&quot; height=&quot;149&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/11/image-5.png&quot; alt=&quot;select the minimum amount of permissions that you can. They should never be signed into anyway &quot; class=&quot;wp-image-1888&quot; srcset=&quot;https:/wp-content/uploads/2020/11/image-5.png 495w, https:/wp-content/uploads/2020/11/image-5-300x90.png 300w, https:/wp-content/uploads/2020/11/image-5-100x30.png 100w&quot; sizes=&quot;(max-width: 495px) 100vw, 495px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+                      Even though people should not be logging into our App, we need to setup some sort of Authentication for the App to theoretically use, even though we won't use it.
+                    &lt;/p&gt;
+                    
+                    &lt;p&gt;
+                      Under &lt;strong&gt;Certificates and Secrets&lt;/strong&gt;, I created a New Client Secret. You do not need to save the key values
+                    &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large image-shadow&quot;&gt;
+                    
+                    &lt;img loading=&quot;lazy&quot; width=&quot;624&quot; height=&quot;151&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/11/image-6.png&quot; alt=&quot;Create a Dummy client secret, for the Microsoft backend. you do not need to keep the key&quot; class=&quot;wp-image-1889&quot; srcset=&quot;https:/wp-content/uploads/2020/11/image-6.png 624w, https:/wp-content/uploads/2020/11/image-6-300x73.png 300w, https:/wp-content/uploads/2020/11/image-6-100x24.png 100w&quot; sizes=&quot;(max-width: 624px) 100vw, 624px&quot; /&gt;&lt;/figure&gt; &lt;div class=&quot;wp-block-group&quot;&gt;
+                      &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                        &lt;h2 id=&quot;Constructing-App-Auth-URL&quot;&gt;
+                          Constructing our App Authorization URL
+                        &lt;/h2&gt;
+                        
+                        &lt;p&gt;
+                          Next, we need to gather the information for our authentication URL.
+                        &lt;/p&gt;
+                        
+                        &lt;ul&gt;
+                          &lt;li&gt;
+                            Authentication endpoints
+                          &lt;/li&gt;
+                          &lt;li&gt;
+                            Application ID (Client ID in the URL)
+                          &lt;/li&gt;
+                          &lt;li&gt;
+                            Email Addresses to check
+                          &lt;/li&gt;
+                          &lt;li&gt;
+                            Scope for our API Permissions
+                          &lt;/li&gt;
+                        &lt;/ul&gt;
+                        
+                        &lt;p&gt;
+                          We get most of these from our App’s Overview page, from the API Permissions tab, and combine those with some other parameters from the &lt;a href=&quot;https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow#request-an-authorization-code&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;OAuth 2.0 code flow&lt;/a&gt; to get a URL similar to the one below
+                        &lt;/p&gt;
+                        
+                        &lt;div class=&quot;wp-block-group&quot;&gt;
+                          &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                            &lt;p&gt;
+                              &lt;a href=&quot;https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&amp;scope=user.read&amp;response_type=code&amp;state=23424&amp;login_hint=TinaFey@contoso.one&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener nofollow&quot;&gt;https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?&lt;br /&gt;&amp;nbsp; &amp;nbsp; client_id=&lt;strong&gt;bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&lt;/strong&gt;&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;scope=user.read&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;response_type=code&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;state=23424&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;login_hint=&lt;strong&gt;TinaFey@contoso.one&lt;/strong&gt;&lt;/a&gt;
+                            &lt;/p&gt;
+                            
+                            &lt;p&gt;
+                            &lt;/p&gt;
+                          &lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;p&gt;
+                          You can test this URL above live for yourself, or use your own app created with the process above. Just adjust the &lt;strong&gt;Client_ID&lt;/strong&gt; to match your &lt;strong&gt;Application ID&lt;/strong&gt;, and adjust the &lt;strong&gt;login_hint&lt;/strong&gt; to match your user
+                        &lt;/p&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;div class=&quot;wp-block-group&quot;&gt;
+                      &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                        &lt;div class=&quot;wp-block-columns&quot;&gt;
+                          &lt;div class=&quot;wp-block-column&quot;&gt;
+                            &lt;h5&gt;
+                              &lt;strong&gt;Valid Microsoft Account&lt;/strong&gt;
+                            &lt;/h5&gt;&lt;figure class=&quot;wp-block-image image-shadow&quot;&gt;
+                            
+                            &lt;img loading=&quot;lazy&quot; width=&quot;435&quot; height=&quot;314&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/11/image-7.png&quot; alt=&quot;Providing a Valid Microsoft Account email continues to a Password Prompt&quot; class=&quot;wp-image-1890&quot; srcset=&quot;https:/wp-content/uploads/2020/11/image-7.png 435w, https:/wp-content/uploads/2020/11/image-7-300x217.png 300w, https:/wp-content/uploads/2020/11/image-7-100x72.png 100w&quot; sizes=&quot;(max-width: 435px) 100vw, 435px&quot; /&gt;&lt;figcaption&gt;Note: the email address is recognized, and the prompt has switched to “Enter password”&lt;/figcaption&gt;&lt;/figure&gt; 
+                            
+                            &lt;p&gt;
+                            &lt;/p&gt;
+                          &lt;/div&gt;
+                          
+                          &lt;div class=&quot;wp-block-column&quot;&gt;
+                            &lt;h5&gt;
+                              &lt;strong&gt;No Valid Microsoft Account&lt;/strong&gt;
+                            &lt;/h5&gt;&lt;figure class=&quot;wp-block-image image-shadow&quot;&gt;
+                            
+                            &lt;img loading=&quot;lazy&quot; width=&quot;431&quot; height=&quot;378&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/11/image-8.png&quot; alt=&quot;Providing an invalid Microsoft Account email throws a watning that the Microsoft Account does not exists&quot; class=&quot;wp-image-1891&quot; srcset=&quot;https:/wp-content/uploads/2020/11/image-8.png 431w, https:/wp-content/uploads/2020/11/image-8-300x263.png 300w, https:/wp-content/uploads/2020/11/image-8-100x88.png 100w&quot; sizes=&quot;(max-width: 431px) 100vw, 431px&quot; /&gt;&lt;figcaption&gt;Note: the email address is not recognized, and the prompt still shows “That Microsoft account doesn’t exist”&lt;/figcaption&gt;&lt;/figure&gt; 
+                            
+                            &lt;p&gt;
+                            &lt;/p&gt;
+                          &lt;/div&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;div class=&quot;wp-block-group&quot;&gt;
+                      &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;div class=&quot;wp-block-group&quot;&gt;
+                      &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                        &lt;h2 id=&quot;Scripting-the-process&quot;&gt;
+                          Scripting the verification Process
+                        &lt;/h2&gt;
+                        
+                        &lt;p&gt;
+                          Below is a quick script I made to build a list of all the company emails and iterate through checking them.
+                        &lt;/p&gt;
+                        
+                        &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                          &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;FindMicrosoftAccounts.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;#$emailAddresses = 'tinafey@contoso.one','username@domain.com','ronswanson@contoso.one'
+</code></pre>
+<p>$emailAddresses = Get-EXORecipient -RecipientTypeDetails UserMailbox -PropertySets Minimum | select -ExpandProperty Emailaddresses | where {$_ -match &ldquo;SMTP:"} | foreach {$_ -replace &lsquo;^smtp:'}</p>
+<p>$ApplicationID = &lsquo;bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&rsquo;
+$scope = &lsquo;user.read&rsquo;</p>
+<p>$results = [System.Collections.ArrayList]::new()
+$emailAddresses | foreach -Begin { $i = 1} -Process {
+Write-Progress -Activity &lsquo;Checking Email Addresses for Microsoft Accounts&rsquo; -CurrentOperation (&ldquo;Checking {0} - {1}/{2}&rdquo; -f $<em>,$i,$emailAddresses.Count) -PercentComplete ($i/($emailAddresses.count)*100)
+$UserURL = &lsquo;<a href="https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=%7B0%7D&scope=%7B1%7D&response_type=code&state=23424&login_hint=%7B2%7D'">https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id={0}&scope={1}&response_type=code&state=23424&login_hint={2}'</a> -f $ApplicationID,$scope,$</em>
+$response = Invoke-WebRequest -Uri $UserURL</p>
+<pre><code>$results.Add( 
+    [psCustomobject]@{
+        EmailAddress = $_
+        HasMSAccount = $response -match '&quot;HasPassword&quot;:1' 
+        Result       = $response.StatusCode
+    }
+) | Out-Null
+$i++
+</code></pre>
+<p>}
+$results
+</p>
+<pre><code>                        &lt;img loading=&quot;lazy&quot; width=&quot;435&quot; height=&quot;324&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/11/image-10.png&quot; alt=&quot;&quot; class=&quot;wp-image-1944&quot; srcset=&quot;https:/wp-content/uploads/2020/11/image-10.png 435w, https:/wp-content/uploads/2020/11/image-10-300x223.png 300w, https:/wp-content/uploads/2020/11/image-10-100x74.png 100w&quot; sizes=&quot;(max-width: 435px) 100vw, 435px&quot; /&gt;&lt;/figure&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;div class=&quot;wp-block-group&quot;&gt;
+                      &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                        &lt;h2 id=&quot;Sample-User-Consent-Prompt&quot;&gt;
+                          User Consent Prompt
+                        &lt;/h2&gt;
+                        
+                        &lt;p&gt;
+                          Our app doesn’t have any server code. We only need to get to the pre-login experience to confirm whether an email address has a Microsoft account associated with it. This means that users don’t need to finish logging in and authorize the app, but if they do finish logging in, they will get a consent prompt like this.
+                        &lt;/p&gt;&lt;figure class=&quot;wp-block-image image-shadow&quot;&gt;
+                        
+                        &lt;img loading=&quot;lazy&quot; width=&quot;422&quot; height=&quot;486&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/11/image-9.png&quot; alt=&quot;If a user does sign into this app fully, they will be prompted to approve the permissions requested earlier&quot; class=&quot;wp-image-1892&quot; srcset=&quot;https:/wp-content/uploads/2020/11/image-9.png 422w, https:/wp-content/uploads/2020/11/image-9-260x300.png 260w, https:/wp-content/uploads/2020/11/image-9-100x115.png 100w&quot; sizes=&quot;(max-width: 422px) 100vw, 422px&quot; /&gt;&lt;figcaption&gt;Note: &lt;strong&gt;Unverified&lt;/strong&gt; is the default state, but you can verify your tenant to show your company’s name instead. Details &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://go.microsoft.com/fwlink/?linkid=2121525&amp;clcid=0x9&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;div class=&quot;wp-block-group&quot;&gt;
+                      &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                        &lt;h2&gt;
+                          Wrap up
+                        &lt;/h2&gt;
+                        
+                        &lt;p&gt;
+                          With this app we made, we can verify whether any email address has a Microsoft account associated with it with an automated method that we can script against.
+                        &lt;/p&gt;
+                        
+                        &lt;p&gt;
+                          To test any email address manually, just remove the &lt;strong&gt;login_hint&lt;/strong&gt; parameter from the URL and you can enter any email address to check it, even without their password.
+                        &lt;/p&gt;
+                        
+                        &lt;p&gt;
+                          &lt;a href=&quot;https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&amp;scope=user.read&amp;response_type=code&amp;state=23424&amp;login_hint=TinaFey@contoso.one&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?&lt;br /&gt;&amp;nbsp; &amp;nbsp; client_id=&lt;strong&gt;bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&lt;/strong&gt;&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;scope=user.read&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;response_type=code&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;state=23424&lt;br /&gt;&lt;/a&gt;
+                        &lt;/p&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;p&gt;
+                    &lt;/p&gt;
+</code></pre>
+</div>
+<div class=post-share>
+<div class="post-share-box share-comments">
+hello
+</div>
+</div>
+<div class=post-author>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Reprovision Windows 10 Apps… Wait, What?-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/01/06/reprovision-windows-10-apps-wait-what/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Reprovision Windows 10 Apps… Wait, What?">
+<meta name=twitter:description content="Remember when we all complained that Microsoft &ldquo;wasn&rsquo;t respecting our app removals!&rdquo; and they were all reinstalled during every feature update? Pepperidge farm remembers. Well, Microsoft was kind enough to hear our collective complaints, and take action on them. That is an awesome quality that we are seeing from the product teams at Microsoft.
+Starting in Windows 10 1803, deprovisioned apps will NOT be reinstalled during a feature update. No more Solitaire returning from the dead every time we try to &ldquo;Get current and stay current.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Reprovision Windows 10 Apps… Wait, What?</h1>
+<span class=post-date>January 6, 2020</span>
+</div>
+<div class=post-entry>
+<p>Remember when we all complained that Microsoft &ldquo;wasn&rsquo;t respecting our app removals!&rdquo; and they were all reinstalled during every feature update? Pepperidge farm remembers. Well, Microsoft was kind enough to hear our collective complaints, and take action on them. That is an awesome quality that we are seeing from the product teams at Microsoft.</p>
+<p>Starting in Windows 10 1803, deprovisioned apps will NOT be reinstalled during a feature update. No more Solitaire returning from the dead every time we try to &ldquo;Get current and stay current.&rdquo; No more ZuneMusic trying to be brought back from the dead by Microsoft.</p>
+<h4 id=but-i-changed-my-mind-i-want-those-apps-back>But I changed my mind&mldr; I want those apps back</h4>
+<p>Ironically, I found myself pounding my head against the keyboard trying to reinstall the Windows Store! Bad decisions are made sometimes . In this case, a business decision was made to deprovision the Windows Store because it is <em>evil</em>!!! Or at least that was the misunderstanding 3-4 years ago when the decision was made. <strong>(Note: DON&rsquo;T REMOVE THE STORE, THERE ARE BETTER WAYS TO HANDLE IT SUCH AS DISABLING WITH GPO, OR MANAGING IT WITH WINDOWS STORE FOR BUSINESS)</strong></p>
+<p>The Windows Store was of course not the only app removed. Various applications were selected for removal based on this reason, or that reason.</p>
+<h4 id=we-can-unfix-it-we-have-the-technology>We can unfix it, we have the technology</h4>
+<p>Microsoft details the &lsquo;trigger&rsquo; for these apps not being reinstalled in the docs here.</p>
+<p>The gist of it is, when an app is deprovisioned a registry key will be made. If that registry key is present then the app will not be reinstalled on any Windows 10 Feature Update that is 1803 or above. To help get a handle on this I&rsquo;ve written up some functions that have multiple use cases.</p>
+<h4 id=find-em>Find &lsquo;em</h4>
+<p>First, we can identify apps that have been deprovisioned with the below function. I’ve linked to it on GitHub, and the codeblock is below.</p>
+<p>Get-DeprovisionedAppX</p>
+<p>Nothing too crazy going on here. At the core we are grabbing all keys under the path provided in the MS docs. I am just tossing in support for filters, comment based help, and some verbose output. I am also ensuring that we return an object with a specific property name, DeprovisionedApp. The reason for this will be apparent when we look at the next function.</p>
+<h4 id=fix-em>Fix &lsquo;em</h4>
+<p>We have our targets, now lets blow them away! The below function &lsquo;reprovisions&rsquo; the apps by removing the registry keys for the requested apps.</p>
+<p>Reprovision-AppX</p>
+<p>What we have here is a glorified wrapper for <strong>Remove-Item</strong>. But, it does have a bit of extra spice sprinkled on it.</p>
+<p><strong>ValueFromPipelineByPropertyName</strong> - With this specified on the DeprovisionedApp input parameter we are able to pipe from our Get-DeprovisionedApp function, to Reprovision-App.</p>
+<p>That&rsquo;s pretty cool!</p>
+<p><strong>[CmdletBinding(SupportsShouldProcess)]</strong> - At the top of the function this snippet allows the implementation of WhatIf support. To finish the implementation we have to use <strong>$PSCmdlet.ShouldProcess</strong> where it is fitting. This function has it at line 37, just before the action happens.</p>
+<h4 id=last-step>Last step</h4>
+<p>Once the deprovisioned apps have been identified, and &lsquo;reprovisioned&rsquo; by removing the registry keys, there is one last step. You have to do a feature update! It is always good to &lsquo;Get current and stay current&rsquo; anyway, but this gives you another reason to update Windows 10.</p>
+<h4 id=a-good-start>A good start</h4>
+<p>In this post I&rsquo;ve outlined the mechanism that ensures a deprovisioned AppX Package stays removed. Knowing how this works, we can leverage functions that help identify deprovisoned apps, and &lsquo;reprovision&rsquo; them.</p>
+<p>I hope this helps someone get their environment back in working order by restoring the Windows Store! Or maybe just Solitaire&mldr; Let them play cards guys.</p>
+<p><a href=https://twitter.com/CodyMathis123>@CodyMathis123</a></p>
+</div>
+<div class=post-share>
+<div class="post-share-box share-comments">
+hello
+</div>
+</div>
+<div class=post-author>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

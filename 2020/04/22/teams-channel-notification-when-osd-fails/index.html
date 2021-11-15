@@ -1,0 +1,327 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Teams Channel Notification when OSD Fails-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/04/22/teams-channel-notification-when-osd-fails/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Teams Channel Notification when OSD Fails">
+<meta name=twitter:description content="How would you like this lovely notification appearing within MS Teams every time a build failed? Better than getting a helpdesk ticket or not finding out at all.
+Well, now you can!     Step 1 - Configure Teams  Open Teams. Select a channel, or create a new channel specific for these notifications (This is best practice so normal channels are not spammed) Click the &mldr; Next to the channel name and choose Connectors       Click Add / Configure        Give your Connector an appropriate name and custom image.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Teams Channel Notification when OSD Fails</h1>
+<span class=post-date>April 22, 2020</span>
+</div>
+<div class=post-entry>
+<p>How would you like this lovely notification appearing within MS Teams every time a build failed? Better than getting a helpdesk ticket or not finding out at all.</p>
+<p>Well, now you can! </p>
+<p><div class=image>
+<figure>
+<a href=https://lh3.googleusercontent.com/BoKEAscaxddhdwbdL99Ks2fPQLO1TojP-vK3LtEddTJWWCHkG7rOapin1BhIkxOtFOT3B_eDY-vU6rFjo6bEBnMEpzzS2H7PbRnb4d9l7vIcbq1QQiUyHleq3K1KlYERHzcWyBk target=_blank>
+<img src=https://lh3.googleusercontent.com/BoKEAscaxddhdwbdL99Ks2fPQLO1TojP-vK3LtEddTJWWCHkG7rOapin1BhIkxOtFOT3B_eDY-vU6rFjo6bEBnMEpzzS2H7PbRnb4d9l7vIcbq1QQiUyHleq3K1KlYERHzcWyBk alt="Oh how sexy!">
+</a>
+</figure>
+</div> </p>
+<h2 id=step-1>Step 1 - Configure Teams</h2>
+<ul>
+<li>Open Teams.</li>
+<li>Select a channel, or create a new channel specific for these notifications (This is best practice so normal channels are not spammed)</li>
+<li>Click the <strong>&mldr;</strong> Next to the channel name and choose Connectors</li>
+</ul>
+<p><div class=image>
+<figure>
+<a href=https://lh3.googleusercontent.com/IDmdOWv7kS2rHVKHZWxkRq_k4Jk6EYKwwJZzu9M9OWDkcM9uIWFsskyUlDP6XGKK_5OES_bpHyWOd3AJVdicjZnKGe97-2PhCVWkCpusBJjaFn5Ej_rg2Gt3i4AM4JkYCoc4eE4 target=_blank>
+<img src=https://lh3.googleusercontent.com/IDmdOWv7kS2rHVKHZWxkRq_k4Jk6EYKwwJZzu9M9OWDkcM9uIWFsskyUlDP6XGKK_5OES_bpHyWOd3AJVdicjZnKGe97-2PhCVWkCpusBJjaFn5Ej_rg2Gt3i4AM4JkYCoc4eE4 alt>
+</a>
+</figure>
+</div> </p>
+<ul>
+<li>Click Add / Configure </li>
+</ul>
+<p><div class=image>
+<figure>
+<a href=https://lh6.googleusercontent.com/PQNNHfPzcDuCgYGJVAFlhynNeAIzMS11W75ak6v6udvTDjUGfjDjZCFuUGiDJOsh1FD3xgQXx5vKpwx9uQ-Q5ra-rN65nKcfMVVpCPSNoWhPJZXz_uY6IPZeYG2kuXezvfpEieA target=_blank>
+<img src=https://lh6.googleusercontent.com/PQNNHfPzcDuCgYGJVAFlhynNeAIzMS11W75ak6v6udvTDjUGfjDjZCFuUGiDJOsh1FD3xgQXx5vKpwx9uQ-Q5ra-rN65nKcfMVVpCPSNoWhPJZXz_uY6IPZeYG2kuXezvfpEieA alt>
+</a>
+</figure>
+</div> </p>
+<ul>
+<li>Give your Connector an appropriate name and custom image. </li>
+</ul>
+<p><div class=image>
+<figure>
+<a href=https://lh6.googleusercontent.com/JNlowFdme9yLmJs6kIMjYZaLw1hJ4Y_W5GYiQC55gc-0k8R6hPjaCv8Ia7Si73rU3bnoxRFE_OtwJgnTiZy0sXcQGWNQzyH-MlGYksJsj0SGaAOUHjxL6aV1rHDglSOtwaSti2w target=_blank>
+<img src=https://lh6.googleusercontent.com/JNlowFdme9yLmJs6kIMjYZaLw1hJ4Y_W5GYiQC55gc-0k8R6hPjaCv8Ia7Si73rU3bnoxRFE_OtwJgnTiZy0sXcQGWNQzyH-MlGYksJsj0SGaAOUHjxL6aV1rHDglSOtwaSti2w alt>
+</a>
+</figure>
+</div> </p>
+<ul>
+<li>It will then generate a unique API code for you to use later. Copy this URI and keep it safe! </li>
+</ul>
+<p><div class=image>
+<figure>
+<a href=https://lh3.googleusercontent.com/fHuRMMRmCLr-gwHGqwT3UCVd76Y_UtjuZ6yhlsaRQCE83X9WFYqYwSk30AN8694sDkDvkuBRLX1OTnbqdX3YMFRfMq51CIgIFx2VrfOLOwy7XSoetUG-qlChyZXtQGAPysivMcw target=_blank>
+<img src=https://lh3.googleusercontent.com/fHuRMMRmCLr-gwHGqwT3UCVd76Y_UtjuZ6yhlsaRQCE83X9WFYqYwSk30AN8694sDkDvkuBRLX1OTnbqdX3YMFRfMq51CIgIFx2VrfOLOwy7XSoetUG-qlChyZXtQGAPysivMcw alt>
+</a>
+</figure>
+</div> </p>
+<h2 id=step-2>Step 2 - PowerShell Script</h2>
+<p>I have modified the PowerShell script created by Terence Beggs from <a href=https://www.scconfigmgr.com/2017/10/06/configmgr-osd-notification-service-teams/>https://www.scconfigmgr.com/2017/10/06/configmgr-osd-notification-service-teams/</a></p>
+<h1 id=open-tsenv-for-use>Open TSEnv for use.</h1>
+<p>$TSenv = New-Object -COMObject Microsoft.SMS.TSEnvironment -ErrorAction SilentlyContinue</p>
+<h1 id=date-and-time>Date and Time</h1>
+<p>$DateTime = Get-Date -Format &ldquo;dddd dd/MM/yyyy HH:mm&rdquo;</p>
+<h1 id=computer-make>Computer Make</h1>
+<p>$Make = (Get-WmiObject -Class Win32_BIOS).Manufacturer</p>
+<h1 id=computer-model>Computer Model</h1>
+<p>$Model = (Get-WmiObject -Class Win32_ComputerSystem).Model</p>
+<h1 id=computer-name>Computer Name</h1>
+<p>#DEBUG# $Name = (Get-WmiObject -Class Win32_ComputerSystem).Name
+if ($TSenv.Value("_SMSTSPackageName") -ne &ldquo;") { $Name = $TSenv.value(&ldquo;OSDComputerName&rdquo;) } else { $Name = (Get-WmiObject -Class Win32_ComputerSystem).Name }</p>
+<h1 id=computer-serial-number>Computer Serial Number</h1>
+<p>[string]$SerialNumber = (Get-WmiObject win32_bios).SerialNumber</p>
+<h1 id=ip-address-of-the-computer>IP Address of the Computer</h1>
+<p>$IPAddress = (Get-WmiObject win32_Networkadapterconfiguration | Where-Object { $_.ipaddress -notlike $null }).IPaddress | Select-Object -First 1</p>
+<p>#$TS Name
+#DEBUG# $TSName = &ldquo;TSName&rdquo;
+if ($TSenv.Value("_SMSTSPackageName&rdquo;) -ne &ldquo;") { $TSName = $TSenv.value("_SMSTSPackageName&rdquo;) } else { $TSName = &ldquo;Unknown Task Sequence&rdquo; }</p>
+<p>#Error Code
+$TSLastError = ($TSenv.Value(&ldquo;ErrorReturnCode&rdquo;))
+If([string]::IsNullOrEmpty($TSLastError)){$TSLastError = &ldquo;Unknown Error. Check Logs."}</p>
+<h1 id=json-for-the-teams-messagecard-legacy>JSON for the Teams MessageCard (LEGACY)</h1>
+<p>$body = @&rdquo;
+{
+&ldquo;@type&rdquo;: &ldquo;MessageCard&rdquo;,
+&ldquo;@context&rdquo;: &ldquo;<a href=https://schema.org/extensions%22>https://schema.org/extensions"</a>,
+&ldquo;summary&rdquo;: &ldquo;OSD Failure Card&rdquo;,
+&ldquo;themeColor&rdquo;: &ldquo;0078D7&rdquo;,
+&ldquo;title&rdquo;: &ldquo;$Name Failed to build&rdquo;,
+&ldquo;text&rdquo;: &ldquo;&rdquo;,
+&ldquo;sections&rdquo;: [
+{
+&ldquo;activityTitle&rdquo;: &ldquo;Task Sequence&rdquo;,
+&ldquo;activitySubtitle&rdquo;: &ldquo;$TSName&rdquo;,
+&ldquo;activityImage&rdquo;: &ldquo;https://media.giphy.com/media/27EhcDHnlkw1O/giphy.gif&rdquo;
+},
+{
+&ldquo;title&rdquo;: &ldquo;## Deployment Details&rdquo;,
+&ldquo;facts&rdquo;: [
+{
+&ldquo;name&rdquo;: &ldquo;Name:&rdquo;,
+&ldquo;value&rdquo;: &ldquo;$Name&rdquo;
+},
+{
+&ldquo;name&rdquo;: &ldquo;Date Time:&rdquo;,
+&ldquo;value&rdquo;: &ldquo;$DateTime&rdquo;
+},
+{
+&ldquo;name&rdquo;: &ldquo;IP Number:&rdquo;,
+&ldquo;value&rdquo;: &ldquo;$IPAddress&rdquo;
+},
+{
+&ldquo;name&rdquo;: &ldquo;Make:&rdquo;,
+&ldquo;value&rdquo;: &ldquo;$Make&rdquo;
+},
+{
+&ldquo;name&rdquo;: &ldquo;Model:&rdquo;,
+&ldquo;value&rdquo;: &ldquo;$Model&rdquo;
+},
+{
+&ldquo;name&rdquo;: &ldquo;Serial:&rdquo;,
+&ldquo;value&rdquo;: &ldquo;$SerialNumber&rdquo;
+},
+{
+&ldquo;name&rdquo;: &ldquo;Last Error&rdquo;,
+&ldquo;value&rdquo;: &ldquo;$TSLastError&rdquo;
+}
+]
+},
+{
+&ldquo;title&rdquo;: &ldquo;## Log Location&rdquo;,
+&ldquo;text&rdquo;: &ldquo;\\\SERVER\Logs\OSD\&rdquo;
+}
+]
+}
+&ldquo;@</p>
+<p>Invoke-RestMethod -uri $uri -Method Post -body $body -ContentType &lsquo;application/json&rsquo;
+</p>
+<h3 id=customising-the-messagecard>Customising the MessageCard</h3>
+<p>If you want to change the JSON, there is a reference guide here: <a href=https://docs.microsoft.com/en-us/outlook/actionable-messages/message-card-reference>https://docs.microsoft.com/en-us/outlook/actionable-messages/message-card-reference</a></p>
+<p>And a Playground site: <a href=https://messagecardplayground.azurewebsites.net/>https://messagecardplayground.azurewebsites.net/</a></p>
+<p>This modification of the PowerShell script means you can just copy/paste the JSON as long as it&rsquo;s wrapped inside $body = @&rdquo; &mldr; &ldquo;@</p>
+<p><strong>NB: Incoming Webconnectors only support the Legacy MessageCard format at this time.</strong></p>
+<h2 id=step-3>Step 3 - Create Package for Script</h2>
+<ul>
+<li>Copy the PowerShell script to your Config Manager package source share.</li>
+<li>In Config Manager Console, create a new Package.</li>
+<li>Give it a <strong>Name</strong>, <strong>Description</strong>, and specify the <strong>source share</strong></li>
+</ul>
+<p><div class=image>
+<figure>
+<a href=https://lh5.googleusercontent.com/ogV4YKLMOxUoa9EcZ3ZZcvs7FBWrFC6FTkct_kvD7slFw2nJjZUqMk9U7w3dFPRGk1j3vK6Q9MC5M_hLVJxgWV38bdLzhaR1N59gZ3rty8szV9nWxo84y3uRLXwk4ONaLtiYOhk target=_blank>
+<img src=https://lh5.googleusercontent.com/ogV4YKLMOxUoa9EcZ3ZZcvs7FBWrFC6FTkct_kvD7slFw2nJjZUqMk9U7w3dFPRGk1j3vK6Q9MC5M_hLVJxgWV38bdLzhaR1N59gZ3rty8szV9nWxo84y3uRLXwk4ONaLtiYOhk alt>
+</a>
+</figure>
+</div> </p>
+<ul>
+<li>Select <strong>Do not create a program</strong></li>
+</ul>
+<p><div class=image>
+<figure>
+<a href=https://lh3.googleusercontent.com/fnKUiM0o1crWIn8rhzNcpvVJHEeLzJT-M6EelVNqcTDdwkvwYNTwHl_igoC2hoHQPRKLj9XK0JfKjTk7jQiyD-IT4z6qtcruWZujQ_pBYFwZE3S3oeleF24RFG9qOV2mVpLXmis target=_blank>
+<img src=https://lh3.googleusercontent.com/fnKUiM0o1crWIn8rhzNcpvVJHEeLzJT-M6EelVNqcTDdwkvwYNTwHl_igoC2hoHQPRKLj9XK0JfKjTk7jQiyD-IT4z6qtcruWZujQ_pBYFwZE3S3oeleF24RFG9qOV2mVpLXmis alt>
+</a>
+</figure>
+</div> </p>
+<ul>
+<li>Complete the wizard.</li>
+<li>Distribute the Package contents.</li>
+</ul>
+<h2 id=step-4>Step 4 - Task Sequence</h2>
+<p>Edit the task sequence for OSD.</p>
+<p>Our TS is set up with logic and a section to run if the task sequence encounters an error. This is where we will put the OSD Failure notification script.</p>
+<p><em>For more information on how to set up Error Handling in OSD Task Sequence, see <a href=https://ccmexec.com/author/jonil/>Jörgen Nilsson</a>&rsquo;s post about it here: <a href=https://ccmexec.com/2016/12/error-handling-in-ts-without-mdt-using-osdbackground/>https://ccmexec.com/2016/12/error-handling-in-ts-without-mdt-using-osdbackground/</a></em></p>
+<p><div class=image>
+<figure>
+<a href=https://lh5.googleusercontent.com/GRx_3DUP7m-LKvPLhxOqfdS0hI94Nii31qrJyXmyH9pXxGHmPs_VNZzm8Yr42YOA_6e5TUhhJHLQ3xLT7t4psCGvJsE7qLSRZRBRweEpNZ0QHuCh8t1OIcx80lDYpH8NR82AM4E target=_blank>
+<img src=https://lh5.googleusercontent.com/GRx_3DUP7m-LKvPLhxOqfdS0hI94Nii31qrJyXmyH9pXxGHmPs_VNZzm8Yr42YOA_6e5TUhhJHLQ3xLT7t4psCGvJsE7qLSRZRBRweEpNZ0QHuCh8t1OIcx80lDYpH8NR82AM4E alt>
+</a>
+</figure>
+</div> </p>
+<ul>
+<li>After the Gather step, we want to add a Run PowerShell Script task.</li>
+<li>Select the package with our Script.</li>
+<li>Change the PowerShell execution policy to Bypass</li>
+</ul>
+<p><div class=image>
+<figure>
+<a href=https://lh4.googleusercontent.com/j3haF1BmaCbjBJWnwwRFZ0mjRn_yfDGlUsgb1R2MBiRMDj8Bbc4meoRpeh0ekaruaa_yqiZdD-MZF_ZDFjKaPoXu9Ny5VWJTS6B9q8s4tWXuRPz1lEi84YbKyCK60Lip_ZLOxMA target=_blank>
+<img src=https://lh4.googleusercontent.com/j3haF1BmaCbjBJWnwwRFZ0mjRn_yfDGlUsgb1R2MBiRMDj8Bbc4meoRpeh0ekaruaa_yqiZdD-MZF_ZDFjKaPoXu9Ny5VWJTS6B9q8s4tWXuRPz1lEi84YbKyCK60Lip_ZLOxMA alt>
+</a>
+</figure>
+</div> </p>
+<ul>
+<li>Click OK and that&rsquo;s it set up!</li>
+</ul>
+<p>If you want to try emulating a failure, create a <strong>Run Command Line</strong> task somewhere in your Task Sequence that runs the following:</p>
+<p><div class=image>
+<figure>
+<a href=https://lh5.googleusercontent.com/48_DvgDPw7zontS5B_1_x7XLGKptLobBqnS3wf9nGkywHwxKzYYoME70O7J6KFSTOqh8T5bkf4xR3_tZ89z1Sl2enGMYJoB8o-_uSvIi0znFDRDtcW9aPk_ro7kYnDC1k3JIMTU target=_blank>
+<img src=https://lh5.googleusercontent.com/48_DvgDPw7zontS5B_1_x7XLGKptLobBqnS3wf9nGkywHwxKzYYoME70O7J6KFSTOqh8T5bkf4xR3_tZ89z1Sl2enGMYJoB8o-_uSvIi0znFDRDtcW9aPk_ro7kYnDC1k3JIMTU alt>
+</a>
+</figure>
+</div> </p>
+<p>So now, if your task sequence runs into an error, you will now get a lovely message straight into your Teams channel: </p>
+<p><div class=image>
+<figure>
+<a href=https://lh3.googleusercontent.com/BoKEAscaxddhdwbdL99Ks2fPQLO1TojP-vK3LtEddTJWWCHkG7rOapin1BhIkxOtFOT3B_eDY-vU6rFjo6bEBnMEpzzS2H7PbRnb4d9l7vIcbq1QQiUyHleq3K1KlYERHzcWyBk target=_blank>
+<img src=https://lh3.googleusercontent.com/BoKEAscaxddhdwbdL99Ks2fPQLO1TojP-vK3LtEddTJWWCHkG7rOapin1BhIkxOtFOT3B_eDY-vU6rFjo6bEBnMEpzzS2H7PbRnb4d9l7vIcbq1QQiUyHleq3K1KlYERHzcWyBk alt>
+</a>
+</figure>
+</div> </p>
+</div>
+<div class=post-share>
+<div class="post-share-box share-comments">
+hello
+</div>
+</div>
+<div class=post-author>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

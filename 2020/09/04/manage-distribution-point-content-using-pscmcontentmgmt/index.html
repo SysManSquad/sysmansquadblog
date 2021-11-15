@@ -1,0 +1,578 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Manage Distribution Point Content Using PSCMContentMgmt-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/09/04/manage-distribution-point-content-using-pscmcontentmgmt/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Manage Distribution Point Content Using PSCMContentMgmt">
+<meta name=twitter:description content="<p> I recently wrote <a href=&#34;https://github.com/codaamok/PSCMContentMgmt&#34; target=&#34;_blank&#34; rel=&#34;noreferrer noopener&#34;>PSCMContentMgmt</a> which provides a simple and effective workflow for managing your MEMCM distribution points. Here are some of the things you can do with it: </p> <ul> <li> Query content objects which are distributed to distribution point(s) or distribution point group(s) </li> <li> Compare content objects distributed to distribution point(s) or distribution point group(s) </li> <li> Find content objects in a &#34;distribution failed&#34; state for all or selective distribution points </li> <li> Remove, distribute or redistribute content objects returned by any function to distribution point(s) </li> <li> Find an object in your site by searching on any arbitrary ID (useful when reading logs and want to know what object an ID resolves to) </li> <li> Migrate a distribution point's content to a new/different distribution point by exporting its content library to prestaged .">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Manage Distribution Point Content Using PSCMContentMgmt</h1>
+<span class=post-date>September 4, 2020</span>
+</div>
+<div class=post-entry>
+<pre><code>                                    &lt;p&gt;
+                                      I recently wrote &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;PSCMContentMgmt&lt;/a&gt; which provides a simple and effective workflow for managing your MEMCM distribution points. Here are some of the things you can do with it:
+                                    &lt;/p&gt;
+                                    
+                                    &lt;ul&gt;
+                                      &lt;li&gt;
+                                        Query content objects which are distributed to distribution point(s) or distribution point group(s)
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Compare content objects distributed to distribution point(s) or distribution point group(s)
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Find content objects in a &quot;distribution failed&quot; state for all or selective distribution points
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Remove, distribute or redistribute content objects returned by any function to distribution point(s)
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Find an object in your site by searching on any arbitrary ID (useful when reading logs and want to know what object an ID resolves to)
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Migrate a distribution point's content to a new/different distribution point by exporting its content library to prestaged .pkgx files and importing the .pkgx files to the new distribution point
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Invoke the ContentLibraryCleanup.exe tool
+                                      &lt;/li&gt;
+                                    &lt;/ul&gt;
+                                    
+                                    &lt;p&gt;
+                                      PSCMContentMgmt is a mix of being no more than a wrapper for MEMCM cmdlets or native binaries. Some functions query WMI or invoke WMI methods.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      PSCMContentMgmt does not intend to reinvent the wheel from already available cmdlets. Instead it provides a simpler workflow for managing your distribution points by offering:
+                                    &lt;/p&gt;
+                                    
+                                    &lt;ul&gt;
+                                      &lt;li&gt;
+                                        Easy to use pipeline support, so you can easily progress through the motions for tasks such as querying content on a distribution point or distribution point group - perhaps in a particular state (e.g. &quot;distribution failed&quot;) - and distributing, redistributing or removing it from another (or the same) distribution point or distribution point group.
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Consistent property names when dealing with different types of content objects, i.e. the ObjectID property is always PackageID except for Applications/Deployment Types where it is CI_ID (same is true for the -ObjectID parameter on functions that offer it).
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Functionality which the Configuration Manager console does not provide e.g. content redistribution or import .pkgx files.
+                                      &lt;/li&gt;
+                                    &lt;/ul&gt;
+                                    
+                                    &lt;p&gt;
+                                      At the time of writing this, here are a list of functions in PSCMContentMgmt (be sure to check out the docs on the &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;GitHub repository&lt;/a&gt; in case there are changes):
+                                    &lt;/p&gt;
+                                    
+                                    &lt;ul&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Find-CMOBject.md&quot;&gt;Find-CMObject&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Compare-DPContent.md&quot;&gt;Compare-DPContent&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Compare-DPGroupContent.md&quot;&gt;Compare-DPGroupContent&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Export-DPContent.md&quot;&gt;Export-DPContent&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DP.md&quot;&gt;Get-DP&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPContent.md&quot;&gt;Get-DPContent&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPDistributionStatus.md&quot;&gt;Get-DPDistributionStatus&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPGroup.md&quot;&gt;Get-DPGroup&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPGroupContent.md&quot;&gt;Get-DPGroupContent&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Import-DPContent.md&quot;&gt;Import-DPContent&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Invoke-DPContentLibraryCleanup.md&quot;&gt;Invoke-DPContentLibraryCleanup&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Remove-DPContent.md&quot;&gt;Remove-DPContent&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Remove-DPGroupContent.md&quot;&gt;Remove-DPGroupContent&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Set-DPAllowPrestagedContent.md&quot;&gt;Set-DPAllowPrestagedContent&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Start-DPContentDistribution.md&quot;&gt;Start-DPContentDistribution&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Start-DPContentRedistribution.md&quot;&gt;Start-DPContentRedistribution&lt;/a&gt;
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Start-DPGroupContentDistribution.md&quot;&gt;Start-DPGroupContentDistribution&lt;/a&gt;
+                                      &lt;/li&gt;
+                                    &lt;/ul&gt;
+                                    
+                                    &lt;h2&gt;
+                                      Installing
+                                    &lt;/h2&gt;
+                                    
+                                    &lt;p&gt;
+                                      Install the module from the PowerShell gallery and import it to your session:
+                                    &lt;/p&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;showPanel&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;shell.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Install-Module PSCMContentMgmt -Scope CurrentUser
+</code></pre>
+<p>PS C:&amp;gt; Import-Module PSCMContentMgmt
+</p>
+<pre><code>                                    &lt;p&gt;
+                                      All functions of the module require use of &lt;code&gt;-SiteServer&lt;/code&gt; or &lt;code&gt;-SiteCode&lt;/code&gt; parameters. This can be tedious to repeatedly type out. Therefore upon importing the module, two variables will be set in your session:
+                                    &lt;/p&gt;
+                                    
+                                    &lt;ul&gt;
+                                      &lt;li&gt;
+                                        &lt;code&gt;$CMSiteServer&lt;/code&gt;&lt;ul&gt;
+                                          &lt;li&gt;
+                                            Value determined by reading the &lt;code&gt;Server&lt;/code&gt; registry value in the key &lt;code&gt;HKLM:\SOFTWARE\WOW6432Node\Microsoft\ConfigMgr10\AdminUI\Connection&lt;/code&gt;.
+                                          &lt;/li&gt;
+                                          &lt;li&gt;
+                                            This registry key is used by the Configuration Manager module, therefore it is assumed this is the site you want to work in.
+                                          &lt;/li&gt;
+                                        &lt;/ul&gt;
+                                      &lt;/li&gt;
+                                      
+                                      &lt;li&gt;
+                                        &lt;code&gt;$CMSiteCode&lt;/code&gt;&lt;ul&gt;
+                                          &lt;li&gt;
+                                            Value determined by reading the &lt;code&gt;SiteCode&lt;/code&gt; property in the&lt;code&gt;SMS_ProviderLocation&lt;/code&gt; WMI class on the server defined in &lt;code&gt;$CMSiteServer&lt;/code&gt;
+                                          &lt;/li&gt;
+                                        &lt;/ul&gt;
+                                      &lt;/li&gt;
+                                    &lt;/ul&gt;
+                                    
+                                    &lt;p&gt;
+                                      Ovewritting these variables is OK and essential if you operate in a multi-site environment.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      If you receive a warning along the lines of being unable to auto-populate variables&amp;nbsp;&lt;code&gt;$CMSiteServer&lt;/code&gt;&amp;nbsp;or&amp;nbsp;&lt;code&gt;$CMSiteCode&lt;/code&gt;, that means the module failed to read the previously mentioned registry value or the&amp;nbsp;&lt;code&gt;SMS_ProviderLocation&lt;/code&gt;&amp;nbsp;class on your site server.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      If the reason why the module could not set these variables itself is not known, or there's no viable workaround for you, then you can set&amp;nbsp;&lt;code&gt;$CMSiteServer&lt;/code&gt;&amp;nbsp;or&amp;nbsp;&lt;code&gt;$CMSiteCode&lt;/code&gt;&amp;nbsp;yourself. Alternatively you can use the&amp;nbsp;&lt;code&gt;-SiteServer&lt;/code&gt;&amp;nbsp;and&amp;nbsp;&lt;code&gt;-SiteCode&lt;/code&gt;&amp;nbsp;parameters on an ad-hoc basis.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;h2&gt;
+                                      Examples
+                                    &lt;/h2&gt;
+                                    
+                                    &lt;p&gt;
+                                      I'll walk you through some key examples which I think most people will benefit from.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;h4&gt;
+                                      &lt;strong&gt;Comparing distributed content objects between two distribution points or distribution point groups&lt;/strong&gt;
+                                    &lt;/h4&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;showPanel&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;shell.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Compare-DPContent -Source &quot;dp1.contoso.com&quot; -Target &quot;dp2.contoso.com&quot;
+</code></pre>
+<p>ObjectName : 2020-03-1809
+Description :
+ObjectType : DeploymentPackage
+ObjectID : ACC000F3
+SourceSize : 324981
+DistributionPoint : dp1.contoso.com</p>
+<p>ObjectName : 2020-02-1809
+Description :
+ObjectType : DeploymentPackage
+ObjectID : ACC000F4
+SourceSize : 292894
+DistributionPoint : dp1.contoso.com</p>
+<p>&mldr;
+</p>
+<pre><code>                                    &lt;p&gt;
+                                      Returns content objects which are on dp1.contoso.com but not dp2.contoso.com.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      With this command, you can pipe it to other appropriate functions within PSCMContentMgmt, e.g. &lt;code&gt;Remove-DPContent&lt;/code&gt; or &lt;code&gt;Start-DPContentDistribution&lt;/code&gt;.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;showPanel&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;shell.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Compare-DPContent -Source &quot;dp1.contoso.com&quot; -Target &quot;dp2.contoso.com&quot; | Start-DPContentDistribution -DistributionPoint &quot;dp2.contoso.com&quot;
+</code></pre>
+<p>Result ObjectId ObjectType Message</p>
+<hr>
+<p>Success ACC00001 Package
+Success ACC00004 BootImage
+Success ACC00005 BootImage
+Success ACC00007 Package
+Success 16999742 Application
+Success 16999646 Application
+Success 16999674 Application
+Success 16999752 Application
+Success 16999720 Application
+Success 17007034 Application</p>
+<p>&mldr;
+</p>
+<pre><code>                                    &lt;h4&gt;
+                                      &lt;strong&gt;Finding content objects in &quot;distribution failed&quot; state and initiating redistribution en masse&lt;/strong&gt;
+                                    &lt;/h4&gt;
+                                    
+                                    &lt;p&gt;
+                                      This is the most practical function I like about PSCMContentMgmt. It is not uncommon for me to experience distribution failures in my environments and I wanted a way to quickly have a visual on those, and take action.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;showPanel&amp;quot;:false,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Get-DP | Get-DPDistributionStatus -DistributionFailed | Group-Object -Property DistributionPoint
+</code></pre>
+<p>Count Name Group</p>
+<hr>
+<p>42 dp1.contoso.com {@{ObjectID=17099179; ObjectType=Applicat&mldr;
+30 dp2.contoso.com {@{ObjectID=17099179; ObjectType=Applicat&mldr;
+</p>
+<pre><code>                                    &lt;p&gt;
+                                      Return all distribution points, their associated failed distribution tasks and group the results by distribution point name for an overview.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;showPanel&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;shell.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Get-DPDistributionStatus -DistributionPoint &quot;dp1.contoso.com&quot; -DistributionFailed | Start-DPContentRedistribution&lt;/pre&gt;
+                                    &lt;/div&gt;
+                                    
+                                    &lt;p&gt;
+                                      This is an example on taking action on those items. In this instance, I'm initiating redistribution for all of the objects on dp1.contoso.com in a &quot;distribution failed&quot; state.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      If you didn't want to redistribute, you could pipe to &lt;code&gt;Remove-DPContent&lt;/code&gt; instead.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;h4&gt;
+                                      &lt;strong&gt;Finding objects in your environment with some arbitrary ID&lt;/strong&gt;
+                                    &lt;/h4&gt;
+                                    
+                                    &lt;p&gt;
+                                      This is my favourite function. Do you ever look through log files, see some random ID that you know represents some object in console and just want to know what object that is?
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      &lt;code&gt;Find-CMObject&lt;/code&gt; accepts one parameter and that's &lt;code&gt;-ID&lt;/code&gt;. Pass it anything and it'll do its best to find these objects for you:
+                                    &lt;/p&gt;
+                                    
+                                    &lt;ul&gt;
+                                      &lt;li&gt;
+                                        Applications
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Deployment Types
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Packages
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Drivers
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Driver Packages
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Boot Images
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Operating System Images
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Operating System Upgrade Images
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Task Sequences
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Configuration Items
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Configuration Baselines
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        User Collections
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Device Collections
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        (Software Update) Deployment Packages
+                                      &lt;/li&gt;
+                                    &lt;/ul&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;showPanel&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;shell.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Find-CMObject -ID &quot;ACC00048&quot;&lt;/pre&gt;
+                                    &lt;/div&gt;
+                                    
+                                    &lt;p&gt;
+                                      Finds any object which has the PackageID &quot;ACC00048&quot;, this includes Applications, collections, driver packages, boot images, OS images, OS upgrade images, task sequences and deployment packages.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      It searches for Applications by PackageID as a last resort if no match has been found yet by loading every Application's PackageID property which is a lazy property in WMI. This can be time consuming, depending on how many Applications you have in your site, hence why it is last in the list.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;h4&gt;
+                                      &lt;strong&gt;Migrating a distribution point to another&lt;/strong&gt;
+                                    &lt;/h4&gt;
+                                    
+                                    &lt;p&gt;
+                                      Do you need to stand up a new distribution point beside an existing one, but don't want to send content across the WAN?
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      This requirement was what originally inspired me to write the module. A couple of years ago I came across &lt;a href=&quot;http://synack87.blogspot.com/2017/03/distribution-point-migration-tool-kit.html&quot;&gt;this post&lt;/a&gt; by someone with the handle SYN_ACK_87. The code offered on TechNet helped me hugely at the time for what I needed, but I felt like adding extra bits. I rolled my own and here we are.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      Pull distribution points are undoubtedly a million miles easier than this. If you can, or do currently, use pull distribution points, don't follow this. Configure the new distribution point to pull from the old distribution point.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      However if for whatever reason you can't or don't want to use the pull distribution point method, then this is for you.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;h6&gt;
+                                      1. Begin by exporting your old/source distribution point's content using &lt;code&gt;Export-DPContent&lt;/code&gt;.
+                                    &lt;/h6&gt;
+                                    
+                                    &lt;p&gt;
+                                      Preferably this server will be on the same LAN as the distribution point you intend to import the .pkgx files to.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      If the server is remote across a slow link, it is recommended you copy the .pkgx files generated by &lt;code&gt;Export-DPContent&lt;/code&gt; to your new/target distribution point.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;showPanel&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;shell.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Get-DPContent -DistributionPoint &quot;OldDP.contoso.com&quot; | Export-DPContent -Folder &quot;E:\exported&quot;&lt;/pre&gt;
+                                    &lt;/div&gt;
+                                    
+                                    &lt;h6&gt;
+                                      2. Configure your new/target distribution point to allow prestaged content using &lt;code&gt;Set-DPAllowPrestagedContent&lt;/code&gt;.
+                                    &lt;/h6&gt;
+                                    
+                                    &lt;p&gt;
+                                      This will ensure when we use &lt;code&gt;Start-DPContentDistribution&lt;/code&gt; in the next step that the content will not inadvertently transfer across an undesired route.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;showPanel&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;shell.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Set-DPAllowPrestagedContent -DistributionPoint &quot;NewDP.contoso.com&quot;&lt;/pre&gt;
+                                    &lt;/div&gt;
+                                    
+                                    &lt;h6&gt;
+                                      3. Distribute the exported content from step 1 using &lt;code&gt;Start-DPContentDistribution&lt;/code&gt; using its &lt;code&gt;-Folder&lt;/code&gt; parameter.
+                                    &lt;/h6&gt;
+                                    
+                                    &lt;p&gt;
+                                      This will walk through all .pkgx files in the given folder, identifying each object by the particular naming convention of the .pkgx files generated by &lt;code&gt;Export-DPContent&lt;/code&gt;, and distribute each of the objects they represent in console to your new/target distribution point.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      This will put the content objects in console in a &quot;Pending&quot; state; waiting to be imported on your new/target distribution point.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;showPanel&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;shell.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;Start-DPContentDistribution -Folder &quot;E:\exported&quot; -DistributionPoint &quot;NewDP.contoso.com&quot;&lt;/pre&gt;
+                                    &lt;/div&gt;
+                                    
+                                    &lt;h6&gt;
+                                      4. Log on locally or enter a PowerShell session to your new/target distribution point and import PSCMContentMgmt to run &lt;code&gt;Import-DPContent&lt;/code&gt;.
+                                    &lt;/h6&gt;
+                                    
+                                    &lt;p&gt;
+                                      This step must be executed locally to your new/target distribution point. This is because &lt;code&gt;Import-DPContent&lt;/code&gt; simply invokes ExtractContent.exe.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      Use Import-DPContent and the -Folder parameter (which is preferably a local drive path, or a UNC path where the host is on the same LAN) to begin importing content.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      Similar to step 3, &lt;code&gt;Import-DPContent&lt;/code&gt; depends on the particular naming convention of .pkgx files generated by &lt;code&gt;Export-DPContent&lt;/code&gt; to successfully import the content.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;showPanel&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;shell.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Import-DPContent -Folder &quot;\\OldDP.contoso.com\e$\exported&quot;&lt;/pre&gt;
+                                    &lt;/div&gt;
+                                    
+                                    &lt;h6&gt;
+                                      5. Unconfigure your new/target distribution point to only allow prestaged content.
+                                    &lt;/h6&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;showPanel&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;shell.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Set-DPAllowPrestagedContent -DistributionPoint &quot;NewDP.contoso.com&quot; -State $false&lt;/pre&gt;
+                                    &lt;/div&gt;
+                                    
+                                    &lt;h2&gt;
+                                      Getting help
+                                    &lt;/h2&gt;
+                                    
+                                    &lt;p&gt;
+                                      If you're seeing or hearing things, I recommend you drink more rum.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      I encourage you to read the documentation on the &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;GitHub repository page&lt;/a&gt; and the &lt;code&gt;Get-Help&lt;/code&gt; material. I wrote several &quot;About&quot; help topics , filling all functions with examples and detailed descriptions for parameters.
+                                    &lt;/p&gt;
+                                    
+                                    &lt;p&gt;
+                                      To view the help material for a particular function:
+                                    &lt;/p&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;showPanel&amp;quot;:false,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Get-Help Compare-DPContent -Detailed&lt;/pre&gt;
+                                    &lt;/div&gt;
+                                    
+                                    &lt;p&gt;
+                                      To see all of the &quot;About&quot; help topics available for PSCMContentMgmt:
+                                    &lt;/p&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;showPanel&amp;quot;:false,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Get-Help about_PSCMContentMgmt*&lt;/pre&gt;
+                                    &lt;/div&gt;
+                                    
+                                    &lt;p&gt;
+                                      To read one of the &quot;About&quot; help topics:
+                                    &lt;/p&gt;
+                                    
+                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
+                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;showPanel&amp;quot;:false,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; Get-Help about_PSCMContentMgmt_Query&lt;/pre&gt;
+                                    &lt;/div&gt;
+                                    
+                                    &lt;p&gt;
+                                      Failing that:
+                                    &lt;/p&gt;
+                                    
+                                    &lt;ul&gt;
+                                      &lt;li&gt;
+                                        If you think you're experiencing, or have found, a bug in PSCMContentMgmt, please open an issue on its &lt;a href=&quot;https://github.com/codaamok/PSCMContentMgmt&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;GitHub repository&lt;/a&gt;.
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Ping me on Twitter &lt;a href=&quot;https://twitter.com/codaamok&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;@codaamok&lt;/a&gt;.
+                                      &lt;/li&gt;
+                                      &lt;li&gt;
+                                        Come to the &lt;a href=&quot;https://winadmins.io/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;WinAdmins Discord&lt;/a&gt; and bug me there, my handle is @acc.
+                                      &lt;/li&gt;
+                                    &lt;/ul&gt;
+                                    
+                                    &lt;p&gt;
+                                      The Configuration Manager module notoriously returns generic error messages (if any) for most of its cmdlets/functions. Since this module is mostly nothing more than a wrapper for most cmdlets/functions, I just forward those messages on to you so please bear that in mind.
+                                    &lt;/p&gt;</code></pre>
+</div>
+<div class=post-share>
+<div class="post-share-box share-comments">
+hello
+</div>
+</div>
+<div class=post-author>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

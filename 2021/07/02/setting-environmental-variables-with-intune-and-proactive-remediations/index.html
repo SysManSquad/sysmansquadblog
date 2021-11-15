@@ -1,0 +1,190 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Setting Environmental Variables with Intune and proactive remediations-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2021/07/02/setting-environmental-variables-with-intune-and-proactive-remediations/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Setting Environmental Variables with Intune and proactive remediations">
+<meta name=twitter:description content="As you may have noticed by now, there doesn&rsquo;t seem to be any nice built in way to set environmental variables in intune 🙁
+The Problem Setting a user environmental variable using powershell is an easy task to accomplish, you basically just run the following:
+This works just fine, but won&rsquo;t take effect until the user either reboots or signs into the device again. Which is obviously not ideal.
+I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a WM_SETTINGCHANGE messageis broadcast to the system and that refreshes them, but how you do that with powershell?">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Setting Environmental Variables with Intune and proactive remediations</h1>
+<span class=post-date>July 2, 2021</span>
+</div>
+<div class=post-entry>
+<p>As you may have noticed by now, there doesn&rsquo;t seem to be any nice built in way to set environmental variables in intune 🙁</p>
+<h2 id=the-problem>The Problem</h2>
+<p>Setting a user environmental variable using powershell is an easy task to accomplish, you basically just run the following:</p>
+<p>This works just fine, but won&rsquo;t take effect until the user either reboots or signs into the device again. Which is obviously not ideal.</p>
+<p>I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a WM_SETTINGCHANGE message is broadcast to the system and that refreshes them, but how you do that with powershell?</p>
+<h2 id=the-solution>The Solution</h2>
+<p>As it turned out, my fellow sysmansquad member Grant Dickins had a solution to the problem.</p>
+<p>Which both sets the variable and broadcasts the change to the rest of the system!</p>
+<h2 id=putting-it-all-together>Putting it all together</h2>
+<p>Intune has a very nice feature called Proactive Remediation that is part of endpoint analytics. and its the perfect tool for the job!</p>
+<p>If you are new to using Proactive Remediations, check out Jake Shackelford&rsquo;s blog post, it will get you up to speed in no time.</p>
+<p>When you create the Proactive remediation, you need to configure it to run as the logged-on user.</p>
+<p> </p>
+<h2 id=the-script>The Script</h2>
+<p>First up is the Detection script, pretty simple stuff, it checks if the temp and tmp variables are set to the path i want.</p>
+<p>Note that if you want to use a different path, just change line 5 in both scripts.</p>
+<h1 id=path-to-the-directory-that-temp-and-tmp-should-point-towards>path to the directory that TEMP and TMP should point towards</h1>
+<h1 id=make-sure-its-the-same-in-both-the-remediation-and-discovery-scripts>Make sure its the same in both the remediation and discovery scripts</h1>
+<p>$value = &ldquo;c:\temp"</p>
+<p>try {</p>
+<pre><code># create the temp directory if it doesn't exist, no need to use a remediation to do that
+if ( (Test-Path -Path $value -ErrorAction stop) -eq $false ) {
+    Write-Host &quot;$value directory missing&quot;
+    exit 1
+}
+
+# check the TEMP environmental variable
+$TempVar = [System.Environment]::GetEnvironmentVariable('TEMP', 'User')
+if ($TempVar -ne $value) {
+    Write-Host &quot;failure, Temp is set to $TempVar&quot;
+    exit 1
+}
+
+# check the TMP environmental variable
+$TmpVar = [System.Environment]::GetEnvironmentVariable('TMP', 'User')
+if ($TmpVar -ne $value) {
+    Write-Host &quot;failure, Tmp is set to $TmpVar&quot;
+    exit 1
+}
+
+Write-Host &quot;Temp/tmp Variables set correctly&quot;
+exit 0
+</code></pre>
+<p>}
+catch {
+$errMsg = $_.Exception.Message
+Write-Host $errMsg
+exit 1
+}</p>
+<p>The remediation is not much to write home about. It sets the variables and runs the code needed to refresh the system.</p>
+<h1 id=path-to-the-directory-that-temp-and-tmp-should-point-towards-1>path to the directory that TEMP and TMP should point towards</h1>
+<h1 id=make-sure-its-the-same-in-both-the-remediation-and-discovery-scripts-1>Make sure its the same in both the remediation and discovery scripts</h1>
+<p>$value = &ldquo;c:\temp"</p>
+<p>try {</p>
+<pre><code># create the temp directory if it doesn't exist
+if ( (Test-Path -Path $value) -eq $false ) {
+    New-Item -Path $value -ItemType Directory
+}
+
+# set the variables
+[System.Environment]::SetEnvironmentVariable('TEMP', &quot;$value&quot;, 'User')
+[System.Environment]::SetEnvironmentVariable('TMP', &quot;$value&quot;, 'User')
+
+Write-Host &quot;User variables Changed&quot;
+exit 0
+</code></pre>
+<p>}
+catch {
+$errMsg = $_.Exception.Message
+Write-Host $errMsg
+exit 1
+}</p>
+<h2 id=outro>Outro</h2>
+<p>So there you go, a simple proactive remediation that you can use to change user environmental variables with relative ease. You can trivially adopt this to change any other variable. Either user or System variable.</p>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

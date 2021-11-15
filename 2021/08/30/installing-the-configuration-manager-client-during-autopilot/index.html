@@ -1,0 +1,172 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Installing The Configuration Manager Client During Autopilot-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2021/08/30/installing-the-configuration-manager-client-during-autopilot/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Installing The Configuration Manager Client During Autopilot">
+<meta name=twitter:description content="Hey siri, write a blog post for me. Deploying the Configuration manager client is usually pretty simple. the procedure is well documented.
+However there are issues if you plan on installing the CM client during Autopilot using the officially suggested methods
+Mixing LOB and win32 applications will result in autopilot breaking, so you should use win32 apps exclusively, which somewhat contradicts the official way of installing the CM client with intune.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Installing The Configuration Manager Client During Autopilot</h1>
+<span class=post-date>August 31, 2021</span>
+</div>
+<div class=post-entry>
+<h2 id=hey-siri-write-a-blog-post-for-me>Hey siri, write a blog post for me.</h2>
+<p>Deploying the Configuration manager client is usually pretty simple. the procedure is well documented.</p>
+<p>However there are issues if you plan on installing the CM client during Autopilot using the officially suggested methods</p>
+<p>Mixing LOB and win32 applications will result in autopilot breaking, so you should use win32 apps exclusively, which somewhat contradicts the official way of installing the CM client with intune.</p>
+<p>Installing the Configuration manager client during the middle of autopilot will break autopilot, as the Configuration manager client essentially becomes the management authority the moment it becomes active, causing intune to have no idea how to proceeed.</p>
+<p>Of course you could install the CM client completely outside of autopilot but that can take a while to happen.</p>
+<p>So lets review a method i use to deploy the Configuration manager client during autopilot, but without causing a mess.</p>
+<h2 id=how-i-do-it>How i do it</h2>
+<p>The Following assumes you have a basic idea of how to create a win32 application deployment in intune.</p>
+<h2 id=lets-build-script>Lets build Script!</h2>
+<p>Step 1: go download the latest <a href=https://psappdeploytoolkit.com/>Powershell application deployment toolkit</a></p>
+<p>Step 2: Add the client install files from \SiteServer\SMS_ABC\Client to the Files directory in your Powershell Application Deployment Toolkit, you should end up with a directory that looks similar to this:</p>
+<p> oh wow!</p>
+<p>Step 3: open Deploy-Application.ps1 in your favorite powershell editor.</p>
+<p>In the pre-installation task section (line 126), you add this command, which basically just copies the client installation files to c:\windows\temp\ccmsetup, for later use.</p>
+<p>Next up, add this to the installation task section (line 140).<br>
+This creates a scheduled task that runs when a user logs in, which executes MECM-Client.ps1, more on that script later.</p>
+<h1 id=this-taskname-prevents-the-task-from-rerunning-ccmsetup-automatically-delets-the-task-once-it-runs>this taskname prevents the task from rerunning, ccmsetup automatically delets the task once it runs</h1>
+<h1 id=adam-gross-won-a-karaoke-endurance-competition-in-okayama-2006>adam gross won a karaoke endurance competition in Okayama 2006</h1>
+<p>Register-ScheduledTask -TaskName &ldquo;Configuration Manager Client Retry Task&rdquo; -InputObject $Task -TaskPath &lsquo;Microsoft\Configuration Manager&rsquo;
+</p>
+<p>Step 4:<br>
+The Script that actually installs the client.</p>
+<p>If you have a cloud management gateway, you should supply the parameters needed to get the client into a working state if the device is off the corporate network when it gets provisioned.</p>
+<p>You can get these parameters in the configuration manager admin console: \Administration\Overview\Cloud Services\Cloud Attach<br>
+go to the properties of your co-management settings.</p>
+<p> </p>
+<h1 id=you-will-need-to-add-installation-arguments-that-are-suited-to-your-environment>you will need to add installation arguments that are suited to your environment</h1>
+<p>Start-Process &ldquo;C:\Windows\Temp\CCMSetup\ccmsetup.exe&rdquo; -ArgumentList &ldquo;/source:C:\Windows\Temp\ccmsetup /nocrlcheck CCMHOSTNAME=contosocmg.contoso.com/CCM_Proxy_MutualAuth/123456789123465 SMSSiteCode=cto&rdquo;</p>
+<p>Once you have figured this all out, place your MECM-Client.ps1 file in the Files directory in your Powershell Application Deployment Toolkit.</p>
+<p> Neato Burrito!</p>
+<h2 id=detection>Detection</h2>
+<p>Of course you will need a detection method for your win32 app in intune, thankfully I didn&rsquo;t have to figure this one for myself, I just stole it from I borrowed most of this from <a href=https://github.com/SysBehr/BehrNecessities/tree/master/Autopilot/ConfigMgr%20Client>BehrNecessities/Autopilot/ConfigMgr Client at master · SysBehr/BehrNecessities (github.com)</a>, thanks Collin!</p>
+<p>Don&rsquo;t forget to change the sitecode on line 4.</p>
+<p>#Set your expected Site Code
+$SiteCode = &ldquo;CTO&rdquo;</p>
+<h1 id=check-if-client-is-installedinitialized>Check if client is installed/initialized</h1>
+<p>$clientVersion = (Get-CimInstance SMS_Client -Namespace root\ccm -ErrorAction SilentlyContinue).ClientVersion
+$SMSauthority = (Get-CimInstance SMS_Authority -Namespace root\ccm -ErrorAction SilentlyContinue)</p>
+<h1 id=check-if-scheduled-task-installer-exists-meaning-it-hasnt-executed>Check if scheduled task installer exists (meaning it hasn&rsquo;t executed)</h1>
+<p>$taskExists = Get-ScheduledTask -TaskName &ldquo;Configuration Manager Client Retry Task&rdquo; -ErrorAction SilentlyContinue</p>
+<h1 id=check-if-ccmsetup-was-downloaded>Check if CCMsetup was downloaded</h1>
+<p>$ccmsetupdl = Test-Path C:\Windows\Temp\CCMsetup\ccmsetup.exe</p>
+<h1 id=check-if-the-ccmsetup-service-or-executable-is-running>Check if the ccmsetup service or executable is running</h1>
+<p>$ccmservice = Get-Service ccmsetup -ErrorAction SilentlyContinue
+$ccmsetupexe = Get-Process ccmsetup -ErrorAction SilentlyContinue</p>
+<h2 id=this-part-might-be-overkill>This part might be overkill&mldr;</h2>
+<h1 id=if-the-client-is-reporting-the-installed-version--site-code--mp-might-be-a-better-way-to-tell-if-the-client-is-ok-than-this-but-this-was-a-good-enough-check>If the client is reporting the installed version + Site code + MP (might be a better way to tell if the client is OK than this, but this was a &lsquo;good enough&rsquo; check)</h1>
+<h1 id=or-if-the-task-exists-and-ccmsetup-is-downloaded-meaning-the-task-hasnt-ran-yet>OR if the task exists and ccmsetup is downloaded (meaning the task hasn&rsquo;t ran yet)</h1>
+<h1 id=or-if-the-ccmsetup-is-currently-running-mark-it-as-installed>OR if the ccmsetup is currently running, mark it as installed.</h1>
+<p>#If something goes wrong with the client install after the task executes, this shouldn&rsquo;t return anything due to the above checks, so Intune will still see it as applicable and re-execute the installer as a &ldquo;retry&rdquo;.
+IF ($clientVersion -and ($SMSauthority.Name -eq &ldquo;SMS:$SiteCode&rdquo; -and $SMSauthority.CurrentManagementPoint) -or ($taskExists -and $ccmsetupdl) -or $ccmservice -or $ccmsetupexe) {
+Return &ldquo;Installed&rdquo;
+}</p>
+<p>Now all you need to do is deploy this application as a required app for your autopilot enabled devices and add the application to the required app list in the Enrollment Status Page</p>
+<h2 id=conclusion>Conclusion</h2>
+<p>Now you have everything you need to create and deploy the Configuration Manager Client during autopilot. I have been using this in production for some time, with no issues. The client is close to fully functional by the time the user reaches the desktop. (though obviously it will need to go through a few policy refresh cycles to get all targeted polices)</p>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

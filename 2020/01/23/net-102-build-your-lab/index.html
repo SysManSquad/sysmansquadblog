@@ -1,0 +1,602 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>NET-102: Build your lab-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/01/23/net-102-build-your-lab/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="NET-102: Build your lab">
+<meta name=twitter:description content="Welcome back! We&rsquo;re now going to move on to the actual effort it takes to build your lab. As you recall we got pretty far last time in documenting the beginnings of our network. For this lab I&rsquo;ll be using VMWare Workstation, but you can accomplish this with Microsoft Hyper-V, Oracle VirtualBox, the free tier of VMWare&rsquo;s ESX, or XCP-NG.
+If you haven&rsquo;t read the previous post, please have a look here as each post builds upon the last.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>NET-102: Build your lab</h1>
+<span class=post-date>January 23, 2020</span>
+</div>
+<div class=post-entry>
+<p>Welcome back! We&rsquo;re now going to move on to the actual effort it takes to build your lab. As you recall we got pretty far last time in documenting the beginnings of our network. For this lab I&rsquo;ll be using VMWare Workstation, but you can accomplish this with Microsoft Hyper-V, Oracle VirtualBox, the free tier of VMWare&rsquo;s ESX, or XCP-NG.</p>
+<p>If you haven&rsquo;t read the previous post, please have a look <a href=https://sysmansquad.com/2019/12/17/net-101-create-a-basic-lab-network-design/>here</a> as each post builds upon the last.</p>
+<p>I&rsquo;m not going to cover a lot of the implementation details of any particular hypervisor other than as a general concept. You can view manuals for most hypervisors and find a ton of tutorials for how to create a VM. </p>
+<pre><code>                &lt;h2 id=&quot;0-a-note-about-pinging&quot;&gt;
+                  A Note About Pinging
+                &lt;/h2&gt;
+                
+                &lt;p&gt;
+                  You might find yourself wanting to ping things to verify that you have your IP settings correct. In this article, the only thing you'll be able to ping is the default gateway. By default the Windows Firewall rules consider any network they're on as a 'public' network for purposes of the firewall. Just leave all that alone for now, and we'll make some changes later. For now, just ping the gateway
+                &lt;/p&gt;
+                
+                &lt;h2 id=&quot;1-documentation&quot;&gt;
+                  Documentation
+                &lt;/h2&gt;
+                
+                &lt;p&gt;
+                  In a previous revision of the last article I made 2 mistakes : I picked 'my.example' as our DNS name. Windows DNS rejects this name as not allowed, for it's own reasons. The error message was pretty useless if I'm honest, but it doesn't really matter. We're going to proceed with &quot;lab.test&quot; instead. Since we haven't actually implemented anything yet, now is the time to fix the mistake.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  It also appears that most DHCP servers won't do a scope smaller than a /64 for IPv6, including Windows DHCP. We will adjust our subnet to a /64 as a result.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  It's time to upgrade our documentation.
+                &lt;/p&gt;&lt;figure class=&quot;wp-block-table is-style-stripes&quot;&gt;
+                
+                &lt;table class=&quot;&quot;&gt;
+                  &lt;tr&gt;
+                    &lt;td&gt;
+                      &lt;strong&gt;Item&lt;/strong&gt;
+                    &lt;/td&gt;
+                    
+                    &lt;td&gt;
+                      &lt;strong&gt;Value&lt;/strong&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  
+                  &lt;tr&gt;
+                    &lt;td&gt;
+                      Subnet ID
+                    &lt;/td&gt;
+                    
+                    &lt;td&gt;
+                      IPv4: &lt;strong&gt;10.248.100.0/24&lt;/strong&gt;&lt;br /&gt;IPv6: &lt;strong&gt;fdda:f6d4:f5a2:f1e6::/64&lt;/strong&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  
+                  &lt;tr&gt;
+                    &lt;td&gt;
+                      Default Gateway
+                    &lt;/td&gt;
+                    
+                    &lt;td&gt;
+                      IPv4: &lt;strong&gt;10.248.100.1/24&lt;/strong&gt;&lt;br /&gt;IPv6: &lt;strong&gt;fdda:f6d4:f5a2:f1e6::1/64&lt;/strong&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  
+                  &lt;tr&gt;
+                    &lt;td&gt;
+                      DNS Server
+                    &lt;/td&gt;
+                    
+                    &lt;td&gt;
+                      Hostname: &lt;strong&gt;lab-dns&lt;/strong&gt;&lt;br /&gt;IPv4: &lt;strong&gt;10.248.100.2/24&lt;/strong&gt;&lt;br /&gt;IPv6: &lt;strong&gt;fdda:f6d4:f5a2:f1e6::2/64&lt;/strong&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  
+                  &lt;tr&gt;
+                    &lt;td&gt;
+                      DNS Domain
+                    &lt;/td&gt;
+                    
+                    &lt;td&gt;
+                      &lt;strong&gt;lab.test.&lt;/strong&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  
+                  &lt;tr&gt;
+                    &lt;td&gt;
+                      DHCP Server
+                    &lt;/td&gt;
+                    
+                    &lt;td&gt;
+                      Hostname: &lt;strong&gt;lab-dhcp&lt;/strong&gt;&lt;br /&gt;IPv4: &lt;strong&gt;10.248.100.3/24&lt;/strong&gt;&lt;br /&gt;IPv6:&lt;strong&gt;fdda:f6d4:f5a2:f1e6::3/64&lt;/strong&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  
+                  &lt;tr&gt;
+                    &lt;td&gt;
+                      DHCP Range
+                    &lt;/td&gt;
+                    
+                    &lt;td&gt;
+                      &lt;strong&gt;10.248.100.[50-99]/24&lt;/strong&gt;&lt;br /&gt;&lt;strong&gt;fdda:f6d4:f5a2:f1e6::[32-*]/&lt;/strong&gt;64
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  
+                  &lt;tr&gt;
+                    &lt;td&gt;
+                      VLAN ID
+                    &lt;/td&gt;
+                    
+                    &lt;td&gt;
+                      &lt;strong&gt;77&lt;/strong&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                &lt;/table&gt;&lt;/figure&gt; 
+                
+                &lt;h2 id=&quot;2-the-admin-workstation&quot;&gt;
+                  The Admin Workstation
+                &lt;/h2&gt;
+                
+                &lt;p&gt;
+                  You're going to need a machine to use to work from inside your lab network and reach the management address of your gateway/firewall.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Install a Windows 10 VM to use as your admin workstation. Let's say that you're using an evaluation copy from the &lt;a href=&quot;https://www.microsoft.com/en-us/evalcenter/evaluate-windows-10-enterprise&quot;&gt;evaluation center&lt;/a&gt;, which will function for 90 days. Place it on the lab network, and if you'd like to RDP to it, give it an adapter on the parent network as well.
+                &lt;/p&gt;
+                
+                &lt;p class=&quot;has-background has-very-light-gray-background-color&quot;&gt;
+                  NOTE: Your local account on the admin workstation will need a password if you intend to use remote desktop to connect, and also as basic security hygiene.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  You'll want to choose Windows over Linux for this workstation because we'll be using PowerShell with domain membership to manage most of this network. You're welcome to try to replicate the roles of these machines in Linux if you want to do it that way, but we're not covering how to do that. For most of these network roles, it only matters that they exist and doesn't matter so much which OS runs the software to do it. If you give up Windows for these roles, you have to move them somewhere else, and the software we'll use for the default gateway can handle it if you're low on RAM in your hypervisor.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Install your workstation and document the IP address(es). Since nothing else is up and running in this network, you'll need to set the addresses by hand. Choose addresses not already allocated to something else, and located outside of your DHCP range. Remember that IPv6 addresses are addressed in hexadecimal, not decimal. Numbers range from 0-9, followed by a-f before you move to what would be the tens column in normal numbering.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  If you're not sure, open the Windows Calculator, switch to the programmer view and type the number you'd like to use and you'll see a &lt;strong&gt;HEX&lt;/strong&gt;adecimal, &lt;strong&gt;DEC&lt;/strong&gt;imal, &lt;strong&gt;OCT&lt;/strong&gt;al and &lt;strong&gt;BIN&lt;/strong&gt;ary notation version of the number. It also includes a bit-toggling keypad you can use to get a better feel for how binary math works.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  For our purposes, we will use the following addresses for the IN LAB network interface:
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  &lt;strong&gt;IPv4&lt;/strong&gt;: &lt;br /&gt;10.248.100.10 &lt;br /&gt;&lt;strong&gt;Netmask&lt;/strong&gt; 255.255.255.0 ( this is equivalent to /24 )&lt;br /&gt;Fill in the &lt;strong&gt;Gateway&lt;/strong&gt;, &lt;strong&gt;DNS server &lt;/strong&gt;address from your network documentation you've created last time.&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;IPv6&lt;/strong&gt;: fdda:f6d4:f5a2:f1e6::a/64 &lt;br /&gt;Fill in the &lt;strong&gt;subnet prefix length&lt;/strong&gt;, &lt;strong&gt;default gateway&lt;/strong&gt;, and &lt;strong&gt;DNS server&lt;/strong&gt; from your documentation.&lt;br /&gt;&lt;br /&gt;The parent network interface will be set for DHCP.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  After setting your addresses, if you open a terminal (either &lt;strong&gt;cmd&lt;/strong&gt; or &lt;strong&gt;PowerShell&lt;/strong&gt;) and run &lt;code&gt;ipconfig&lt;/code&gt;, you will see that you have 2 IPv6 addresses and 1 IPv4 address on the listing. One of these IPv6 addresses is the one you set, the other is called a link-local address. Please consult the links to documentation on IPv6 address types from the last article if you'd like to know why.
+                &lt;/p&gt;
+                
+                &lt;h2 id=&quot;3-the-default-gateway&quot;&gt;
+                  The Default Gateway
+                &lt;/h2&gt;
+                
+                &lt;p&gt;
+                  We touched on what this is and what it does last time, so you know that this will serve as the default gateway for the network. It is also the firewall and IPv4 NAT appliance. Grab the latest &lt;a rel=&quot;noreferrer noopener&quot; aria-label=&quot;PFSense  (opens in a new tab)&quot; href=&quot;https://www.pfsense.org/download/&quot; target=&quot;_blank&quot;&gt;PFSense &lt;/a&gt;ISO and install a VM with ~2048MB RAM and two ethernet interfaces. The first will be the parent network, in this case your home or business network, the second will be the in-lab network. Consult the pfsense documentation for installing and setting the IP addresses you've chosen for the in-lab interface. The parent network interface should be set to DHCP.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  For now the only setting you need to set on the gateway is it's IPv4 and IPv6 addresses, aside from setting a new default password for the admin account.
+                &lt;/p&gt;
+                
+                &lt;h2 id=&quot;4-the-dns-server&quot;&gt;
+                  The DNS Server
+                &lt;/h2&gt;
+                
+                &lt;p&gt;
+                  For fun, we're going to use a Windows Core install for this machine. Why a core install? Because there are no buttons to push. It is all command line on the server itself, and the configuration is done either via shell commands, PowerShell, or Remote Management Tools.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Create a VM with ~2048MB RAM and a minimum 60GB disk space. You likely won't need all of it but these are pretty standard requirements for a Windows Core install.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Insert the Windows Server 2019 ISO and run the setup routine, for our purposes we're using &quot;Windows Server 2019 Standard&quot; which is the core install, instead of &quot;Windows Server 2019 Standard (Desktop Experience)&quot; which is what you would pick if you wanted the normal experience you're used to.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  When the OS is installed and booted for the first time you'll be prompted to set a password for the local administrator. This is the first built-in account for the machine that you will use until you've created another administrative account, then you may choose to disable this one.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Now that you have a good login for this machine, you'll be sitting at a command window. You'll do the initial configuration by running the command &lt;code&gt;sconfig&lt;/code&gt;
+                &lt;/p&gt;
+                
+                &lt;h3 id=&quot;5-initial-configuration&quot;&gt;
+                  Initial Configuration
+                &lt;/h3&gt;
+                
+                &lt;p&gt;
+                  Run the &lt;code&gt;sconfig&lt;/code&gt; command and choose option 2 to set the hostname or &quot;Computer Name&quot; of this machine. We didn't cover what the hostnames are for these machines when we were creating our documentation, so we're going to set them and add them to the documentation now. I'm going to name the DNS server &quot;&lt;strong&gt;lab-dns&lt;/strong&gt;&quot;, so it's FQDN (Fully Qualified Domain Name) is &quot;lab-dns.lab.test&quot;. Set the computer name to your chosen short name and we'll cover the rest a bit later. When you've set the computer name, you'll be prompted to restart. You don't need to do this quite yet.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  You should also set the Windows update settings. I have set mine for full automatic.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  You may also choose to enable remote desktop while you are in &lt;strong&gt;sconfig&lt;/strong&gt;. It'll be the same command line interface you have now, but it may come in handy if you need to paste a command. You'll want to choose the recommended option to require Network Level Authentication.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  You will now choose the option to set your network settings. This machine should only have the 1 network interface on your lab network. Choose the only interface and set the IPv4 network adapter address. Remember that a /24 subnet mask is equivalent to '255.255.255.0'.
+                &lt;/p&gt;
+                
+                &lt;p class=&quot;has-background has-very-light-gray-background-color&quot;&gt;
+                  NOTE: &lt;strong&gt;sconfig&lt;/strong&gt; only handles IPv4 addressing. We will cover setting the IPv6 address a bit later.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  You can also quickly set the time zone, but finish off by restarting the computer for the new name to take effect.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Now that you're restarted, log back in and run the &lt;strong&gt;hostname&lt;/strong&gt; command to make sure the short computer name is correct. If you're using my settings, the hostname will be 'lab-dns'. You can also run the &lt;strong&gt;ipconfig&lt;/strong&gt; command and make sure the IPv4 address is what you expected.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  You'll notice that the connection-specific DNS suffix is 'localdomain', and there will be a &lt;strong&gt;link-local&lt;/strong&gt; ipv6 address present, even though you didn't set one. This is normal.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  At this point you might want to use your admin workstation to RDP to your lab-dns server in case you want to paste some commands. I'd suggest adjusting the display settings for your connection to the DNS server to no more than 800x600 so you can still see your other windows and maybe your browser in case you need to copy/paste. There isn't much point in having a huge connection just to host a command window.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Now, we need to finish configuring our network addressing since we have a working IPv4 RDP connection. Let's open &lt;strong&gt;powershell&lt;/strong&gt;. Simply type &lt;strong&gt;powershell&lt;/strong&gt; at the command prompt.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Here are some commands we'll need to type to get a working IPv6 config as well as finishing out some commands &lt;strong&gt;sconfig&lt;/strong&gt; couldn't handle. I would suggest pasting this code block into a notepad (or better yet, VSCode) session on your admin workstation, editing, then pasting it into a powershell session you have running over RDP.
+                &lt;/p&gt;
+                
+                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;# Change these to match the config in your documentation
+</code></pre>
+<p>$IPv6Address=&lsquo;fdda:f6d4:f5a2:f1e6::2&rsquo;
+$IPv6PrefixLength=&lsquo;64&rsquo;
+$IPv6Gateway=&lsquo;fdda:f6d4:f5a2:f1e6::1&rsquo;
+$IPv4Gateway=&lsquo;10.248.100.1&rsquo;
+$FQDN=&lsquo;lab.test&rsquo;</p>
+<h1 id=these-bits-will-be-gathered-by-powershell>These bits will be gathered by powershell</h1>
+<h1 id=get-information-about-the-only-network-adapter-or-the-first-network-adapter-if-you-have-more-than-one-save-it-in-a-variable>Get information about the only network adapter (or the first network adapter if you have more than one), save it in a variable.</h1>
+<p>$Adapter=(Get-NetAdapter)[0]
+Set-DnsClient -InterfaceIndex $Adapter.ifIndex -ConnectionSpecificSuffix $FQDN</p>
+<h1 id=figure-out-what-the-already-set-ipv4-address-is-of-this-machine>Figure out what the already-set IPv4 address is of this machine.</h1>
+<p>$IPv4Address=(Get-NetIPAddress -ifIndex $Adapter.ifIndex -AddressFamily IPv4).IPAddress</p>
+<h1 id=the-dns-server-should-use-itself-first-then-the-default-gateway>The DNS server should use itself first, then the default gateway:</h1>
+<p>$DnsServerAddresses=($IPv4Address,$IPv4Gateway,$IPv6Address,$IPv6Gateway)</p>
+<h1 id=set-dhcp-to-disabled>Set DHCP to disabled</h1>
+<p>Set-NetIPInterface -Dhcp Disabled -InterfaceIndex $Adapter.ifIndex</p>
+<h1 id=set-our-dns-client-settings-to-the-list-we-decided-on-earlier>Set our DNS client settings to the list we decided on earlier:</h1>
+<p>Set-DnsClientServerAddress -InterfaceIndex $Adapter.ifIndex -ServerAddresses $DnsServerAddresses</p>
+<h1 id=we-now-build-a-hash-with-key--values-and-save-it-to-a-variable-this-is-called-splatting>We now build a hash with key = values and save it to a variable. This is called &lsquo;splatting&rsquo;</h1>
+<p>$IPv6Arguments =@{
+InterfaceIndex = $Adapter.ifIndex
+PrefixLength = $IPv6PrefixLength
+IPAddress = $IPv6Address
+DefaultGateway = $IPv6Gateway
+AddressFamily = &lsquo;IPv6&rsquo;
+Type = &lsquo;Unicast&rsquo;
+}</p>
+<h1 id=now-we-create-the-ip-address-using-the-hash-table-we-created-earlier>Now we create the IP address using the hash table we created earlier.</h1>
+<h1 id=otherwise-we-would-have-to-have-one-very-long-line-that-is-hard-to-read-through>Otherwise we would have to have one very long line that is hard to read through.</h1>
+<p>New-NetIPAddress @IPv6Arguments</p>
+<p></p>
+<pre><code>                &lt;p&gt;
+                  Whew. That's a lot to read. If you're not familiar with powershell, the lines beginning with '#' are comments. They are there to give you an idea of what's happening even if you don't understand the code.
+                &lt;/p&gt;
+                
+                &lt;h3 id=&quot;6-installing-amp-configuring-dns-server-role&quot;&gt;
+                  Installing &amp; Configuring DNS server role
+                &lt;/h3&gt;
+                
+                &lt;p&gt;
+                  Once again in powershell:
+                &lt;/p&gt;
+                
+                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;# Install the DNS server feature
+</code></pre>
+<p>Install-WindowsFeature DNS</p>
+<h1 id=install-the-remote-dns-tools>Install the remote dns tools</h1>
+<p>Install-WindowsFeature RSAT-DNS-Server
+</p>
+<pre><code>                &lt;p&gt;
+                  You'd think it might be a little more difficult than that, but no. We'll move right along into configuring the role. In powershell:
+                &lt;/p&gt;
+                
+                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;# Define the FQDN of your zone
+</code></pre>
+<p>$ZoneFQDN=&lsquo;lab.test&rsquo;
+$IPv4NetworkID=&lsquo;10.248.100.0/24&rsquo;
+$IPv6NetworkID=&lsquo;fdda:f6d4:f5a2:f1e6::/120&rsquo;
+$IPv4ReverseName=&lsquo;100.248.10.in-addr.arpa.dns&rsquo;
+$IPv6ReverseName=&lsquo;0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa.dns&rsquo;</p>
+<h1 id=add-the-zone-main-forward-zone>Add the zone main forward zone</h1>
+<p>Add-DnsServerPrimaryZone -Name $ZoneFQDN -ZoneFile &ldquo;$ZoneFQDN.dns&rdquo; -ComputerName $env:COMPUTERNAME</p>
+<h1 id=add-the-appropriate-reverse-zones>Add the appropriate reverse zones</h1>
+<p>Add-DnsServerPrimaryZone -NetworkId $IPv4NetworkID -ZoneFile $IPv4ReverseName
+Add-DnsServerPrimaryZone -NetworkId $IPv6NetworkID -ZoneFile $IPv6ReverseName
+</p>
+<pre><code>                &lt;p&gt;
+                  Again, pretty simple. No fancy or difficult-to-read powershell here. Let's check our work:
+                &lt;/p&gt;
+                
+                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;PS C:\Users\Administrator&amp;gt; Get-DnsServerZone|select ZoneName
+</code></pre>
+<h2 id=zonename>ZoneName</h2>
+<p>0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa
+0.in-addr.arpa
+100.248.10.in-addr.arpa
+127.in-addr.arpa
+255.in-addr.arpa
+lab.test</p>
+<p>PS C:\Users\Administrator> Get-ChildItem C:\Windows\System32\dns\</p>
+<pre><code>Directory: C:\Windows\System32\dns
+</code></pre>
+<p>Mode LastWriteTime Length Name</p>
+<hr>
+<p>d&mdash;&ndash; 12/26/2019 7:25 PM backup
+d&mdash;&ndash; 12/26/2019 6:58 PM samples
+-a&mdash;- 12/26/2019 8:58 PM 632 0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4
+.d.6.f.a.d.d.f.ip6.arpa.dns
+-a&mdash;- 12/26/2019 8:58 PM 538 0.3.10.in-addr.arpa.dns
+-a&mdash;- 12/26/2019 6:58 PM 3864 CACHE.DNS
+-a&mdash;- 12/26/2019 7:25 PM 0 dns.log
+-a&mdash;- 12/26/2019 8:48 PM 513 lab.test.dns</p>
+<p>PS C:\Users\Administrator> Get-DnsServerResourceRecord -ZoneName lab.test|select Hostname,RecordType,RecordData</p>
+<p>Hostname RecordType RecordData</p>
+<hr>
+<p>@ NS DnsServerResourceRecordNS
+@ SOA DnsServerResourceRecordSoa</p>
+<pre><code>                &lt;p&gt;
+                  Neat, now we have an empty zone. The only records that currently exist are the required records for a zone to exist at all, the NS and SOA records. Now let's add some records based on our documentation.
+                &lt;/p&gt;
+                
+                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;$ZoneName='lab.test'
+</code></pre>
+<p>$DNSServer=$env:COMPUTERNAME</p>
+<h1 id=most-of-this-will-be-repetitive-and-some-will-simply-be-for-exposition>Most of this will be repetitive, and some will simply be for exposition.</h1>
+<p>Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -A -Name &lsquo;gateway&rsquo; -ipv4address &lsquo;10.248.100.1&rsquo; -CreatePtr -ComputerName $DNSServer
+Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -A -Name &lsquo;lab-dns&rsquo; -ipv4address &lsquo;10.248.100.2&rsquo; -CreatePtr -ComputerName $DNSServer
+Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -A -Name &lsquo;lab-dhcp&rsquo; -ipv4address &lsquo;10.248.100.3&rsquo; -CreatePtr -ComputerName $DNSServer</p>
+<p>Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -AAAA -Name &lsquo;gateway&rsquo; -ipv6address &lsquo;fdda:f6d4:f5a2:f1e6::1&rsquo; -CreatePtr -ComputerName $DNSServer
+Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -AAAA -Name &lsquo;lab-dns&rsquo; -ipv6address &lsquo;fdda:f6d4:f5a2:f1e6::2&rsquo; -CreatePtr -ComputerName $DNSServer
+Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -AAAA -Name &lsquo;lab-dhcp&rsquo; -ipv6address &lsquo;fdda:f6d4:f5a2:f1e6::3&rsquo; -CreatePtr -ComputerName $DNSServer
+</p>
+<pre><code>                &lt;p class=&quot;has-background has-very-light-gray-background-color&quot;&gt;
+                  What is the difference between an 'A' record and an 'AAAA' record? At the simplest level, they are both a type of DNS record that specify a normal mapping from a DNS name to an IP address. A records contain IPv4 addresses, and AAAA records contain IPv6 addresses. You can have multiple A or AAAA records that point to more than one IP address, and the DNS server will round-robin rotate through them. This gives a free amount of load balancing but it isn't appropriate if you're trying to balance a heavily used service by utilization. For more information and to see some more detailed and pedantic information on the types of DNS records there are, see &lt;a href=&quot;https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-4&quot;&gt;this IANA reference page.&lt;/a&gt;
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  So - Why did we create three zones? The first - 'lab.test' is a &lt;strong&gt;forward&lt;/strong&gt; lookup zone. The ones tied to the network IDs are &lt;strong&gt;reverse&lt;/strong&gt; zones. They enable you to look up an IP address and see what its hostname is. Records tying an IP address to a hostname are called &lt;strong&gt;PTR&lt;/strong&gt;, or pointer records. That is why we created the reverse zones up front, then had powershell add the pointer records at the same time as the A or AAAA records by tacking on the '-CreatePtr' flag to the Add-DnsServerResourceRecord cmdlet.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Having done this work, you can re-run the Get-DnsServerResourceRecord cmdlet in powershell as outlined in the example above to verify the results.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Neat. Now we have a functioning DNS server. You can close your connection to the DNS server now.
+                &lt;/p&gt;
+                
+                &lt;h2 id=&quot;7-the-dhcp-server&quot;&gt;
+                  The DHCP Server
+                &lt;/h2&gt;
+                
+                &lt;h3 id=&quot;8-initial-config&quot;&gt;
+                  Initial Config
+                &lt;/h3&gt;
+                
+                &lt;p&gt;
+                  By now you've installed a Windows Server OS at least once, so create a vm with ~2048MB ram and a minimum 60gb disk space. You'll also want a core install on this machine.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  I'm going to name it &lt;strong&gt;lab-dhcp&lt;/strong&gt; and apply the same configuration steps for &lt;strong&gt;sconfig &lt;/strong&gt;as we did for the DNS server.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  When you are in &lt;strong&gt;sconfig&lt;/strong&gt;, configure the DNS server settings to use the DNS server address for your lab.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Restart after setting everything you need to do, log in and open powershell again. This script is modified from the one we used for the DNS server, so don't mix them up.
+                &lt;/p&gt;
+                
+                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;# Change these to match the config in your documentation
+</code></pre>
+<p>$IPv6Address=&lsquo;fdda:f6d4:f5a2:f1e6::3&rsquo;
+$IPv6PrefixLength=&lsquo;64&rsquo;
+$IPv6Gateway=&lsquo;fdda:f6d4:f5a2:f1e6::1&rsquo;
+$IPv6DNSServer=&lsquo;fdda:f6d4:f5a2:f1e6::2&rsquo;
+$IPv4Gateway=&lsquo;10.248.100.1&rsquo;
+$IPv4DNSServer=&lsquo;10.248.100.2&rsquo;
+$FQDN=&lsquo;lab.test&rsquo;</p>
+<h1 id=use-our-dns-server-then-fall-back-to-the-gateway-if-the-dns-server-is-offline>Use our DNS server, then fall back to the gateway if the DNS server is offline</h1>
+<p>$DnsServerAddresses=($IPv4DNSServer,$IPv4Gateway,$IPv6DNSServer,$IPv6Gateway)</p>
+<h1 id=get-the-adapter>Get the adapter</h1>
+<p>$Adapter=(Get-NetAdapter)[0]
+Set-DnsClient -InterfaceIndex $Adapter.ifIndex -ConnectionSpecificSuffix $FQDN</p>
+<h1 id=turn-off-dhcp>turn off DHCP</h1>
+<p>Set-NetIPInterface -Dhcp Disabled -InterfaceIndex $Adapter.ifIndex</p>
+<h1 id=configure-dns-client>configure DNS client</h1>
+<p>Set-DnsClientServerAddress -InterfaceIndex $Adapter.ifIndex -ServerAddresses $DnsServerAddresses</p>
+<h1 id=create-the-ipv6-config-create-the-address>Create the IPv6 config, create the address</h1>
+<p>$IPv6Arguments =@{
+InterfaceIndex = $Adapter.ifIndex
+PrefixLength = $IPv6PrefixLength
+IPAddress = $IPv6Address
+DefaultGateway = $IPv6Gateway
+AddressFamily = &lsquo;IPv6&rsquo;
+Type = &lsquo;Unicast&rsquo;
+}
+New-NetIPAddress @IPv6Arguments
+</p>
+<pre><code>                &lt;h3 id=&quot;9-installing--amp-configuring-the-dhcp-role&quot;&gt;
+                  Installing &amp; Configuring the DHCP role
+                &lt;/h3&gt;
+                
+                &lt;p&gt;
+                  In powershell on the DHCP server:
+                &lt;/p&gt;
+                
+                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools
+</code></pre>
+<p>Install-WindowsFeature -Name &lsquo;RSAT-DHCP&rsquo;</p>
+<pre><code>                &lt;p&gt;
+                  As before, super simple command to make something a DHCP server. Windows will quickly install the relevant services. Now it's time to add scopes.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  A&amp;nbsp;DHCP&amp;nbsp;server's&amp;nbsp;job&amp;nbsp;is&amp;nbsp;to&amp;nbsp;configure&amp;nbsp;the&amp;nbsp;clients&amp;nbsp;so&amp;nbsp;you&amp;nbsp;don't&amp;nbsp;have&amp;nbsp;to&amp;nbsp;manually&amp;nbsp;set&amp;nbsp;up&amp;nbsp;each&amp;nbsp;individual&amp;nbsp;host.&amp;nbsp;We&amp;nbsp;will&amp;nbsp;set&amp;nbsp;several&amp;nbsp;settings&amp;nbsp;for&amp;nbsp;the&amp;nbsp;DHCP&amp;nbsp;server&amp;nbsp;to&amp;nbsp;tell&amp;nbsp;clients&amp;nbsp;about.&amp;nbsp;Some&amp;nbsp;will&amp;nbsp;be&amp;nbsp;on&amp;nbsp;a&amp;nbsp;scope,&amp;nbsp;some&amp;nbsp;at&amp;nbsp;a&amp;nbsp;&amp;nbsp;server&amp;nbsp;level.&amp;nbsp;
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  In powershell:
+                &lt;/p&gt;
+                
+                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;
+</code></pre>
+<h1 id=server-scope-options>Server Scope Options</h1>
+<p>$Server4Values=@{
+DnsServer = &lsquo;10.248.100.2&rsquo;
+DnsDomain = &lsquo;lab.test&rsquo;
+}
+Set-DhcpServerv4OptionValue @Server4Values</p>
+<p>$Server6Values=@{
+DnsServer = &lsquo;fdda:f6d4:f5a2:f1e6::2&rsquo;
+DomainSearchList = &lsquo;lab.test&rsquo;
+}
+Set-DhcpServerv6OptionValue @Server6Values</p>
+<h1 id=dhcp-v4-has-the-concept-of-a-start-and-end-range-inside-a-subnet>DHCP v4 has the concept of a start and end range inside a subnet.</h1>
+<p>$V4ScopeID=&lsquo;10.248.100.0&rsquo;
+$IPv4Router=&lsquo;10.248.100.1&rsquo;</p>
+<p>$V4Scope=@{
+Name = &lsquo;Lab Subnet&rsquo;
+StartRange = &lsquo;10.248.100.50&rsquo;
+EndRange = &lsquo;10.248.100.99&rsquo;
+SubnetMask = &lsquo;255.255.255.0&rsquo;
+}
+Add-DhcpServerv4Scope @V4Scope</p>
+<p>Set-DhcpServerv4OptionValue -ScopeId $V4ScopeID -Router $IPv4Router</p>
+<h1 id=dhcpv6-expects-you-to-exclude-any-addresses-you-intend-to-use-statically-instead-of-specifying-the-range>DHCPv6 expects you to exclude any addresses you intend to use statically, instead of specifying the range.</h1>
+<p>#$V6ScopeID=&lsquo;10.248.100.0&rsquo;
+$V6Scope=@{
+Name = &lsquo;Lab V6 Subnet&rsquo;
+Prefix = &lsquo;fdda:f6d4:f5a2:f1e6::&rsquo;
+}
+Add-DhcpServerv6Scope @V6Scope</p>
+<p>$V6ExclusionRange=@{
+StartRange = &lsquo;fdda:f6d4:f5a2:f1e6::1&rsquo;
+EndRange = &lsquo;fdda:f6d4:f5a2:f1e6::31&rsquo;
+Prefix = &lsquo;fdda:f6d4:f5a2:f1e6::&rsquo;
+}
+Add-DhcpServerv6ExclusionRange @V6ExclusionRange</p>
+<h1 id=were-not-setting-a-router-address---ipv6-includes-an-automatic-address-all-routers-listen-on-also-router-advertisements-are-a-thingcodepre>We&rsquo;re not setting a router address - IPv6 includes an automatic address all routers listen on. Also router advertisements are a thing.</h1>
+<pre><code>                &lt;h2 id=&quot;10-conclusion-amp-testing&quot;&gt;
+                  Conclusion &amp; Testing
+                &lt;/h2&gt;
+                
+                &lt;p&gt;
+                  At this point, install some workstation class OS on a new vm and see whether you get a usable workstation out of the box without configuring any IP addressing. Try resolving some DNS names and see if they resolve properly. Be sure and check both A and AAAA records, as well as browsing the internet. At this point your workstation should be fully functional.
+                &lt;/p&gt;
+                
+                &lt;p&gt;
+                  Next article we'll cover layering in identity management in the form of Active Directory.
+                &lt;/p&gt;
+</code></pre>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

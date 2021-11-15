@@ -1,0 +1,235 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Modern BIOS Management with the Administration Service-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/06/18/modern-bios-management-with-the-administration-service/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Modern BIOS Management with the Administration Service">
+<meta name=twitter:description content="2021-04-27 update: The solution now works over CMG. Please see this post for details.
+If you haven&rsquo;t seen my first blog post about modern driver management, the quick summary is that the solution uses packages created with the Driver Automation Tool and the administration service to retrieve information on these packages and identify the most suitable driver package to apply in a task sequence.
+In this second part, I&rsquo;ll be discussing the changes and improvements done to the existing solution to also dynamically retrieve and filter and apply BIOS updates.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Modern BIOS Management with the Administration Service</h1>
+<span class=post-date>June 18, 2020</span>
+</div>
+<div class=post-entry>
+<p><strong>2021-04-27 update: The solution now works over CMG. Please see this <a href=https://sysmansquad.com/2021/04/27/updated-modern-driver-bios-management-with-cmg-support/>post</a> for details.</strong></p>
+<p>If you haven&rsquo;t seen my first blog post about <a href=https://www.sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/>modern driver management</a>, the quick summary is that the solution uses packages created with the <a href=https://www.sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/>Driver Automation Tool</a> and the <a href=https://docs.microsoft.com/en-us/mem/configmgr/develop/adminservice/overview>administration service</a> to retrieve information on these packages and identify the most suitable driver package to apply in a task sequence.</p>
+<p>In this second part, I&rsquo;ll be discussing the changes and improvements done to the existing solution to also dynamically retrieve and filter and apply BIOS updates.</p>
+<p>Note: Download link for the task sequence exports is located at the end of the blog post.</p>
+<h3 id=invoke-getpackageidfromadminservice-improvements>Invoke-GetPackageIDFromAdminService improvements</h3>
+<p>When I initially wrote the script that queries the AdminService, I wanted to make sure I could reuse the same script to return both BIOS and Driver packages. But when it was time to actually design the task sequence for applying BIOS packages, I found out that I forgot something to determine the system&rsquo;s current BIOS version and filter out any BIOS packages which were not an upgrade to the current system.</p>
+<h4 id=new-parameters-for-bios-information>New parameters for BIOS information</h4>
+<p>I needed to provide more information to the script as a parameter regarding the system BIOS. The 2 following parameters were added to the script:</p>
+<ul>
+<li>CurrentBIOSVersion</li>
+<li>CurrentBIOSReleaseDate</li>
+</ul>
+<p><strong><em>Why do you need the release date of the BIOS?</em></strong><br>
+Good question! The original solution by the Nickolaj Andersen and Maurice Daly of <a href=https://msendpointmgr.com/modern-bios-management/>MSEndPointMgr</a> uses the BIOS release date for Lenovo systems to determine if the BIOS package is an update or not. Now why exactly? I&rsquo;m guessing Lenovo was not very good at keeping some sort of standard naming or versioning for their BIOS versions.</p>
+<p> Example of a Lenovo BIOS package created with the Driver Automation Tool</p>
+<h4 id=bios-filtering>BIOS filtering</h4>
+<p>Now that we have the current BIOS version and release date, we need to evaluate and filter out older BIOS package versions. We only want the script to return a package ID if the package is actually an upgrade for the device.</p>
+<p>For this part, I had to dig into the <a href=https://github.com/MSEndpointMgr/ConfigMgr/blob/master/Operating%20System%20Deployment/BIOS/Invoke-CMDownloadBIOSPackage.ps1>Invoke-CMDownloadBIOSPackage.ps1</a> script and in the script of the <a href=https://github.com/maurice-daly/DriverAutomationTool/blob/master/Content/DriverAutomationTool.ps1>Driver Automation Tool</a> to see how they were filtering and extracting version information for the different vendors. I ended up with the following code to compare BIOS versions.</p>
+<pre><code>	foreach($package in $Packages){
+		switch($Manufacturer){
+			&quot;Dell&quot;{
+				If($package.Version -as [Version]){
+					If($CurrentBIOSVersion -as [Version]){
+						If(([Version]$Package.Version) -gt [Version]$CurrentBIOSVersion){
+							[void]$ApplicableBIOSPackages.Add($package)
+						}
+					}ElseIf($CurrentBIOSVersion -like &quot;A*&quot;){
+						#Moving from A__ version to a proper version number is considered an upgrade for Dell systems
+						[void]$ApplicableBIOSPackages.Add($package)
+					}
+				}ElseIf(($Package.Version -like &quot;A*&quot;) -and ($CurrentBIOSVersion -like &quot;A*&quot;)){
+					If(([Int32]::Parse(($Package.Version).TrimStart(&quot;A&quot;))) -gt ([Int32]::Parse(($CurrentBIOSVersion).TrimStart(&quot;A&quot;)))){
+						[void]$ApplicableBIOSPackages.Add($package)
+					}
+				}
+			}
+			&quot;Hewlett-Packard&quot;{
+				$packageVersion = ($package.Version).TrimEnd(&quot;.&quot;)
+				$packageVersion = $packageVersion.Split(&quot; &quot;)[0] #Example: 02.02.03 A 1 --&amp;gt; Will only use 02.02.03 for evaluating
+				If($packageVersion -as [Version]){
+					If($CurrentBIOSVersion -as [Version]){
+						If([Version]$packageVersion -gt [Version]$CurrentBIOSVersion){
+							[void]$ApplicableBIOSPackages.Add($package)
+						}
+					}Else{#Attempting to extract a version number from the current BIOS version provided
+						$CleanBIOSVersion = $CurrentBIOSVersion.TrimEnd(&quot;.&quot;)
+						$CleanBIOSVersion = $CleanBIOSVersion.Split(&quot; &quot;)[0]
+						If($CleanBIOSVersion -as [Version]){
+							If([Version]$packageVersion -gt [Version]$CleanBIOSVersion){
+								[void]$ApplicableBIOSPackages.Add($package)
+							}
+						}
+					}
+				}ElseIf($packageVersion -match &quot;.*F\.(\d+)$&quot;){
+					$packageVersion = $matches[1]
+					If($CurrentBIOSVersion -match &quot;.*F\.(\d+)$&quot;){
+						If([int32]$packageVersion -gt [int32]$matches[1]){
+							[void]$ApplicableBIOSPackages.add($package)
+						}
+					}
+				}
+			}
+			&quot;Microsoft&quot;{
+				Add-TextToCMLog $LogFile  &quot;No BIOS package will be returned, Microsoft provides firmware updates as part of their driver packages.&quot; $component 2
+			}
+			default{
+				#Any other manufacturer: Compare versions only if they both parse as [Version] objects
+				If(($package.Version -as [Version]) -and ($CurrentBIOSVersion -as [Version])){
+					If([Version]($package.Version) -gt [Version]$CurrentBIOSVersion){
+						[void]$ApplicableBIOSPackages.Add($package)
+					}
+				}
+			}
+		}
+	}
+}Else{
+	Add-TextToCMLog $LogFile  &quot;No current BIOS version specified, cannot compare BIOS version.&quot; $component 3
+}
+</code></pre>
+<p>}Else{
+#Lenovo Only: Check if any of the remaining packages have a BIOS Release Date newer than the current BIOS Release Date
+Add-TextToCMLog $LogFile &ldquo;Filtering package results to only packages that have a BIOS release date newer than <code>"$($CurrentBIOSReleaseDate)</code>&rdquo;." $component 1
+$BIOSReleaseDate = [datetime]::ParseExact($CurrentBIOSReleaseDate,&ldquo;yyyyMMdd&rdquo;,$null)
+foreach($package in $Packages){
+If($package.Description -match &ldquo;(Models included:(.<em>)) (Release Date:(.</em>))"){
+Try{
+$ReleaseDate = [datetime]::ParseExact($matches<a href=https://www.sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/>2</a>,&ldquo;yyyyMMdd&rdquo;,$null)
+If($ReleaseDate -gt $BIOSReleaseDate){
+[void]$ApplicableBIOSPackages.Add($package)
+}
+}Catch{
+Add-TextToCMLog $LogFile &ldquo;Failed to parse <code>"$matches[2]</code>&rdquo; as a BIOS release date for package <code>"$($package.Name)</code>&rdquo;, skipping&mldr;" $component 2
+}
+}
+}
+}</p>
+<p> Example of the log file created when querying for a BIOS package</p>
+<p>With these enhancements done on the script, we are now ready to use a task sequence to dynamically apply BIOS packages.</p>
+<h3 id=task-sequences-modifications>Task Sequences modifications</h3>
+<h4 id=modify-the-query-adminservice-for-packageid-ts>Modify the &ldquo;Query AdminService for PackageID&rdquo; TS</h4>
+<p>We need to provide the current BIOS version and release date to the script in the task sequence.</p>
+<p> New TS variables used for BIOS packages</p>
+<p>Then we pass this information as a parameter to the Invoke-GetPackageIDFromAdminService script.</p>
+<p> </p>
+<h4 id=create-the-apply-bios-package-task-sequence>Create the &ldquo;Apply BIOS package&rdquo; task sequence</h4>
+<p>The task sequence is similar to the one I had created for drivers. For applying the actual BIOS update, I&rsquo;ve reused the scripts by the guys at <a href=https://msendpointmgr.com/>MSEndpointMgr</a>.</p>
+<p> </p>
+<h4 id=regarding-hp-bios-updates>Regarding HP BIOS updates</h4>
+<p>If your HP devices have a BIOS password set (I hope you do), then you&rsquo;ll need to specify 2 more variables:</p>
+<ul>
+<li>PasswordBinFilename: Name of the .bin file to use when applying BIOS update</li>
+<li>PasswordBinPackageID: PackageID of the package containing the .bin file.</li>
+</ul>
+<p>I had to modify the original <a href=https://github.com/MSEndpointMgr/ConfigMgr/blob/master/Operating%20System%20Deployment/BIOS/Invoke-HPBIOSUpdate.ps1>Invoke-HPBIOSUpdate</a> script to add a new parameter to specify the path to the .bin file because the original script would expect the .bin file to be in the same folder as the script.</p>
+<p>I also did not like the fact that the HP BIOS utility writes a log file in whatever directory it&rsquo;s located in with no options to specify a different log path, so I added a step to move the log file to _SMSTSLogPath.</p>
+<h3 id=download>Download</h3>
+<p><a href=https://github.com/CharlesNRU/mdm-adminservice/raw/master/MDM-TS.zip>Direct link to the task sequences</a></p>
+<p><a href=https://github.com/CharlesNRU/mdm-adminservice>Link to the github repository</a></p>
+<p>As always, feel free to contact me if you have any suggestions for improvements.</p>
+<p>Thank you.</p>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

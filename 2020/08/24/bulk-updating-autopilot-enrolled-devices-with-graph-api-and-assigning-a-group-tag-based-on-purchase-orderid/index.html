@@ -1,0 +1,232 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Bulk Updating Autopilot enrolled devices with Graph API and assigning a Group Tag based on Purchase OrderID-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/08/24/bulk-updating-autopilot-enrolled-devices-with-graph-api-and-assigning-a-group-tag-based-on-purchase-orderid/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Bulk Updating Autopilot enrolled devices with Graph API and assigning a Group Tag based on Purchase OrderID">
+<meta name=twitter:description content="The Problem For any new machines ordered from a vendor such as Dell that get enrolled into Autopilot you get the basic device info enrolled but nothing defining that would let it get auto-enrolled into a dynamic group easily. Purchase Order ID is included in every order we receive from Dell however I don&rsquo;t want to have to add that Purchase Order ID into the dynamic device query every time a new machine gets added.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Bulk Updating Autopilot enrolled devices with Graph API and assigning a Group Tag based on Purchase OrderID</h1>
+<span class=post-date>August 24, 2020</span>
+</div>
+<div class=post-entry>
+<h3 id=the-problem>The Problem</h3>
+<p>For any new machines ordered from a vendor such as Dell that get enrolled into Autopilot you get the basic device info enrolled but nothing defining that would let it get auto-enrolled into a dynamic group easily. Purchase Order ID is included in every order we receive from Dell however I don&rsquo;t want to have to add that Purchase Order ID into the dynamic device query every time a new machine gets added.</p>
+<p>Instead assigning a Group Tag would be much more beneficial. I won&rsquo;t have to change the dynamic device query and won&rsquo;t run the risk of messing the group up.</p>
+<p>Watch a demo of this script on Intune.Training.<br>
+<a href=https://youtu.be/VCR-J5pvQbo>https://youtu.be/VCR-J5pvQbo</a></p>
+<h3 id=requirements>Requirements</h3>
+<ol>
+<li>Access to Create Groups in (AAD) Azure Active Directory</li>
+<li>Access to create an Application in AAD</li>
+<li>Access to grant admin consent for your organization</li>
+<li>Access to Intune</li>
+</ol>
+<h3 id=creating-a-dynamic-device-group>Creating a Dynamic Device Group</h3>
+<ol>
+<li>Navigate to your Intune portal</li>
+<li>Select <strong>Groups</strong></li>
+<li>Select <strong>New Group</strong></li>
+<li>Group Type should be Security</li>
+<li>Assign a group name &ldquo;Intune Windows Device Enrollment&rdquo;</li>
+<li>Membership type should be changed to <strong>Dynamic Device</strong></li>
+<li>Select <strong>Add dynamic query</strong></li>
+<li>On Rule Syntax Select <strong>Edit</strong> on the right hand side</li>
+<li>Type in the following:<br>
+<code>(device.devicePhysicalIds -any _ -contains "StandardMachine")</code></li>
+<li>Feel free to change <code>"StandardMachine"</code> to whatever you&rsquo;d like your group tag to be</li>
+<li>Select <strong>Save</strong></li>
+<li>Select <strong>Create</strong></li>
+</ol>
+<h3 id=registering-an-app-to-access-graph-api-and-grabbing-additional-information>Registering an APP to access Graph API and Grabbing Additional Information</h3>
+<ol>
+<li>
+<p>Navigate to your Azure Active Directory</p>
+</li>
+<li>
+<p>Select <strong>App registrations</strong></p>
+</li>
+<li>
+<p>Select <strong>New registration</strong></p>
+</li>
+<li>
+<p>Give your app a name such as Intune Graph Access</p>
+</li>
+<li>
+<p>Select <strong>Register</strong></p>
+</li>
+<li>
+<p>Go to your newly created App</p>
+</li>
+<li>
+<p>Select <strong>API permissions</strong></p>
+</li>
+<li>
+<p>Select <strong>Add a permission</strong></p>
+</li>
+<li>
+<p>Select <strong>Microsoft Graph</strong></p>
+</li>
+<li>
+<p>Select <strong>Application permissions</strong></p>
+</li>
+<li>
+<p>Enable <strong>DeviceManagementServiceConfig.ReadWrite.All</strong></p>
+</li>
+<li>
+<p>Select <strong>Add permissions</strong></p>
+</li>
+<li>
+<p>Select <strong>Grant Admin Consent for CONTOSO</strong></p>
+</li>
+<li>
+<p>Navigate to <strong>Certificates & Secrets</strong> for your app</p>
+</li>
+<li>
+<p>Select <strong>New client secret</strong></p>
+</li>
+<li>
+<p>Give a description and select an expiration time</p>
+</li>
+<li>
+<p>Select <strong>Add</strong></p>
+</li>
+<li>
+<p>Copy the key value for later use</p>
+</li>
+<li>
+<p>Select <strong>Overview</strong></p>
+</li>
+<li>
+<p>Copy the Application (client) ID for later use</p>
+</li>
+<li>
+<p>Select <strong>Custom domain names</strong></p>
+</li>
+<li>
+<p>Copy your domain that has the .onmicrosoft.com for later use</p>
+</li>
+</ol>
+<h3 id=the-script>The Script</h3>
+<p>You will need to update 4 fields in the below script with information you copied earlier. Those fields being line 2,3,4, and 6 if you changed the group tag for your dynamic device query. The script will use the App we created earlier to authenticate and grab information for all devices and create an array of devices based on Purchase Order ID. that you manually enter via prompt. It then loops through that array and assigns the Group Tag to all devices . Once all group tags have been assigned it will push a refresh to your portal, bare in mind that you may have to wait an hour or so for the new group tags to show up. This is incredibly helpful for large bulk orders.</p>
+<p>$ReqTokenBody = @{
+Grant_Type = &ldquo;client_credentials&rdquo;
+Scope = &ldquo;<a href=https://graph.microsoft.com/.default%22>https://graph.microsoft.com/.default"</a>
+client_Id = $clientID
+Client_Secret = $clientSecret
+}</p>
+<p>$TokenResponse = Invoke-RestMethod -Uri &ldquo;<a href=https://login.microsoftonline.com/$TenantName/oauth2/v2.0/token%22>https://login.microsoftonline.com/$TenantName/oauth2/v2.0/token"</a> -Method POST -Body $ReqTokenBody
+$apiUrl = &lsquo;<a href="https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeviceIdentities/'">https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeviceIdentities/'</a>
+$Data = Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($TokenResponse.access_token)"} -Uri $apiUrl -Method Get
+$Devices = ($Data | select-object Value).Value</p>
+<p>$devices = ($data.value | where purchaseOrderIdentifier -eq $purchaseOrderId).id</p>
+<p>$body = &lsquo;{&ldquo;groupTag&rdquo;:"'+$groupTag+'"}&rsquo;</p>
+<p>foreach ($device in $Devices) {
+$apiUrl = &ldquo;<a href=https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeviceIdentities/$device/UpdateDeviceProperties%22>https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeviceIdentities/$device/UpdateDeviceProperties"</a>
+$rest = Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($TokenResponse.access_token)"} -Uri $apiUrl -Body $body -Method Post -ContentType &lsquo;application/json&rsquo;
+Write-Host ($device + ' has been added to the ' + $grouptag)
+}</p>
+<p>#Special thanks to @JGKPS, @portaldotjay, @AdamGross</p>
+<p>$apiUrl2 = &ldquo;<a href=https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotSettings/sync%22>https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotSettings/sync"</a>
+Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($TokenResponse.access_token)"} -Uri $apiUrl2 -Method Post</p>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

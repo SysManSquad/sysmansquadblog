@@ -1,0 +1,179 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Downloading a Device Guard Signing Service version 2 Root Certificate for MSIX-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/11/01/downloading-a-device-guard-signing-service-version-2-root-certificate-for-msix/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Downloading a Device Guard Signing Service version 2 Root Certificate for MSIX">
+<meta name=twitter:description content="Howdy y&rsquo;all
+In this post I will show you how to get the Device Guard Signing Service v2 root certificate.
+Device Guard Signing Services v1 (DGSS) is being deprecated at the end of December 2020, so we need to migrate to DGSSv2, and it just so happens that the means to download the DGSSv2 root cert is a little bit more complex than the DGSSv1.
+MSIX crash course While MSIX is generally marketed as a replacement for MSI for developers, there are scenarios that can benefit systems administrators.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Downloading a Device Guard Signing Service version 2 Root Certificate for MSIX</h1>
+<span class=post-date>November 2, 2020</span>
+</div>
+<div class=post-entry>
+<p>Howdy y&rsquo;all<br>
+In this post I will show you how to get the Device Guard Signing Service v2 root certificate.</p>
+<p>Device Guard Signing Services v1 (DGSS) is being deprecated at the end of December 2020, so we need to migrate to DGSSv2, and it just so happens that the means to download the DGSSv2 root cert is a little bit more complex than the DGSSv1.</p>
+<h2 id=msix-crash-course>MSIX crash course</h2>
+<p>While MSIX is generally marketed as a replacement for MSI for developers, there are scenarios that can benefit systems administrators.</p>
+<ul>
+<li>A means to install an app that has no silent installation</li>
+<li>Capture installs of apps that require manual setup as part of the post install setup</li>
+<li>MSIX apps are easy to uninstall, which is not always possible/reliable for some Win32 apps</li>
+<li>MSIX apps are containerized, you can install multiple versions of the same app at the same time, for example: Office 2010 and M365A/O365 running at the same time</li>
+<li>MSIX app attach for Windows Virtual Desktops</li>
+<li>MSIX apps can be installed per user or provisioned for all users on a device</li>
+</ul>
+<p>So what does this have to do with certificates?<br>
+The MSIX packaging format has a strict signing requirement. While you can always buy a code signing certificate, you can use a free DGSSv2 certificate from Microsoft.</p>
+<p>If you want to know how MSIX apps are setup and deployed, check out Jake&rsquo;s blog post on MSIX.</p>
+<h2 id=registering-the-azuread-app>Registering the AzureAD app</h2>
+<p>First we need to setup an AzureAd Application, this is mostly covered in the official docs but it&rsquo;s not very user friendly and when this post was written (31.10.2020), it was missing a crucial step.</p>
+<p>For those of you who have done this sort of thing before, here is the quick overview:</p>
+<ul>
+<li>Sign into AzureAd and start registering an app</li>
+<li>Under Redirect URI, select &ldquo;Public client (mobile & desktop)&rdquo;. and set <a href=https://dgss.microsoft.com>https://dgss.microsoft.com</a> as the URI</li>
+<li>In the API permissions, select the &ldquo;Windows Store for Business API&rdquo;, Delegated permissions and select <strong>user_impersonation</strong></li>
+<li>Go to the overview and copy the Application (client) ID, and head to the <strong>Get-DGSSv2RootCert</strong> part of this post</li>
+</ul>
+<p>For those of you who have never done this before, here are the detailed steps with screenshots.</p>
+<p>Sign into Azure AD and register a new application.</p>
+<p> </p>
+<p>Give it a descriptive name.<br>
+Under Redirect URI, select &ldquo;Public client (mobile & desktop)&rdquo;, and set <a href=https://dgss.microsoft.com>https://dgss.microsoft.com</a> as the URI.</p>
+<p> </p>
+<p>Once the app has been created, click on <strong>API permissions</strong>.<br>
+<strong>Add permissions</strong>.<br>
+Click on <strong>APIs my organization uses</strong>.<br>
+Search for &ldquo;windows store&rdquo;.<br>
+And click on it.</p>
+<p> </p>
+<p>Click on <strong>Delegated permissions</strong>.<br>
+And select <strong>user_impresonation</strong>.</p>
+<p> </p>
+<p>Click on <strong>Grant consent for&mldr;</strong> otherwise the app will not work.</p>
+<p> </p>
+<p>Now head back to the application overview and copy the GUID that&rsquo;s next to <strong>Application (client) ID</strong>, this is used in a script that is featured in this blog post.</p>
+<p> </p>
+<h2 id=get-dgssv2rootcert>Get-DGSSv2RootCert</h2>
+<p>Since for most people, downloading the root certificate is a one time operation, I elected to run this this in a windows sandbox. but that is 100% optional.</p>
+<p>Paste the application GUID into the $AppID variable and you should be ready to go.</p>
+<h1 id=please-add-your-own-app-id>please add your own App ID</h1>
+<p>$AppID = &ldquo;PUT YOUR GUID HERE&rdquo;</p>
+<h1 id=we-need-to-add-nuget-as-a-package-source-first>we need to add nuget as a package source first</h1>
+<p>Register-PackageSource -Name MyNuGet -Location <a href=https://www.nuget.org/api/v2>https://www.nuget.org/api/v2</a> -ProviderName NuGet -Confirm:$false -Force</p>
+<h1 id=installing-the-package>installing the package</h1>
+<p>Install-Package Microsoft.Acs.Dgss.Client -Source mynuget -Confirm:$false -Force -Verbose</p>
+<h1 id=importing-the-module>importing the module</h1>
+<p>Import-Module &ldquo;C:\Program Files\PackageManagement\NuGet\Packages\Microsoft.Acs.Dgss.Client.1.0.11\PowerShell\Microsoft.Acs.Dgss.Client.dll&rdquo;</p>
+<h1 id=just-for-convenience>just for convenience</h1>
+<p>New-Item -Path c:\ -Name &ldquo;DGCertv2&rdquo; -ItemType Directory -Force</p>
+<h1 id=downloading-the-cert-to-the-folder-specified-above-this-step-is-not-instant-ive-seen-it-take-a-while>downloading the cert to the folder specified above, this step is not instant, ive seen it take a while</h1>
+<p>Get-RootCertificate -PassThru -OutFile C:\DGCertv2\DGSSv2root.cer -AppId $AppID</p>
+<h1 id=voila-the-cert-appears-before-your-eyes>voila! the cert appears before your eyes</h1>
+<p>start C:\DGCertv2&lt;/pre></p>
+<p>Congrats, you now have a Device Guard Signing Service v2 Root Certificate in your possession.</p>
+<p>Now you can deploy the cert to your clients using your delivery mechanism of choice.</p>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

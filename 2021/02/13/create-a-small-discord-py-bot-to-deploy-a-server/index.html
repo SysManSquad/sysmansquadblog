@@ -1,0 +1,273 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Create a small discord.py bot to deploy a server-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2021/02/13/create-a-small-discord-py-bot-to-deploy-a-server/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Create a small discord.py bot to deploy a server">
+<meta name=twitter:description content="I volunteer to help run Southwest CCDCevery year, and had a need to deploy all of the communication infrastructure in a hurry. With Covid Times™ upon us, we needed to move a competition that usually has at least one round in person to all-virtual. Discord was the obvious choice for how to do that successfully - it is targeted to communities of people, and has moderation tools. My discord server needed to have a few things:">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Create a small discord.py bot to deploy a server</h1>
+<span class=post-date>February 14, 2021</span>
+</div>
+<div class=post-entry>
+<p>I volunteer to help run Southwest CCDC every year, and had a need to deploy all of the communication infrastructure in a hurry. With Covid Times™ upon us, we needed to move a competition that usually has at least one round in person to all-virtual. Discord was the obvious choice for how to do that successfully - it is targeted to communities of people, and has moderation tools. My discord server needed to have a few things:</p>
+<ul>
+<li>A few general channels for normal Discord business - announcements, general chatter, help requests etc.</li>
+<li>Private channels for each competing team</li>
+<li>Private channels for staff to organize during the event</li>
+</ul>
+<p>Given that the smallest round will usually have 8 teams and the largest round varies - the only answer to make it correctly, efficiently, and correctly seemed to be automation. Clicking around in a GUI isn&rsquo;t fast nor is it easy to track what&rsquo;s been done and what is left. Discord&rsquo;s settings screens are also always full-screen instead of being something smaller you can drag around.</p>
+<h2 id=creating-a-discord-bot>Creating a Discord bot</h2>
+<p>While my preferred language is PowerShell, sometimes there&rsquo;s no point re-inventing the wheel and it&rsquo;s worth it to get your hands dirty in a second language. In this case the best/most well supported option seemed to be python, in the form of Discord.py.</p>
+<p>The first step is to head to Discord&rsquo;s developer portal and create an application. Here&rsquo;s where you set the icon your bot will use, along with its name also a few extra bits.</p>
+<p>Creating an application is not enough to give your bot a presence on a server, so you also need to move down to the Bot tab, and also add an icon and username there. While you&rsquo;re there you&rsquo;ll have to turn on the &lsquo;Server Members Intent&rsquo; toggle. This is for Reasons. The short story is that Discord feels that bots shouldn&rsquo;t be able to read the members list merely by expressing that intent in code. Other intents don&rsquo;t need this, and can be requested in your bot code.</p>
+<p>I did my development on an empty test server, so I switched to the OAuth2 tab, and selected the &lsquo;bot&rsquo; scope, set the &lsquo;Administrator&rsquo; permission, and copied/pasted the URL provided to a new tab to authorize my bot to join the test server. Yes, administrator is a dangerous permission to grant for a bot, but given that it&rsquo;s my code, I am fine with it in this case. Also some role-managing stuff didn&rsquo;t work particularly well without it.</p>
+<h2 id=writing-the-code>Writing the code</h2>
+<p>Discord.py has a few <a href=https://github.com/Rapptz/discord.py/tree/master/examples>examples</a> you can start from.</p>
+<h3 id=python-setup>Python Setup</h3>
+<p>Because I have been exposed to Python before, I was already aware that python projects should make use of virtual environments. I created a folder for my code, initialized git in the folder to help me keep track of code revisions and began to write.</p>
+<p>I created my virtual environment as a sub-folder. I couldn&rsquo;t possibly say whether it&rsquo;s good practice, but it worked. The virtual environment was in a subfolder called &lsquo;venv&rsquo; so I added it to my <code>.gitignore</code> file. You may find <a href=https://github.com/pyenv/pyenv>pyenv</a> useful.</p>
+<p>Having activated my virtual environment, I followed the instructions to use <code>pip</code> to add the required modules for Discord.py, and added a few of my own. I wanted to avoid storing credentials in a git repository, and the best way to do that is to hand them off to a vault of some kind. A quick google search found me a module called <code>keyring</code>. I also wanted to make sure that as I typed the token to save it, it wouldn&rsquo;t echo to the screen, so that led me to another module called <code>getpass</code>. Seems simple enough so far - they all seem to do what they say they will. The bot&rsquo;s name is MR_FLOOFY.</p>
+<p>service_id=&lsquo;MR_FLOOFY&rsquo;
+token=getpass.getpass(prompt=&lsquo;Token: &lsquo;, stream=None)
+keyring.set_password(service_id, service_id, token)</p>
+<p>Having a few extra python <code>pip</code> modules in place, I followed the instructions to use <code>pip</code> to freeze the list of installed modules in my environment to <code>requirements.txt</code>. This will allow me to quickly re-create this virtual environment if it is destroyed, or I need to change where it&rsquo;s hosted.</p>
+<p>With a Secure Enough™ way of saving and retrieving the token devised, I headed back to Discord&rsquo;s developer portal, my app, and the Bot tab to get the token I&rsquo;d need to allow the bot to connect.</p>
+<p>I&rsquo;m not going to describe the entire, frustrating process of learning just enough about python and Discord.py to make this work, I&rsquo;m just going to describe how the code works now that it works well enough for my purposes. In the future I&rsquo;ll probably keep refining it.</p>
+<h2 id=the-bot>The Bot</h2>
+<p>The first thing one typically does in a python file is import the modules you&rsquo;ll need in the script.</p>
+<p>Next, we set some discord-specific options, retrieve our token and build objects to use later. The <code>intents</code> object is used to tell Discord what things the bot will need access to, so we create the object with the defaults, then also ask for the member list.</p>
+<p>The <code>client</code> object is what we&rsquo;ll use later to make things go. The <code>logging</code> object seems to come for free because we used <code>import logging</code> earlier , I didn&rsquo;t have to specifically create it. We define the service id that matches the service id from when we ran <code>save_key.py</code> earlier. We then retrieve the token to use later.</p>
+<p>The logging settings are also very important - if you screw up and do too many things to some API endpoints, you&rsquo;ll get locked out of it for a period of time. Some of the endpoint limits are ridiculously low and the logging will print to the screen to let you know when you&rsquo;ve hit one of those limits so you don&rsquo;t enrage yourself wondering why code that worked a few minutes ago doesn&rsquo;t work now.</p>
+<p>This bot is meant to listen for messages that meet criteria, so we use this code to define what the bot will look for. I mostly looked through the Discord.py examples linked earlier to figure out how to get started.</p>
+<p>We define the event we care about, then say what should happen when that event fires, in our case <code>on_message</code>. I believe this is a &lsquo;callback&rsquo; but don&rsquo;t quote me. The <code>message</code> object contains the contents of the message, who sent it, the server it came from, and a number of other useful properties.</p>
+<p>If the message meets some criteria, we do some stuff, then <code>return</code> to end processing. In this case the only one that needs to issue commands is me, so our first two conditions just check to see if the bot is talking to itself, or whether the caller is not me. Obviously the second condition would make the first condition completely irrelevant - but I&rsquo;m leaving it in for this example.</p>
+<pre><code># I don't want the bot to react to anyone but me.
+if message.author.id != 00000000000:
+    return
+
+if message.content.startswith('!exit'):
+    print('Exit command received')
+    await client.close()&lt;/pre&gt;
+</code></pre>
+<p>CCDC games are run by several teams. Given the audience of this Discord server and it&rsquo;s purpose, I have to code for 5 separate roles.</p>
+<ul>
+<li>Gold team - organizers of the competition</li>
+<li>Black team - infrastructure for the game, including the game machines themselves</li>
+<li>White team - folks who help run the people side of the competition.</li>
+<li>I also have to set up special rights for team coaches, who are allowed to observe but not help.</li>
+<li>A role for each team</li>
+</ul>
+<p>I originally had all of this bundled up in one command. It was <em>really</em> fun to issue one command and watch an entire discord server populate, but like all good things - it got too complicated and debugging turned into a pain.</p>
+<p>This next stanza sets up the non-competition roles, along with what color they should appear as, whether the role members should be listed apart from all other server members ('<em>hoisted</em>') , server-wide permissions, etc.</p>
+<p>Now, we need to create a category of channels for staff using these roles, along with customized permissions for channels inside that category.</p>
+<p>We begin by getting the role objects we created earlier. We then create permission override objects we&rsquo;ll use when we create the channels. Following that, we create the category, get an object representing it, and create channels using the category object and the permission overrides.</p>
+<pre><code>    role_black=discord.utils.get(guild.roles, name=&quot;Black Team&quot;)
+    role_gold=discord.utils.get(guild.roles, name=&quot;Gold Team&quot;)
+    role_white=discord.utils.get(guild.roles, name=&quot;White Team&quot;)
+    role_coach=discord.utils.get(guild.roles, name=&quot;Coach&quot;)
+
+    all_staff_overwrites = {
+        guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        role_gold: discord.PermissionOverwrite(read_messages=True),
+        role_black: discord.PermissionOverwrite(read_messages=True),
+        role_white: discord.PermissionOverwrite(read_messages=True)
+    }
+
+    gold_team_overwrites = {
+        guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        role_gold: discord.PermissionOverwrite(read_messages=True),
+        role_black: discord.PermissionOverwrite(read_messages=False),
+        role_white: discord.PermissionOverwrite(read_messages=False)
+    }
+
+    black_team_overwrites = {
+        guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        role_black: discord.PermissionOverwrite(read_messages=True),
+        role_gold: discord.PermissionOverwrite(read_messages=False),
+        role_white: discord.PermissionOverwrite(read_messages=False)
+    }    
+    gold_x_black_team_overwrites = {
+        guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        role_gold: discord.PermissionOverwrite(read_messages=True),
+        role_black: discord.PermissionOverwrite(read_messages=True),
+        role_white: discord.PermissionOverwrite(read_messages=False)
+    }
+    coach_overwrites = {
+        guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        role_gold: discord.PermissionOverwrite(read_messages=True),
+        role_black: discord.PermissionOverwrite(read_messages=True),
+        role_white: discord.PermissionOverwrite(read_messages=True),
+        role_coach: discord.PermissionOverwrite(read_messages=True,send_messages=True)
+    }
+
+    await guild.create_category_channel(name=&quot;Staff&quot;, overwrites=all_staff_overwrites)
+    staff_category=discord.utils.get(guild.categories, name=&quot;Staff&quot;)
+
+    await guild.create_text_channel(name=&quot;Gold Team&quot;, category=staff_category, overwrites=gold_team_overwrites)
+    await guild.create_text_channel(name=&quot;Black Team&quot;, category=staff_category, overwrites=black_team_overwrites)
+    await guild.create_text_channel(name=&quot;Gold x Black Team&quot;, category=staff_category, overwrites=gold_x_black_team_overwrites)
+    await guild.create_text_channel(name=&quot;coaches&quot;, category=staff_category, overwrites=coach_overwrites)
+    await guild.create_text_channel(name=&quot;White Team&quot;, category=staff_category)&lt;/pre&gt;
+</code></pre>
+<p>Here we come to the meat of the script - how do you quickly create a number of teams along with some work channels, locked down to keep each blue team out of each other&rsquo;s business? Some loops mostly, using the code we&rsquo;ve already seen above.</p>
+<p>Generally speaking, here&rsquo;s how the permissions for teams are supposed to work:</p>
+<p>Black/Gold/White/[1 Blue team] should have r/w for text and voice, while coaches can see everything and say nothing. This is to replicate the in-person experience where team coaches serve as room monitors for all teams except their own. It&rsquo;s not just about rule enforcement however, coaches have access to this level of information because it will help them coach their teams and learn from other team experiences. Since the ultimate goal of the competition is education, this aligns with that goal without making the competition unfair.</p>
+<p>The coach role permissions below are not good enough, they allow the guild-wide permissions for the coach role to filter down to the teams. I&rsquo;ll change how those work in future versions of Mr Floofy.</p>
+<pre><code>    numTeams = int(message.content.split(' ')[1])
+
+    role_black=discord.utils.get(guild.roles, name=&quot;Black Team&quot;)
+    role_gold=discord.utils.get(guild.roles, name=&quot;Gold Team&quot;)
+    role_white=discord.utils.get(guild.roles, name=&quot;White Team&quot;)
+    role_coach=discord.utils.get(guild.roles, name=&quot;Coach&quot;)
+
+    for i in range(1,numTeams):
+        await guild.create_role(name=&quot;Team{:02d}&quot;.format(i),color=discord.Color(0x0d6dc9),hoist=1,permissions=discord.Permissions(permissions=36818496))
+        role=discord.utils.get(guild.roles,name=&quot;Team{:02d}&quot;.format(i))
+
+        blue_team_overwrites = {
+            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+            role_gold: discord.PermissionOverwrite(read_messages=True),
+            role_black: discord.PermissionOverwrite(read_messages=True),
+            role_white: discord.PermissionOverwrite(read_messages=True),
+            role_coach: discord.PermissionOverwrite(read_messages=True),
+            role: discord.PermissionOverwrite(read_messages=True)
+        }
+
+        await guild.create_category_channel(name=&quot;Team{:02d}&quot;.format(i), overwrites=blue_team_overwrites)
+        category=discord.utils.get(guild.categories,name=&quot;Team{:02d}&quot;.format(i))
+
+        # Use the category to create child-channels. This section is easy to modify if we want to give more than the allotted amount of channels below to allow teams to split communication.
+        await guild.create_text_channel(name=&quot;Team{:02d} General&quot;.format(i),category=category, topic='General chit-chat')
+        await guild.create_text_channel(name=&quot;Team{:02d} Retrospective&quot;.format(i),category=category, topic='Notes for after-action - what went wrong, what went right for your team and SWCCDC staff.')
+        await guild.create_text_channel(name=&quot;Team{:02d} A&quot;.format(i),category=category, topic='Channel to separate efforts and reduce cross-talk')
+        await guild.create_text_channel(name=&quot;Team{:02d} B&quot;.format(i),category=category, topic='Channel to separate efforts and reduce cross-talk')
+        await guild.create_text_channel(name=&quot;Team{:02d} C&quot;.format(i),category=category, topic='Channel to separate efforts and reduce cross-talk')
+        await guild.create_voice_channel(name=&quot;Team{:02d} Voice 1&quot;.format(i),category=category)
+        await guild.create_voice_channel(name=&quot;Team{:02d} Voice 2&quot;.format(i),category=category)
+</code></pre>
+<p></p>
+<p>As you can see, we create a number of channels. Between the number of categories and channels involved, doing this by hand would be prohibitive and prone to failure.</p>
+<p>Lastly, as a final command to help set things up, I wanted a way to automate assigning a user to a role in a way where I could easily paste some commands and get a team in their roles from a spreadsheet, given how the list of team members would be sent to me.</p>
+<pre><code>    role=discord.utils.get(guild.roles, name=teamid)
+    if(userobject == None):
+        await message.channel.send('They are not here yet!')
+        return
+    try:
+        await userobject.add_roles(role)
+    except Exception as e:
+        await message.channel.send('There was an error running this command ' + str(e))
+    else:
+        await message.channel.send('I think it worked')
+</code></pre>
+<p></p>
+<p>It should be noted that the roles are case-sensitive here.</p>
+<p>Lastly, we need an event to fire when the script has initialized and begun to run. We&rsquo;ll use the objects from the top of the script and tell the bot to go.</p>
+<p>client.run(TOKEN)
+</p>
+<h2 id=conclusion>Conclusion</h2>
+<p>It has been an interesting experience building this bot, and as simple as it is, I&rsquo;m very proud of it. I look forward to extending or replacing it with a proper PowerShell bot, perhaps PoshBot. I deeply hate the experience of trying to debug python, especially in the context of a bot like this.</p>
+<p>I hope it&rsquo;s been instructive to you.</p>
+<p>I want to thank my friend <a href=https://twitter.com/duplico>George</a> for both his expertise and patience as I struggled through some of the nastier parts of getting used to Python.</p>
+<p>I also want to thank the fine folks at <a href=https://pixabay.com/vectors/eagle-snake-kill-bird-wings-claws-46636/>Pixabay</a> for this beautiful header image that expresses my feelings about python.</p>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

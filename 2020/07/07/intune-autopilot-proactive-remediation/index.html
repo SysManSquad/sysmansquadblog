@@ -1,0 +1,164 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Intune/Autopilot Proactive Remediation-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/07/07/intune-autopilot-proactive-remediation/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Intune/Autopilot Proactive Remediation">
+<meta name=twitter:description content="What is Proactive Remediation? Proactive remediations are a pair of scripts used to detect and remediate a problem on a machine. The first script runs a query on your endpoints that returns an exit code of success or failure. We call this first script the detection script. On a successful exit code it is reported as &ldquo;Without issue&rdquo; in the Intune portal and nothing else is executed. On a failed exit code the second script is run which is called a remediation script.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Intune/Autopilot Proactive Remediation</h1>
+<span class=post-date>July 7, 2020</span>
+</div>
+<div class=post-entry>
+<h3 id=what-is-proactive-remediation>What is Proactive Remediation?</h3>
+<p>Proactive remediations are a pair of scripts used to detect and remediate a problem on a machine. The first script runs a query on your endpoints that returns an exit code of success or failure. We call this first script the detection script. On a successful exit code it is reported as &ldquo;Without issue&rdquo; in the Intune portal and nothing else is executed. On a failed exit code the second script is run which is called a remediation script. This script will &ldquo;fix&rdquo; in theory whatever you detected in your first script so the next time the detection script is run it returns successful. In the event the Intune portal reports a &ldquo;Failed&rdquo; status you have some detection or remediation logic failing. We will go over examples of both detection and remediation scripts to help alleviate that.</p>
+<p> Example of a proactive remediation graph in the Intune Portal</p>
+<p>If you&rsquo;re familiar with SCCM/MECM/MEMCM/SMS or whatever acronym you want to give Configuration Manager, proactive remediation is in essence the equivalent of configuration items and baselines.</p>
+<h3 id=how-do-we-get-started>How do we get started?</h3>
+<ol>
+<li>Head over to the Microsoft Endpoint Manager admin center</li>
+<li>Select <strong>Reports</strong> under Favorites</li>
+<li>Select <strong>Endpoint Analytics</strong> under Analytics</li>
+<li>Select <strong>Proactive remediations</strong></li>
+</ol>
+<p>You&rsquo;ll notice by default we have two Script Packages that Microsoft authored. After we create our detection and remediation script we will create a script package so let&rsquo;s get cracking on that!</p>
+<h3 id=first-we-need-to-create-a-detection-script>First we need to create a Detection script</h3>
+<p>}
+catch{
+$errMsg = $_.Exception.Message
+write-host $errMsg
+exit 1
+}</p>
+<p>The above detection script is the generic format you should use for detection logic. You&rsquo;ll notice it&rsquo;s a simple try-catch. In this script we are checking to see if a VPN connection exists. You can make these detection scripts as robust as you&rsquo;d like but for this scenario we are making it simplistic. You can copy the above and simply change Line 2 to whatever you&rsquo;d like to test. I would STRONGLY encourage you to include the <strong>-ErrorAction Stop</strong> section as not all PowerShell cmdlets exit without throwing the cmdlet error, and this will ensure that they exit with the proper exit codes you define. On a exit code of 0 it&rsquo;s reported as &ldquo;Without Issues&rdquo; in the portal. Nothing else will happen and the detection script will run again at the scheduled time. In the event an Exit code of 1 is thrown the remediation script will run. If no exit code is thrown the detection script will report as Failed and you&rsquo;ll need to adjust the script. As an example on the above script if you remove the <strong>-ErrorAction Stop</strong> section the detection fails because Get-VPNConnection doesn&rsquo;t throw the correct cmdlet error which results in the exit code not being defined.</p>
+<p>If you&rsquo;d like to read more on error handling and exceptions Kevin Marquette has a fantastic blog on it. <a href=https://powershellexplained.com/2017-04-10-Powershell-exceptions-everything-you-ever-wanted-to-know/#trycatch>https://powershellexplained.com/2017-04-10-Powershell-exceptions-everything-you-ever-wanted-to-know/#trycatch</a></p>
+<h3 id=next-lets-make-a-remediation-script>Next lets make a remediation script</h3>
+<p>The above remediation script, just like the detection script, is a try-catch. You&rsquo;ll see that I add The VPN connection and in the event of a failure it writes to the host what the error was. This is going to be important for diagnosing why your script fails if it does. This is included in both the detection and remediation scripts I&rsquo;ve shown. Much like the detection script feel free to change Line 2 to whatever you&rsquo;d like and expand upon it.</p>
+<h3 id=creating-a-script-package>Creating a script package</h3>
+<ol>
+<li>On the Proactive Remediations tab (Go back to How do we get started section if you don&rsquo;t see this) Select <strong>Create a Script Package</strong></li>
+<li>Add a friendly name and a description if desired</li>
+<li>Select <strong>Next</strong></li>
+<li>Copy your Detection and Remediation scripts and add them to the respective field</li>
+<li>Some scripts may need to be run using the &ldquo;Run this script using the logged on credentials&rdquo; option, or &ldquo;Run script in 64 bit PowerShell&rdquo;, depending on how your detection and remediation works. In our example, neither need to be enabled.</li>
+</ol>
+<p>Now in proper Intune fashion wait a few hours and your devices should start reporting.</p>
+<h3 id=run-into-a-failure>Run into a failure?</h3>
+<p>In the event you have failures, you can see why they failed by doing the following:</p>
+<ol>
+<li>Go to your script package</li>
+<li>Select <strong>Device Status</strong></li>
+<li>Select <strong>Columns</strong></li>
+<li>Turn on all the options and hit <strong>Apply</strong>. This will show you the output of the scripts which should include the error code and exception message thanks to our try-catch in the detection and remediation scripts<br>
+</li>
+<li>Check the respective field for where the error occurred and you should be able to diagnose why the failure happened</li>
+</ol>
+<h3 id=other-issues>Other issues?</h3>
+<p>If you run into any other issues or have questions about anything Intune head over to the WinAdmins discord community and go to the #Intune channel.</p>
+</div>
+<div class=post-share>
+<div class="post-share-box share-comments">
+hello
+</div>
+</div>
+<div class=post-author>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

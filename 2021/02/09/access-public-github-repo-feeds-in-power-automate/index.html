@@ -1,0 +1,319 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Access Public GitHub Repo Feeds in Power Automate-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2021/02/09/access-public-github-repo-feeds-in-power-automate/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Access Public GitHub Repo Feeds in Power Automate">
+<meta name=twitter:description content="Have you ever wanted to get a simple notification when there is a new Release for your favorite PowerShell Module or other Public Repo on GitHub? In this post we&rsquo;ll talk about how you can use Power Automate to watch for new releases and trigger events on these and send out Teams messages, Emails, or even Kick off an Azure Function or similar automation.">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Access Public GitHub Repo Feeds in Power Automate</h1>
+<span class=post-date>February 9, 2021</span>
+</div>
+<div class=post-entry>
+<p>Have you ever wanted to get a simple notification when there is a new Release for your favorite PowerShell Module or other Public Repo on GitHub? In this post we&rsquo;ll talk about how you can use Power Automate to watch for new releases and trigger events on these and send out Teams messages, Emails, or even Kick off an Azure Function or similar automation.</p>
+<pre><code>    &lt;li class=&quot;uagb-toc__list&quot;&gt;
+      &lt;a href=&quot;#discovering-testing-rssatom-feeds&quot;&gt;Discovering &amp; Testing RSS/Atom feeds&lt;/a&gt;&lt;li class=&quot;uagb-toc__list&quot;&gt;
+        &lt;a href=&quot;#connecting-the-connectors&quot;&gt;Connecting the Connectors&lt;/a&gt;&lt;li class=&quot;uagb-toc__list&quot;&gt;
+          &lt;a href=&quot;#install-instructions&quot;&gt;Install Instructions&lt;/a&gt;&lt;li class=&quot;uagb-toc__list&quot;&gt;
+            &lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;
+          &lt;/li&gt;&lt;/ul&gt;&lt;/ol&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; 
+          &lt;h2&gt;
+            Introduction
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            In my &lt;a href=&quot;https://sysmansquad.com/2020/12/30/automating-changing-out-of-business-hours-responses/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;previous post&lt;/a&gt;, we did some automation with client-side scripts and Microsoft Graph to update Outlook Auto-Responses on a schedule. Today we will be going in a different direction for something with almost no code in it at all - Power Automate.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            &lt;a href=&quot;https://flow.microsoft.com&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Power Automate&lt;/a&gt; is an excellent tool that can monitor for changes, run actions on a schedule, process events, or just run a multi-step process when you hit a button. It does all of this with you having to write no, or minimal, code by using &lt;strong&gt;Service Connectors&lt;/strong&gt; and abstracting out &lt;strong&gt;Events&lt;/strong&gt; and &lt;strong&gt;Actions&lt;/strong&gt; that you might need to take. This post assumes that you are somewhat familiar with Power Automate, for an introduction to Power Automate, check out this &lt;a href=&quot;https://docs.microsoft.com/en-us/power-automate/getting-started&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Microsoft Docs Article&lt;/a&gt;, or this &lt;a href=&quot;https://go.microsoft.com/fwlink/p/?linkid=2018566&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Microsoft Learn Course&lt;/a&gt; on Automate.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            There are hundreds of &lt;a href=&quot;https://flow.microsoft.com/connectors/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;supported app and service connectors&lt;/a&gt; including &lt;a href=&quot;https://flow.microsoft.com/connectors/shared_twitter/twitter/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Twitter&lt;/a&gt;, &lt;a href=&quot;https://flow.microsoft.com/connectors/shared_office365/office-365-outlook/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Office 365 Outlook&lt;/a&gt;, and the connector that seems like it would help us most for this goal: &lt;a href=&quot;https://flow.microsoft.com/connectors/shared_github/github/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;GitHub&lt;/a&gt;.
+          &lt;/p&gt;
+          
+          &lt;div class=&quot;wp-block-image&quot;&gt;
+            &lt;figure class=&quot;aligncenter is-resized&quot;&gt;&lt;img loading=&quot;lazy&quot; src=&quot;https://i.imgur.com/8AsDn9T.png&quot; alt=&quot;&quot; width=&quot;465&quot; height=&quot;181&quot; /&gt;&lt;figcaption&gt;Available triggers for GitHub are based on Issues or Pull Requests&lt;/figcaption&gt;&lt;/figure&gt;
+          &lt;/div&gt;
+          
+          &lt;p&gt;
+            However, when you look at the GitHub connector, it only supports a few &lt;strong&gt;triggers&lt;/strong&gt; related to &lt;strong&gt;Issues &lt;/strong&gt;and &lt;strong&gt;Pull Requests&lt;/strong&gt;, and if we check the GitHub Connector &lt;a href=&quot;https://docs.microsoft.com/en-us/connectors/github/#triggers&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;triggers documentation&lt;/a&gt;, then even those would require an API key. Since these are public repos, instead of repos we own, we won't have any way to get a API key anyway.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            We definitely need some other direction.
+          &lt;/p&gt;
+          
+          &lt;div class=&quot;wp-block-group&quot;&gt;
+            &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+              &lt;h2 id=&quot;github-atom-feeds&quot;&gt;
+                GitHub supports Atom Feeds
+              &lt;/h2&gt;
+              
+              &lt;div class=&quot;wp-block-group&quot;&gt;
+                &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                  &lt;p&gt;
+                    After some searching around, I found that GitHub support &lt;a href=&quot;http://www.atomenabled.org/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Atom Feeds&lt;/a&gt; by appending &lt;code&gt;.atom&lt;/code&gt; to certain URLs.
+                  &lt;/p&gt;
+                  
+                  &lt;p&gt;
+                    From what I could find, these are supported on &lt;strong&gt;Releases&lt;/strong&gt;, &lt;strong&gt;Tags&lt;/strong&gt;, and &lt;strong&gt;Commits&lt;/strong&gt;. To get the feed, simply take the URL for the feeds and append &lt;code&gt;&amp;lt;strong&gt;.atom&amp;lt;/strong&gt;&lt;/code&gt; to the end.
+                  &lt;/p&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+              
+              &lt;div class=&quot;wp-block-group&quot;&gt;
+                &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                  &lt;h4 id=&quot;sample-urls&quot;&gt;
+                    Sample URLs
+                  &lt;/h4&gt;
+                  
+                  &lt;p&gt;
+                    &lt;strong&gt;Releases · PowerShell&lt;br /&gt;&lt;/strong&gt;HTML - &lt;a href=&quot;https://github.com/PowerShell/PowerShell/releases&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;https://github.com/PowerShell/PowerShell/releases&lt;/a&gt;&lt;br /&gt;ATOM - &lt;a href=&quot;https://github.com/PowerShell/PowerShell/releases.atom&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener nofollow&quot;&gt;https://github.com/PowerShell/PowerShell/releases.atom&lt;/a&gt;
+                  &lt;/p&gt;
+                  
+                  &lt;p&gt;
+                    &lt;strong&gt;Tags · PowerShell&lt;/strong&gt;&lt;br /&gt;HTML - &lt;a href=&quot;https://github.com/PowerShell/PowerShell/tags&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;https://github.com/PowerShell/PowerShell/tags&lt;/a&gt;&lt;br /&gt;ATOM - &lt;a href=&quot;https://github.com/PowerShell/PowerShell/tags.atom&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener nofollow&quot;&gt;https://github.com/PowerShell/PowerShell/tags.atom&lt;/a&gt;
+                  &lt;/p&gt;
+                  
+                  &lt;p&gt;
+                    &lt;strong&gt;Releases · Pester&lt;/strong&gt;&lt;br /&gt;HTML - &lt;a href=&quot;https://github.com/pester/Pester/releases&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;https://github.com/pester/Pester/releases&lt;/a&gt;&lt;br /&gt;ATOM - &lt;a href=&quot;https://github.com/pester/Pester/releases.atom&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;https://github&lt;/a&gt;&lt;a href=&quot;https://github.com/pester/Pester/releases.atom&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener nofollow&quot;&gt;.com/pester/Pester/releases.atom&lt;/a&gt;
+                  &lt;/p&gt;
+                  
+                  &lt;p&gt;
+                    &lt;strong&gt;Commits · win-acme · Master Branch&lt;br /&gt;&lt;/strong&gt;HTML - &lt;a href=&quot;https://github.com/pester/Pester/releases&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;https://&lt;/a&gt;&lt;a href=&quot;https://github.com/win-acme/win-acme/commits/master&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;github.com/win-acme/win-acme/commits/master&lt;/a&gt;&lt;br /&gt;ATOM - &lt;a href=&quot;https://github.com/win-acme/win-acme/commits/master.atom&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener nofollow&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://github.com/win-acme/win-acme/commits/master.atom&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;https://github.com/win-acme/win-acme/commits/master.atom&lt;/a&gt;
+                  &lt;/p&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
+            &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+              &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
+                &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                  &lt;h2 class=&quot;alignwide has-text-align-center&quot;&gt;
+                    Discovering &amp; Testing RSS/Atom feeds
+                  &lt;/h2&gt;
+                  
+                  &lt;p&gt;
+                    If you are still having a hard time finding the URL, I found this &lt;a href=&quot;https://microsoftedge.microsoft.com/addons/detail/get-rss-feed-url/pgbelohmepchkohpdldadopkblkgbjom&quot;&gt;Edge Extension&lt;/a&gt; to discover Atom URLs for the current page, and a &lt;a href=&quot;https://chrome.google.com/webstore/detail/get-rss-feed-url/kfghpdldaipanmkhfpdcjglncmilendn&quot;&gt;Chrome Version&lt;/a&gt; as well.
+                  &lt;/p&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;&lt;figure class=&quot;wp-block-image alignwide size-large&quot;&gt;
+              
+              &lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;413&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/02/image-1024x413.png&quot; alt=&quot;&quot; class=&quot;wp-image-2257&quot; srcset=&quot;https:/wp-content/uploads/2021/02/image-1024x413.png 1024w, https:/wp-content/uploads/2021/02/image-300x121.png 300w, https:/wp-content/uploads/2021/02/image-768x310.png 768w, https:/wp-content/uploads/2021/02/image-100x40.png 100w, https:/wp-content/uploads/2021/02/image-855x345.png 855w, https:/wp-content/uploads/2021/02/image-1234x497.png 1234w, https:/wp-content/uploads/2021/02/image.png 1367w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/figure&gt; 
+              
+              &lt;p&gt;
+                To test what the content of the feeds was, I used &lt;a href=&quot;https://rssatom.com/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;rssatom.com&lt;/a&gt; to check I had a valid Atom or RSS feed URL that worked publicly.
+              &lt;/p&gt;
+              
+              &lt;p&gt;
+                Now, armed with these feed URLs, we have... no connector for Atom Feeds directly... damn... we were so close...
+              &lt;/p&gt;&lt;figure class=&quot;wp-block-image&quot;&gt;
+              
+              &lt;img src=&quot;https://media1.tenor.com/images/0d40c691a9a6ac353f1afcfdab3a3758/tenor.gif?itemid=12784504&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; 
+              
+              &lt;p&gt;
+                But! Atom Feeds are mostly compatible with RSS Feeds. Compatible enough that we can actually use the &lt;a href=&quot;https://flow.microsoft.com/connectors/shared_rss/rss/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;RSS Feed connector&lt;/a&gt; to receive the feeds and throw our events! We just won't be able to access all of the fields.
+              &lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;div class=&quot;wp-block-group&quot;&gt;
+            &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+              &lt;h2 id=&quot;connecting-the-connectors&quot;&gt;
+                Connecting the Connectors
+              &lt;/h2&gt;
+              
+              &lt;p&gt;
+                The useful fields available to us are below:
+              &lt;/p&gt;
+              
+              &lt;ul&gt;
+                &lt;li&gt;
+                  Feed Entry Title
+                &lt;/li&gt;
+                &lt;li&gt;
+                  Feed Entry Primary Link
+                &lt;/li&gt;
+                &lt;li&gt;
+                  Feed Entry Links &lt;ul&gt;
+                    &lt;li&gt;
+                      A list of the links in the entry
+                    &lt;/li&gt;
+                  &lt;/ul&gt;
+                &lt;/li&gt;
+                
+                &lt;li&gt;
+                  Feed Entry Summary&lt;ul&gt;
+                    &lt;li&gt;
+                      Roughly the &quot;text&quot; of the Feed Entry
+                    &lt;/li&gt;
+                  &lt;/ul&gt;
+                &lt;/li&gt;
+                
+                &lt;li&gt;
+                  Feed Entry Update and Published Dates
+                &lt;/li&gt;
+              &lt;/ul&gt;
+              
+              &lt;p&gt;
+                Here is a full listing and link to the &lt;a href=&quot;https://docs.microsoft.com/connectors/rss/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;RSS Feed Connector documentation&lt;/a&gt;
+              &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+              
+              &lt;img loading=&quot;lazy&quot; width=&quot;303&quot; height=&quot;429&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/02/image-5.png&quot; alt=&quot;&quot; class=&quot;wp-image-2266&quot; srcset=&quot;https:/wp-content/uploads/2021/02/image-5.png 303w, https:/wp-content/uploads/2021/02/image-5-212x300.png 212w, https:/wp-content/uploads/2021/02/image-5-100x142.png 100w&quot; sizes=&quot;(max-width: 303px) 100vw, 303px&quot; /&gt;&lt;/figure&gt; 
+              
+              &lt;p&gt;
+                So from here, we can use the &lt;strong&gt;RSS Feed trigger&lt;/strong&gt;, build some variables, and send it to the &lt;strong&gt;Teams Connector&lt;/strong&gt;. From this, I refined the formatting a bit, and ended up with this.
+              &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+              
+              &lt;img loading=&quot;lazy&quot; width=&quot;960&quot; height=&quot;778&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/02/image-2.png&quot; alt=&quot;&quot; class=&quot;wp-image-2261&quot; srcset=&quot;https:/wp-content/uploads/2021/02/image-2.png 960w, https:/wp-content/uploads/2021/02/image-2-300x243.png 300w, https:/wp-content/uploads/2021/02/image-2-768x622.png 768w, https:/wp-content/uploads/2021/02/image-2-100x81.png 100w, https:/wp-content/uploads/2021/02/image-2-855x693.png 855w&quot; sizes=&quot;(max-width: 960px) 100vw, 960px&quot; /&gt;&lt;/figure&gt; 
+              
+              &lt;p&gt;
+                This sends through notifications to Teams that look like this:
+              &lt;/p&gt;&lt;figure class=&quot;wp-block-image&quot;&gt;
+              
+              &lt;img src=&quot;https://i.imgur.com/VQ5lvlQ.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;h2 id=&quot;install&quot;&gt;
+            Install Instructions
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            You can &lt;a href=&quot;https://github.com/SysManSquad/BlogFiles/tree/master/PsychoData/GitHub_to_Teams_Notifications&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;download this here&lt;/a&gt; to import this into your own environment and start getting your own notifications from Public Repos.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+            You can also use this as a guide to set up alerts on any other RSS feeds or most Atom feeds as well. Since this is already in Power Automate, you could also use hundreds of different connectors to connect to other services like Azure &lt;a href=&quot;https://flow.microsoft.com/connectors/shared_azureautomation/azure-automation/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Automation&lt;/a&gt;, &lt;a href=&quot;https://flow.microsoft.com/connectors/shared_visualstudioteamservices/azure-devops/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;DevOps&lt;/a&gt;, &lt;a href=&quot;https://flow.microsoft.com/connectors/shared_azureblob/azure-blob-storage/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Blob Storage&lt;/a&gt;, &lt;a href=&quot;https://flow.microsoft.com/connectors/shared_ftp/ftp/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;FTP&lt;/a&gt;, &lt;a href=&quot;https://flow.microsoft.com/connectors/shared_slack/slack/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Slack&lt;/a&gt;, &lt;a href=&quot;https://flow.microsoft.com/connectors/shared_todoist/todoist/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Todoist&lt;/a&gt;, or even invoke a &lt;a href=&quot;https://docs.microsoft.com/connectors/webcontents/#get-web-resource&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Web API&lt;/a&gt;.
+          &lt;/p&gt;
+          
+          &lt;h2 id=&quot;build-your-own&quot;&gt;
+            Conclusion
+          &lt;/h2&gt;
+          
+          &lt;p&gt;
+            In this post, we found a way to work around some limitations of the GitHub Connector, made a Power Automate flow that can be easily duplicated to subscribe to many feeds, and used Power Automate to post notifications to Teams Channels.
+          &lt;/p&gt;&lt;figure class=&quot;wp-block-image&quot;&gt;
+          
+          &lt;img src=&quot;https://uploads-ssl.webflow.com/5d2b950d9ea87fc61f0c1f3e/5daa2dfbe9a275421795e33d_ezgif.com-optimize%20(12).gif&quot; alt=&quot;Image result for so much win jim halpert&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+            &lt;strong&gt;What kind of workflows would you like to automate&lt;/strong&gt;? Let me know what kind of things you are doing with &lt;strong&gt;Power Platform&lt;/strong&gt; on the &lt;a href=&quot;#contact&quot;&gt;Discord below&lt;/a&gt;. For some ideas of automations you might be able to use, go &lt;a href=&quot;https://us.flow.microsoft.com/en-us/templates/&quot;&gt;Browse Power Automate Templates&lt;/a&gt;, &lt;a href=&quot;https://flow.microsoft.com/connectors/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Search Connectors&lt;/a&gt;, or check out the Power Automate &lt;a href=&quot;https://go.microsoft.com/fwlink/?LinkID=787467&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Community&lt;/a&gt;.
+          &lt;/p&gt;
+          
+          &lt;p id=&quot;contact&quot;&gt;
+            If you have questions, are having problems, or just want to chat over something, for the best response you can reach me and several other IT Pros on the &lt;a href=&quot;https://discord.com/invite/winadmins&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;WinAdmins Discord&lt;/a&gt; as &lt;a href=&quot;https://discordapp.com/users/264652399824601088&quot;&gt;@PsychoData&lt;/a&gt; or you can reach me on &lt;a href=&quot;https://twitter.com/psychodata&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Twitter&lt;/a&gt;.
+          &lt;/p&gt;
+          
+          &lt;p&gt;
+          &lt;/p&gt;</code></pre>
+</div>
+<div class=post-share>
+<div class="post-share-box share-comments">
+hello
+</div>
+</div>
+<div class=post-author>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
+<meta name=viewport content="width=device-width">
+<meta name=description content="A community blog and subsidiary of WinAdmins.io">
+<link rel="shortcut icon" href=/img/favicon.ico>
+<title>Inventory Deprovisioned Windows 10 Apps-SysManSquad | Systems Management Squad</title>
+<link rel=canonical href=/2020/03/11/inventory-deprovisioned-windows-10-apps/>
+<link rel=stylesheet href=/css/style.css>
+<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
+<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:title content="Inventory Deprovisioned Windows 10 Apps">
+<meta name=twitter:description content="In my previous post I&rsquo;ve shown that we can revert the deprovisioning of Windows 10 apps. This is awesome news for anyone that has removed the Windows Store. I have been unable to find any other way of restoring the Windows Store once it has been deprovisioned, so this is an awesome time saver. Instead of reimaging devices that do not have the store we can simply &lsquo;reprovision&rsquo; the store, and perform a feature update!">
+</head>
+<body class="home blog">
+<div id=asd-container>
+<div id=top-bar>
+<div class=container>
+<div id=nav-wrapper>
+<ul class=menu id=menu-top-menu>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/>Home</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/about/>
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=https://github.com/SysManSquad>
+<span>GitHub</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/jointhesquad/>
+<span>Join the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/meetthesquad/>
+<span>Meet the Squad</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=#>
+<span>MORE></span>
+</a>
+<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
+<a href=/contact/>Contact</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id=top-search>
+<a href=# class=search><i class="fa fa-search"></i></a>
+<div class=show-search>
+<form role=search method=get action=https://www.google.com/search id=searchform>
+<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<button type=submit value=Search>
+</form>
+</div>
+</div>
+<div class=menu id=menu-mobile></div>
+</div>
+</div>
+<header id=header class=noslider>
+<div class=container>
+<div id=logo>
+<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+</div>
+</div>
+</header>
+<div class=container>
+<div id=content>
+<div id=main class=fullwidth>
+<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
+<div class=post-header>
+<h1>Inventory Deprovisioned Windows 10 Apps</h1>
+<span class=post-date>March 11, 2020</span>
+</div>
+<div class=post-entry>
+<p>In my <a href=https://sysmansquad.com/2020/01/06/reprovision-windows-10-apps-wait-what/>previous post</a> I&rsquo;ve shown that we can revert the deprovisioning of Windows 10 apps. This is awesome news for anyone that has removed the Windows Store. I have been unable to find any other way of restoring the Windows Store once it has been deprovisioned, so this is an awesome time saver. Instead of reimaging devices that do not have the store we can simply &lsquo;reprovision&rsquo; the store, and perform a feature update! But&mldr; who knows the existing impact of deprovisioned apps in their environment? Opinions have changed over time regarding what should be removed (if anything at all!)</p>
+<h4 id=identify-sins-of-the-past>Identify sins of the past</h4>
+<p>Thankfully the power of MEMCM can save us from our mistakes! Custom hardware inventory enables us to gather any information desired into the database. The value of this cannot be overstated. MEMCM is a powerful tool that should be used with care. Because of this we should <strong>take action based on DATA</strong> whenever possible.</p>
+<pre><code>&lt;li class=&quot;schema-how-to-step&quot; id=&quot;how-to-step-1577027904909&quot;&gt;
+  &lt;strong class=&quot;schema-how-to-step-name&quot;&gt;Run script on a schedule&lt;/strong&gt; &lt;p class=&quot;schema-how-to-step-text&quot;&gt;
+    Typically with a Configuration Item, but it can be done however you'd like.
+  &lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li class=&quot;schema-how-to-step&quot; id=&quot;how-to-step-1577027934428&quot;&gt;
+  &lt;strong class=&quot;schema-how-to-step-name&quot;&gt;Add new WMI class to hardware inventory&lt;/strong&gt; &lt;p class=&quot;schema-how-to-step-text&quot;&gt;
+    This is done on the 'Default Settings'
+  &lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li class=&quot;schema-how-to-step&quot; id=&quot;how-to-step-1577028462586&quot;&gt;
+  &lt;strong class=&quot;schema-how-to-step-name&quot;&gt;Leverage new inventory for making collections, reports, and decisions&lt;/strong&gt; &lt;p class=&quot;schema-how-to-step-text&quot;&gt;
+    &lt;strong&gt;ACT BASED ON DATA!&lt;/strong&gt;
+  &lt;/p&gt;
+&lt;/li&gt;
+</code></pre>
+<h4 id=step-1---write-a-script-to-gather-the-data>Step 1 - Write a script to gather the data</h4>
+<p>&lsquo;The data&rsquo; is stored in the registry, so we need to extract it from there. From my previous post, we know the data is located at</p>
+<p>But it is stored as a set of registry keys instead of properties on a registry key. Depending on the structure of data in the registry it may be possible to use <a href=https://gallery.technet.microsoft.com/RegKeyToMof-28e84c28>RegKeyToMof</a> to generate a MOF file. With this being a set of indeterminate registry keys I&rsquo;ve decided to use a script instead.</p>
+<p>Scripts for custom hardware inventory typically follow this workflow. At least&mldr; mine do</p>
+<ul>
+<li>Ensure the WMI Namespace exists</li>
+<li>Clear / Remove the WMI Class if it exists</li>
+<li>(Re)create the WMI Class</li>
+<li>Collect the data</li>
+<li>Populate WMI</li>
+<li>Write out some random gibberish so that your CI can be &lsquo;Compliant&rsquo;</li>
+</ul>
+<p>#region test if the namespace exists, and create it if it does not
+try {
+$null = [wmiclass]"$HinvNamespace<code>:__NameSpace" } catch { $HinvNamespaceSplit = $HinvNamespace -split '\\' $PathToTest = $HinvNamespaceSplit[0] for (${i} = 1; ${i} -lt $($HinvNamespaceSplit.Count); ${i}++) { $PathToTest = [string]::Join('\', @($PathToTest, $HinvNamespaceSplit[$i])) try { $null = [wmiclass]"$PathToTest</code>:__NameSpace"
+}
+catch {
+$PathToTestParent = Split-Path -Path $PathToTest -Parent
+$PathToTestName = Split-Path -Path $PathToTest -Leaf
+$NewNamespace = [wmiclass]"$PathToTestParent`:__NameSpace"
+$NamespaceCreation = $NewNamespace.CreateInstance()
+$NamespaceCreation.Name = $PathToTestName
+$null = $NamespaceCreation.Put()
+}
+}
+}
+#endregion test if the namespace exists, and create it if it does not</p>
+<p>#region clear our class from the namespace if it exists
+Remove-WmiObject -Class $HinvClassName -Namespace $HinvNamespace -ErrorAction SilentlyContinue
+#endregion clear our class from the namespace if it exists</p>
+<p>#region create the WMI class, and set the properties to be inventoried
+$HinvClass = [System.Management.ManagementClass]::new($HinvNamespace, [string]::Empty, $null)
+$HinvClass["__CLASS"] = $HinvClassName
+$HinvClass.Qualifiers.Add(&ldquo;Static&rdquo;, $true)
+$HinvClass.Properties.Add(&ldquo;DeprovisionedApp&rdquo;, [System.Management.CimType]::String, $false)
+$HinvClass.Properties[&ldquo;DeprovisionedApp&rdquo;].Qualifiers.Add(&ldquo;Key&rdquo;, $true)
+$null = $HinvClass.Put()
+#endregion create the WMI class, and set the properties to be inventoried</p>
+<p>$DeprovisionRoot = &ldquo;registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned&rdquo;
+$AllDeprovisionedApps = Get-ChildItem -Path $DeprovisionRoot | Select-Object -ExpandProperty PSChildName
+if ($null -ne $AllDeprovisionedApps) {
+foreach ($App in $AllDeprovisionedApps) {
+$null = Set-WmiInstance -Namespace $HinvNamespace -Class $HinvClassName -ErrorAction SilentlyContinue -Arguments @{
+DeprovisionedApp = $App
+}
+}
+}</p>
+<p>Write-Output &lsquo;Inventory Complete&rsquo;</p>
+<p>Inventory-DeprovisionedAppX</p>
+<h4 id=step-2---run-script-on-a-schedule>Step 2 - Run script on a schedule</h4>
+<p>There are countless sources to show you how to create a CI in MEMCM (Don&rsquo;t search for MEMCM, you won&rsquo;t get any results. Use SCCM, or ConfigMgr). While a step by step on all those sweet sweet next buttons sounds invigorating, I&rsquo;m going to provide some screenshots instead.</p>
+<p>Some &lsquo;good to knows&rsquo; for doing custom hardware inventory in this fashion are below.</p>
+<ol>
+<li>Make sure it returns compliant&mldr; Having &lsquo;non-compliant&rsquo; in your reporting data, or your control panel applet because of a poorly written script is silly!</li>
+<li>Do NOT include a &lsquo;timestamp&rsquo; as part of your custom inventory unless you absolutely have to. (See <a href=https://sccmf12twice.com/2019/08/hinvchangelog-the-600gb-db-backlog/>this post</a> for an explanation)</li>
+<li>Put some thought to the schedule. Some types of inventory may require a more frequent gather. Compare your need for data with your hardware inventory cycle, as well as the expected rate of change of the data.</li>
+</ol>
+<h4 id=step-3---add-new-wmi-class-to-hardware-inventory>Step 3 - Add new WMI class to hardware inventory</h4>
+<p>The script is written, deployed, and has run on a client. Now it is time to actually get this data into MEMCM!</p>
+<p>I start at a client that I know has run my script. If everything is working as expected, and I have deprovisioned apps, I should be able to perform a query to return my custom data stored in WMI.</p>
+<p> </p>
+<p>Awesome! That is easily half the battle. Now, to complete the cycle we need to get the data into the database. If you are feeling frisky you can start editing MOF files. Otherwise, you can connect to a computer from the MEMCM console and select the new WMI class. I recommend option #2.</p>
+<p>Pop open the &lsquo;Default Settings&rsquo; policy, and navigate to the &lsquo;Hardware Inventory&rsquo; section. Now click that thingy I have highlighted below (<strong>Set Classes</strong>&mldr;).</p>
+<p> </p>
+<p>And from there:</p>
+<ol>
+<li>Click <strong>Add</strong></li>
+<li>Click <strong>Connect&mldr;</strong></li>
+<li>Type in the Computer name of the device that has the new WMI class</li>
+<li>Specify your WMI namespace if it is NOT the default root\cimv2</li>
+<li>Specify credentials if required</li>
+<li>Click <strong>Connect</strong></li>
+</ol>
+<p> </p>
+<p>If you didn&rsquo;t forget your password, a wonderful list of WMI classes under the specified namespace should appear. Check the box, click edit if you feel like poking around, and click ok!</p>
+<p> </p>
+<h4 id=step-4---act-based-on-data>Step 4 - ACT BA<strong>SED ON DATA!</strong></h4>
+<p>This bit will have to wait for another post! There is some fun stuff we can do with the data we are now collecting. The next post should spark some ideas for people, I hope. But, let&rsquo;s still take a look at the data we have now.</p>
+<p>In it&rsquo;s simplest form, we can query the MEMCM database as below.</p>
+<p> </p>
+<p>If we desire a little more insight, the query can be adjusted to show counts.</p>
+<p> </p>
+<p>Join us next time, when decisions, and actions are made with our new found data!</p>
+<p><a href=https://twitter.com/CodyMathis123>@CodyMathis123</a></p>
+</div>
+<div class=post-share>
+<div class="post-share-box share-comments">
+hello
+</div>
+</div>
+<div class=post-author>
+</div>
+<comments id=comments>
+<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
+</comments>
+</article>
+</div>
+</div>
+</div>
+<footer id=footer>
+<div class=container>
+<div id=footer-copyright>
+<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>
