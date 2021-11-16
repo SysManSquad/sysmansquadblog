@@ -10,16 +10,16 @@
 <title>Mapping Network Drives on Intune Devices-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/12/16/mapping-network-drives-on-intune-devices/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Mapping Network Drives on Intune Devices">
 <meta name=twitter:description content="This guide is part of a video series companion guide on setting up mapped drives on Intune devices - you can watch the video here S02E18 - How to Map Network Drives on Microsoft Intune Devices - (I.T) - YouTube! This is rather simple but I will be adding some useful bits of code for people who do not have an always on VPN solution for all those Work From Home scenarios.">
 </head>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -93,7 +93,7 @@
 <span class=post-date>December 16, 2020</span>
 </div>
 <div class=post-entry>
-<p>This guide is part of a video series companion guide on setting up mapped drives on Intune devices - you can watch the video here S02E18 - How to Map Network Drives on Microsoft Intune Devices - (I.T) - YouTube! This is rather simple but I will be adding some useful bits of code for people who do not have an always on VPN solution for all those Work From Home scenarios.</p>
+<p>This guide is part of a video series companion guide on setting up mapped drives on Intune devices - you can watch the video here <a href="https://www.youtube.com/watch?v=hHtXFeuHkC4">S02E18 - How to Map Network Drives on Microsoft Intune Devices - (I.T) - YouTube</a>! This is rather simple but I will be adding some useful bits of code for people who do not have an always on VPN solution for all those Work From Home scenarios.</p>
 <h2 id=creating-the-script>Creating the script</h2>
 <p>Before we get started let me explain how this process works. We are going to create a script that we deploy via intune, which in turn will create a scheduled task to map the network drives at login. We will then be adding a few lines of code to also have it map on any network changes.</p>
 <ol>
@@ -133,7 +133,13 @@ stop-Transcript
 </ol>
 <h2 id=verify-the-scheduled-task-exists>Verify the Scheduled Task Exists</h2>
 <p>Once you have deployed the script to the selected group, you can sync Intune policies through Company Portal. Remember it can take up to 8 hours for this to appear. You should see a scheduled Task named <code>&lt;strong>IntuneDriveMapping&lt;/strong></code> and the triggers should look like the below.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=MicrosoftTeams-image-2-1024x439.png target=_blank>
+<img src=MicrosoftTeams-image-2-1024x439.png alt>
+</a>
+</figure>
+</div> </p>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
@@ -152,7 +158,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

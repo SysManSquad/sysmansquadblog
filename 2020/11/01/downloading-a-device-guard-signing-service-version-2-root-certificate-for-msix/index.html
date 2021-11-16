@@ -10,16 +10,16 @@
 <title>Downloading a Device Guard Signing Service version 2 Root Certificate for MSIX-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/11/01/downloading-a-device-guard-signing-service-version-2-root-certificate-for-msix/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Downloading a Device Guard Signing Service version 2 Root Certificate for MSIX">
 <meta name=twitter:description content="Howdy y&rsquo;all
 In this post I will show you how to get the Device Guard Signing Service v2 root certificate.
@@ -72,7 +72,7 @@ MSIX crash course While MSIX is generally marketed as a replacement for MSI for 
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -83,7 +83,7 @@ MSIX crash course While MSIX is generally marketed as a replacement for MSI for 
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -111,9 +111,9 @@ In this post I will show you how to get the Device Guard Signing Service v2 root
 </ul>
 <p>So what does this have to do with certificates?<br>
 The MSIX packaging format has a strict signing requirement. While you can always buy a code signing certificate, you can use a free DGSSv2 certificate from Microsoft.</p>
-<p>If you want to know how MSIX apps are setup and deployed, check out Jake&rsquo;s blog post on MSIX.</p>
+<p>If you want to know how MSIX apps are setup and deployed, check out <a href=https://sysmansquad.com/2020/09/15/signing-and-deploying-applications-via-msix-with-intune/>Jake&rsquo;s blog post on MSIX</a>.</p>
 <h2 id=registering-the-azuread-app>Registering the AzureAD app</h2>
-<p>First we need to setup an AzureAd Application, this is mostly covered in the official docs but it&rsquo;s not very user friendly and when this post was written (31.10.2020), it was missing a crucial step.</p>
+<p>First we need to setup an AzureAd Application, <a href=https://docs.microsoft.com/en-us/windows/msix/package/signing-package-device-guard-signing>this is mostly covered in the official docs</a> but it&rsquo;s not very user friendly and when this post was written (31.10.2020), it was missing a crucial step.</p>
 <p>For those of you who have done this sort of thing before, here is the quick overview:</p>
 <ul>
 <li>Sign into AzureAd and start registering an app</li>
@@ -123,25 +123,61 @@ The MSIX packaging format has a strict signing requirement. While you can always
 </ul>
 <p>For those of you who have never done this before, here are the detailed steps with screenshots.</p>
 <p>Sign into Azure AD and register a new application.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=1-app-registration-1024x573.png target=_blank>
+<img src=1-app-registration-1024x573.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Give it a descriptive name.<br>
 Under Redirect URI, select &ldquo;Public client (mobile & desktop)&rdquo;, and set <a href=https://dgss.microsoft.com>https://dgss.microsoft.com</a> as the URI.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=2-replyurl.png target=_blank>
+<img src=2-replyurl.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Once the app has been created, click on <strong>API permissions</strong>.<br>
 <strong>Add permissions</strong>.<br>
 Click on <strong>APIs my organization uses</strong>.<br>
 Search for &ldquo;windows store&rdquo;.<br>
 And click on it.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=3-api-permissions-1024x342.png target=_blank>
+<img src=3-api-permissions-1024x342.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Click on <strong>Delegated permissions</strong>.<br>
 And select <strong>user_impresonation</strong>.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=4-delegate-access.png target=_blank>
+<img src=4-delegate-access.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Click on <strong>Grant consent for&mldr;</strong> otherwise the app will not work.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=5-consent-1024x494.png target=_blank>
+<img src=5-consent-1024x494.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Now head back to the application overview and copy the GUID that&rsquo;s next to <strong>Application (client) ID</strong>, this is used in a script that is featured in this blog post.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=6-appid.png target=_blank>
+<img src=6-appid.png alt>
+</a>
+</figure>
+</div> </p>
 <h2 id=get-dgssv2rootcert>Get-DGSSv2RootCert</h2>
-<p>Since for most people, downloading the root certificate is a one time operation, I elected to run this this in a windows sandbox. but that is 100% optional.</p>
+<p>Since for most people, downloading the root certificate is a one time operation, I elected to run this this in a <a href=https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-overview>windows sandbox</a>. but that is 100% optional.</p>
 <p>Paste the application GUID into the $AppID variable and you should be ready to go.</p>
 <h1 id=please-add-your-own-app-id>please add your own App ID</h1>
 <p>$AppID = &ldquo;PUT YOUR GUID HERE&rdquo;</p>
@@ -170,7 +206,7 @@ And select <strong>user_impresonation</strong>.</p>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

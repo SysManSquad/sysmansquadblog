@@ -10,16 +10,16 @@
 <title>Microsoft Teams Cache, a burden to us all-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/11/11/microsoft-teams-cache-a-burden-to-us-all/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Microsoft Teams Cache, a burden to us all">
 <meta name=twitter:description content="Microsoft Teams Cache, we&rsquo;ve all been there in the last year and a half. Microsoft Teams is working fine, then it&rsquo;s not. What happened? I restarted Teams and it&rsquo;s still acting weird.
 Well, Teams is an interesting app when it comes to its cache. It relies heavily on it. I personally do not know all the ins and outs of the Teams cache, but I too know all too well that it is a pain in the butt when it goes awry.">
@@ -70,7 +70,7 @@ Well, Teams is an interesting app when it comes to its cache. It relies heavily 
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -81,7 +81,7 @@ Well, Teams is an interesting app when it comes to its cache. It relies heavily 
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -105,7 +105,7 @@ Well, Teams is an interesting app when it comes to its cache. It relies heavily 
 <p>It then does another Start-Sleep just to make sure there are no pending hooks in the file system, then it relaunches the Teams process and the Outlook Process.</p>
 <p>Notice the <code>&lt;strong>-ArgumentList "--processStart Teams.exe"&lt;/strong></code> on the Teams command line. This is extremely important. Without this, Teams will not launch. Also, make sure the p in Process is lower case. Ask me how I know.</p>
 <h2 id=creating-the-executable>Creating the Executable</h2>
-<p>That takes care of the script portion of this blog post. Next, we need to encapsulate this PowerShell script in an EXE. For this, I used a module in PSGallery called PS2EXE. This module is so simple to use, it&rsquo;s almost criminal.</p>
+<p>That takes care of the script portion of this blog post. Next, we need to encapsulate this PowerShell script in an EXE. For this, I used a module in PSGallery called <a href=https://www.powershellgallery.com/packages/ps2exe/1.0.4>PS2EXE</a>. This module is so simple to use, it&rsquo;s almost criminal.</p>
 <p>It is literally a simple as:</p>
 <p>That is the simplest form you can do. There are a bunch of other switches you can do to add other information like Company Name, Version, Author, etc.</p>
 <h3 id=caveats>Caveats</h3>
@@ -116,7 +116,13 @@ Well, Teams is an interesting app when it comes to its cache. It relies heavily 
 <p>Whichever way you decide to package up your EXE and PS1 for install, just make sure it works through ConfigMan and InTune (if you go that route, you can also just stick this in a folder somewhere and create a shortcut for the EXE on your desktop).</p>
 <h2 id=conclusion>Conclusion</h2>
 <p>If you implement this as I have described, when a user runs this, they will be presented with a PowerShell window that says:</p>
-<p> Clear Teams Cache results window</p>
+<p><div class=image>
+<figure>
+<a href=ClearTeamsCache.png target=_blank>
+<img src=ClearTeamsCache.png alt>
+</a>
+</figure>
+</div> Clear Teams Cache results window</p>
 <p>And here is the Icon I made for my application if you want it. You can also make your own fairly easily if you wish.</p>
 <p>That should be it. You should now have a fully functioning &ldquo;program&rdquo; to clear the Microsoft Teams Cache on a computer.</p>
 </div>
@@ -137,7 +143,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

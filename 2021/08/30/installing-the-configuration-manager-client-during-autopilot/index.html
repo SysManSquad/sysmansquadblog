@@ -10,16 +10,16 @@
 <title>Installing The Configuration Manager Client During Autopilot-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/08/30/installing-the-configuration-manager-client-during-autopilot/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Installing The Configuration Manager Client During Autopilot">
 <meta name=twitter:description content="Hey siri, write a blog post for me. Deploying the Configuration manager client is usually pretty simple. the procedure is well documented.
 However there are issues if you plan on installing the CM client during Autopilot using the officially suggested methods
@@ -71,7 +71,7 @@ Mixing LOB and win32 applications will result in autopilot breaking, so you shou
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -82,7 +82,7 @@ Mixing LOB and win32 applications will result in autopilot breaking, so you shou
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -96,9 +96,9 @@ Mixing LOB and win32 applications will result in autopilot breaking, so you shou
 </div>
 <div class=post-entry>
 <h2 id=hey-siri-write-a-blog-post-for-me>Hey siri, write a blog post for me.</h2>
-<p>Deploying the Configuration manager client is usually pretty simple. the procedure is well documented.</p>
+<p>Deploying the Configuration manager client is usually pretty simple. the procedure is <a href=https://docs.microsoft.com/en-us/mem/configmgr/core/clients/deploy/plan/client-installation-methods>well documented</a>.</p>
 <p>However there are issues if you plan on installing the CM client during Autopilot using the officially suggested methods</p>
-<p>Mixing LOB and win32 applications will result in autopilot breaking, so you should use win32 apps exclusively, which somewhat contradicts the official way of installing the CM client with intune.</p>
+<p>Mixing LOB and win32 applications <a href=https://docs.microsoft.com/en-us/mem/intune/apps/lob-apps-windows>will result in autopilot breaking</a>, so you should use win32 apps exclusively, which somewhat contradicts the official way of installing the CM client with intune.</p>
 <p>Installing the Configuration manager client during the middle of autopilot will break autopilot, as the Configuration manager client essentially becomes the management authority the moment it becomes active, causing intune to have no idea how to proceeed.</p>
 <p>Of course you could install the CM client completely outside of autopilot but that can take a while to happen.</p>
 <p>So lets review a method i use to deploy the Configuration manager client during autopilot, but without causing a mess.</p>
@@ -107,7 +107,13 @@ Mixing LOB and win32 applications will result in autopilot breaking, so you shou
 <h2 id=lets-build-script>Lets build Script!</h2>
 <p>Step 1: go download the latest <a href=https://psappdeploytoolkit.com/>Powershell application deployment toolkit</a></p>
 <p>Step 2: Add the client install files from \SiteServer\SMS_ABC\Client to the Files directory in your Powershell Application Deployment Toolkit, you should end up with a directory that looks similar to this:</p>
-<p> oh wow!</p>
+<p><div class=image>
+<figure>
+<a href=JlUmG62Jae.png target=_blank>
+<img src=JlUmG62Jae.png alt>
+</a>
+</figure>
+</div> oh wow!</p>
 <p>Step 3: open Deploy-Application.ps1 in your favorite powershell editor.</p>
 <p>In the pre-installation task section (line 126), you add this command, which basically just copies the client installation files to c:\windows\temp\ccmsetup, for later use.</p>
 <p>Next up, add this to the installation task section (line 140).<br>
@@ -118,14 +124,26 @@ This creates a scheduled task that runs when a user logs in, which executes MECM
 </p>
 <p>Step 4:<br>
 The Script that actually installs the client.</p>
-<p>If you have a cloud management gateway, you should supply the parameters needed to get the client into a working state if the device is off the corporate network when it gets provisioned.</p>
+<p>If you have a cloud management gateway, you should supply the <a href=https://docs.microsoft.com/en-us/mem/configmgr/core/clients/deploy/about-client-installation-properties>parameters needed</a> to get the client into a working state if the device is off the corporate network when it gets provisioned.</p>
 <p>You can get these parameters in the configuration manager admin console: \Administration\Overview\Cloud Services\Cloud Attach<br>
 go to the properties of your co-management settings.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=vmconnect_repLU2tUGj-1024x940.png target=_blank>
+<img src=vmconnect_repLU2tUGj-1024x940.png alt>
+</a>
+</figure>
+</div> </p>
 <h1 id=you-will-need-to-add-installation-arguments-that-are-suited-to-your-environment>you will need to add installation arguments that are suited to your environment</h1>
 <p>Start-Process &ldquo;C:\Windows\Temp\CCMSetup\ccmsetup.exe&rdquo; -ArgumentList &ldquo;/source:C:\Windows\Temp\ccmsetup /nocrlcheck CCMHOSTNAME=contosocmg.contoso.com/CCM_Proxy_MutualAuth/123456789123465 SMSSiteCode=cto&rdquo;</p>
 <p>Once you have figured this all out, place your MECM-Client.ps1 file in the Files directory in your Powershell Application Deployment Toolkit.</p>
-<p> Neato Burrito!</p>
+<p><div class=image>
+<figure>
+<a href=Code_daA8jyi7CL.png target=_blank>
+<img src=Code_daA8jyi7CL.png alt>
+</a>
+</figure>
+</div> Neato Burrito!</p>
 <h2 id=detection>Detection</h2>
 <p>Of course you will need a detection method for your win32 app in intune, thankfully I didn&rsquo;t have to figure this one for myself, I just stole it from I borrowed most of this from <a href=https://github.com/SysBehr/BehrNecessities/tree/master/Autopilot/ConfigMgr%20Client>BehrNecessities/Autopilot/ConfigMgr Client at master · SysBehr/BehrNecessities (github.com)</a>, thanks Collin!</p>
 <p>Don&rsquo;t forget to change the sitecode on line 4.</p>
@@ -149,7 +167,7 @@ $ccmsetupexe = Get-Process ccmsetup -ErrorAction SilentlyContinue</p>
 IF ($clientVersion -and ($SMSauthority.Name -eq &ldquo;SMS:$SiteCode&rdquo; -and $SMSauthority.CurrentManagementPoint) -or ($taskExists -and $ccmsetupdl) -or $ccmservice -or $ccmsetupexe) {
 Return &ldquo;Installed&rdquo;
 }</p>
-<p>Now all you need to do is deploy this application as a required app for your autopilot enabled devices and add the application to the required app list in the Enrollment Status Page</p>
+<p>Now all you need to do is deploy this application as a required app for your autopilot enabled devices and add the application to the <a href=https://docs.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status#block-access-to-a-device-until-a-specific-application-is-installed>required app list in the Enrollment Status Page</a></p>
 <h2 id=conclusion>Conclusion</h2>
 <p>Now you have everything you need to create and deploy the Configuration Manager Client during autopilot. I have been using this in production for some time, with no issues. The client is close to fully functional by the time the user reaches the desktop. (though obviously it will need to go through a few policy refresh cycles to get all targeted polices)</p>
 </div>
@@ -163,7 +181,7 @@ Return &ldquo;Installed&rdquo;
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

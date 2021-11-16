@@ -10,20 +10,20 @@
 <title>VPN Boundary Type and Understanding Its Options-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/09/14/vpn-boundary-type-and-understanding-its-options/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="VPN Boundary Type and Understanding Its Options">
-<meta name=twitter:description content="Like many, I was very excited that the new Configuration Manager 2006release included a huge improvement for remote devices by adding a new VPN Boundary type.
+<meta name=twitter:description content="Like many, I was very excited that the new Configuration Manager 2006 release included a huge improvement for remote devices by adding a new VPN Boundary type.
 &ldquo;Finally! I don&rsquo;t have to constantly bug my Network Engineers as to which IP pools are being used for which VPN appliances.&rdquo;
-Create A New Boundary In the Admin Console, navigate to the Administration Node and open up Hierarchy Configuration and right-click on BoundariesSelect the new VPN option in the Type drop-downExploring the VPN Type Options Types Defined From the Define boundaries - Configuration Manager | Microsoft Docs, these are the type options:">
+Create A New Boundary In the Admin Console, navigate to the Administration Node and open up Hierarchy Configuration and right-click on Boundaries    Select the new VPN option in the Type drop-down    Exploring the VPN Type Options Types Defined From the Define boundaries - Configuration Manager | Microsoft Docs, these are the type options:">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -71,7 +71,7 @@ Create A New Boundary In the Admin Console, navigate to the Administration Node 
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -82,7 +82,7 @@ Create A New Boundary In the Admin Console, navigate to the Administration Node 
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -95,13 +95,25 @@ Create A New Boundary In the Admin Console, navigate to the Administration Node 
 <span class=post-date>September 14, 2020</span>
 </div>
 <div class=post-entry>
-<p>Like many, I was <em>very</em> excited that the new Configuration Manager 2006 release included a huge improvement for remote devices by adding a new VPN Boundary type.<br>
+<p>Like many, I was <em>very</em> excited that the new <a href=https://docs.microsoft.com/en-us/mem/configmgr/core/plan-design/changes/whats-new-in-version-2006#vpn-boundary-type>Configuration Manager 2006</a> release included a huge improvement for remote devices by adding a new <a href=https://docs.microsoft.com/en-us/mem/configmgr/core/servers/deploy/configure/boundaries#vpn>VPN Boundary type</a>.<br>
 &ldquo;Finally! I don&rsquo;t have to constantly bug my Network Engineers as to which IP pools are being used for which VPN appliances.&rdquo;</p>
 <h2 id=create-a-new-boundary>Create A New Boundary</h2>
 <p>In the Admin Console, navigate to the Administration Node and open up Hierarchy Configuration and right-click on Boundaries</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-2.png target=_blank>
+<img src=image-2.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Select the new VPN option in the Type drop-down</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-3.png target=_blank>
+<img src=image-3.png alt>
+</a>
+</figure>
+</div> </p>
 <h2 id=exploring-the-vpn-type-options>Exploring the VPN Type Options</h2>
 <h4 id=types-defined>Types Defined</h4>
 <p>From the <a href=https://docs.microsoft.com/en-us/mem/configmgr/core/servers/deploy/configure/boundaries#vpn>Define boundaries - Configuration Manager | Microsoft Docs</a>, these are the type options:</p>
@@ -145,27 +157,39 @@ For example, you run the ipconfig /all command on the device, and one of the c
 </code></pre>
 <h2 id=to-test-i-followed-the-instructions>To test, I followed the instructions</h2>
 <p>On a machine connected to our VPN solution, Palo Alto Global Protect, I capture the specified information from the documentation.</p>
-<p><a href="https://www.sysmansquad.com/?attachment_id=1747"></a></p>
+<p><a href="https://www.sysmansquad.com/?attachment_id=1747"><div class=image>
+<figure>
+<a href=2020-09-13_9-33-39.png target=_blank>
+<img src=2020-09-13_9-33-39.png alt>
+</a>
+</figure>
+</div></a></p>
 <p>Next, I went back to the Admin Console and my open Create Boundary window, and pasted the description from <code>ipconfig /all</code> into the Connection Description field.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-4.png target=_blank>
+<img src=image-4.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Then I added the new Boundary to my VPN Boundary Group.</p>
 <h2 id=test-results>Test Results</h2>
 <p>What happened next confused me. After forcing a few clients to update their Machine Policy, I saw VPN-connected devices drop <em>out</em> of the VPN Boundary Group that I added my newly-created Boundary to. I double-checked my own machine:</p>
 <p>The output revealed that my machine was no longer in my VPN Boundary Group, and instead was merely in the fallback Default Boundary Group.<br>
 But WHY?</p>
 <p>Taking to Twitter, I posted a message&mldr;</p>
-<pre><code>  &lt;a href=&quot;https://twitter.com/robdotyork/status/1298788226606329858?ref_src=twsrc%5Etfw&quot;&gt;August 27, 2020&lt;/a&gt;
+<pre><code>  [August 27, 2020](https://twitter.com/robdotyork/status/1298788226606329858?ref_src=twsrc%5Etfw)
 &lt;/blockquote&gt;
 </code></pre>
 <p>and none other than Rob York responded, inadvertently leading me to answer my own question</p>
-<pre><code>  &lt;a href=&quot;https://twitter.com/robdotyork/status/1298807830867111938?ref_src=twsrc%5Etfw&quot;&gt;August 27, 2020&lt;/a&gt;
+<pre><code>  [August 27, 2020](https://twitter.com/robdotyork/status/1298807830867111938?ref_src=twsrc%5Etfw)
 &lt;/blockquote&gt;
 </code></pre>
 <h2 id=my-mistakes-were-two-fold>My mistakes were two-fold:</h2>
 <ol>
 <li>Some of you may have noticed above that the output from <code>ipconfig/all</code> in my image did not match what I typed into the <code>Connection Description</code> field in the Boundary properties window.
 <ol>
-<li>The docs clearly state that the string must be exact and that wildcards are not supported (see red text in type definitions above).</li>
+<li>The <a href=https://docs.microsoft.com/en-us/mem/configmgr/core/servers/deploy/configure/boundaries#vpn>docs</a> clearly state that the string must be exact and that wildcards are not supported (see red text in type definitions above).</li>
 </ol>
 </li>
 <li>The second mistake I made was attempting to have forethought while also assuming I knew what I was doing.
@@ -177,9 +201,15 @@ But WHY?</p>
 </ol>
 <p>FROM v_GS_NETWORK_ADAPTER
 WHERE Description0 LIKE &lsquo;PANGP Virtual Ethernet Adapter%&rsquo;
-ORDER BY Description0</p>
+ORDER BY Description0```</p>
 <p>I assumed that the <code>Description</code> field populated in <code>win32_networkadapter</code> matched the <code>Description</code> field from <code>ipconfig/all</code>, but you already know that wasn&rsquo;t the case.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=Snag_2984151.png target=_blank>
+<img src=Snag_2984151.png alt="Description Compare">
+</a>
+</figure>
+</div> </p>
 <h2 id=the-solution>The Solution</h2>
 <p>Once I re-read Rob York&rsquo;s response, I realized I was looking at the wrong property and ninja-edited my SQL query:</p>
 <blockquote>
@@ -188,11 +218,23 @@ ORDER BY Description0</p>
 </blockquote>
 <p>FROM v_GS_NETWORK_ADAPTER
 WHERE Name0 LIKE &lsquo;PANGP Virtual Ethernet Adapter%&rsquo;
-ORDER BY Description0</p>
+ORDER BY Description0```</p>
 <p>This gave me more results and made me realize I needed a Boundary for each of these adapter Descriptions. Er&mldr; <em>Name0</em></p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=Snag_29cce99.png target=_blank>
+<img src=Snag_29cce99.png alt="SQL adapter">
+</a>
+</figure>
+</div> </p>
 <p>And now my VPN Boundary Group looks like this and devices are where they need to be.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=Snag_2a0b39b.png target=_blank>
+<img src=Snag_2a0b39b.png alt=BG>
+</a>
+</figure>
+</div> </p>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -204,7 +246,7 @@ ORDER BY Description0</p>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

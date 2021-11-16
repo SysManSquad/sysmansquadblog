@@ -10,18 +10,18 @@
 <title>Use the Task Sequence deployment type to deploy an application with sensitive information-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/09/27/use-the-task-sequence-deployment-type-to-deploy-an-application-with-sensitive-information/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Use the Task Sequence deployment type to deploy an application with sensitive information">
-<meta name=twitter:description content="<p class=&#34;has-text-align-justify&#34;> <a aria-label=&#34;undefined (opens in a new tab)&#34; rel=&#34;noreferrer noopener&#34; href=&#34;https://docs.microsoft.com/en-us/mem/configmgr/core/plan-design/changes/whats-new-in-version-2002#task-sequence-as-an-app-model-deployment-type&#34; target=&#34;_blank&#34;>Introduced with ConfigMgr 2002</a>, the &#34;<strong>Task Sequence as an application deployment type</strong>&#34; feature is available in pre-release. That means it is still in active development and can contains bugs. Using a Task Sequence (TS) as a deployment type allows for more complex installation process that can even contains reboot. And as it is a Task Sequence, you can also benefit from many other feature like the use of TS variables.">
+<meta name=twitter:description content="<p class=&#34;has-text-align-justify&#34;> [Introduced with ConfigMgr 2002](https://docs.microsoft.com/en-us/mem/configmgr/core/plan-design/changes/whats-new-in-version-2002#task-sequence-as-an-app-model-deployment-type), the &#34;<strong>Task Sequence as an application deployment type</strong>&#34; feature is available in pre-release. That means it is still in active development and can contains bugs. Using a Task Sequence (TS) as a deployment type allows for more complex installation process that can even contains reboot. And as it is a Task Sequence, you can also benefit from many other feature like the use of TS variables.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -94,7 +94,7 @@
 </div>
 <div class=post-entry>
 <pre><code>            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              &lt;a aria-label=&quot;undefined (opens in a new tab)&quot; rel=&quot;noreferrer noopener&quot; href=&quot;https://docs.microsoft.com/en-us/mem/configmgr/core/plan-design/changes/whats-new-in-version-2002#task-sequence-as-an-app-model-deployment-type&quot; target=&quot;_blank&quot;&gt;Introduced with ConfigMgr 2002&lt;/a&gt;, the &quot;&lt;strong&gt;Task Sequence as an application deployment type&lt;/strong&gt;&quot; feature is available in pre-release. That means it is still in active development and can contains bugs. Using a Task Sequence (TS) as a deployment type allows for more complex installation process that can even contains reboot. And as it is a Task Sequence, you can also benefit from many other feature like the use of TS variables. This will be the focus of this post.
+              [Introduced with ConfigMgr 2002](https://docs.microsoft.com/en-us/mem/configmgr/core/plan-design/changes/whats-new-in-version-2002#task-sequence-as-an-app-model-deployment-type), the &quot;&lt;strong&gt;Task Sequence as an application deployment type&lt;/strong&gt;&quot; feature is available in pre-release. That means it is still in active development and can contains bugs. Using a Task Sequence (TS) as a deployment type allows for more complex installation process that can even contains reboot. And as it is a Task Sequence, you can also benefit from many other feature like the use of TS variables. This will be the focus of this post.
             &lt;/p&gt;
             
             &lt;p class=&quot;has-text-align-justify&quot;&gt;
@@ -106,11 +106,11 @@
             &lt;/h2&gt;
             
             &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              To use the &quot;Task sequence as an app model deployment type&quot; feature, you need to have at least Configuration Manager Current Branch 2002 installed. You also have &lt;a aria-label=&quot;undefined (opens in a new tab)&quot; rel=&quot;noreferrer noopener&quot; href=&quot;https://docs.microsoft.com/en-us/mem/configmgr/core/servers/manage/pre-release-features#enable-pre-release-features&quot; target=&quot;_blank&quot;&gt;enable the pre-release feature&lt;/a&gt;. Once this is done, you are all good.
+              To use the &quot;Task sequence as an app model deployment type&quot; feature, you need to have at least Configuration Manager Current Branch 2002 installed. You also have [enable the pre-release feature](https://docs.microsoft.com/en-us/mem/configmgr/core/servers/manage/pre-release-features#enable-pre-release-features). Once this is done, you are all good.
             &lt;/p&gt;
             
             &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              It is also important to note that there are &lt;a aria-label=&quot;undefined (opens in a new tab)&quot; href=&quot;https://docs.microsoft.com/en-us/mem/configmgr/apps/get-started/creating-windows-applications#prerequisites-for-a-task-sequence-deployment-type&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;some limitations&lt;/a&gt; inherent to the Task Sequence deployment type:
+              It is also important to note that there are [some limitations](https://docs.microsoft.com/en-us/mem/configmgr/apps/get-started/creating-windows-applications#prerequisites-for-a-task-sequence-deployment-type) inherent to the Task Sequence deployment type:
             &lt;/p&gt;
             
             &lt;ul&gt;
@@ -123,7 +123,7 @@
             &lt;/ul&gt;
             
             &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              There are also some &lt;a aria-label=&quot;undefined (opens in a new tab)&quot; href=&quot;https://docs.microsoft.com/en-us/mem/configmgr/apps/get-started/creating-windows-applications#known-issues-for-a-task-sequence-deployment-type&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;known issues&lt;/a&gt; (Remember the feature is still in pre-release):
+              There are also some [known issues](https://docs.microsoft.com/en-us/mem/configmgr/apps/get-started/creating-windows-applications#known-issues-for-a-task-sequence-deployment-type) (Remember the feature is still in pre-release):
             &lt;/p&gt;
             
             &lt;ul&gt;
@@ -168,16 +168,16 @@
             
             &lt;ul class=&quot;blocks-gallery-grid&quot;&gt;
               &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;&lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/Package-1.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;1366&quot; height=&quot;768&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/Package-1.png&quot; alt=&quot;&quot; data-id=&quot;1785&quot; data-link=&quot;https://www.sysmansquad.com/?attachment_id=1785&quot; class=&quot;wp-image-1785&quot; srcset=&quot;https:/wp-content/uploads/2020/09/Package-1.png 1366w, https:/wp-content/uploads/2020/09/Package-1-300x169.png 300w, https:/wp-content/uploads/2020/09/Package-1-1024x576.png 1024w, https:/wp-content/uploads/2020/09/Package-1-768x432.png 768w, https:/wp-content/uploads/2020/09/Package-1-100x56.png 100w, https:/wp-content/uploads/2020/09/Package-1-855x481.png 855w, https:/wp-content/uploads/2020/09/Package-1-1234x694.png 1234w&quot; sizes=&quot;(max-width: 1366px) 100vw, 1366px&quot; /&gt;&lt;/a&gt;&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Package overview&lt;/figcaption&gt;&lt;/figure&gt;
+                &lt;figure&gt;[![](Package-1.png)](Package-1.png)&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Package overview&lt;/figcaption&gt;&lt;/figure&gt;
               &lt;/li&gt;
               &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;&lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/Task-Sequence.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;901&quot; height=&quot;592&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/Task-Sequence.png&quot; alt=&quot;Task Sequence&quot; data-id=&quot;1680&quot; data-link=&quot;https://www.sysmansquad.com/?attachment_id=1680&quot; class=&quot;wp-image-1680&quot; srcset=&quot;https:/wp-content/uploads/2020/09/Task-Sequence.png 901w, https:/wp-content/uploads/2020/09/Task-Sequence-300x197.png 300w, https:/wp-content/uploads/2020/09/Task-Sequence-768x505.png 768w, https:/wp-content/uploads/2020/09/Task-Sequence-100x66.png 100w, https:/wp-content/uploads/2020/09/Task-Sequence-855x562.png 855w&quot; sizes=&quot;(max-width: 901px) 100vw, 901px&quot; /&gt;&lt;/a&gt;&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Task Sequence&lt;/figcaption&gt;&lt;/figure&gt;
+                &lt;figure&gt;[![Task Sequence](Task-Sequence.png)](Task-Sequence.png)&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Task Sequence&lt;/figcaption&gt;&lt;/figure&gt;
               &lt;/li&gt;
               &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;&lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/TS-Deployment-Type.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;791&quot; height=&quot;703&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/TS-Deployment-Type.png&quot; alt=&quot;Deployment type selection&quot; data-id=&quot;1681&quot; data-link=&quot;https://www.sysmansquad.com/?attachment_id=1681&quot; class=&quot;wp-image-1681&quot; srcset=&quot;https:/wp-content/uploads/2020/09/TS-Deployment-Type.png 791w, https:/wp-content/uploads/2020/09/TS-Deployment-Type-300x267.png 300w, https:/wp-content/uploads/2020/09/TS-Deployment-Type-768x683.png 768w, https:/wp-content/uploads/2020/09/TS-Deployment-Type-100x89.png 100w&quot; sizes=&quot;(max-width: 791px) 100vw, 791px&quot; /&gt;&lt;/a&gt;&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Deployment type selection&lt;/figcaption&gt;&lt;/figure&gt;
+                &lt;figure&gt;[![Deployment type selection](TS-Deployment-Type.png)](TS-Deployment-Type.png)&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Deployment type selection&lt;/figcaption&gt;&lt;/figure&gt;
               &lt;/li&gt;
               &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;&lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/TS-Deployment-Type-TS-Selection.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;791&quot; height=&quot;703&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/TS-Deployment-Type-TS-Selection.png&quot; alt=&quot;Task Sequence Selection&quot; data-id=&quot;1683&quot; data-link=&quot;https://www.sysmansquad.com/?attachment_id=1683&quot; class=&quot;wp-image-1683&quot; srcset=&quot;https:/wp-content/uploads/2020/09/TS-Deployment-Type-TS-Selection.png 791w, https:/wp-content/uploads/2020/09/TS-Deployment-Type-TS-Selection-300x267.png 300w, https:/wp-content/uploads/2020/09/TS-Deployment-Type-TS-Selection-768x683.png 768w, https:/wp-content/uploads/2020/09/TS-Deployment-Type-TS-Selection-100x89.png 100w&quot; sizes=&quot;(max-width: 791px) 100vw, 791px&quot; /&gt;&lt;/a&gt;&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Task sequence selection&lt;/figcaption&gt;&lt;/figure&gt;
+                &lt;figure&gt;[![Task Sequence Selection](TS-Deployment-Type-TS-Selection.png)](TS-Deployment-Type-TS-Selection.png)&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Task sequence selection&lt;/figcaption&gt;&lt;/figure&gt;
               &lt;/li&gt;
             &lt;/ul&gt;&lt;/figure&gt; 
             
@@ -206,12 +206,12 @@
             &lt;/p&gt;
             
             &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              Note that there is a particularity with the MMA executable. When you get the sources &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://docs.microsoft.com/en-us/azure/azure-monitor/platform/agent-windows#install-agent-using-dsc-in-azure-automation&quot; target=&quot;_blank&quot;&gt;from this page&lt;/a&gt;, you need to extract them because the MMA-Setup_AMD64.exe file can't be used for a silent installation. Instead, use the following command to extract its content and use this extracted content as the source of your package.
+              Note that there is a particularity with the MMA executable. When you get the sources [from this page](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/agent-windows#install-agent-using-dsc-in-azure-automation), you need to extract them because the MMA-Setup_AMD64.exe file can't be used for a silent installation. Instead, use the following command to extract its content and use this extracted content as the source of your package.
             &lt;/p&gt;
             
             &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;MMASetup-AMD64.exe /c /t:&amp;lt;Full Extraction Path&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            &lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;576&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/Package-1-1024x576.png&quot; alt=&quot;&quot; class=&quot;wp-image-1785&quot; srcset=&quot;https:/wp-content/uploads/2020/09/Package-1-1024x576.png 1024w, https:/wp-content/uploads/2020/09/Package-1-300x169.png 300w, https:/wp-content/uploads/2020/09/Package-1-768x432.png 768w, https:/wp-content/uploads/2020/09/Package-1-100x56.png 100w, https:/wp-content/uploads/2020/09/Package-1-855x481.png 855w, https:/wp-content/uploads/2020/09/Package-1-1234x694.png 1234w, https:/wp-content/uploads/2020/09/Package-1.png 1366w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;figcaption&gt;Package overview&lt;/figcaption&gt;&lt;/figure&gt; &lt;h5&gt;
+            ![](Package-1-1024x576.png)&lt;figcaption&gt;Package overview&lt;/figcaption&gt;&lt;/figure&gt; &lt;h5&gt;
               2. Task Sequence creation
             &lt;/h5&gt;
             
@@ -220,11 +220,11 @@
             &lt;/p&gt;
             
             &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              First, set two &lt;strong&gt;Task Sequence variables&lt;/strong&gt; to store the Workspace ID and the Workspace key that you can find in the MD-ATP portal. Then, set a third TS variable named &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://docs.microsoft.com/en-us/mem/configmgr/osd/understand/task-sequence-variables#OSDDoNotLogCommand&quot; target=&quot;_blank&quot;&gt;OSDDoNotLogCommand&lt;/a&gt; to &lt;strong&gt;True&lt;/strong&gt; to hide the command line in the log. Alternatively, you can also set &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://docs.microsoft.com/en-us/mem/configmgr/osd/understand/task-sequence-variables#OSDLogPowerShellParameters&quot; target=&quot;_blank&quot;&gt;OSDLogPowerShellParameters&lt;/a&gt; to &lt;strong&gt;False&lt;/strong&gt; to hide PowerShell parameters in smsts.log (If you are using PowerShell rather than CMD to install your application).
+              First, set two &lt;strong&gt;Task Sequence variables&lt;/strong&gt; to store the Workspace ID and the Workspace key that you can find in the MD-ATP portal. Then, set a third TS variable named [OSDDoNotLogCommand](https://docs.microsoft.com/en-us/mem/configmgr/osd/understand/task-sequence-variables#OSDDoNotLogCommand) to &lt;strong&gt;True&lt;/strong&gt; to hide the command line in the log. Alternatively, you can also set [OSDLogPowerShellParameters](https://docs.microsoft.com/en-us/mem/configmgr/osd/understand/task-sequence-variables#OSDLogPowerShellParameters) to &lt;strong&gt;False&lt;/strong&gt; to hide PowerShell parameters in smsts.log (If you are using PowerShell rather than CMD to install your application).
             &lt;/p&gt;
             
             &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              The next step is the &lt;strong&gt;installation of the application&lt;/strong&gt; itself. Use the “&lt;strong&gt;Run Command Line&lt;/strong&gt;” step and select the package you previously created and the following command line (Taken from the &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://docs.microsoft.com/en-us/azure/azure-monitor/platform/agent-windows#install-agent-using-command-line&quot; target=&quot;_blank&quot;&gt;online documentation&lt;/a&gt;).
+              The next step is the &lt;strong&gt;installation of the application&lt;/strong&gt; itself. Use the “&lt;strong&gt;Run Command Line&lt;/strong&gt;” step and select the package you previously created and the following command line (Taken from the [online documentation](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/agent-windows#install-agent-using-command-line)).
             &lt;/p&gt;
             
             &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;setup.exe /qn NOAPM=1 ADD_OPINSIGHTS_WORKSPACE=1 OPINSIGHTS_WORKSPACE_AZURE_CLOUD_TYPE=0 OPINSIGHTS_WORKSPACE_ID=&quot;%WorkspaceID%&quot; OPINSIGHTS_WORKSPACE_KEY=&quot;%WorkspaceKey%&quot; AcceptEndUserLicenseAgreement=1&lt;/code&gt;&lt;/pre&gt;
@@ -239,10 +239,10 @@
             
             &lt;ul class=&quot;blocks-gallery-grid&quot;&gt;
               &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;&lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/TS-Command-Line.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;300&quot; height=&quot;209&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/TS-Command-Line-300x209.png&quot; alt=&quot;&quot; data-id=&quot;1783&quot; data-full-url=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/TS-Command-Line.png&quot; data-link=&quot;https://www.sysmansquad.com/?attachment_id=1783&quot; class=&quot;wp-image-1783&quot; srcset=&quot;https:/wp-content/uploads/2020/09/TS-Command-Line-300x209.png 300w, https:/wp-content/uploads/2020/09/TS-Command-Line-768x535.png 768w, https:/wp-content/uploads/2020/09/TS-Command-Line-100x70.png 100w, https:/wp-content/uploads/2020/09/TS-Command-Line-855x596.png 855w, https:/wp-content/uploads/2020/09/TS-Command-Line.png 864w&quot; sizes=&quot;(max-width: 300px) 100vw, 300px&quot; /&gt;&lt;/a&gt;&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Use the command line to install the application&lt;/figcaption&gt;&lt;/figure&gt;
+                &lt;figure&gt;[![](TS-Command-Line.png)](TS-Command-Line.png)&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Use the command line to install the application&lt;/figcaption&gt;&lt;/figure&gt;
               &lt;/li&gt;
               &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;&lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/TS-Secret-Variable.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;300&quot; height=&quot;209&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/TS-Secret-Variable-300x209.png&quot; alt=&quot;&quot; data-id=&quot;1784&quot; data-full-url=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/TS-Secret-Variable.png&quot; data-link=&quot;https://www.sysmansquad.com/?attachment_id=1784&quot; class=&quot;wp-image-1784&quot; srcset=&quot;https:/wp-content/uploads/2020/09/TS-Secret-Variable-300x209.png 300w, https:/wp-content/uploads/2020/09/TS-Secret-Variable-768x535.png 768w, https:/wp-content/uploads/2020/09/TS-Secret-Variable-100x70.png 100w, https:/wp-content/uploads/2020/09/TS-Secret-Variable-855x596.png 855w, https:/wp-content/uploads/2020/09/TS-Secret-Variable.png 864w&quot; sizes=&quot;(max-width: 300px) 100vw, 300px&quot; /&gt;&lt;/a&gt;&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Declaration of a secret TS variable&lt;/figcaption&gt;&lt;/figure&gt;
+                &lt;figure&gt;[![](TS-Secret-Variable.png)](TS-Secret-Variable.png)&lt;figcaption class=&quot;blocks-gallery-item__caption&quot;&gt;Declaration of a secret TS variable&lt;/figcaption&gt;&lt;/figure&gt;
               &lt;/li&gt;
             &lt;/ul&gt;&lt;/figure&gt; 
             
@@ -258,7 +258,7 @@
               The last step is the creation of the application itself. &lt;strong&gt;Create a new application&lt;/strong&gt; and select Custom deployment type. When you need to select your deployment type, chose &lt;strong&gt;Task Sequence&lt;/strong&gt;. This will lead you to a screen that allows the selection of two TS. One for the installation (Mandatory) and one for the uninstallation (Optional) of the application.
             &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            &lt;img loading=&quot;lazy&quot; width=&quot;791&quot; height=&quot;703&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/TS-Deployment-Type-TS-Selection.png&quot; alt=&quot;Task Sequence Selection&quot; class=&quot;wp-image-1683&quot; srcset=&quot;https:/wp-content/uploads/2020/09/TS-Deployment-Type-TS-Selection.png 791w, https:/wp-content/uploads/2020/09/TS-Deployment-Type-TS-Selection-300x267.png 300w, https:/wp-content/uploads/2020/09/TS-Deployment-Type-TS-Selection-768x683.png 768w, https:/wp-content/uploads/2020/09/TS-Deployment-Type-TS-Selection-100x89.png 100w&quot; sizes=&quot;(max-width: 791px) 100vw, 791px&quot; /&gt;&lt;figcaption&gt;Task Sequence Selection&lt;/figcaption&gt;&lt;/figure&gt; &lt;h5&gt;
+            ![Task Sequence Selection](TS-Deployment-Type-TS-Selection.png)&lt;figcaption&gt;Task Sequence Selection&lt;/figcaption&gt;&lt;/figure&gt; &lt;h5&gt;
               4. Testing the result
             &lt;/h5&gt;
             
@@ -266,17 +266,18 @@
               Now that the application is ready, &lt;strong&gt;deploy it to a device collection&lt;/strong&gt; to install the agent on a server. Once it is installed, give a look at the logs. You need to look at the &lt;strong&gt;smsts.log&lt;/strong&gt; file as the installation is executed with a Task Sequence. As you can notice below, the Workspace ID and key are never shown (Look at the yellow line).
             &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            &lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;546&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/OneTrace-Logs-1024x546.png&quot; alt=&quot;smsts.log content showing not command line&quot; class=&quot;wp-image-1786&quot; srcset=&quot;https:/wp-content/uploads/2020/09/OneTrace-Logs-1024x546.png 1024w, https:/wp-content/uploads/2020/09/OneTrace-Logs-300x160.png 300w, https:/wp-content/uploads/2020/09/OneTrace-Logs-768x409.png 768w, https:/wp-content/uploads/2020/09/OneTrace-Logs-100x53.png 100w, https:/wp-content/uploads/2020/09/OneTrace-Logs-855x456.png 855w, https:/wp-content/uploads/2020/09/OneTrace-Logs-1234x658.png 1234w, https:/wp-content/uploads/2020/09/OneTrace-Logs.png 1366w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;figcaption&gt;smsts.log&lt;/figcaption&gt;&lt;/figure&gt; &lt;p class=&quot;has-text-align-justify&quot;&gt;
+            ![smsts.log content showing not command line](OneTrace-Logs-1024x546.png)&lt;figcaption&gt;smsts.log&lt;/figcaption&gt;&lt;/figure&gt; &lt;p class=&quot;has-text-align-justify&quot;&gt;
               If you log onto your server and you start the Microsoft Monitoring Agent, you can see it is registered with the &lt;strong&gt;Azure Logs Analytic&lt;/strong&gt; space, so everything worked as expected.
             &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            &lt;img loading=&quot;lazy&quot; width=&quot;751&quot; height=&quot;483&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/09/MMA_Success.png&quot; alt=&quot;Microsoft Monitoring Agent reporting succesfully to Azure Log Analytics (OMS)&quot; class=&quot;wp-image-1713&quot; srcset=&quot;https:/wp-content/uploads/2020/09/MMA_Success.png 751w, https:/wp-content/uploads/2020/09/MMA_Success-300x193.png 300w, https:/wp-content/uploads/2020/09/MMA_Success-100x64.png 100w&quot; sizes=&quot;(max-width: 751px) 100vw, 751px&quot; /&gt;&lt;/figure&gt; &lt;h2&gt;
+            ![Microsoft Monitoring Agent reporting succesfully to Azure Log Analytics (OMS)](MMA_Success.png)&lt;/figure&gt; &lt;h2&gt;
               Conclusion
             &lt;/h2&gt;
             
             &lt;p class=&quot;has-text-align-justify&quot;&gt;
               &lt;strong&gt;Task Sequence as an application deployment type&lt;/strong&gt; can help you deploy applications that require a complex installation process. But they can also be used to deploy simple application that requires password or other sensitive information that need to be hid with the help of TS variables though all the steps involved (Creating a package, a TS and finally an application) will add a little overhead to the complete process of creating and deploying an application.
-            &lt;/p&gt;</code></pre>
+            &lt;/p&gt;
+</code></pre>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -288,7 +289,7 @@
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

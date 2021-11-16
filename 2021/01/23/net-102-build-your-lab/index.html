@@ -8,18 +8,18 @@
 <meta name=description content="A community blog and subsidiary of WinAdmins.io">
 <link rel="shortcut icon" href=/img/favicon.ico>
 <title>NET-102: Build your lab-SysManSquad | Systems Management Squad</title>
-<link rel=canonical href=/2020/01/23/net-102-build-your-lab/>
+<link rel=canonical href=/2021/01/23/net-102-build-your-lab/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="NET-102: Build your lab">
 <meta name=twitter:description content="Welcome back! We&rsquo;re now going to move on to the actual effort it takes to build your lab. As you recall we got pretty far last time in documenting the beginnings of our network. For this lab I&rsquo;ll be using VMWare Workstation, but you can accomplish this with Microsoft Hyper-V, Oracle VirtualBox, the free tier of VMWare&rsquo;s ESX, or XCP-NG.
 If you haven&rsquo;t read the previous post, please have a look here as each post builds upon the last.">
@@ -70,7 +70,7 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -81,7 +81,7 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -94,7 +94,7 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
 <span class=post-date>January 23, 2020</span>
 </div>
 <div class=post-entry>
-<p>Welcome back! We&rsquo;re now going to move on to the actual effort it takes to build your lab. As you recall we got pretty far last time in documenting the beginnings of our network. For this lab I&rsquo;ll be using VMWare Workstation, but you can accomplish this with Microsoft Hyper-V, Oracle VirtualBox, the free tier of VMWare&rsquo;s ESX, or XCP-NG.</p>
+<p>Welcome back! We&rsquo;re now going to move on to the actual effort it takes to build your lab. As you recall we got pretty far last time in documenting the beginnings of our network. For this lab I&rsquo;ll be using <a href=https://www.vmware.com/products/workstation-pro.html>VMWare Workstation</a>, but you can accomplish this with <a href=https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/about/>Microsoft Hyper-V</a>, <a href=https://www.virtualbox.org/>Oracle VirtualBox</a>, the free tier of <a href=https://www.vmware.com/products/vsphere.html>VMWare&rsquo;s ESX</a>, or <a href=https://xcp-ng.org/>XCP-NG</a>.</p>
 <p>If you haven&rsquo;t read the previous post, please have a look <a href=https://sysmansquad.com/2019/12/17/net-101-create-a-basic-lab-network-design/>here</a> as each post builds upon the last.</p>
 <p>I&rsquo;m not going to cover a lot of the implementation details of any particular hypervisor other than as a general concept. You can view manuals for most hypervisors and find a ton of tutorials for how to create a VM. </p>
 <pre><code>                &lt;h2 id=&quot;0-a-note-about-pinging&quot;&gt;
@@ -212,7 +212,7 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  Install a Windows 10 VM to use as your admin workstation. Let's say that you're using an evaluation copy from the &lt;a href=&quot;https://www.microsoft.com/en-us/evalcenter/evaluate-windows-10-enterprise&quot;&gt;evaluation center&lt;/a&gt;, which will function for 90 days. Place it on the lab network, and if you'd like to RDP to it, give it an adapter on the parent network as well.
+                  Install a Windows 10 VM to use as your admin workstation. Let's say that you're using an evaluation copy from the [evaluation center](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-10-enterprise), which will function for 90 days. Place it on the lab network, and if you'd like to RDP to it, give it an adapter on the parent network as well.
                 &lt;/p&gt;
                 
                 &lt;p class=&quot;has-background has-very-light-gray-background-color&quot;&gt;
@@ -248,7 +248,7 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
                 &lt;/h2&gt;
                 
                 &lt;p&gt;
-                  We touched on what this is and what it does last time, so you know that this will serve as the default gateway for the network. It is also the firewall and IPv4 NAT appliance. Grab the latest &lt;a rel=&quot;noreferrer noopener&quot; aria-label=&quot;PFSense  (opens in a new tab)&quot; href=&quot;https://www.pfsense.org/download/&quot; target=&quot;_blank&quot;&gt;PFSense &lt;/a&gt;ISO and install a VM with ~2048MB RAM and two ethernet interfaces. The first will be the parent network, in this case your home or business network, the second will be the in-lab network. Consult the pfsense documentation for installing and setting the IP addresses you've chosen for the in-lab interface. The parent network interface should be set to DHCP.
+                  We touched on what this is and what it does last time, so you know that this will serve as the default gateway for the network. It is also the firewall and IPv4 NAT appliance. Grab the latest [PFSense ](https://www.pfsense.org/download/)ISO and install a VM with ~2048MB RAM and two ethernet interfaces. The first will be the parent network, in this case your home or business network, the second will be the in-lab network. Consult the pfsense documentation for installing and setting the IP addresses you've chosen for the in-lab interface. The parent network interface should be set to DHCP.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -441,7 +441,7 @@ Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -AAAA -Name &lsquo;lab
 Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -AAAA -Name &lsquo;lab-dhcp&rsquo; -ipv6address &lsquo;fdda:f6d4:f5a2:f1e6::3&rsquo; -CreatePtr -ComputerName $DNSServer
 </p>
 <pre><code>                &lt;p class=&quot;has-background has-very-light-gray-background-color&quot;&gt;
-                  What is the difference between an 'A' record and an 'AAAA' record? At the simplest level, they are both a type of DNS record that specify a normal mapping from a DNS name to an IP address. A records contain IPv4 addresses, and AAAA records contain IPv6 addresses. You can have multiple A or AAAA records that point to more than one IP address, and the DNS server will round-robin rotate through them. This gives a free amount of load balancing but it isn't appropriate if you're trying to balance a heavily used service by utilization. For more information and to see some more detailed and pedantic information on the types of DNS records there are, see &lt;a href=&quot;https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-4&quot;&gt;this IANA reference page.&lt;/a&gt;
+                  What is the difference between an 'A' record and an 'AAAA' record? At the simplest level, they are both a type of DNS record that specify a normal mapping from a DNS name to an IP address. A records contain IPv4 addresses, and AAAA records contain IPv6 addresses. You can have multiple A or AAAA records that point to more than one IP address, and the DNS server will round-robin rotate through them. This gives a free amount of load balancing but it isn't appropriate if you're trying to balance a heavily used service by utilization. For more information and to see some more detailed and pedantic information on the types of DNS records there are, see [this IANA reference page.](https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-4)
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -593,7 +593,7 @@ Add-DhcpServerv6ExclusionRange @V6ExclusionRange</p>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

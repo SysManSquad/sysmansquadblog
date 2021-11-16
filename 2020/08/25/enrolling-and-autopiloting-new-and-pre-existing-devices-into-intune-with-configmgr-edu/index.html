@@ -10,16 +10,16 @@
 <title>Enrolling and Autopiloting New and Pre-existing Devices into Intune with ConfigMgr – EDU-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/08/25/enrolling-and-autopiloting-new-and-pre-existing-devices-into-intune-with-configmgr-edu/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Enrolling and Autopiloting New and Pre-existing Devices into Intune with ConfigMgr – EDU">
 <meta name=twitter:description content="Months after we issued students and faculty 600+ unmanaged off the shelf laptops (no AD, no Azure AD, no Intune, no ConfigMgr) to get them off and running temporarily during this pandemic, my co-worker and I were tasked with figuring out how to bring these machines under some form of management. We did not have these machines in ConfigMgr or have the hardware hashes uploaded into Intune, so we had some work ahead of us.">
 </head>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -98,7 +98,13 @@
 <p><strong>Disclaimer:</strong> This blog assumes you have a working knowledge of ConfigMgr and Endpoint Manager Admin Center (MEMAC), and have administrative rights to your Intune Tenant.</p>
 <p>First off we will prepare the Autopilot Profile and download the config JSON</p>
 <p>In MEMAC, navigate to the &ldquo;Windows Autopilot deployment profiles&rdquo; blade, and create a new Autopilot profile, call this whatever you want. The only basic setting we are worried about is the &ldquo;Convert all targeted devices to Autopilot&rdquo;, set this to Yes. Next we will set the OOBE settings to the following (Note: the &ldquo;Enter a name&rdquo; option can be whatever you want to name your devices, this is important as we will use this to target the Autopilot profile post image): </p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image.png target=_blank>
+<img src=image.png alt>
+</a>
+</figure>
+</div> </p>
 <p>For now we will not assign this to a group, this comes later.</p>
 <p>Next we are going to pull down this config into a file called AutopilotConfigurationFile.JSON. In powershell run the following commands:</p>
 <p>Sign into your tenant here and back in powershell run the following command:</p>
@@ -106,26 +112,74 @@
 <p>Next we head into ConfigMgr and create a new package, this package can have any name, but make sure you check the box &ldquo;This package contains source files&rdquo; and point it to the folder that houses your config file. On the following page, select &ldquo;Do not create a program&rdquo;. Distribute this package to any DP&rsquo;s you will use.</p>
 <p>Now, create a new task sequence and select the option for &ldquo;Deploy Windows Autopilot for Existing Devices&rdquo;. The rest of these options can be default, just select your Windows image you want to use and on the Prepare System for Windows Autopilot screen, select the package that you just created that contains your JSON.</p>
 <p>Once the TS is created it should look something like this:</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-1.png target=_blank>
+<img src=image-1.png alt>
+</a>
+</figure>
+</div> </p>
 <p>We are going to make some small changes to this task sequence, when completed, it should look like this:</p>
-<p> The final reboot step reboots to the currently installed operation system </p>
+<p><div class=image>
+<figure>
+<a href=image-3.png target=_blank>
+<img src=image-3.png alt>
+</a>
+</figure>
+</div> The final reboot step reboots to the currently installed operation system </p>
 <p>The step we added &ldquo;Autopilot for existing devices config file&rdquo; is a &ldquo;Run Command Line&rdquo; and will copy the config JSON from the package we created earlier and place it in the C:\Windows\Provisioning\Autopilot\ folder. It should look something like this:</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-9.png target=_blank>
+<img src=image-9.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Distribute this content to your DP.</p>
 <p>At this point lets head back to MEMAC and create our dynamic device security group that we will be targeting with our AP profile. The dynamic membership rules will be as follows (This is based on my computer naming convention that is in the Autopilot Profile)</p>
 <p>Once this group is created, navigate to the Deployment Profiles blade that we linked at the beginning of the blog, select your AP profile and under properties, edit the assignments and assign the profile to the newly created dynamic group.</p>
 <p>Congrats! Most of the setup is complete at this point, we only have to deploy the new Task Sequence and run it! Back in ConfigMgr deploy your Provisioning TS to &ldquo;All Unknown Computers&rdquo; or to a collection if you want to convert already managed machines (there is an easier way to do this that I may blog about later) and PXE boot your device, run the task sequence! After some time (usually 20 min or so) you should be presented with the following screen:</p>
-<p> Choose any options for all of these screens as they will be handled by AutoPilot going forward</p>
+<p><div class=image>
+<figure>
+<a href=image-4-1024x767.png target=_blank>
+<img src=image-4-1024x767.png alt>
+</a>
+</figure>
+</div> Choose any options for all of these screens as they will be handled by AutoPilot going forward</p>
 <p>After selecting your defaults, the final screen you should see is your Org login screen.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=ap-1024x773.jpg target=_blank>
+<img src=ap-1024x773.jpg alt>
+</a>
+</figure>
+</div> </p>
 <p>After another couple of minutes of setup, the provisioning process begins! At this point it will apply any settings that were configured as a part of that Autopilot Profile we set up earlier.</p>
 <p>If you check MEMAC at this stage you should see your newly created device but it won&rsquo;t be named properly yet, and is missing some info.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-5-1024x29.png target=_blank>
+<img src=image-5-1024x29.png alt>
+</a>
+</figure>
+</div> </p>
 <p>At this point the machine still isn&rsquo;t completely converted, that comes a little later, for now, let the device provision and send you to your desktop.</p>
 <p>Once we are at the desktop, take a look in MEMAC, TA-DA!</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-7-1024x24.png target=_blank>
+<img src=image-7-1024x24.png alt>
+</a>
+</figure>
+</div> </p>
 <p>The new device is named according to our AP config file, and is now managed by Intune. If we check the Autopiloted Devices blade we see the following:</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=complete-1.png target=_blank>
+<img src=complete-1.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Your device is now Autopiloted and managed by Intune! You can now reset this device and it will come up with the settings configured in the AP Config JSON.</p>
 </div>
 <comments id=comments>
@@ -138,7 +192,7 @@
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

@@ -10,18 +10,18 @@
 <title>Deploy languages via Software Center with PSCMWin10Language-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/06/08/deploy-languages-via-software-center-with-pscmwin10language/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Deploy languages via Software Center with PSCMWin10Language">
-<meta name=twitter:description content="<p> This post complements <a rel=&#34;noreferrer noopener&#34; href=&#34;https://sysmansquad.com/2020/06/02/language-packs,-language-experience-packs,-language-interface-packs-what?!&#34; target=&#34;_blank&#34;>my other post</a>, where I walk-through the differences of LP, LIP, LXP and FoD. </p> <p> Here I will show you how to use a PowerShell module I wrote, <a href=&#34;https://github.com/codaamok/PSCMWin10Language&#34; target=&#34;_blank&#34; rel=&#34;noreferrer noopener&#34;>PSCMWin10Languages</a>, to create Microsoft Endpoint Manager Configuration Manager Applications for each language you want to deploy via the Software Center. </p> <p> These Applications are not for OSD. It changes the language only for the user who installs the Application via the Software Center.">
+<meta name=twitter:description content="<p> This post complements [my other post](https://sysmansquad.com/2020/06/02/language-packs,-language-experience-packs,-language-interface-packs-what?!), where I walk-through the differences of LP, LIP, LXP and FoD. </p> <p> Here I will show you how to use a PowerShell module I wrote, [PSCMWin10Languages](https://github.com/codaamok/PSCMWin10Language), to create Microsoft Endpoint Manager Configuration Manager Applications for each language you want to deploy via the Software Center. </p> <p> These Applications are not for OSD. It changes the language only for the user who installs the Application via the Software Center.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -94,11 +94,11 @@
 </div>
 <div class=post-entry>
 <pre><code>          &lt;p&gt;
-            This post complements &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://sysmansquad.com/2020/06/02/language-packs,-language-experience-packs,-language-interface-packs-what?!&quot; target=&quot;_blank&quot;&gt;my other post&lt;/a&gt;, where I walk-through the differences of LP, LIP, LXP and FoD.
+            This post complements [my other post](https://sysmansquad.com/2020/06/02/language-packs,-language-experience-packs,-language-interface-packs-what?!), where I walk-through the differences of LP, LIP, LXP and FoD.
           &lt;/p&gt;
           
           &lt;p&gt;
-            Here I will show you how to use a PowerShell module I wrote, &lt;a href=&quot;https://github.com/codaamok/PSCMWin10Language&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;PSCMWin10Languages&lt;/a&gt;, to create Microsoft Endpoint Manager Configuration Manager Applications for each language you want to deploy via the Software Center.
+            Here I will show you how to use a PowerShell module I wrote, [PSCMWin10Languages](https://github.com/codaamok/PSCMWin10Language), to create Microsoft Endpoint Manager Configuration Manager Applications for each language you want to deploy via the Software Center.
           &lt;/p&gt;
           
           &lt;p&gt;
@@ -110,11 +110,11 @@
           &lt;/h2&gt;
           
           &lt;p&gt;
-            The module can be found on &lt;a href=&quot;https://github.com/codaamok/PSCMWin10Language&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;GitHub&lt;/a&gt; or the &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://www.powershellgallery.com/packages/PSCMWin10Language/0.0.1&quot; target=&quot;_blank&quot;&gt;PowerShell Gallery&lt;/a&gt;. You can install it like so:
+            The module can be found on [GitHub](https://github.com/codaamok/PSCMWin10Language) or the [PowerShell Gallery](https://www.powershellgallery.com/packages/PSCMWin10Language/0.0.1). You can install it like so:
           &lt;/p&gt;
           
           &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;Install-Module &quot;PSCMWin10Language&quot; -Scope CurrentUser&lt;/pre&gt;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;Install-Module &quot;PSCMWin10Language&quot; -Scope CurrentUser&lt;/pre&gt;
           &lt;/div&gt;
           
           &lt;p&gt;
@@ -122,7 +122,7 @@
           &lt;/p&gt;
           
           &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;Import-Module &quot;PSCMWin10Language&quot;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;Import-Module &quot;PSCMWin10Language&quot;
 </code></pre>
 <p>Get-Command -Module &ldquo;PSCMWin10Language&rdquo;
 </p>
@@ -163,7 +163,7 @@
           &lt;/p&gt;
           
           &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:false,&amp;quot;styleActiveLine&amp;quot;:false,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;PS C:\&amp;gt; tree &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot; | Select-Object -Skip 2
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:false,&quot;styleActiveLine&quot;:false,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; tree &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot; | Select-Object -Skip 2
 </code></pre>
 <p>\SCCM.ACC.LOCAL\OSD\SOURCE\1909-LANGUAGES
 +&mdash;de-de
@@ -193,7 +193,7 @@
           &lt;/p&gt;
           
           &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;New-LPRepository -Language &quot;fr-FR&quot;, &quot;de-DE&quot; -SourcePath &quot;I:\x64\langpacks&quot; -TargetPath &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;New-LPRepository -Language &quot;fr-FR&quot;, &quot;de-DE&quot; -SourcePath &quot;I:\x64\langpacks&quot; -TargetPath &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot;
 </code></pre>
 <p>New-LXPRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rdquo; -SourcePath &ldquo;I:\LocalExperiencePack" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\1909-Languages&rdquo;
 New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rdquo; -SourcePath &ldquo;J:" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\1909-Languages&rdquo;
@@ -207,7 +207,7 @@ New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rd
           &lt;/p&gt;
           
           &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;New-CMLanguagePackApplication -SiteServer &quot;cm.contoso.com&quot; -SiteCode &quot;P01&quot; -SourcePath &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot; -Languages &quot;fr-fr&quot;, &quot;de-de&quot; -WindowsVersion @{ &quot;Version&quot; = &quot;1909&quot;; &quot;Build&quot; = &quot;18363&quot; } -GlobalConditionName &quot;Operating System build&quot; -CreateAppIfMissing -CreateGlobalConditionIfMissing&lt;/pre&gt;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;New-CMLanguagePackApplication -SiteServer &quot;cm.contoso.com&quot; -SiteCode &quot;P01&quot; -SourcePath &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot; -Languages &quot;fr-fr&quot;, &quot;de-de&quot; -WindowsVersion @{ &quot;Version&quot; = &quot;1909&quot;; &quot;Build&quot; = &quot;18363&quot; } -GlobalConditionName &quot;Operating System build&quot; -CreateAppIfMissing -CreateGlobalConditionIfMissing&lt;/pre&gt;
           &lt;/div&gt;
           
           &lt;p&gt;
@@ -240,7 +240,7 @@ New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rd
           &lt;/p&gt;
           
           &lt;div class=&quot;wp-block-image&quot;&gt;
-            &lt;figure class=&quot;aligncenter size-large&quot;&gt;&lt;a href=&quot;https://sysmansquad.com/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new.jpg&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;658&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-1024x658.jpg&quot; alt=&quot;&quot; class=&quot;wp-image-1319&quot; srcset=&quot;https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-1024x658.jpg 1024w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-300x193.jpg 300w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-768x493.jpg 768w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-1536x986.jpg 1536w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-2048x1315.jpg 2048w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-100x64.jpg 100w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-855x549.jpg 855w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-2-new-1234x792.jpg 1234w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/a&gt;&lt;/figure&gt;
+            &lt;figure class=&quot;aligncenter size-large&quot;&gt;[![](LPSoftwareCenter-EndResult-2-new-1024x658.jpg)](LPSoftwareCenter-EndResult-2-new.jpg)&lt;/figure&gt;
           &lt;/div&gt;
           
           &lt;p&gt;
@@ -264,19 +264,20 @@ New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rd
           &lt;/p&gt;
           
           &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;New-LXPRepository -Language &quot;fr-fr&quot;, &quot;de-de&quot; -SourcePath &quot;I:\LocalExperiencePack\&quot; -TargetPath &quot;\\sccm.acc.local\OSD\Source\2004-Languages&quot;
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;New-LXPRepository -Language &quot;fr-fr&quot;, &quot;de-de&quot; -SourcePath &quot;I:\LocalExperiencePack\&quot; -TargetPath &quot;\\sccm.acc.local\OSD\Source\2004-Languages&quot;
 </code></pre>
 <p>New-LPRepository -Language &ldquo;fr-fr&rdquo;, &ldquo;de-de&rdquo; -SourcePath &ldquo;I:\x64\langpacks" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\2004-Languages&rdquo;
 New-FoDLanguageFeaturesRepository -Language &ldquo;fr-fr&rdquo;, &ldquo;de-de&rdquo; -SourcePath &ldquo;I:" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\2004-Languages&rdquo;
 New-CMLanguagePackApplication -SiteServer &ldquo;cm.contoso.com&rdquo; -SiteCode &ldquo;P01&rdquo; -SourcePath &ldquo;\sccm.acc.local\OSD\Source\2004-Languages&rdquo; -Languages &ldquo;fr-fr&rdquo;, &ldquo;de-de&rdquo; -WindowsVersion @{ &ldquo;Version&rdquo; = &ldquo;2004&rdquo;; &ldquo;Build&rdquo; = &ldquo;19041&rdquo; } -GlobalConditionName &ldquo;Operating System build&rdquo; -CreateAppIfMissing -CreateGlobalConditionIfMissing
 </p>
-<pre><code>          &lt;a href=&quot;https://sysmansquad.com/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new.jpg&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;658&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-1024x658.jpg&quot; alt=&quot;&quot; class=&quot;wp-image-1320&quot; srcset=&quot;https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-1024x658.jpg 1024w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-300x193.jpg 300w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-768x493.jpg 768w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-1536x987.jpg 1536w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-2048x1316.jpg 2048w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-100x64.jpg 100w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-855x549.jpg 855w, https:/wp-content/uploads/2020/06/LPSoftwareCenter-EndResult-3-new-1234x793.jpg 1234w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/a&gt;&lt;/figure&gt; &lt;h2&gt;
+<pre><code>          [![](LPSoftwareCenter-EndResult-3-new-1024x658.jpg)](LPSoftwareCenter-EndResult-3-new.jpg)&lt;/figure&gt; &lt;h2&gt;
             Support
           &lt;/h2&gt;
           
           &lt;p&gt;
-            If you have any issues with the module, please do open an issue on the &lt;a href=&quot;https://github.com/codaamok/PSCMWin10Language&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;PSCMWin10Language GitHub repository&lt;/a&gt;!
-          &lt;/p&gt;</code></pre>
+            If you have any issues with the module, please do open an issue on the [PSCMWin10Language GitHub repository](https://github.com/codaamok/PSCMWin10Language)!
+          &lt;/p&gt;
+</code></pre>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
@@ -295,7 +296,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

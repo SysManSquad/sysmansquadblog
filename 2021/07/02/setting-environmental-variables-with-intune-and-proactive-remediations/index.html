@@ -10,21 +10,21 @@
 <title>Setting Environmental Variables with Intune and proactive remediations-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/07/02/setting-environmental-variables-with-intune-and-proactive-remediations/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Setting Environmental Variables with Intune and proactive remediations">
 <meta name=twitter:description content="As you may have noticed by now, there doesn&rsquo;t seem to be any nice built in way to set environmental variables in intune 🙁
 The Problem Setting a user environmental variable using powershell is an easy task to accomplish, you basically just run the following:
 This works just fine, but won&rsquo;t take effect until the user either reboots or signs into the device again. Which is obviously not ideal.
-I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a WM_SETTINGCHANGE messageis broadcast to the system and that refreshes them, but how you do that with powershell?">
+I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a WM_SETTINGCHANGE message is broadcast to the system and that refreshes them, but how you do that with powershell?">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -72,7 +72,7 @@ I spent a little time looking into this and i found out that when you change the
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -83,7 +83,7 @@ I spent a little time looking into this and i found out that when you change the
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -100,15 +100,21 @@ I spent a little time looking into this and i found out that when you change the
 <h2 id=the-problem>The Problem</h2>
 <p>Setting a user environmental variable using powershell is an easy task to accomplish, you basically just run the following:</p>
 <p>This works just fine, but won&rsquo;t take effect until the user either reboots or signs into the device again. Which is obviously not ideal.</p>
-<p>I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a WM_SETTINGCHANGE message is broadcast to the system and that refreshes them, but how you do that with powershell?</p>
+<p>I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a <a href=https://docs.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange>WM_SETTINGCHANGE message</a> is broadcast to the system and that refreshes them, but how you do that with powershell?</p>
 <h2 id=the-solution>The Solution</h2>
-<p>As it turned out, my fellow sysmansquad member Grant Dickins had a solution to the problem.</p>
+<p>As it turned out, my fellow sysmansquad member <a href=https://sysmansquad.com/author/gduk/>Grant Dickins</a> had a solution to the problem.</p>
 <p>Which both sets the variable and broadcasts the change to the rest of the system!</p>
 <h2 id=putting-it-all-together>Putting it all together</h2>
 <p>Intune has a very nice feature called Proactive Remediation that is part of endpoint analytics. and its the perfect tool for the job!</p>
-<p>If you are new to using Proactive Remediations, check out Jake Shackelford&rsquo;s blog post, it will get you up to speed in no time.</p>
+<p>If you are new to using Proactive Remediations, check out Jake Shackelford&rsquo;s <a href=https://sysmansquad.com/2020/07/07/intune-autopilot-proactive-remediation/>blog post,</a> it will get you up to speed in no time.</p>
 <p>When you create the Proactive remediation, you need to configure it to run as the logged-on user.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=vmconnect_68MRJGl48P.png target=_blank>
+<img src=vmconnect_68MRJGl48P.png alt>
+</a>
+</figure>
+</div> </p>
 <h2 id=the-script>The Script</h2>
 <p>First up is the Detection script, pretty simple stuff, it checks if the temp and tmp variables are set to the path i want.</p>
 <p>Note that if you want to use a different path, just change line 5 in both scripts.</p>
@@ -181,7 +187,7 @@ exit 1
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

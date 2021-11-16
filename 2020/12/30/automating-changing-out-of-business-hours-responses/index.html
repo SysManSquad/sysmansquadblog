@@ -10,16 +10,16 @@
 <title>Automating Outside of Business Hours Responses-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/12/30/automating-changing-out-of-business-hours-responses/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Automating Outside of Business Hours Responses">
 <meta name=twitter:description content="Have you ever had customers emailing in outside of hours? In this post we will setup some scripted automatic maintenance of Auto-Reply responses on a user account.
 We considered several possibilities but the customer did not have an Azure Subscription yet, we ended up using PowerShell, Microsoft Graph, App Authentication, and a Scheduled Task.">
@@ -70,7 +70,7 @@ We considered several possibilities but the customer did not have an Azure Subsc
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -81,7 +81,7 @@ We considered several possibilities but the customer did not have an Azure Subsc
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -142,7 +142,7 @@ We considered several possibilities but the customer did not have an Azure Subsc
             &lt;/h2&gt;
             
             &lt;p&gt;
-              First, we need to create an App to use for authentication, so that a user or administrator doesn't have to log in every time to run this. Just like my last post, where we created an app registration to &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://sysmansquad.com/2020/11/23/find-microsoft-accounts/#setting-up-your-app-registration&quot; target=&quot;_blank&quot;&gt;Find Microsoft Accounts on your company domain&lt;/a&gt;, we need to register an App for our script to authenticate and be granted permissions.
+              First, we need to create an App to use for authentication, so that a user or administrator doesn't have to log in every time to run this. Just like my last post, where we created an app registration to [Find Microsoft Accounts on your company domain](https://sysmansquad.com/2020/11/23/find-microsoft-accounts/#setting-up-your-app-registration), we need to register an App for our script to authenticate and be granted permissions.
             &lt;/p&gt;
             
             &lt;p&gt;
@@ -156,7 +156,7 @@ We considered several possibilities but the customer did not have an Azure Subsc
               &lt;li&gt;
                 add API Permissions to &lt;strong&gt;ReadWrite &lt;/strong&gt;all &lt;strong&gt;MailboxSettings&lt;/strong&gt;&lt;ul&gt;
                   &lt;li&gt;
-                    in my example, I am requesting ReadWrite to all, but you should be able to &lt;a href=&quot;https://docs.microsoft.com/en-us/graph/auth-limit-mailbox-access&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;scope it to specific users&lt;/a&gt; for a more secure implementation
+                    in my example, I am requesting ReadWrite to all, but you should be able to [scope it to specific users](https://docs.microsoft.com/en-us/graph/auth-limit-mailbox-access) for a more secure implementation
                   &lt;/li&gt;
                 &lt;/ul&gt;
               &lt;/li&gt;
@@ -184,7 +184,7 @@ We considered several possibilities but the customer did not have an Azure Subsc
             &lt;/ul&gt;
             
             &lt;p&gt;
-              This is a long list of tasks, and for more details and a more GUI-based walkthrough, I recommend you check out &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://laurakokkarinen.com/authenticating-to-office-365-apis-with-a-certificate-step-by-step/#creating-the-certificate&quot; target=&quot;_blank&quot;&gt;this post&lt;/a&gt;. For the ease of my setup (and to keep this a reasonable length) I included a script below to set everything up.
+              This is a long list of tasks, and for more details and a more GUI-based walkthrough, I recommend you check out [this post](https://laurakokkarinen.com/authenticating-to-office-365-apis-with-a-certificate-step-by-step/#creating-the-certificate). For the ease of my setup (and to keep this a reasonable length) I included a script below to set everything up.
             &lt;/p&gt;
             
             &lt;p&gt;
@@ -192,7 +192,7 @@ We considered several possibilities but the customer did not have an Azure Subsc
             &lt;/p&gt;
             
             &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
-              &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;Create_Certificate_And_App.ps1&amp;quot;,&amp;quot;align&amp;quot;:&amp;quot;wide&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;# --- config start
+              &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;fileName&quot;:&quot;Create_Certificate_And_App.ps1&quot;,&quot;align&quot;:&quot;wide&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;# --- config start
 </code></pre>
 <p>$appName = &ldquo;AutomaticAutoReply&rdquo;
 $password = &ldquo;Come up with something secure!&rdquo; # Certificate password
@@ -251,12 +251,12 @@ Write-Host -ForeGroundColor Cyan &ldquo;Copied to ClipBoard&rdquo;
               To use the App auth Certificate is fairly simple, and the script above outputs the command to use. For my app it came out to the &lt;strong&gt;Connect-mgGraph&lt;/strong&gt; command shown below.
             &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot; id=&quot;AppAuthExampleImage&quot;&gt;
             
-            &lt;img loading=&quot;lazy&quot; width=&quot;792&quot; height=&quot;390&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/image-8.png&quot; alt=&quot;&quot; class=&quot;wp-image-2055&quot; srcset=&quot;https:/wp-content/uploads/2020/12/image-8.png 792w, https:/wp-content/uploads/2020/12/image-8-300x148.png 300w, https:/wp-content/uploads/2020/12/image-8-768x378.png 768w, https:/wp-content/uploads/2020/12/image-8-100x49.png 100w&quot; sizes=&quot;(max-width: 792px) 100vw, 792px&quot; /&gt;&lt;figcaption&gt;Sample &lt;strong&gt;Connect-mgGraph&lt;/strong&gt; command shown above&lt;br /&gt;Connected with Certificate based, AppOnly login. &lt;/figcaption&gt;&lt;/figure&gt; &lt;p&gt;
+            ![](image-8.png)&lt;figcaption&gt;Sample &lt;strong&gt;Connect-mgGraph&lt;/strong&gt; command shown above&lt;br /&gt;Connected with Certificate based, AppOnly login. &lt;/figcaption&gt;&lt;/figure&gt; &lt;p&gt;
               You can use the &lt;strong&gt;Get-mgContext&lt;/strong&gt; to verify you are connected &lt;strong&gt;AppOnly&lt;/strong&gt;/non-interactive login, as well as the &lt;strong&gt;app name &lt;/strong&gt;and your &lt;strong&gt;permissions scopes&lt;/strong&gt;.
             &lt;/p&gt;
             
             &lt;p&gt;
-              For a comparison, here is a screenshot of what this looks like connected as my Global Admin during the app registration - &lt;a rel=&quot;noreferrer noopener nofollow&quot; href=&quot;https://i.imgur.com/cEi2DNy.png&quot; target=&quot;_blank&quot;&gt;Screenshot&lt;/a&gt;
+              For a comparison, here is a screenshot of what this looks like connected as my Global Admin during the app registration - [Screenshot](https://i.imgur.com/cEi2DNy.png)
             &lt;/p&gt;
             
             &lt;h2&gt;
@@ -264,15 +264,15 @@ Write-Host -ForeGroundColor Cyan &ldquo;Copied to ClipBoard&rdquo;
             &lt;/h2&gt;
             
             &lt;p&gt;
-              Now that we can authenticate to the Graph API, we need to make a script to update the Out-of-office messages, which are part of the &lt;a href=&quot;https://docs.microsoft.com/en-us/graph/api/user-get-mailboxsettings?view=graph-rest-1.0&amp;tabs=http&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;MailboxSettings&lt;/a&gt; resource.
+              Now that we can authenticate to the Graph API, we need to make a script to update the Out-of-office messages, which are part of the [MailboxSettings](https://docs.microsoft.com/en-us/graph/api/user-get-mailboxsettings?view=graph-rest-1.0&amp;tabs=http) resource.
             &lt;/p&gt;
             
             &lt;p&gt;
-              Using those variables from the previous app we created above, it provided out several variables we will need in the top of the script below. You can see them in the &lt;a href=&quot;#AppAuthExampleImage&quot;&gt;previous screenshot&lt;/a&gt;. Pull those variables into Lines 3-6 below.
+              Using those variables from the previous app we created above, it provided out several variables we will need in the top of the script below. You can see them in the [previous screenshot](#AppAuthExampleImage). Pull those variables into Lines 3-6 below.
             &lt;/p&gt;
             
             &lt;p&gt;
-              We can select our User to update the Automatic Out-of-office responses on, and even setup a Teams WebHook notification for failures or errors, like they did for this post &lt;a rel=&quot;noreferrer noopener&quot; href=&quot;https://sysmansquad.com/2020/04/22/teams-channel-notification-when-osd-fails/#step-1&quot; target=&quot;_blank&quot;&gt;Teams Channel Notification when OSD Fails&lt;/a&gt;. Just update &lt;code&gt;$WebHookURL&lt;/code&gt; on line 12 with your WebHookURL and set the user you want to maintain on line 9.
+              We can select our User to update the Automatic Out-of-office responses on, and even setup a Teams WebHook notification for failures or errors, like they did for this post [Teams Channel Notification when OSD Fails](https://sysmansquad.com/2020/04/22/teams-channel-notification-when-osd-fails/#step-1). Just update &lt;code&gt;$WebHookURL&lt;/code&gt; on line 12 with your WebHookURL and set the user you want to maintain on line 9.
             &lt;/p&gt;
             
             &lt;p&gt;
@@ -284,7 +284,7 @@ Write-Host -ForeGroundColor Cyan &ldquo;Copied to ClipBoard&rdquo;
             &lt;/p&gt;
             
             &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
-              &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;Update-AutoReply.ps1&amp;quot;,&amp;quot;align&amp;quot;:&amp;quot;wide&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;#Region Variables
+              &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;fileName&quot;:&quot;Update-AutoReply.ps1&quot;,&quot;align&quot;:&quot;wide&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;#Region Variables
 </code></pre>
 <p>#Vars for Graph Connection
 $ClientID = &lsquo;9d6033b0-XXXX-XXXX-XXXX-33f02ff30d52&rsquo;
@@ -372,15 +372,15 @@ Fail -ErrorRecord $_ -WebHookUrl $WebHookUrl
               Since my schedule was 5PM to 8AM Monday-Friday, I made a scheduled task and set it up to run Weekly - Monday-Friday at 9AM.
             &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            &lt;img loading=&quot;lazy&quot; width=&quot;629&quot; height=&quot;173&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/image-12.png&quot; alt=&quot;&quot; class=&quot;wp-image-2066&quot; srcset=&quot;https:/wp-content/uploads/2020/12/image-12.png 629w, https:/wp-content/uploads/2020/12/image-12-300x83.png 300w, https:/wp-content/uploads/2020/12/image-12-100x28.png 100w&quot; sizes=&quot;(max-width: 629px) 100vw, 629px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+            ![](image-12.png)&lt;/figure&gt; &lt;p&gt;
               In my testing, since it was only accessing the Current User's profile, and did not need access to other networked resources, you can skip storing the password to increase security.
             &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            &lt;img loading=&quot;lazy&quot; width=&quot;625&quot; height=&quot;404&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/image-9.png&quot; alt=&quot;&quot; class=&quot;wp-image-2063&quot; srcset=&quot;https:/wp-content/uploads/2020/12/image-9.png 625w, https:/wp-content/uploads/2020/12/image-9-300x194.png 300w, https:/wp-content/uploads/2020/12/image-9-100x65.png 100w&quot; sizes=&quot;(max-width: 625px) 100vw, 625px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+            ![](image-9.png)&lt;/figure&gt; &lt;p&gt;
               For the program to run, we just need to specify to run the file with powershell.exe. On my system, it was trying to default opening the .ps1 in notepad, so I switched to directly running powershell.exe to bypass that.
             &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            &lt;img loading=&quot;lazy&quot; width=&quot;711&quot; height=&quot;129&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/image-13.png&quot; alt=&quot;&quot; class=&quot;wp-image-2067&quot; srcset=&quot;https:/wp-content/uploads/2020/12/image-13.png 711w, https:/wp-content/uploads/2020/12/image-13-300x54.png 300w, https:/wp-content/uploads/2020/12/image-13-100x18.png 100w&quot; sizes=&quot;(max-width: 711px) 100vw, 711px&quot; /&gt;&lt;/figure&gt; &lt;h2&gt;
+            ![](image-13.png)&lt;/figure&gt; &lt;h2&gt;
               Conclusion
             &lt;/h2&gt;
             
@@ -420,8 +420,9 @@ Fail -ErrorRecord $_ -WebHookUrl $WebHookUrl
             &lt;/h4&gt;
             
             &lt;p&gt;
-              If you have questions, are having problems, or just want to chat over something, you can leave a comment below or reach me on the &lt;a href=&quot;https://discord.com/invite/winadmins&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;WinAdmins Discord&lt;/a&gt; at &lt;a href=&quot;https://discordapp.com/users/264652399824601088&quot;&gt;@PsychoData&lt;/a&gt;
-            &lt;/p&gt;</code></pre>
+              If you have questions, are having problems, or just want to chat over something, you can leave a comment below or reach me on the [WinAdmins Discord](https://discord.com/invite/winadmins) at [@PsychoData](https://discordapp.com/users/264652399824601088)
+            &lt;/p&gt;
+</code></pre>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -433,7 +434,7 @@ Fail -ErrorRecord $_ -WebHookUrl $WebHookUrl
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

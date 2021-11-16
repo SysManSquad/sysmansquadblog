@@ -10,20 +10,20 @@
 <title>Removing The Built-in Teams App in Windows 11 with Intune-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/10/08/removing-the-built-in-teams-app-in-windows-11-with-intune/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Removing The Built-in Teams App in Windows 11 with Intune">
-<meta name=twitter:description content="Intro So you&rsquo;ve started rolling out Windows 11 to your endpoints, and your users got confused and upset over the consumer teams apps that is installed? Understandably you wish to do something about this.(╯°□°）╯︵ ┻━┻No worries mate, Intune Proactive Remediations to the rescue!
+<meta name=twitter:description content="Intro So you&rsquo;ve started rolling out Windows 11 to your endpoints, and your users got confused and upset over the consumer teams apps that is installed? Understandably you wish to do something about this.    (╯°□°）╯︵ ┻━┻No worries mate, Intune Proactive Remediations to the rescue!
 The Solution The code below fixes two things.
-It removes the chat by writing the registry key that disables itthe TaskbarMn DWORD controls thisThen it simply uninstalls the appx package for the consumer teams app, note that this has no effect on the regular teams app.">
+It removes the chat by writing the registry key that disables it    the TaskbarMn DWORD controls thisThen it simply uninstalls the appx package for the consumer teams app, note that this has no effect on the regular teams app.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -71,7 +71,7 @@ It removes the chat by writing the registry key that disables itthe TaskbarMn DW
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -82,7 +82,7 @@ It removes the chat by writing the registry key that disables itthe TaskbarMn DW
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -97,12 +97,24 @@ It removes the chat by writing the registry key that disables itthe TaskbarMn DW
 <div class=post-entry>
 <h2 id=intro>Intro</h2>
 <p>So you&rsquo;ve started rolling out Windows 11 to your endpoints, and your users got confused and upset over the consumer teams apps that is installed? Understandably you wish to do something about this.</p>
-<p> (╯°□°）╯︵ ┻━┻</p>
+<p><div class=image>
+<figure>
+<a href=vmconnect_HKVrTs61hf.png target=_blank>
+<img src=vmconnect_HKVrTs61hf.png alt>
+</a>
+</figure>
+</div> (╯°□°）╯︵ ┻━┻</p>
 <p>No worries mate, Intune Proactive Remediations to the rescue!</p>
 <h2 id=the-solution>The Solution</h2>
 <p>The code below fixes two things.</p>
 <p>It removes the chat by writing the registry key that disables it</p>
-<p> the TaskbarMn DWORD controls this</p>
+<p><div class=image>
+<figure>
+<a href=vmconnect_GJk3LXz1EF.png target=_blank>
+<img src=vmconnect_GJk3LXz1EF.png alt>
+</a>
+</figure>
+</div> the TaskbarMn DWORD controls this</p>
 <p>Then it simply uninstalls the appx package for the consumer teams app, note that this has no effect on the regular teams app. The two are completely different.</p>
 <h2 id=code>Code</h2>
 <p>Pretty simple stuff,</p>
@@ -132,7 +144,7 @@ $errMsg = _.Exception.Message
 Write-Host $errMsg
 exit 1
 }</p>
-<p>Here is the remediation code, parts of it were made using the reg2ps website which i highly recommend.</p>
+<p>Here is the remediation code, parts of it were made using the <a href=https://reg2ps.azurewebsites.net/>reg2ps website</a> which i highly recommend.</p>
 <p>try {</p>
 <pre><code># remove the taskbar icon
 # Reg2CI (c) 2021 by Roger Zander
@@ -156,10 +168,22 @@ Write-Host $errMsg
 exit 1
 }</p>
 <h2 id=setting-it-up>Setting it up</h2>
-<p>Go to the Proactive Remediations blade in the Intune admin portal, create a new PR and add the detection and remediation scripts, configure the PR to run in user context and 64bit, and deploy accordingly.</p>
-<p> </p>
+<p>Go to the <a href=https://endpoint.microsoft.com/#blade/Microsoft_Intune_Enrollment/UXAnalyticsMenu/proactiveRemediations>Proactive Remediations blade</a> in the Intune admin portal, create a new PR and add the detection and remediation scripts, configure the PR to run in user context and 64bit, and deploy accordingly.</p>
+<p><div class=image>
+<figure>
+<a href=WindowsSandboxClient_EZVCQZGC8M.png target=_blank>
+<img src=WindowsSandboxClient_EZVCQZGC8M.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Once the Remediation has run on the targeted endpoints, your users will be happier and slightly less confused.</p>
-<p> ┳━┳ ノ( ゜-゜ノ)</p>
+<p><div class=image>
+<figure>
+<a href=j4sLKefuYe.png target=_blank>
+<img src=j4sLKefuYe.png alt>
+</a>
+</figure>
+</div> ┳━┳ ノ( ゜-゜ノ)</p>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
@@ -178,7 +202,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

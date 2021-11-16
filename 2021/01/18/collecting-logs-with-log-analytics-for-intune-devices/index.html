@@ -10,16 +10,16 @@
 <title>Collecting Logs with Log Analytics for Intune devices-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/01/18/collecting-logs-with-log-analytics-for-intune-devices/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Collecting Logs with Log Analytics for Intune devices">
 <meta name=twitter:description content="Why do I need logs? The purpose of this guide is to configure the collection of Logs in an Intune environment. By default the log analytics you enable in Intune does not give you much information beyond auditing basic things. With this approach we can record any desired log for all of our machines. There is a companion video for this setup https://youtu.be/Uw3GjMnSXbI.
 Enabling Log Analytics  Navigate to endpoint.microsoft.com Select Reports Select Diagnostic Settings Select Add Diagnostic setting Select all options under Log Select Send to Log Analytics workspace Select a Log Analytics workspace  You can archive to a storage account to keep data longer    Now that we have the log analytics workspace configured we can configure the Microsoft Monitoring Agent (MMA)">
@@ -70,7 +70,7 @@ Enabling Log Analytics  Navigate to endpoint.microsoft.com Select Reports Select
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -81,7 +81,7 @@ Enabling Log Analytics  Navigate to endpoint.microsoft.com Select Reports Select
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -98,7 +98,7 @@ Enabling Log Analytics  Navigate to endpoint.microsoft.com Select Reports Select
 <p>The purpose of this guide is to configure the collection of Logs in an Intune environment. By default the log analytics you enable in Intune does not give you much information beyond auditing basic things. With this approach we can record any desired log for all of our machines. There is a companion video for this setup <a href=https://youtu.be/Uw3GjMnSXbI>https://youtu.be/Uw3GjMnSXbI</a>.</p>
 <h2 id=enabling-log-analytics>Enabling Log Analytics</h2>
 <ol>
-<li>Navigate to endpoint.microsoft.com</li>
+<li>Navigate to <a href=https://endpoint.microsoft.com/#home>endpoint.microsoft.com</a></li>
 <li>Select <strong>Reports</strong></li>
 <li>Select <strong>Diagnostic Settings</strong></li>
 <li>Select <strong>Add Diagnostic setting</strong></li>
@@ -119,24 +119,42 @@ Enabling Log Analytics  Navigate to endpoint.microsoft.com Select Reports Select
 <li>Select <strong>Data</strong><br>
 You can now add any event log you wish to collect. Begin typing a log you wish to collect and it should auto populate. If the log you wish to use does not appear you can type in the full log path and it will be added. I&rsquo;ve included an example of a few logs below, please bare in mind that if the log is not enabled by default you will still need to enable that log separately. </li>
 </ol>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image.png target=_blank>
+<img src=image.png alt>
+</a>
+</figure>
+</div> </p>
 <ol>
 <li>Navigate back to your log analytics workspace</li>
 <li>Select <strong>Agents management</strong></li>
 <li>Copy down the <strong>Workspace ID</strong> and <strong>Primary Key</strong></li>
 <li>Select <strong>Download Windows Agent (64bit)</strong></li>
 <li>Create a folder and put the <strong>MMA-Setup-AMD64.exe</strong> inside of it</li>
-<li>Open command prompt and run <strong>MMA-Setup-AMD64.exe /C</strong> in the directory your install exists</li>
+<li>Open command prompt and run <strong>MMA-Setup-AMD64.exe /C</strong> in the directory your install exists<div class=image>
+<figure>
+<a href=Discord_KkLVtr1Ip4.png target=_blank>
+<img src=Discord_KkLVtr1Ip4.png alt>
+</a>
+</figure>
+</div></li>
 <li>Extract the contents to your desired folder</li>
 <li>Download the repo located <a href=https://github.com/Microsoft/Microsoft-Win32-Content-Prep-Tool>Github-IntuneContentPrep</a></li>
 <li>Extract and run the <strong>IntuneWinAppUtil.exe</strong></li>
 <li>Specify the <strong>source folder</strong></li>
 <li>Specify the <strong>setup file</strong> (Setup.exe)</li>
-<li>Specify an <strong>output folder</strong></li>
+<li>Specify an <strong>output folder</strong><div class=image>
+<figure>
+<a href=SQQldCGPu6.png target=_blank>
+<img src=SQQldCGPu6.png alt>
+</a>
+</figure>
+</div></li>
 </ol>
 <h2 id=creating-the-mma-app-deployment>Creating the MMA app deployment</h2>
 <ol>
-<li>Navigate to endpoint.microsoft.com</li>
+<li>Navigate to <a href=https://endpoint.microsoft.com/#home>endpoint.microsoft.com</a></li>
 <li>Select <strong>Apps</strong></li>
 <li>Select <strong>Windows</strong></li>
 <li>Select <strong>Add</strong></li>
@@ -171,7 +189,7 @@ You can now add any event log you wish to collect. Begin typing a log you wish t
 <h2 id=checking-the-logs>Checking the logs</h2>
 <p>Once the clients receive the agent you should be able to check for a heartbeat immediately in log analytics. I&rsquo;ll show two quick queries we can run as an example.</p>
 <ol>
-<li>Navigate to portal.azure.com</li>
+<li>Navigate to <a href=https://portal.azure.com/>portal.azure.com</a></li>
 <li>Navigate to your log analytics workspace</li>
 <li>Select Logs</li>
 <li>In the query section type the following and select <strong>Run</strong>:</li>
@@ -193,7 +211,7 @@ You can now add any event log you wish to collect. Begin typing a log you wish t
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

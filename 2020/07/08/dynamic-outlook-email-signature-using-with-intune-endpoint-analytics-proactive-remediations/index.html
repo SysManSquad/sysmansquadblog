@@ -10,19 +10,19 @@
 <title>Dynamic Outlook Email Signature Using with Intune Endpoint Analytics Proactive Remediations-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/07/08/dynamic-outlook-email-signature-using-with-intune-endpoint-analytics-proactive-remediations/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Dynamic Outlook Email Signature Using with Intune Endpoint Analytics Proactive Remediations">
 <meta name=twitter:description content="Howdy y&rsquo;all!
-Since you have already read señor Shackelfords blog poston setting up Endpoint Analytics Proactive remediations, we can skip the intro and dive right in.
+Since you have already read señor Shackelfords blog post on setting up Endpoint Analytics Proactive remediations, we can skip the intro and dive right in.
 In this blog post we will be get familiar with a somewhat novel idea that proactive remediation&rsquo;s can be used for. Which, as the title of this post suggests, is the creation of a dynamic email signature in the form of a .html file using Microsoft Graph.">
 </head>
 <body class="home blog">
@@ -71,7 +71,7 @@ In this blog post we will be get familiar with a somewhat novel idea that proact
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -82,7 +82,7 @@ In this blog post we will be get familiar with a somewhat novel idea that proact
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -96,10 +96,10 @@ In this blog post we will be get familiar with a somewhat novel idea that proact
 </div>
 <div class=post-entry>
 <p>Howdy y&rsquo;all!</p>
-<p>Since you have already read señor Shackelfords blog post on setting up Endpoint Analytics Proactive remediations, we can skip the intro and dive right in.</p>
+<p>Since you have already read <a href=https://sysmansquad.com/2020/07/07/intune-autopilot-proactive-remediation/>señor Shackelfords blog post</a> on setting up Endpoint Analytics Proactive remediations, we can skip the intro and dive right in.</p>
 <p>In this blog post we will be get familiar with a somewhat novel idea that proactive remediation&rsquo;s can be used for. Which, as the title of this post suggests, is the creation of a dynamic email signature in the form of a .html file using Microsoft Graph.</p>
 <h2 id=getting-started>Getting Started</h2>
-<p>To get started you need to familiarize your self with how to connect to the Microsoft Graph and query for data. Luckily Brad Wyatt has made an excellent blog post on the subject, so go read it before you read the rest of this post. Follow the steps he lists to create a new Azure application. When you get to the Client Credentials section, see below.</p>
+<p>To get started you need to familiarize your self with how to connect to the Microsoft Graph and query for data. Luckily <a href=https://www.thelazyadministrator.com>Brad Wyatt </a>has made an <a href=https://www.thelazyadministrator.com/2019/07/22/connect-and-navigate-the-microsoft-graph-api-with-powershell/>excellent blog post</a> on the subject, so go read it before you read the rest of this post. Follow the steps he lists to create a new Azure application. When you get to the Client Credentials section, see below.</p>
 <p>Welcome back. Now that we are on the same page, let&rsquo;s continue. The application we create in Azure needs to be granted the User.Read.All permission. don&rsquo;t forget to grant consent if prompted.</p>
 <h2 id=discovery>Discovery</h2>
 <p>Now on to the fun part. We need a discovery script that will checks if the Outlook signature file exists, how old it is and if no file exists, report non-compliance. If the file is older than current day, its also non compliant.</p>
@@ -187,7 +187,7 @@ $officelocation = $data.officeLocation
 <p>Now you just need to deploy the script package to a group, make sure its set to run with the logged-on credentials and use 64-bit PowerShell. Follow the steps in Jake&rsquo;s post to create a new script and deploy it.</p>
 <p>Once the script package is on a client, the signature will appear in Outlook, though Outlook will not configure it as a default on its own. (perhaps an idea for another blog post).</p>
 <h3 id=questionsissues>Questions/Issues?</h3>
-<p>If you run into any issues or have questions about anything Intune head over to the WinAdmins discord community and go to the <code>#Intune</code> channel, and ask Jake to help you.</p>
+<p>If you run into any issues or have questions about anything Intune head over to the <a href=https://aka.ms/winadmins>WinAdmins discord community</a> and go to the <code>#Intune</code> channel, and ask Jake to help you.</p>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -199,7 +199,7 @@ $officelocation = $data.officeLocation
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

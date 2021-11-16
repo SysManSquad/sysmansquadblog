@@ -10,20 +10,20 @@
 <title>Modern Driver Management with the Administration Service-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/05/15/modern-driver-management-with-the-administration-service/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Modern Driver Management with the Administration Service">
 <meta name=twitter:description content="2021-04-27 update: The solution now works over CMG. Please see this post for details.
 Hello!
-Today I’d like to share with you a new solution I’ve developed to allow me to use the free Modern Driver Management solution from the team at MSEndpointMgrat my work. My goal is to use the process developed by them for managing drivers in a task sequence and convert it to use the ConfigMgr Administration Service since my company won&rsquo;t allow me to install their third-party web service.">
+Today I’d like to share with you a new solution I’ve developed to allow me to use the free Modern Driver Management solution from the team at MSEndpointMgr at my work. My goal is to use the process developed by them for managing drivers in a task sequence and convert it to use the ConfigMgr Administration Service since my company won&rsquo;t allow me to install their third-party web service.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -71,7 +71,7 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -82,7 +82,7 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -97,7 +97,7 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <div class=post-entry>
 <p><strong>2021-04-27 update: The solution now works over CMG. Please see this <a href=https://sysmansquad.com/2021/04/27/updated-modern-driver-bios-management-with-cmg-support/>post</a> for details</strong>.</p>
 <p>Hello!</p>
-<p>Today I’d like to share with you a new solution I’ve developed to allow me to use the free Modern Driver Management solution from the team at MSEndpointMgr at my work. My goal is to use the process developed by them for managing drivers in a task sequence and convert it to use the ConfigMgr Administration Service since my company won&rsquo;t allow me to install their third-party web service. It will also move most of the functionality into task sequence steps to make it easier for admins to debug and make changes to the process. Links to my solution are provided below.</p>
+<p>Today I’d like to share with you a new solution I’ve developed to allow me to use the free <a href=https://msendpointmgr.com/modern-driver-management/>Modern Driver Management solution from the team at MSEndpointMgr</a> at my work. My goal is to use the process developed by them for managing drivers in a task sequence and convert it to use the ConfigMgr Administration Service since my company won&rsquo;t allow me to install their third-party web service. It will also move most of the functionality into task sequence steps to make it easier for admins to debug and make changes to the process. Links to my solution are provided below.</p>
 <p>Here is a quick summary of their existing solution:</p>
 <h3 id=what-is-the-administration-service>What is the Administration Service?</h3>
 <p>The Administration Service (AdminService for short) is a REST API for the SMS_Provider that is accessible via HTTPS. It&rsquo;s a web service developed and maintained by the product team.</p>
@@ -131,9 +131,21 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <h4 id=task-sequence-to-query-the-adminservice>Task Sequence to query the AdminService</h4>
 <p>The goal of this task sequence is to identify the manufacturer, model and SKU of the current system and make sure it matches the naming convention used by the Driver Automation Tool.</p>
 <p>Then, with those values, we call the Invoke-GetPackageIDFromAdminService to get the PackageID of the driver package we need.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=QueryAdminServiceTS-1-1024x759.png target=_blank>
+<img src=QueryAdminServiceTS-1-1024x759.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Keep in mind that you will need to set the appropriate credentials to use to query the AdminService, see here: </p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=QueryAdminServiceTS_Parameters-1-1024x518.png target=_blank>
+<img src=QueryAdminServiceTS_Parameters-1-1024x518.png alt>
+</a>
+</figure>
+</div> </p>
 <p>The user account needed in this step only needs &ldquo;Read&rdquo; permission on Packages in configuration manager. That&rsquo;s it.</p>
 <p><strong>A quick note on “BypassCertCheck”:</strong> If you set this to 0, you will need to make sure that the certificate used by the AdminService is trusted by the device at the time it’s running the task sequence or the script will be unable to query the AdminService. If you have a good idea how to tackle this problem, please let me know.</p>
 <p>Disclaimer: I&rsquo;ve only been doing my test on current branch 2002 with enhanced HTTP enabled.</p>
@@ -155,7 +167,13 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 </ul>
 </li>
 </ul>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=ApplyDrivers_TS-1-1024x984.png target=_blank>
+<img src=ApplyDrivers_TS-1-1024x984.png alt>
+</a>
+</figure>
+</div> </p>
 <p>You can reuse this task sequence in multiple other task sequences simply by defining some key variables.</p>
 <p>I&rsquo;ve exported the task sequences for you to <a href=https://github.com/CharlesNRU/mdm-adminservice/raw/master/MDM-TS.zip>download here</a>.</p>
 <h3 id=examples>Examples</h3>
@@ -165,14 +183,26 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <li>Applying 1809 64-bit</li>
 <li>Drivers should be cached in C:\Win10Drivers_1809</li>
 </ul>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=Example1-1024x258.png target=_blank>
+<img src=Example1-1024x258.png alt>
+</a>
+</figure>
+</div> </p>
 <p>There is no need to specify the &ldquo;DriverPackageOSArch&rdquo; in this case because the default value is x64. If you were deploying a 32-bit OS image, you would need to specify that too.</p>
 <h4 id=example-2---in-place-upgrade>Example 2 - In-place upgrade</h4>
 <ul>
 <li>Stage the 1909 drivers before the in-place upgrade</li>
 <li>Don&rsquo;t cache the drivers in a custom location</li>
 </ul>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-2.png target=_blank>
+<img src=image-2.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Setting the &ldquo;DriverDeploymentType&rdquo; to OSUpgrade will assign the TS variable &ldquo;OSDUpgradeStagedContent&rdquo; to the location of the downloaded drivers.</p>
 <p>The content will be used by the upgrade step to apply the new drivers.</p>
 <p>For more information, see <a href=https://deploymentresearch.com/improving-the-configmgr-inplace-upgrade-task-sequence/>here</a>.</p>
@@ -181,14 +211,26 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <li>Update the current drivers on system</li>
 <li>Don&rsquo;t cache the drivers in a custom location</li>
 </ul>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-3.png target=_blank>
+<img src=image-3.png alt>
+</a>
+</figure>
+</div> </p>
 <p>The default behavior of the &ldquo;Apply Driver Package&rdquo; TS is to perform a driver refresh when run in Full OS.</p>
 <h4 id=example-4---precache-drivers>Example 4 - Precache drivers</h4>
 <ul>
 <li>Cache the drivers in the location C:\Drivers\1909</li>
 <li>Precache Windows 10 1909 drivers only, don&rsquo;t install the drivers</li>
 </ul>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-4.png target=_blank>
+<img src=image-4.png alt>
+</a>
+</figure>
+</div> </p>
 <h3 id=next-steps>Next steps</h3>
 <p>I&rsquo;m looking for feedback and suggestions to improve this solution.</p>
 <p>I will also be working on a similar task sequence for BIOS packages.</p>
@@ -205,7 +247,7 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

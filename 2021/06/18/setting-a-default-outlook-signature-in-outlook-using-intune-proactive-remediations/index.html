@@ -10,19 +10,19 @@
 <title>Setting A Default Outlook Signature in Outlook using Intune Proactive Remediations-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/06/18/setting-a-default-outlook-signature-in-outlook-using-intune-proactive-remediations/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Setting A Default Outlook Signature in Outlook using Intune Proactive Remediations">
 <meta name=twitter:description content="So you have already figured out how to dynamically generated outlook signatures, but now you want to make sure that people actually use them. but without preventing the use of other signatures your users might have.
-Well it just so happens that I have a solution for you!No default signature has been setTo do all this, we create a new Proactive Remediation in Intune.
+Well it just so happens that I have a solution for you!    No default signature has been setTo do all this, we create a new Proactive Remediation in Intune.
 Add the detection and remediations scripts from below, and set it to run as the user.">
 </head>
 <body class="home blog">
@@ -71,7 +71,7 @@ Add the detection and remediations scripts from below, and set it to run as the 
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -82,7 +82,7 @@ Add the detection and remediations scripts from below, and set it to run as the 
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -95,12 +95,24 @@ Add the detection and remediations scripts from below, and set it to run as the 
 <span class=post-date>June 18, 2021</span>
 </div>
 <div class=post-entry>
-<p>So you have already figured out how to dynamically generated outlook signatures, but now you want to make sure that people actually use them. but without preventing the use of other signatures your users might have.</p>
+<p>So you have already figured out <a href=https://sysmansquad.com/2020/07/08/dynamic-outlook-email-signature-using-with-intune-endpoint-analytics-proactive-remediations/>how to dynamically generated outlook signatures</a>, but now you want to make sure that people actually use them. but without preventing the use of other signatures your users might have.</p>
 <p>Well it just so happens that I have a solution for you!</p>
-<p> No default signature has been set</p>
-<p>To do all this, we create a new Proactive Remediation in Intune.</p>
+<p><div class=image>
+<figure>
+<a href=before.png target=_blank>
+<img src=before.png alt>
+</a>
+</figure>
+</div> No default signature has been set</p>
+<p>To do all this, we create a new <a href=https://sysmansquad.com/2020/07/07/intune-autopilot-proactive-remediation/>Proactive Remediation in Intune</a>.</p>
 <p>Add the detection and remediations scripts from below, and set it to run as the user.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=vmconnect_68MRJGl48P.png target=_blank>
+<img src=vmconnect_68MRJGl48P.png alt>
+</a>
+</figure>
+</div> </p>
 <p>This solution takes care of picking the default outlook profile. but keep in mind that this has only been tested on Office 365/microsoft 365 apps for business. so I have no idea if it works on the legacy versions.</p>
 <p>You only need to specify the name of the signature file on line 4 in both the detection and remediation scripts, which are case sensitive.</p>
 <h3 id=this-is-case-sensitive>this is case sensitive!</h3>
@@ -162,7 +174,13 @@ Write-Host $errMsg
 exit 1
 }</p>
 <p>There is one caveat, this change will only take effect when outlook is restarted.</p>
-<p> Neato burrito, check it out!</p>
+<p><div class=image>
+<figure>
+<a href=after.png target=_blank>
+<img src=after.png alt>
+</a>
+</figure>
+</div> Neato burrito, check it out!</p>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -174,7 +192,7 @@ exit 1
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

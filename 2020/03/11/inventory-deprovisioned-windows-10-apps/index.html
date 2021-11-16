@@ -10,16 +10,16 @@
 <title>Inventory Deprovisioned Windows 10 Apps-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/03/11/inventory-deprovisioned-windows-10-apps/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Inventory Deprovisioned Windows 10 Apps">
 <meta name=twitter:description content="In my previous post I&rsquo;ve shown that we can revert the deprovisioning of Windows 10 apps. This is awesome news for anyone that has removed the Windows Store. I have been unable to find any other way of restoring the Windows Store once it has been deprovisioned, so this is an awesome time saver. Instead of reimaging devices that do not have the store we can simply &lsquo;reprovision&rsquo; the store, and perform a feature update!">
 </head>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -161,7 +161,7 @@ DeprovisionedApp = $App
 }
 }
 }</p>
-<p>Write-Output &lsquo;Inventory Complete&rsquo;</p>
+<p>Write-Output &lsquo;Inventory Complete&rsquo;```</p>
 <p>Inventory-DeprovisionedAppX</p>
 <h4 id=step-2---run-script-on-a-schedule>Step 2 - Run script on a schedule</h4>
 <p>There are countless sources to show you how to create a CI in MEMCM (Don&rsquo;t search for MEMCM, you won&rsquo;t get any results. Use SCCM, or ConfigMgr). While a step by step on all those sweet sweet next buttons sounds invigorating, I&rsquo;m going to provide some screenshots instead.</p>
@@ -174,10 +174,22 @@ DeprovisionedApp = $App
 <h4 id=step-3---add-new-wmi-class-to-hardware-inventory>Step 3 - Add new WMI class to hardware inventory</h4>
 <p>The script is written, deployed, and has run on a client. Now it is time to actually get this data into MEMCM!</p>
 <p>I start at a client that I know has run my script. If everything is working as expected, and I have deprovisioned apps, I should be able to perform a query to return my custom data stored in WMI.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=CustomHINV-GetDeproHINV-1.png target=_blank>
+<img src=CustomHINV-GetDeproHINV-1.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Awesome! That is easily half the battle. Now, to complete the cycle we need to get the data into the database. If you are feeling frisky you can start editing MOF files. Otherwise, you can connect to a computer from the MEMCM console and select the new WMI class. I recommend option #2.</p>
 <p>Pop open the &lsquo;Default Settings&rsquo; policy, and navigate to the &lsquo;Hardware Inventory&rsquo; section. Now click that thingy I have highlighted below (<strong>Set Classes</strong>&mldr;).</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=CustomHINV-Depro-SetClasses.png target=_blank>
+<img src=CustomHINV-Depro-SetClasses.png alt>
+</a>
+</figure>
+</div> </p>
 <p>And from there:</p>
 <ol>
 <li>Click <strong>Add</strong></li>
@@ -187,15 +199,39 @@ DeprovisionedApp = $App
 <li>Specify credentials if required</li>
 <li>Click <strong>Connect</strong></li>
 </ol>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=CustomHINV-Depro-AddHinvClass.png target=_blank>
+<img src=CustomHINV-Depro-AddHinvClass.png alt>
+</a>
+</figure>
+</div> </p>
 <p>If you didn&rsquo;t forget your password, a wonderful list of WMI classes under the specified namespace should appear. Check the box, click edit if you feel like poking around, and click ok!</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=CustomHINV-Depro-AddHinvClass2.png target=_blank>
+<img src=CustomHINV-Depro-AddHinvClass2.png alt>
+</a>
+</figure>
+</div> </p>
 <h4 id=step-4---act-based-on-data>Step 4 - ACT BA<strong>SED ON DATA!</strong></h4>
 <p>This bit will have to wait for another post! There is some fun stuff we can do with the data we are now collecting. The next post should spark some ideas for people, I hope. But, let&rsquo;s still take a look at the data we have now.</p>
 <p>In it&rsquo;s simplest form, we can query the MEMCM database as below.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=CustomHINV-BasicDB.png target=_blank>
+<img src=CustomHINV-BasicDB.png alt>
+</a>
+</figure>
+</div> </p>
 <p>If we desire a little more insight, the query can be adjusted to show counts.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=CustomHINV-CountDB.png target=_blank>
+<img src=CustomHINV-CountDB.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Join us next time, when decisions, and actions are made with our new found data!</p>
 <p><a href=https://twitter.com/CodyMathis123>@CodyMathis123</a></p>
 </div>
@@ -216,7 +252,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

@@ -8,18 +8,18 @@
 <meta name=description content="A community blog and subsidiary of WinAdmins.io">
 <link rel="shortcut icon" href=/img/favicon.ico>
 <title>Managing Multiple Office 365 Deployments with ConfigMgr-SysManSquad | Systems Management Squad</title>
-<link rel=canonical href=/2020/02/25/managing-multiple-office-365-deployments-with-configmgr/>
+<link rel=canonical href=/2021/02/25/managing-multiple-office-365-deployments-with-configmgr/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Managing Multiple Office 365 Deployments with ConfigMgr">
 <meta name=twitter:description content="At the client I&rsquo;m currently working for, we have FIVE different deployments of Office 365 Client within Microsoft Enterprise Configuration Manager. The business decided that they only wanted users to have exactly what was needed. Essentially, this is the legacy approach to Office deployment in the MSI days where you could fully customise which components were installed and was easy to add bits back in at a later date.
 These are the options they wanted:">
@@ -70,7 +70,7 @@ These are the options they wanted:">
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -81,7 +81,7 @@ These are the options they wanted:">
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -116,9 +116,21 @@ These are the options they wanted:</p>
 <p>Then we have two separate deployments for Visio and Project. Despite trying to argue that they&rsquo;ll run in Read Only mode if a license isn&rsquo;t applied to the user, it did not matter and I just did what I was instructed like a good obedient contractor.</p>
 <h2 id=configuration-manager-deployment>Configuration Manager Deployment</h2>
 <p>Using the built-in Office 365 configuration builder, we generated config files for each deployment. Apart from Visio and Project, the config was the same with varying sections.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-11.png target=_blank>
+<img src=image-11.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Visio and Project XML look like this:</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-9.png target=_blank>
+<img src=image-9.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Initially, the detection method used for Standard Office deployment was only looking in the O365 Configuration Registry <code>HKLM:\SOFTWARE\Microsoft\Office\ClickToRun\Configuration</code> for &ldquo;<code>VersionToReport</code>&rdquo; being Greater Than or Equal to 16.x.x.x.</p>
 <p>However, when I came to do the 2nd application, I needed more than the version to detect the type of install - I opted for the values: &ldquo;<code>VersionToReport</code>&rdquo; and &ldquo;<code>O365ProPlusRetail.ExcludedApps</code>&rdquo;.</p>
 <p>So, in order to make each deployment unique, the detection methods had to be adjusted as follows:</p>
@@ -126,19 +138,19 @@ These are the options they wanted:</p>
 </code></pre>
 <p>And <br>
 LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\O365ProPlusRetail.ExcludedApps Equals access,groove,onenote. </p>
-<pre><code>&lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/02/image.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;515&quot; height=&quot;539&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/02/image.png&quot; alt=&quot;&quot; class=&quot;wp-image-783&quot; srcset=&quot;https:/wp-content/uploads/2020/02/image.png 515w, https:/wp-content/uploads/2020/02/image-287x300.png 287w, https:/wp-content/uploads/2020/02/image-100x105.png 100w&quot; sizes=&quot;(max-width: 515px) 100vw, 515px&quot; /&gt;&lt;/a&gt;&lt;/figure&gt;
+<pre><code>[![](image.png)](image.png)&lt;/figure&gt;
 </code></pre>
 <pre><code>&lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\VersionToReport Greater than or equal to 16.0.11929.20606.  
 </code></pre>
 <p>And <br>
 LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\O365ProPlusRetail.ExcludedApps Equals access,groove,lync,onedrive,onenote,outlook,publisher,teams. </p>
-<pre><code>&lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/02/image-1.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;512&quot; height=&quot;538&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/02/image-1.png&quot; alt=&quot;&quot; class=&quot;wp-image-784&quot; srcset=&quot;https:/wp-content/uploads/2020/02/image-1.png 512w, https:/wp-content/uploads/2020/02/image-1-286x300.png 286w, https:/wp-content/uploads/2020/02/image-1-100x105.png 100w&quot; sizes=&quot;(max-width: 512px) 100vw, 512px&quot; /&gt;&lt;/a&gt;&lt;/figure&gt;
+<pre><code>[![](image-1.png)](image-1.png)&lt;/figure&gt;
 </code></pre>
 <pre><code>&lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\VersionToReport Greater than or equal to 16.0.11929.20606.  
 </code></pre>
 <p>And <br>
 LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\O365ProPlusRetail.ExcludedApps Equals groove,onenote. </p>
-<pre><code>&lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/02/image-2.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;514&quot; height=&quot;537&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/02/image-2.png&quot; alt=&quot;&quot; class=&quot;wp-image-785&quot; srcset=&quot;https:/wp-content/uploads/2020/02/image-2.png 514w, https:/wp-content/uploads/2020/02/image-2-287x300.png 287w, https:/wp-content/uploads/2020/02/image-2-100x104.png 100w&quot; sizes=&quot;(max-width: 514px) 100vw, 514px&quot; /&gt;&lt;/a&gt;&lt;/figure&gt;
+<pre><code>[![](image-2.png)](image-2.png)&lt;/figure&gt;
 </code></pre>
 <p><strong>NB</strong>: Visio and Project use a different registry key as they do not appear in <code>O365ProPlusRetail.ExcludedApps</code>.</p>
 <p>This time we have to look in the registry value: <code>ProductReleaseIds</code> if it <strong>contains</strong> <code>VisioProRetail</code> or <code>ProjectProRetail</code> along with the <code>VersionToReport</code>.</p>
@@ -146,13 +158,13 @@ LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\O365ProPlusRetai
 </code></pre>
 <p>And
 LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\ProductReleaseIds Contains ProjectProRetail.</p>
-<pre><code>&lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/02/image-4.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;513&quot; height=&quot;537&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/02/image-4.png&quot; alt=&quot;&quot; class=&quot;wp-image-787&quot; srcset=&quot;https:/wp-content/uploads/2020/02/image-4.png 513w, https:/wp-content/uploads/2020/02/image-4-287x300.png 287w, https:/wp-content/uploads/2020/02/image-4-100x105.png 100w&quot; sizes=&quot;(max-width: 513px) 100vw, 513px&quot; /&gt;&lt;/a&gt;&lt;/figure&gt;
+<pre><code>[![](image-4.png)](image-4.png)&lt;/figure&gt;
 </code></pre>
 <pre><code>&lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\VersionToReport Greater than or equal to 16.0.11328.20368.
 </code></pre>
 <p>And
 LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\ProductReleaseIds Contains ProjectProRetail.</p>
-<pre><code>&lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/02/image-5.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;512&quot; height=&quot;537&quot; src=&quot;https://www.sysmansquad.com/wp-content/uploads/2020/02/image-5.png&quot; alt=&quot;&quot; class=&quot;wp-image-788&quot; srcset=&quot;https:/wp-content/uploads/2020/02/image-5.png 512w, https:/wp-content/uploads/2020/02/image-5-286x300.png 286w, https:/wp-content/uploads/2020/02/image-5-100x105.png 100w&quot; sizes=&quot;(max-width: 512px) 100vw, 512px&quot; /&gt;&lt;/a&gt;&lt;/figure&gt;
+<pre><code>[![](image-5.png)](image-5.png)&lt;/figure&gt;
 </code></pre>
 <p>The standard Office is included in the OSD Task Sequence, so there is no active deployment of this Application.</p>
 <p>The others are deployed to specific collections which computers get added to via AD groups.<br>
@@ -183,7 +195,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

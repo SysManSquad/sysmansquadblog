@@ -10,19 +10,19 @@
 <title>Modern BIOS Management with the Administration Service-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/06/18/modern-bios-management-with-the-administration-service/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Modern BIOS Management with the Administration Service">
 <meta name=twitter:description content="2021-04-27 update: The solution now works over CMG. Please see this post for details.
-If you haven&rsquo;t seen my first blog post about modern driver management, the quick summary is that the solution uses packages created with the Driver Automation Tool and the administration service to retrieve information on these packages and identify the most suitable driver package to apply in a task sequence.
+If you haven&rsquo;t seen my first blog post about modern driver management, the quick summary is that the solution uses packages created with the [Driver Automation Tool][2] and the administration service to retrieve information on these packages and identify the most suitable driver package to apply in a task sequence.
 In this second part, I&rsquo;ll be discussing the changes and improvements done to the existing solution to also dynamically retrieve and filter and apply BIOS updates.">
 </head>
 <body class="home blog">
@@ -71,7 +71,7 @@ In this second part, I&rsquo;ll be discussing the changes and improvements done 
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -82,7 +82,7 @@ In this second part, I&rsquo;ll be discussing the changes and improvements done 
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -96,7 +96,7 @@ In this second part, I&rsquo;ll be discussing the changes and improvements done 
 </div>
 <div class=post-entry>
 <p><strong>2021-04-27 update: The solution now works over CMG. Please see this <a href=https://sysmansquad.com/2021/04/27/updated-modern-driver-bios-management-with-cmg-support/>post</a> for details.</strong></p>
-<p>If you haven&rsquo;t seen my first blog post about <a href=https://www.sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/>modern driver management</a>, the quick summary is that the solution uses packages created with the <a href=https://www.sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/>Driver Automation Tool</a> and the <a href=https://docs.microsoft.com/en-us/mem/configmgr/develop/adminservice/overview>administration service</a> to retrieve information on these packages and identify the most suitable driver package to apply in a task sequence.</p>
+<p>If you haven&rsquo;t seen my first blog post about <a href=https://www.sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/>modern driver management</a>, the quick summary is that the solution uses packages created with the [Driver Automation Tool][2] and the <a href=https://docs.microsoft.com/en-us/mem/configmgr/develop/adminservice/overview>administration service</a> to retrieve information on these packages and identify the most suitable driver package to apply in a task sequence.</p>
 <p>In this second part, I&rsquo;ll be discussing the changes and improvements done to the existing solution to also dynamically retrieve and filter and apply BIOS updates.</p>
 <p>Note: Download link for the task sequence exports is located at the end of the blog post.</p>
 <h3 id=invoke-getpackageidfromadminservice-improvements>Invoke-GetPackageIDFromAdminService improvements</h3>
@@ -109,7 +109,13 @@ In this second part, I&rsquo;ll be discussing the changes and improvements done 
 </ul>
 <p><strong><em>Why do you need the release date of the BIOS?</em></strong><br>
 Good question! The original solution by the Nickolaj Andersen and Maurice Daly of <a href=https://msendpointmgr.com/modern-bios-management/>MSEndPointMgr</a> uses the BIOS release date for Lenovo systems to determine if the BIOS package is an update or not. Now why exactly? I&rsquo;m guessing Lenovo was not very good at keeping some sort of standard naming or versioning for their BIOS versions.</p>
-<p> Example of a Lenovo BIOS package created with the Driver Automation Tool</p>
+<p><div class=image>
+<figure>
+<a href=image-2-1024x584.png target=_blank>
+<img src=image-2-1024x584.png alt>
+</a>
+</figure>
+</div> Example of a Lenovo BIOS package created with the Driver Automation Tool</p>
 <h4 id=bios-filtering>BIOS filtering</h4>
 <p>Now that we have the current BIOS version and release date, we need to evaluate and filter out older BIOS package versions. We only want the script to return a package ID if the package is actually an upgrade for the device.</p>
 <p>For this part, I had to dig into the <a href=https://github.com/MSEndpointMgr/ConfigMgr/blob/master/Operating%20System%20Deployment/BIOS/Invoke-CMDownloadBIOSPackage.ps1>Invoke-CMDownloadBIOSPackage.ps1</a> script and in the script of the <a href=https://github.com/maurice-daly/DriverAutomationTool/blob/master/Content/DriverAutomationTool.ps1>Driver Automation Tool</a> to see how they were filtering and extracting version information for the different vendors. I ended up with the following code to compare BIOS versions.</p>
@@ -181,7 +187,7 @@ $BIOSReleaseDate = [datetime]::ParseExact($CurrentBIOSReleaseDate,&ldquo;yyyyMMd
 foreach($package in $Packages){
 If($package.Description -match &ldquo;(Models included:(.<em>)) (Release Date:(.</em>))"){
 Try{
-$ReleaseDate = [datetime]::ParseExact($matches<a href=https://www.sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/>2</a>,&ldquo;yyyyMMdd&rdquo;,$null)
+$ReleaseDate = [datetime]::ParseExact($matches[2],&ldquo;yyyyMMdd&rdquo;,$null)
 If($ReleaseDate -gt $BIOSReleaseDate){
 [void]$ApplicableBIOSPackages.Add($package)
 }
@@ -191,17 +197,41 @@ Add-TextToCMLog $LogFile &ldquo;Failed to parse <code>"$matches[2]</code>&rdquo;
 }
 }
 }</p>
-<p> Example of the log file created when querying for a BIOS package</p>
+<p><div class=image>
+<figure>
+<a href=image-6-1024x545.png target=_blank>
+<img src=image-6-1024x545.png alt>
+</a>
+</figure>
+</div> Example of the log file created when querying for a BIOS package</p>
 <p>With these enhancements done on the script, we are now ready to use a task sequence to dynamically apply BIOS packages.</p>
 <h3 id=task-sequences-modifications>Task Sequences modifications</h3>
 <h4 id=modify-the-query-adminservice-for-packageid-ts>Modify the &ldquo;Query AdminService for PackageID&rdquo; TS</h4>
 <p>We need to provide the current BIOS version and release date to the script in the task sequence.</p>
-<p> New TS variables used for BIOS packages</p>
+<p><div class=image>
+<figure>
+<a href=image-7-1024x743.png target=_blank>
+<img src=image-7-1024x743.png alt>
+</a>
+</figure>
+</div> New TS variables used for BIOS packages</p>
 <p>Then we pass this information as a parameter to the Invoke-GetPackageIDFromAdminService script.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-8-1024x655.png target=_blank>
+<img src=image-8-1024x655.png alt>
+</a>
+</figure>
+</div> </p>
 <h4 id=create-the-apply-bios-package-task-sequence>Create the &ldquo;Apply BIOS package&rdquo; task sequence</h4>
 <p>The task sequence is similar to the one I had created for drivers. For applying the actual BIOS update, I&rsquo;ve reused the scripts by the guys at <a href=https://msendpointmgr.com/>MSEndpointMgr</a>.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image-5-1024x820.png target=_blank>
+<img src=image-5-1024x820.png alt>
+</a>
+</figure>
+</div> </p>
 <h4 id=regarding-hp-bios-updates>Regarding HP BIOS updates</h4>
 <p>If your HP devices have a BIOS password set (I hope you do), then you&rsquo;ll need to specify 2 more variables:</p>
 <ul>
@@ -212,7 +242,7 @@ Add-TextToCMLog $LogFile &ldquo;Failed to parse <code>"$matches[2]</code>&rdquo;
 <p>I also did not like the fact that the HP BIOS utility writes a log file in whatever directory it&rsquo;s located in with no options to specify a different log path, so I added a step to move the log file to _SMSTSLogPath.</p>
 <h3 id=download>Download</h3>
 <p><a href=https://github.com/CharlesNRU/mdm-adminservice/raw/master/MDM-TS.zip>Direct link to the task sequences</a></p>
-<p><a href=https://github.com/CharlesNRU/mdm-adminservice>Link to the github repository</a></p>
+<p><a href=https://github.com/CharlesNRU/mdm-adminservice/raw/master/MDM-TS.zip>Link to the github repository</a></p>
 <p>As always, feel free to contact me if you have any suggestions for improvements.</p>
 <p>Thank you.</p>
 </div>
@@ -226,7 +256,7 @@ Add-TextToCMLog $LogFile &ldquo;Failed to parse <code>"$matches[2]</code>&rdquo;
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

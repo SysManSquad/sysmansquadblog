@@ -10,16 +10,16 @@
 <title>Use Azure Policy to configure Boot Diagnostics Settings-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/07/12/use-azure-policy-to-configure-boot-diagnostics-settings/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Use Azure Policy to configure Boot Diagnostics Settings">
 <meta name=twitter:description content="I found several posts about configuring Diagnostic Settings on VMs, but none that specified or included boot diagnostics.
 With this Azure Policy you can automatically enable Boot Diagnostics and apply a storage account to it. This is also a great base if you want to start testing out your own policies.">
@@ -70,7 +70,7 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -81,7 +81,7 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -97,9 +97,9 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
 <p>I found several posts about configuring Diagnostic Settings on VMs, but none that specified or included <strong>boot diagnostics</strong>.</p>
 <p>With this Azure Policy you can automatically enable Boot Diagnostics and apply a storage account to it. This is also a great base if you want to start testing out your own policies.</p>
 <pre><code>      &lt;li class=&quot;uagb-toc__list&quot;&gt;
-        &lt;a href=&quot;#4-create-remediation-task&quot;&gt;4. Create Remediation Task&lt;/a&gt;&lt;li class=&quot;uagb-toc__list&quot;&gt;
-          &lt;a href=&quot;#5-be-patient-and-enjoy&quot;&gt;5. Be Patient and Enjoy&lt;/a&gt;&lt;li class=&quot;uagb-toc__list&quot;&gt;
-            &lt;a href=&quot;#6-optional-export-to-github&quot;&gt;6. Optional: Export to GitHub&lt;/a&gt;
+        [4. Create Remediation Task](#4-create-remediation-task)&lt;li class=&quot;uagb-toc__list&quot;&gt;
+          [5. Be Patient and Enjoy](#5-be-patient-and-enjoy)&lt;li class=&quot;uagb-toc__list&quot;&gt;
+            [6. Optional: Export to GitHub](#6-optional-export-to-github)
           &lt;/li&gt;&lt;/ul&gt;&lt;/ol&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; 
           &lt;div class=&quot;wp-block-group&quot;&gt;
             &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
@@ -141,7 +141,7 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
           &lt;/h2&gt;
           
           &lt;p&gt;
-            First we will need to Create a Custom Definition. To start with head to Portal.Azure.com &gt; &lt;a href=&quot;https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Definitions&quot;&gt;Azure Policy | Definitions&lt;/a&gt;.
+            First we will need to Create a Custom Definition. To start with head to Portal.Azure.com &gt; [Azure Policy | Definitions](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Definitions).
           &lt;/p&gt;
           
           &lt;p&gt;
@@ -151,7 +151,7 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
             From here, we will need to create a new Policy Definition
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          &lt;img src=&quot;https://i.imgur.com/7ANVOqt.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+          ![](https://i.imgur.com/7ANVOqt.png)&lt;/figure&gt; &lt;p&gt;
             Fill in several fields
           &lt;/p&gt;
           
@@ -167,12 +167,12 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
             &lt;/li&gt;
           &lt;/ul&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          &lt;img src=&quot;https://i.imgur.com/BRJEnNY.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
-            For the Policy Rule Definition, you should be able to copy over this JSON below, or use &lt;a href=&quot;https://gist.github.com/PsychoData/27c5028a5a78237f9910d4f652f6b269#file-enable_boot_diagnostics-json&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;this JSON&lt;/a&gt;. Note: Later on, you can configure this to be deployed from a GitHub repo directly, though GitHub actions, but we will talk about that in a later section.
+          ![](https://i.imgur.com/BRJEnNY.png)&lt;/figure&gt; &lt;p&gt;
+            For the Policy Rule Definition, you should be able to copy over this JSON below, or use [this JSON](https://gist.github.com/PsychoData/27c5028a5a78237f9910d4f652f6b269#file-enable_boot_diagnostics-json). Note: Later on, you can configure this to be deployed from a GitHub repo directly, though GitHub actions, but we will talk about that in a later section.
           &lt;/p&gt;
           
           &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;javascript&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/json&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;u003ca href=u0022http://Enable_Boot_Diagnostics.jsonu0022 target=u0022_blanku0022 rel=u0022noreferrer noopeneru0022u003eEnable_Boot_Diagnostics.jsonu003c/au003e&amp;quot;,&amp;quot;align&amp;quot;:&amp;quot;wide&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;JSON&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;json&amp;quot;}&quot;&gt;{
+            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;javascript&quot;,&quot;mime&quot;:&quot;application/json&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;fileName&quot;:&quot;u003ca href=u0022http://Enable_Boot_Diagnostics.jsonu0022 target=u0022_blanku0022 rel=u0022noreferrer noopeneru0022u003eEnable_Boot_Diagnostics.jsonu003c/au003e&quot;,&quot;align&quot;:&quot;wide&quot;,&quot;language&quot;:&quot;JSON&quot;,&quot;modeName&quot;:&quot;json&quot;}&quot;&gt;{
 </code></pre>
 <p>&ldquo;mode&rdquo;: &ldquo;All&rdquo;,
 &ldquo;policyRule&rdquo;: {
@@ -244,7 +244,7 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
             By default, the JSON policy provided will ignore any resources with the tag &lt;strong&gt;IgnoreBootDiagnostics &lt;/strong&gt;, but you can also add &lt;strong&gt;Exclusions&lt;/strong&gt; here, as well.
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          &lt;img src=&quot;https://i.imgur.com/1lJbBMM.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+          ![](https://i.imgur.com/1lJbBMM.png)&lt;/figure&gt; &lt;p&gt;
             For the parameter, you need to fill in the URL to a Azure Blob storage service.
           &lt;/p&gt;
           
@@ -253,10 +253,10 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
           &lt;/h3&gt;
           
           &lt;p&gt;
-            My example is &lt;a href=&quot;https://YourBlobStorage.blob.core.windows.net&quot;&gt;https://YourBlobStorage.blob.core.windows.net&lt;/a&gt; , but you can find the endpoint for your Storage Account by opening your &lt;a href=&quot;https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/Microsoft.Storage%2FStorageAccounts&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Storage Accounts&lt;/a&gt; &gt; Select or Create Relevant Storage account &gt; Settings &gt; Endpoints
+            My example is [https://YourBlobStorage.blob.core.windows.net](https://YourBlobStorage.blob.core.windows.net) , but you can find the endpoint for your Storage Account by opening your [Storage Accounts](https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/Microsoft.Storage%2FStorageAccounts) &gt; Select or Create Relevant Storage account &gt; Settings &gt; Endpoints
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          &lt;img src=&quot;https://i.imgur.com/XIQQYC4.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
+          ![](https://i.imgur.com/XIQQYC4.png)&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
             &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;4.&lt;/span&gt; Create Remediation Task
           &lt;/h2&gt;
           
@@ -272,7 +272,7 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
             Without the Remediation Task, the Policy will just Report Compliance or failure, but you can always start with no Remediation and then add it back later.
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          &lt;img src=&quot;https://i.imgur.com/4Ndafmo.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
+          ![](https://i.imgur.com/4Ndafmo.png)&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
             &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;5.&lt;/span&gt; Be Patient and Enjoy
           &lt;/h2&gt;
           
@@ -285,14 +285,14 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
           &lt;/p&gt;
           
           &lt;p&gt;
-            You can check your Remediation status by going to &lt;a href=&quot;https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Policy Assignments &lt;/a&gt;&gt; Select your policy name &gt; Remediation tab
+            You can check your Remediation status by going to [Policy Assignments ](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments)&gt; Select your policy name &gt; Remediation tab
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          &lt;img src=&quot;https://i.imgur.com/JtkoH2i.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+          ![](https://i.imgur.com/JtkoH2i.png)&lt;/figure&gt; &lt;p&gt;
             To see the details, use the three-dots menu on the right to View remediation task
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          &lt;img src=&quot;https://i.imgur.com/qESeb98.png&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
+          ![](https://i.imgur.com/qESeb98.png)&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
             &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;6.&lt;/span&gt; Optional: Export to GitHub
           &lt;/h2&gt;
           
@@ -301,14 +301,14 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
           &lt;/p&gt;
           
           &lt;p&gt;
-            Azure Policies has this built in, including Automated Deployment from GitHub with GitHub Actions! You can read more about that &lt;a href=&quot;https://docs.microsoft.com/azure/governance/policy/tutorials/policy-as-code-github?WT.mc_id=Portal-AzureTfsExtension#export-azure-policy-objects-from-the-azure-portal&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;here&lt;/a&gt;, but the basic process is shown below.
+            Azure Policies has this built in, including Automated Deployment from GitHub with GitHub Actions! You can read more about that [here](https://docs.microsoft.com/azure/governance/policy/tutorials/policy-as-code-github?WT.mc_id=Portal-AzureTfsExtension#export-azure-policy-objects-from-the-azure-portal), but the basic process is shown below.
           &lt;/p&gt;
           
           &lt;p&gt;
-            Open &lt;a href=&quot;https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Azure Policy Assignments&lt;/a&gt; &gt; Select your assignment &gt; &lt;strong&gt;View Definition&lt;/strong&gt; button near the top &gt; &lt;strong&gt;Export Definition&lt;/strong&gt; button
+            Open [Azure Policy Assignments](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments) &gt; Select your assignment &gt; &lt;strong&gt;View Definition&lt;/strong&gt; button near the top &gt; &lt;strong&gt;Export Definition&lt;/strong&gt; button
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          &lt;img src=&quot;https://i.imgur.com/KGmXwlg.gif&quot; alt=&quot;&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+          ![](https://i.imgur.com/KGmXwlg.gif)&lt;/figure&gt; &lt;p&gt;
             From there, you will need to authorize a connection to a GitHub account with rights to the Account/Repo you want to store the policy in.
           &lt;/p&gt;
           
@@ -317,12 +317,13 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
           &lt;/p&gt;
           
           &lt;p&gt;
-            If you aren't familiar with &lt;a href=&quot;https://github.com/features/actions&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;GitHub Actions&lt;/a&gt;, the export process will create a &lt;strong&gt;.github/workflows/manage_azure_policy_xxxxxx.yml&lt;/strong&gt; that will outline the Workflow and use secrets to securely connect back to Azure.
+            If you aren't familiar with [GitHub Actions](https://github.com/features/actions), the export process will create a &lt;strong&gt;.github/workflows/manage_azure_policy_xxxxxx.yml&lt;/strong&gt; that will outline the Workflow and use secrets to securely connect back to Azure.
           &lt;/p&gt;
           
           &lt;p&gt;
             To make future changes, commit them to the Repository and the GitHub Action will try to build the policy, apply it, and let you know if it was able to apply successfully.
-          &lt;/p&gt;</code></pre>
+          &lt;/p&gt;
+</code></pre>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
@@ -341,7 +342,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

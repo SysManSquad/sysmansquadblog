@@ -10,16 +10,16 @@
 <title>Intune/Autopilot Proactive Remediation-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/07/07/intune-autopilot-proactive-remediation/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Intune/Autopilot Proactive Remediation">
 <meta name=twitter:description content="What is Proactive Remediation? Proactive remediations are a pair of scripts used to detect and remediate a problem on a machine. The first script runs a query on your endpoints that returns an exit code of success or failure. We call this first script the detection script. On a successful exit code it is reported as &ldquo;Without issue&rdquo; in the Intune portal and nothing else is executed. On a failed exit code the second script is run which is called a remediation script.">
 </head>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -95,11 +95,17 @@
 <div class=post-entry>
 <h3 id=what-is-proactive-remediation>What is Proactive Remediation?</h3>
 <p>Proactive remediations are a pair of scripts used to detect and remediate a problem on a machine. The first script runs a query on your endpoints that returns an exit code of success or failure. We call this first script the detection script. On a successful exit code it is reported as &ldquo;Without issue&rdquo; in the Intune portal and nothing else is executed. On a failed exit code the second script is run which is called a remediation script. This script will &ldquo;fix&rdquo; in theory whatever you detected in your first script so the next time the detection script is run it returns successful. In the event the Intune portal reports a &ldquo;Failed&rdquo; status you have some detection or remediation logic failing. We will go over examples of both detection and remediation scripts to help alleviate that.</p>
-<p> Example of a proactive remediation graph in the Intune Portal</p>
+<p><div class=image>
+<figure>
+<a href=msedge_OGHmAQhYGe-1024x448.png target=_blank>
+<img src=msedge_OGHmAQhYGe-1024x448.png alt>
+</a>
+</figure>
+</div> Example of a proactive remediation graph in the Intune Portal</p>
 <p>If you&rsquo;re familiar with SCCM/MECM/MEMCM/SMS or whatever acronym you want to give Configuration Manager, proactive remediation is in essence the equivalent of configuration items and baselines.</p>
 <h3 id=how-do-we-get-started>How do we get started?</h3>
 <ol>
-<li>Head over to the Microsoft Endpoint Manager admin center</li>
+<li>Head over to the <a href=https://endpoint.microsoft.com/>Microsoft Endpoint Manager admin center</a></li>
 <li>Select <strong>Reports</strong> under Favorites</li>
 <li>Select <strong>Endpoint Analytics</strong> under Analytics</li>
 <li>Select <strong>Proactive remediations</strong></li>
@@ -124,6 +130,24 @@ exit 1
 <li>Copy your Detection and Remediation scripts and add them to the respective field</li>
 <li>Some scripts may need to be run using the &ldquo;Run this script using the logged on credentials&rdquo; option, or &ldquo;Run script in 64 bit PowerShell&rdquo;, depending on how your detection and remediation works. In our example, neither need to be enabled.</li>
 </ol>
+<p><div class=image>
+<figure>
+<a href=msedge_Pm7pXyDNrT.png target=_blank>
+<img src=msedge_Pm7pXyDNrT.png alt>
+</a>
+</figure>
+</div>
+6. Select <strong>Next</strong>
+7. Select your assignment group
+8. By default it will schedule to run daily, you can edit this to be Once, Hourly, or Daily<div class=image>
+<figure>
+<a href=msedge_dZOZmuqnCB.png target=_blank>
+<img src=msedge_dZOZmuqnCB.png alt>
+</a>
+</figure>
+</div>
+9. Select <strong>Next</strong>
+10. Review your settings and then hit <strong>Create</strong></p>
 <p>Now in proper Intune fashion wait a few hours and your devices should start reporting.</p>
 <h3 id=run-into-a-failure>Run into a failure?</h3>
 <p>In the event you have failures, you can see why they failed by doing the following:</p>
@@ -132,11 +156,17 @@ exit 1
 <li>Select <strong>Device Status</strong></li>
 <li>Select <strong>Columns</strong></li>
 <li>Turn on all the options and hit <strong>Apply</strong>. This will show you the output of the scripts which should include the error code and exception message thanks to our try-catch in the detection and remediation scripts<br>
-</li>
+<div class=image>
+<figure>
+<a href=msedge_UJCXFijoRN.png target=_blank>
+<img src=msedge_UJCXFijoRN.png alt>
+</a>
+</figure>
+</div></li>
 <li>Check the respective field for where the error occurred and you should be able to diagnose why the failure happened</li>
 </ol>
 <h3 id=other-issues>Other issues?</h3>
-<p>If you run into any other issues or have questions about anything Intune head over to the WinAdmins discord community and go to the #Intune channel.</p>
+<p>If you run into any other issues or have questions about anything Intune head over to the <a href=http://aka.ms/winadmins>WinAdmins discord community</a> and go to the #Intune channel.</p>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
@@ -155,7 +185,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

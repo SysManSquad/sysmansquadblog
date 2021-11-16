@@ -10,18 +10,18 @@
 <title>Create a small discord.py bot to deploy a server-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/02/13/create-a-small-discord-py-bot-to-deploy-a-server/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Create a small discord.py bot to deploy a server">
-<meta name=twitter:description content="I volunteer to help run Southwest CCDCevery year, and had a need to deploy all of the communication infrastructure in a hurry. With Covid Times™ upon us, we needed to move a competition that usually has at least one round in person to all-virtual. Discord was the obvious choice for how to do that successfully - it is targeted to communities of people, and has moderation tools. My discord server needed to have a few things:">
+<meta name=twitter:description content="I volunteer to help run Southwest CCDC every year, and had a need to deploy all of the communication infrastructure in a hurry. With Covid Times™ upon us, we needed to move a competition that usually has at least one round in person to all-virtual. Discord was the obvious choice for how to do that successfully - it is targeted to communities of people, and has moderation tools. My discord server needed to have a few things:">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -93,7 +93,7 @@
 <span class=post-date>February 14, 2021</span>
 </div>
 <div class=post-entry>
-<p>I volunteer to help run Southwest CCDC every year, and had a need to deploy all of the communication infrastructure in a hurry. With Covid Times™ upon us, we needed to move a competition that usually has at least one round in person to all-virtual. Discord was the obvious choice for how to do that successfully - it is targeted to communities of people, and has moderation tools. My discord server needed to have a few things:</p>
+<p>I volunteer to help run <a href=https://southwestccdc.com/>Southwest CCDC</a> every year, and had a need to deploy all of the communication infrastructure in a hurry. With Covid Times™ upon us, we needed to move a competition that usually has at least one round in person to all-virtual. Discord was the obvious choice for how to do that successfully - it is targeted to communities of people, and has moderation tools. My discord server needed to have a few things:</p>
 <ul>
 <li>A few general channels for normal Discord business - announcements, general chatter, help requests etc.</li>
 <li>Private channels for each competing team</li>
@@ -101,14 +101,14 @@
 </ul>
 <p>Given that the smallest round will usually have 8 teams and the largest round varies - the only answer to make it correctly, efficiently, and correctly seemed to be automation. Clicking around in a GUI isn&rsquo;t fast nor is it easy to track what&rsquo;s been done and what is left. Discord&rsquo;s settings screens are also always full-screen instead of being something smaller you can drag around.</p>
 <h2 id=creating-a-discord-bot>Creating a Discord bot</h2>
-<p>While my preferred language is PowerShell, sometimes there&rsquo;s no point re-inventing the wheel and it&rsquo;s worth it to get your hands dirty in a second language. In this case the best/most well supported option seemed to be python, in the form of Discord.py.</p>
-<p>The first step is to head to Discord&rsquo;s developer portal and create an application. Here&rsquo;s where you set the icon your bot will use, along with its name also a few extra bits.</p>
-<p>Creating an application is not enough to give your bot a presence on a server, so you also need to move down to the Bot tab, and also add an icon and username there. While you&rsquo;re there you&rsquo;ll have to turn on the &lsquo;Server Members Intent&rsquo; toggle. This is for Reasons. The short story is that Discord feels that bots shouldn&rsquo;t be able to read the members list merely by expressing that intent in code. Other intents don&rsquo;t need this, and can be requested in your bot code.</p>
+<p>While my preferred language is PowerShell, sometimes there&rsquo;s no point re-inventing the wheel and it&rsquo;s worth it to get your hands dirty in a second language. In this case the best/most well supported option seemed to be python, in the form of <a href=https://discordpy.readthedocs.io/en/latest/index.html>Discord.py</a>.</p>
+<p>The first step is to head to Discord&rsquo;s <a href=https://discord.com/developers/applications>developer portal</a> and create an application. Here&rsquo;s where you set the icon your bot will use, along with its name also a few extra bits.</p>
+<p>Creating an application is not enough to give your bot a presence on a server, so you also need to move down to the Bot tab, and also add an icon and username there. While you&rsquo;re there you&rsquo;ll have to turn on the &lsquo;Server Members Intent&rsquo; toggle. This is for <a href=https://discordpy.readthedocs.io/en/latest/intents.html>Reasons</a>. The short story is that Discord feels that bots shouldn&rsquo;t be able to read the members list merely by expressing that intent in code. Other intents don&rsquo;t need this, and can be requested in your bot code.</p>
 <p>I did my development on an empty test server, so I switched to the OAuth2 tab, and selected the &lsquo;bot&rsquo; scope, set the &lsquo;Administrator&rsquo; permission, and copied/pasted the URL provided to a new tab to authorize my bot to join the test server. Yes, administrator is a dangerous permission to grant for a bot, but given that it&rsquo;s my code, I am fine with it in this case. Also some role-managing stuff didn&rsquo;t work particularly well without it.</p>
 <h2 id=writing-the-code>Writing the code</h2>
 <p>Discord.py has a few <a href=https://github.com/Rapptz/discord.py/tree/master/examples>examples</a> you can start from.</p>
 <h3 id=python-setup>Python Setup</h3>
-<p>Because I have been exposed to Python before, I was already aware that python projects should make use of virtual environments. I created a folder for my code, initialized git in the folder to help me keep track of code revisions and began to write.</p>
+<p>Because I have been exposed to Python before, I was already aware that python projects should make use of <a href=https://docs.python.org/3/tutorial/venv.html>virtual environments</a>. I created a folder for my code, initialized <a href=https://www.atlassian.com/git/tutorials>git</a> in the folder to help me keep track of code revisions and began to write.</p>
 <p>I created my virtual environment as a sub-folder. I couldn&rsquo;t possibly say whether it&rsquo;s good practice, but it worked. The virtual environment was in a subfolder called &lsquo;venv&rsquo; so I added it to my <code>.gitignore</code> file. You may find <a href=https://github.com/pyenv/pyenv>pyenv</a> useful.</p>
 <p>Having activated my virtual environment, I followed the instructions to use <code>pip</code> to add the required modules for Discord.py, and added a few of my own. I wanted to avoid storing credentials in a git repository, and the best way to do that is to hand them off to a vault of some kind. A quick google search found me a module called <code>keyring</code>. I also wanted to make sure that as I typed the token to save it, it wouldn&rsquo;t echo to the screen, so that led me to another module called <code>getpass</code>. Seems simple enough so far - they all seem to do what they say they will. The bot&rsquo;s name is MR_FLOOFY.</p>
 <p>service_id=&lsquo;MR_FLOOFY&rsquo;
@@ -133,7 +133,7 @@ if message.content.startswith('!exit'):
     print('Exit command received')
     await client.close()&lt;/pre&gt;
 </code></pre>
-<p>CCDC games are run by several teams. Given the audience of this Discord server and it&rsquo;s purpose, I have to code for 5 separate roles.</p>
+<p>CCDC games are run by <a href=https://www.nationalccdc.org/index.php/competition/competitors/rules>several teams</a>. Given the audience of this Discord server and it&rsquo;s purpose, I have to code for 5 separate roles.</p>
 <ul>
 <li>Gold team - organizers of the competition</li>
 <li>Black team - infrastructure for the game, including the game machines themselves</li>
@@ -142,7 +142,7 @@ if message.content.startswith('!exit'):
 <li>A role for each team</li>
 </ul>
 <p>I originally had all of this bundled up in one command. It was <em>really</em> fun to issue one command and watch an entire discord server populate, but like all good things - it got too complicated and debugging turned into a pain.</p>
-<p>This next stanza sets up the non-competition roles, along with what color they should appear as, whether the role members should be listed apart from all other server members ('<em>hoisted</em>') , server-wide permissions, etc.</p>
+<p>This next stanza sets up the non-competition roles, along with what color they should appear as, whether the role members should be listed apart from all other server members ('<em>hoisted</em>') , server-wide <a href=https://discordapi.com/permissions.html>permissions</a>, etc.</p>
 <p>Now, we need to create a category of channels for staff using these roles, along with customized permissions for channels inside that category.</p>
 <p>We begin by getting the role objects we created earlier. We then create permission override objects we&rsquo;ll use when we create the channels. Following that, we create the category, get an object representing it, and create channels using the category object and the permission overrides.</p>
 <pre><code>    role_black=discord.utils.get(guild.roles, name=&quot;Black Team&quot;)
@@ -249,7 +249,7 @@ if message.content.startswith('!exit'):
 <p>client.run(TOKEN)
 </p>
 <h2 id=conclusion>Conclusion</h2>
-<p>It has been an interesting experience building this bot, and as simple as it is, I&rsquo;m very proud of it. I look forward to extending or replacing it with a proper PowerShell bot, perhaps PoshBot. I deeply hate the experience of trying to debug python, especially in the context of a bot like this.</p>
+<p>It has been an interesting experience building this bot, and as simple as it is, I&rsquo;m very proud of it. I look forward to extending or replacing it with a proper PowerShell bot, perhaps <a href=https://github.com/poshbotio/PoshBot>PoshBot</a>. I deeply hate the experience of trying to debug python, especially in the context of a bot like this.</p>
 <p>I hope it&rsquo;s been instructive to you.</p>
 <p>I want to thank my friend <a href=https://twitter.com/duplico>George</a> for both his expertise and patience as I struggled through some of the nastier parts of getting used to Python.</p>
 <p>I also want to thank the fine folks at <a href=https://pixabay.com/vectors/eagle-snake-kill-bird-wings-claws-46636/>Pixabay</a> for this beautiful header image that expresses my feelings about python.</p>
@@ -264,7 +264,7 @@ if message.content.startswith('!exit'):
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

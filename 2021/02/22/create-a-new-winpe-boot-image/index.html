@@ -10,18 +10,18 @@
 <title>Create a new WinPE boot image-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/02/22/create-a-new-winpe-boot-image/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Create a new WinPE boot image">
-<meta name=twitter:description content="<h2> Introduction </h2> <p> In this post I'll show you how you can create a new boot image in ConfigMgr. </p> <p> There's plenty of good content out there already on this, but I was interested to write this because I didn't see many PowerShell examples out there until I came across Michael Niehaus' post on <a href=&#34;https://oofhours.com/2021/01/17/build-your-own-windows-pe-image/&#34; target=&#34;_blank&#34; rel=&#34;noreferrer noopener&#34;>Build your own Windows PE image</a>. A fantastic post, highly recommend reading it.">
+<meta name=twitter:description content="<h2> Introduction </h2> <p> In this post I'll show you how you can create a new boot image in ConfigMgr. </p> <p> There's plenty of good content out there already on this, but I was interested to write this because I didn't see many PowerShell examples out there until I came across Michael Niehaus' post on [Build your own Windows PE image](https://oofhours.com/2021/01/17/build-your-own-windows-pe-image/). A fantastic post, highly recommend reading it. Michael provided a useful script at the end of this post in a .">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -102,7 +102,7 @@
         &lt;/p&gt;
         
         &lt;p&gt;
-          There's plenty of good content out there already on this, but I was interested to write this because I didn't see many PowerShell examples out there until I came across Michael Niehaus' post on &lt;a href=&quot;https://oofhours.com/2021/01/17/build-your-own-windows-pe-image/&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Build your own Windows PE image&lt;/a&gt;. A fantastic post, highly recommend reading it. Michael provided a useful script at the end of this post in a .zip file. I felt it could do with some improvements.
+          There's plenty of good content out there already on this, but I was interested to write this because I didn't see many PowerShell examples out there until I came across Michael Niehaus' post on [Build your own Windows PE image](https://oofhours.com/2021/01/17/build-your-own-windows-pe-image/). A fantastic post, highly recommend reading it. Michael provided a useful script at the end of this post in a .zip file. I felt it could do with some improvements.
         &lt;/p&gt;
         
         &lt;p&gt;
@@ -135,7 +135,7 @@
           &lt;/li&gt;
         &lt;/ol&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
         
-        &lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;468&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/02/createnewbootimageconfigmgr-1-1024x468.png&quot; alt=&quot;&quot; class=&quot;wp-image-2436&quot; srcset=&quot;https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-1-1024x468.png 1024w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-1-300x137.png 300w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-1-768x351.png 768w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-1-100x46.png 100w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-1-855x391.png 855w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-1-1234x564.png 1234w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-1.png 1238w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;figcaption&gt;Multiple WinPE.wim files in the ADK installation directory&lt;/figcaption&gt;&lt;/figure&gt; &lt;ol start=&quot;3&quot;&gt;
+        ![](createnewbootimageconfigmgr-1-1024x468.png)&lt;figcaption&gt;Multiple WinPE.wim files in the ADK installation directory&lt;/figcaption&gt;&lt;/figure&gt; &lt;ol start=&quot;3&quot;&gt;
           &lt;li&gt;
             Let's run with the most common requirement here and copy &lt;code&gt;amd64\en-us\winpe.wim&lt;/code&gt; to any destination directory you need
           &lt;/li&gt;
@@ -147,7 +147,7 @@
           &lt;/li&gt;
         &lt;/ol&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
         
-        &lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2021/02/createnewbootimageconfigmgr-2.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;560&quot; height=&quot;346&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/02/createnewbootimageconfigmgr-2.png&quot; alt=&quot;&quot; class=&quot;wp-image-2438&quot; srcset=&quot;https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-2.png 560w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-2-300x185.png 300w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-2-100x62.png 100w&quot; sizes=&quot;(max-width: 560px) 100vw, 560px&quot; /&gt;&lt;/a&gt;&lt;figcaption&gt;Add Boot Image in ConfigMgr console&lt;/figcaption&gt;&lt;/figure&gt; &lt;ol start=&quot;6&quot;&gt;
+        [![](createnewbootimageconfigmgr-2.png)](createnewbootimageconfigmgr-2.png)&lt;figcaption&gt;Add Boot Image in ConfigMgr console&lt;/figcaption&gt;&lt;/figure&gt; &lt;ol start=&quot;6&quot;&gt;
           &lt;li&gt;
             Go through the wizard to browse out and select our new boot image &lt;code&gt;WinPE-amd64-2021-02-13.wim&lt;/code&gt;
           &lt;/li&gt;
@@ -160,13 +160,13 @@
           For each change you make to this boot image, ConfigMgr will always start with a fresh copy from the original - the one without the PackageID in the file name. &lt;strong&gt;Don't delete it&lt;/strong&gt;!Otherwise you'll find yourself making a new one, again, when you come to update drivers or add new components later.
         &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
         
-        &lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2021/02/createnewbootimageconfigmgr-3.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;358&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/02/createnewbootimageconfigmgr-3-1024x358.png&quot; alt=&quot;&quot; class=&quot;wp-image-2441&quot; srcset=&quot;https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-3-1024x358.png 1024w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-3-300x105.png 300w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-3-768x268.png 768w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-3-100x35.png 100w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-3-855x299.png 855w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-3.png 1216w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/a&gt;&lt;figcaption&gt;Boot image on disk and in console after imported&lt;/figcaption&gt;&lt;/figure&gt; &lt;ol start=&quot;8&quot;&gt;
+        [![](createnewbootimageconfigmgr-3-1024x358.png)](createnewbootimageconfigmgr-3.png)&lt;figcaption&gt;Boot image on disk and in console after imported&lt;/figcaption&gt;&lt;/figure&gt; &lt;ol start=&quot;8&quot;&gt;
           &lt;li&gt;
             Now you're free to do as you please with your new fresh new vanilla boot image. You'll notice adding optional components etc will increase the file size, naturally.
           &lt;/li&gt;
         &lt;/ol&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
         
-        &lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2021/02/createnewbootimageconfigmgr-4.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;823&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/02/createnewbootimageconfigmgr-4-1024x823.png&quot; alt=&quot;&quot; class=&quot;wp-image-2445&quot; srcset=&quot;https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-4-1024x823.png 1024w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-4-300x241.png 300w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-4-768x617.png 768w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-4-100x80.png 100w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-4-855x687.png 855w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-4.png 1190w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/a&gt;&lt;figcaption&gt;Boot image with drivers and optional components added&lt;/figcaption&gt;&lt;/figure&gt; &lt;p&gt;
+        [![](createnewbootimageconfigmgr-4-1024x823.png)](createnewbootimageconfigmgr-4.png)&lt;figcaption&gt;Boot image with drivers and optional components added&lt;/figcaption&gt;&lt;/figure&gt; &lt;p&gt;
           What I want to point out here is that because we did these actions within the ConfigMgr console, i.e. add drivers and optional components, we can see exactly what those drivers and components are.
         &lt;/p&gt;
         
@@ -184,18 +184,18 @@
         
         &lt;ol&gt;
           &lt;li&gt;
-            &lt;a href=&quot;https://github.com/codaamok/PoSH/blob/master/ConfigMgr/New-WinPEWIM.ps1&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Download New-WinPEWIM.ps1&lt;/a&gt; from my GitHub by cloning my repo or clicking the Raw button, right clicking empty space and selecting &quot;Save As&quot;. It will attempt to download it as .txt. Just rename it to .ps1 as the only file extension.
+            [Download New-WinPEWIM.ps1](https://github.com/codaamok/PoSH/blob/master/ConfigMgr/New-WinPEWIM.ps1) from my GitHub by cloning my repo or clicking the Raw button, right clicking empty space and selecting &quot;Save As&quot;. It will attempt to download it as .txt. Just rename it to .ps1 as the only file extension.
           &lt;/li&gt;
         &lt;/ol&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
         
-        &lt;a href=&quot;https://www.sysmansquad.com/wp-content/uploads/2021/02/createnewbootimageconfigmgr-5.png&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;1024&quot; height=&quot;582&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/02/createnewbootimageconfigmgr-5-1024x582.png&quot; alt=&quot;&quot; class=&quot;wp-image-2447&quot; srcset=&quot;https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-5-1024x582.png 1024w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-5-300x170.png 300w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-5-768x436.png 768w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-5-100x57.png 100w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-5-855x486.png 855w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-5-1234x701.png 1234w, https:/wp-content/uploads/2021/02/createnewbootimageconfigmgr-5.png 1250w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/a&gt;&lt;figcaption&gt;View New-WinPEWIM.ps1 as Raw&lt;/figcaption&gt;&lt;/figure&gt; &lt;ol start=&quot;2&quot;&gt;
+        [![](createnewbootimageconfigmgr-5-1024x582.png)](createnewbootimageconfigmgr-5.png)&lt;figcaption&gt;View New-WinPEWIM.ps1 as Raw&lt;/figcaption&gt;&lt;/figure&gt; &lt;ol start=&quot;2&quot;&gt;
           &lt;li&gt;
             Execute the script. Customise any of the parameters to suit your needs:
           &lt;/li&gt;
         &lt;/ol&gt;
         
         &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-          &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;default&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;fileName&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;.\New-WinPEWIM.ps1 -Platforms amd64 -OptionalComponents &quot;WinPE-WDS-Tools&quot;, &quot;WinPE-Scripting&quot;, &quot;WinPE-WMI&quot;, &quot;WinPE-SecureStartup&quot;, &quot;WinPE-NetFx&quot;, &quot;WinPE-PowerShell&quot;, &quot;WinPE-StorageWMI&quot;, &quot;WinPE-DismCmdlets&quot; -OutputDirectory &quot;G:\OSD\BootImages&quot; -DriversDirectory &quot;G:\Drivers\WINPE10.0-DRIVERS-A22-3GVJN\x64&quot;&lt;/pre&gt;
+          &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;fileName&quot;:&quot;PowerShell&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;.\New-WinPEWIM.ps1 -Platforms amd64 -OptionalComponents &quot;WinPE-WDS-Tools&quot;, &quot;WinPE-Scripting&quot;, &quot;WinPE-WMI&quot;, &quot;WinPE-SecureStartup&quot;, &quot;WinPE-NetFx&quot;, &quot;WinPE-PowerShell&quot;, &quot;WinPE-StorageWMI&quot;, &quot;WinPE-DismCmdlets&quot; -OutputDirectory &quot;G:\OSD\BootImages&quot; -DriversDirectory &quot;G:\Drivers\WINPE10.0-DRIVERS-A22-3GVJN\x64&quot;&lt;/pre&gt;
         &lt;/div&gt;&lt;figure class=&quot;wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio&quot;&gt;
         
         &lt;div class=&quot;wp-block-embed__wrapper&quot;&gt;
@@ -223,11 +223,11 @@
           &lt;/p&gt;
           
           &lt;p&gt;
-            &lt;a href=&quot;https://github.com/AdamGrossTX/PowershellScripts/blob/master/ConfigMgr/BootImage/New-BootImage.ps1&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;New-BootImage.ps1&lt;/a&gt;
+            [New-BootImage.ps1](https://github.com/AdamGrossTX/PowershellScripts/blob/master/ConfigMgr/BootImage/New-BootImage.ps1)
           &lt;/p&gt;
           
           &lt;p&gt;
-            It looks like it doesn't have a parameter to let you specify which Optional Components you want injected, it's hardcoded on &lt;a href=&quot;https://github.com/AdamGrossTX/PowershellScripts/blob/master/ConfigMgr/BootImage/New-BootImage.ps1#L214&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;line #214&lt;/a&gt;. So tinker with that if you want to add different, more, or fewer optional components.
+            It looks like it doesn't have a parameter to let you specify which Optional Components you want injected, it's hardcoded on [line #214](https://github.com/AdamGrossTX/PowershellScripts/blob/master/ConfigMgr/BootImage/New-BootImage.ps1#L214). So tinker with that if you want to add different, more, or fewer optional components.
           &lt;/p&gt;
           
           &lt;p&gt;
@@ -236,8 +236,9 @@
         &lt;/div&gt;&lt;/section&gt; 
         
         &lt;p&gt;
-          None the less I hope you found this useful. Let me know if you have any questions or feedback in the comments below, or &lt;a href=&quot;https://twitter.com/codaamok&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;DM/tweet me on Twitter @codaamok&lt;/a&gt;.
-        &lt;/p&gt;</code></pre>
+          None the less I hope you found this useful. Let me know if you have any questions or feedback in the comments below, or [DM/tweet me on Twitter @codaamok](https://twitter.com/codaamok).
+        &lt;/p&gt;
+</code></pre>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -249,7 +250,7 @@
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

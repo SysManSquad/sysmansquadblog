@@ -10,16 +10,16 @@
 <title>ARM (Azure Resource Manager) Templating for Windows Virtual Desktop-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/05/26/arm-azure-resource-manager-templating-for-windows-virtual-desktop/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="ARM (Azure Resource Manager) Templating for Windows Virtual Desktop">
 <meta name=twitter:description content="Why would I use ARM templating, isn&rsquo;t the default Image Gallery fine? Well first off, what is ARM Templating? According to Microsoft &ldquo;You can automate deployments and use the practice of infrastructure as code. In code, you define the infrastructure that needs to be deployed. The infrastructure code becomes part of your project. Just like application code, you store the infrastructure code in a source repository and version it&mldr; &rdquo;">
 </head>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -129,7 +129,13 @@ Stop-Computer -ComputerName localhost -Force</p>
 <ol>
 <li>Select the storage account</li>
 <li>Select <strong>Containers</strong><br>
-****</li>
+****<div class=image>
+<figure>
+<a href=msedge_uFT7VQv2mm.png target=_blank>
+<img src=msedge_uFT7VQv2mm.png alt>
+</a>
+</figure>
+</div></li>
 <li>Select <strong>+ Container</strong></li>
 <li>Give your Container a name</li>
 <li>Leave Public access as Private</li>
@@ -149,9 +155,27 @@ Stop-Computer -ComputerName localhost -Force</p>
 <ol>
 <li>Login to <a href=https://portal.azure.com/>https://portal.azure.com/</a></li>
 <li>Select a desired resource group or create a new one (Note nothing will actually get created in the group)</li>
-<li>Select <strong>Add</strong></li>
-<li>Type in &ldquo;<strong>Windows 10</strong>&rdquo; and select <strong>Microsoft Windows 10 + Office 365 ProPlus</strong></li>
-<li>Select <strong>Create</strong></li>
+<li>Select <strong>Add</strong><div class=image>
+<figure>
+<a href=msedge_MCoWS09HuE.png target=_blank>
+<img src=msedge_MCoWS09HuE.png alt>
+</a>
+</figure>
+</div></li>
+<li>Type in &ldquo;<strong>Windows 10</strong>&rdquo; and select <strong>Microsoft Windows 10 + Office 365 ProPlus</strong><div class=image>
+<figure>
+<a href=msedge_sl8U6dkdIm.png target=_blank>
+<img src=msedge_sl8U6dkdIm.png alt>
+</a>
+</figure>
+</div></li>
+<li>Select <strong>Create</strong><div class=image>
+<figure>
+<a href=msedge_CxaaJwZiAP.png target=_blank>
+<img src=msedge_CxaaJwZiAP.png alt>
+</a>
+</figure>
+</div></li>
 <li>Add a <strong>Virtual Machine Name</strong></li>
 <li>Change <strong>size</strong> to desired VM (I recommend <strong>Standard B2ms</strong>)</li>
 <li>Add <strong>Username, Password, Confirm Password</strong></li>
@@ -163,7 +187,13 @@ Stop-Computer -ComputerName localhost -Force</p>
 <li>Select <strong>Next : Management ></strong></li>
 <li>Change Boot Diagnostics to <strong>Off</strong></li>
 <li>Select <strong>Review + Create</strong></li>
-<li>Select <strong>Download a template for automation</strong></li>
+<li>Select <strong>Download a template for automation</strong><div class=image>
+<figure>
+<a href=msedge_TyKXYqsKI6.png target=_blank>
+<img src=msedge_TyKXYqsKI6.png alt>
+</a>
+</figure>
+</div></li>
 <li>Select <strong>Download</strong> in the top left</li>
 </ol>
 <p>You should now have a template.zip with two files named parameters.json and tempalte.json you will want to extract these to a folder and open them both with a text editor. I recommend Visual Studio Code.</p>
@@ -187,7 +217,13 @@ add the following after (Make sure it&rsquo;s after the bracket)</li>
 <p>You will notice under fileUris we have two URLTOCHANGELATER items on lines 17 and 18, we are going to change that to the two SAS token URLs you copied earlier. You can add more URLs with a comma for things like the FSLogix installation exe. On line 20 you will want to change the -File to match the name of your moduleinstall script.</p>
 <p>So what exactly does adding those URLs do? Well they download the files from the respective URL. In this case we are downloading the moduleInstall.ps1 and config.ps1. After that we are executing a command to run moduleInstall.ps1.</p>
 <h3 id=lets-recap>Lets recap</h3>
-<p>I want you to take a deep breathe as you&rsquo;ve done a lot so far.</p>
+<p>I want you to take a deep breathe as you&rsquo;ve done a lot so far.<div class=image>
+<figure>
+<a href=giphy.gif target=_blank>
+<img src=giphy.gif alt>
+</a>
+</figure>
+</div></p>
 <p>You created a few resource groups, a key vault, storage account, an ARM template file, and two powershell scripts and that&rsquo;s awesome!</p>
 <h3 id=making-the-magic-happen>Making the magic happen</h3>
 <p>Below I will be posting the script I use to make the magic happen. It will connect to azure, ask you for an image name, the destination resourcegroup which in this case is &ldquo;Contoso-MyImages&rdquo; if you&rsquo;ve copied word for word. The script creates a temporary resource group, creates our VM, converts it to an image, and cleans up the temporary resource group which includes our VM. The result is a new Image located in Contoso-MyImages. You can then use this image to create a WVD Host Pool.</p>
@@ -213,7 +249,7 @@ New-AzImage -Image $image -ImageName $imagename -ResourceGroupName $imageLocatio
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

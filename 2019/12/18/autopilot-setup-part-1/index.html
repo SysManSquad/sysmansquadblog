@@ -10,16 +10,16 @@
 <title>Intune/Autopilot Setup Companion Guide Part 1-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2019/12/18/autopilot-setup-part-1/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Intune/Autopilot Setup Companion Guide Part 1">
 <meta name=twitter:description content="Purpose The following blog posts will be a companion guide to Steve and Adam&rsquo;s Intune training videos found at intune.training (this covers Episode 1 and 2) and will help you get Autopilot going in your environment. This guide assumes that you already have office 365 and azure configured. By the end of this guide you will have a working bare bones Autopilot configuration. This has been a major request from several people in the WinAdmins community.">
 </head>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -110,24 +110,68 @@
 </ul>
 <h2 id=how-does-the-process-work>How does the process work?</h2>
 <p>I&rsquo;m a big fan of pictures and I believe this one encapsulates the process quiet well.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=image1.png target=_blank>
+<img src=image1.png alt>
+</a>
+</figure>
+</div> </p>
 <h2 id=configuration>Configuration</h2>
 <h3 id=company-branding>Company Branding</h3>
 <p>The first thing we are going to tackle is is branding.<br>
 Navigate to <a href=http://portal.azure.com>portal.azure.com</a> and open up your Azure Active Directory resource. Company branding can be found under the Manage section on the left hand side. If you have never configured Company branding you will see a Configure option, select it. Fill in the desired fields. In our case we filled in Banner Logo, Username hint, Square logo image, and Square logo image dark theme. You will notice almost every option has a tooltip if you are curious what each option does. The below is our current configuration:</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=msedge_oSCAxoZs1L.png target=_blank>
+<img src=msedge_oSCAxoZs1L.png alt>
+</a>
+</figure>
+</div> </p>
 <h3 id=mobility-mdm-and-mam>Mobility (MDM and MAM)</h3>
 <p>If we look back at the left hand side of our Azure Active Directory blade you&rsquo;ll see Mobility (MDM and MAM) two steps above Company branding. You should see one application that being Microsoft Intune:</p>
+<p><div class=image>
+<figure>
+<a href=msedge_X3St3KJPWi.png target=_blank>
+<img src=msedge_X3St3KJPWi.png alt>
+</a>
+</figure>
+</div></p>
 <p>Select Microsoft Intune all your sliders should be currently set to None. In order to get Intune and Autopilot working we need to at the very least move the MDM slider to either Some or All. If you want to test with a specific set of users/devices select Some and select a group. In our environment we have ours set to All. For the vast majority of people setting All will not cause an issue as this just tells Intune which users/devices are allowed to register a device via the MDM.<br>
 The MAM policy is not required but if you have any plans on ever using Azure Information Protection or BYOD (Bring your own device) in your environment you&rsquo;ll want to have this enabled. Again set to a specific set of users or all based on your preference.<br>
 The following is our completed Configuration.</p>
+<p><div class=image>
+<figure>
+<a href=msedge_lisGxnkFwt.png target=_blank>
+<img src=msedge_lisGxnkFwt.png alt>
+</a>
+</figure>
+</div></p>
 <h3 id=device-enrollment>Device Enrollment</h3>
 <p>Navigate to the <a href=http://devicemanagement.microsoft.com>MEM admin center</a> and login with your azure credentials if prompted. On the left hand side select Devices under Favorites. A new blade will pop out and you&rsquo;ll want to select Windows. </p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=msedge_cMcDESDh8f.png target=_blank>
+<img src=msedge_cMcDESDh8f.png alt>
+</a>
+</figure>
+</div> </p>
 <p>Next select Windows Enrollment under Windows Devices.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=msedge_w2Q1TJO34i.png target=_blank>
+<img src=msedge_w2Q1TJO34i.png alt>
+</a>
+</figure>
+</div> </p>
 <p>The first time you select this you will need to choose an MDM Authority. Since we are using Intune we will select the first option Intune MDM Authority. Once we have this configured we can create a Deployment Profile Located under Windows Autopilot Deployment Program.</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=msedge_RFZlECrA6L-1-1024x734.png target=_blank>
+<img src=msedge_RFZlECrA6L-1-1024x734.png alt>
+</a>
+</figure>
+</div> </p>
 <ol>
 <li>Select + Create Profile at the top</li>
 <li>Give it a unique name and description so you won&rsquo;t forget what this specific profile is for</li>
@@ -144,7 +188,13 @@ Intune will have several options already pre-configured. Depending on how you&rs
 <li>Language Region set to English</li>
 <li>Automatically configure keyboard set to NO</li>
 <li>Apply device name template set to No<br>
-</li>
+<div class=image>
+<figure>
+<a href=msedge_AnI5MC3O25.png target=_blank>
+<img src=msedge_AnI5MC3O25.png alt>
+</a>
+</figure>
+</div></li>
 <li>Select Next</li>
 <li>Assign a group that this should be applied to in my case I have a group called Intune-Prod</li>
 <li>Select Next</li>
@@ -154,7 +204,13 @@ Intune will have several options already pre-configured. Depending on how you&rs
 <p>Now that we have the above complete we can actually test Autopilot! First we need to download the profile we created. To do so we will have to do a few quick powershell commands</p>
 <p>You will be prompted to specify your UPN. Supply the UPN and signin. You will be prompted with a Permissions requested screen (This ties in with the Microsoft Graph). Check the Consent on behalf of my organization box and select Accept.</p>
 <p>This will export the JSON file to your C directory. Please be aware if you have multiple policies all of them will be in the JSON file and you&rsquo;ll have to remove the ones you do not need otherwise you can specify which one to export via powershell. The filename must also be AutopilotConfigurationFile.json or it will not work in deployment. However at this point you should only have one profile. Once you have the JSON file you can test a deployment. In the example below you can see I have two deployment profiles:</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=powershell_jGYAn4kPSG.png target=_blank>
+<img src=powershell_jGYAn4kPSG.png alt>
+</a>
+</figure>
+</div> </p>
 <p>To setup the deployment for testing I strongly suggest reading <a href=https://blogs.technet.microsoft.com/mniehaus/2018/10/25/speeding-up-windows-autopilot-for-existing-devices/>Michael Niehaus&rsquo;s blog</a> on deploying via a task sequence he even includes a download for said task sequence.</p>
 <h2 id=congrats-you-have-a-bare-bones-autopilot-configuration><strong>Congrats you have a bare bones Autopilot configuration!!!</strong></h2>
 </div>
@@ -168,7 +224,7 @@ Intune will have several options already pre-configured. Depending on how you&rs
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

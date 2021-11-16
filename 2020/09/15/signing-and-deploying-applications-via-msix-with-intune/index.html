@@ -10,18 +10,19 @@
 <title>Signing and Deploying Applications via MSIX with Intune-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/09/15/signing-and-deploying-applications-via-msix-with-intune/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Signing and Deploying Applications via MSIX with Intune">
-<meta name=twitter:description content="Why would I want to use MSIX and what is it? MSIX is a Windows app package format that provides a modern packaging experience to all Windows apps. The MSIX package format preserves the functionality of existing app packages and/or install files in addition to enabling new, modern packaging and deployment features to Win32, WPF, and Windows Forms apps.Do you have a bloated application? Maybe one or two that are so old it doesn&rsquo;t even have any install parameters?">
+<meta name=twitter:description content="Why would I want to use MSIX and what is it? MSIX is a Windows app package format that provides a modern packaging experience to all Windows apps. The MSIX package format preserves the functionality of existing app packages and/or install files in addition to enabling new, modern packaging and deployment features to Win32, WPF, and Windows Forms apps.
+Do you have a bloated application? Maybe one or two that are so old it doesn&rsquo;t even have any install parameters?">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -69,7 +70,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +81,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -94,26 +95,38 @@
 </div>
 <div class=post-entry>
 <h3 id=why-would-i-want-to-use-msix-and-what-is-it>Why would I want to use MSIX and what is it?</h3>
-<p>MSIX is a Windows app package format that provides a modern packaging experience to all Windows apps. The MSIX package format preserves the functionality of existing app packages and/or install files in addition to enabling new, modern packaging and deployment features to Win32, WPF, and Windows Forms apps.</p>
+<p><a href="https://docs.microsoft.com/en-us/windows/msix/overview#:~:text=MSIX%20is%20a%20Windows%20app,WPF%2C%20and%20Windows%20Forms%20apps.">MSIX is a Windows app package format that provides a modern packaging experience to all Windows apps. The MSIX package format preserves the functionality of existing app packages and/or install files in addition to enabling new, modern packaging and deployment features to Win32, WPF, and Windows Forms apps.</a></p>
 <p>Do you have a bloated application? Maybe one or two that are so old it doesn&rsquo;t even have any install parameters? Maybe you have a massive application that is a pain to deploy?</p>
 <p>Well MSIX might be for you! Wrapping your app with MSIX sounds fine and dandy however you need to also create a certificate otherwise you won&rsquo;t be able to deploy the app properly. I&rsquo;ll walk you through the setup from start to finish.</p>
 <h3 id=prerequisites>Prerequisites</h3>
-<p>Microsoft Store for Business configured<br>
+<p><a href=https://sysmansquad.com/2020/01/27/intune-autopilot-setup-companion-guide-part-2-windows-store-for-business/>Microsoft Store for Business configured</a><br>
 -The first person to sign in to Microsoft Store for Business must be a Global Admin of the Azure Active Directory (AD) tenant. Once the Global Admin has signed in, they can give permissions to others employees.</p>
 <p>A machine that can run Hyper-V</p>
 <h3 id=getting-your-certificate-and-deploying-it>Getting your certificate and deploying it</h3>
 <p>The reason we need to get a certificate is to make the app a trusted one. Once we have this in place the app will go from Untrusted to Trusted like the picture below<br>
-</p>
+<div class=image>
+<figure>
+<a href=vmconnect_1eSsb6FTKd.png target=_blank>
+<img src=vmconnect_1eSsb6FTKd.png alt>
+</a>
+</figure>
+</div></p>
 <ol>
-<li>Log in to Microsoft Store for Business</li>
+<li>Log in to <a href="https://businessstore.microsoft.com/en-us/store?signin=">Microsoft Store for Business</a></li>
 <li>Select <strong>Manage</strong></li>
 <li>Select <strong>Settings</strong></li>
 <li>Select <strong>Devices</strong></li>
-<li>Select <strong>Download</strong> on Download your organization&rsquo;s root certificate file for use with Device Guard</li>
+<li>Select <strong>Download</strong> on Download your organization&rsquo;s root certificate file for use with Device Guard<div class=image>
+<figure>
+<a href=msedge_5t3OJ6orOw.png target=_blank>
+<img src=msedge_5t3OJ6orOw.png alt>
+</a>
+</figure>
+</div></li>
 </ol>
 <p>You will need to deploy this certificate to any machine that you want to install the app on so let&rsquo;s create the Intune Configuration Profile for it</p>
 <ol>
-<li>Log in to Device Management</li>
+<li>Log in to <a href=https://devicemanagement.microsoft.com/>Device Management</a></li>
 <li>Select <strong>Devices</strong></li>
 <li>Select <strong>Configuration Profiles</strong></li>
 <li>Select <strong>Create Profile</strong></li>
@@ -164,7 +177,7 @@
 </ol>
 <h3 id=adding-your-msix-to-intune>Adding your MSIX to Intune</h3>
 <ol>
-<li>Log in to Device Management</li>
+<li>Log in to <a href=https://devicemanagement.microsoft.com/>Device Management</a></li>
 <li>Select <strong>Apps</strong></li>
 <li>Select <strong>Windows</strong></li>
 <li>Select <strong>Add</strong></li>
@@ -178,7 +191,13 @@
 <li>Select <strong>Create</strong></li>
 </ol>
 <p>Congrats! You have a deployed app now! I strongly recommend rebooting the machine after the certificate is deployed and then attempting the installation but you should be all set!</p>
-<p> </p>
+<p><div class=image>
+<figure>
+<a href=giphy-2.gif target=_blank>
+<img src=giphy-2.gif alt>
+</a>
+</figure>
+</div> </p>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
@@ -197,7 +216,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

@@ -10,16 +10,16 @@
 <title>Teams Channel Notification when OSD Fails-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/04/22/teams-channel-notification-when-osd-fails/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Teams Channel Notification when OSD Fails">
 <meta name=twitter:description content="How would you like this lovely notification appearing within MS Teams every time a build failed? Better than getting a helpdesk ticket or not finding out at all.
 Well, now you can!     Step 1 - Configure Teams  Open Teams. Select a channel, or create a new channel specific for these notifications (This is best practice so normal channels are not spammed) Click the &mldr; Next to the channel name and choose Connectors       Click Add / Configure        Give your Connector an appropriate name and custom image.">
@@ -70,7 +70,7 @@ Well, now you can!     Step 1 - Configure Teams  Open Teams. Select a channel, o
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -81,7 +81,7 @@ Well, now you can!     Step 1 - Configure Teams  Open Teams. Select a channel, o
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -261,7 +261,7 @@ If([string]::IsNullOrEmpty($TSLastError)){$TSLastError = &ldquo;Unknown Error. C
 <h2 id=step-4>Step 4 - Task Sequence</h2>
 <p>Edit the task sequence for OSD.</p>
 <p>Our TS is set up with logic and a section to run if the task sequence encounters an error. This is where we will put the OSD Failure notification script.</p>
-<p><em>For more information on how to set up Error Handling in OSD Task Sequence, see <a href=https://ccmexec.com/author/jonil/>Jörgen Nilsson</a>&rsquo;s post about it here: <a href=https://ccmexec.com/2016/12/error-handling-in-ts-without-mdt-using-osdbackground/>https://ccmexec.com/2016/12/error-handling-in-ts-without-mdt-using-osdbackground/</a></em></p>
+<p><em>For more information on how to set up Error Handling in OSD Task Sequence, see <a href=https://ccmexec.com/author/jonil/>Jörgen Nilsson&rsquo;s</a> post about it here: <a href=https://ccmexec.com/2016/12/error-handling-in-ts-without-mdt-using-osdbackground/>https://ccmexec.com/2016/12/error-handling-in-ts-without-mdt-using-osdbackground/</a></em></p>
 <p><div class=image>
 <figure>
 <a href=https://lh5.googleusercontent.com/GRx_3DUP7m-LKvPLhxOqfdS0hI94Nii31qrJyXmyH9pXxGHmPs_VNZzm8Yr42YOA_6e5TUhhJHLQ3xLT7t4psCGvJsE7qLSRZRBRweEpNZ0QHuCh8t1OIcx80lDYpH8NR82AM4E target=_blank>
@@ -318,7 +318,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

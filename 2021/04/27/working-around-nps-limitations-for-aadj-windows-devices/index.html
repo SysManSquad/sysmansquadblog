@@ -10,18 +10,18 @@
 <title>Working around NPS limitations for AADJ Windows devices-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/04/27/working-around-nps-limitations-for-aadj-windows-devices/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Working around NPS limitations for AADJ Windows devices">
-<meta name=twitter:description content="<p> In this post, I'll show you a workaround to get device based wireless authentication working for AADJ Windows devices via NPS. Keep in mind this is a workaround and your mileage may vary. </p> <h2> Background </h2> <p> NPS does not play nice when it comes to AADJ device authentication. There is a fantastic writeup on this issue <a href=&#34;https://docs.microsoft.com/en-us/answers/questions/57999/device-certificate-scep-based-authentication-again.html&#34; target=&#34;_blank&#34; rel=&#34;noreferrer noopener&#34;>here</a>. </p> <h5> <strong>The tl;dr of the issue</strong> </h5> <p> Device based authentication works when there is a computer object in your on-prem.">
+<meta name=twitter:description content="<p> In this post, I'll show you a workaround to get device based wireless authentication working for AADJ Windows devices via NPS. Keep in mind this is a workaround and your mileage may vary. </p> <h2> Background </h2> <p> NPS does not play nice when it comes to AADJ device authentication. There is a fantastic writeup on this issue [here](https://docs.microsoft.com/en-us/answers/questions/57999/device-certificate-scep-based-authentication-again.html). </p> <h5> <strong>The tl;dr of the issue</strong> </h5> <p> Device based authentication works when there is a computer object in your on-prem.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -102,7 +102,7 @@
                       &lt;/h2&gt;
                       
                       &lt;p&gt;
-                        NPS does not play nice when it comes to AADJ device authentication. There is a fantastic writeup on this issue &lt;a href=&quot;https://docs.microsoft.com/en-us/answers/questions/57999/device-certificate-scep-based-authentication-again.html&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;here&lt;/a&gt;.
+                        NPS does not play nice when it comes to AADJ device authentication. There is a fantastic writeup on this issue [here](https://docs.microsoft.com/en-us/answers/questions/57999/device-certificate-scep-based-authentication-again.html).
                       &lt;/p&gt;
                       
                       &lt;h5&gt;
@@ -126,7 +126,7 @@
                       &lt;/h5&gt;
                       
                       &lt;div class=&quot;wp-block-image&quot;&gt;
-                        &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;&lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/04/haadj.gif&quot; alt=&quot;&quot; class=&quot;wp-image-2569&quot; width=&quot;428&quot; height=&quot;259&quot; /&gt;&lt;figcaption&gt;More great gifs like this on the &lt;a href=&quot;https://aka.ms/winadmins&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;Windows Admins&lt;/a&gt; Discord server.&lt;/figcaption&gt;&lt;/figure&gt;
+                        &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;![](haadj.gif)&lt;figcaption&gt;More great gifs like this on the [Windows Admins](https://aka.ms/winadmins) Discord server.&lt;/figcaption&gt;&lt;/figure&gt;
                       &lt;/div&gt;
                       
                       &lt;h2&gt;
@@ -178,7 +178,7 @@
                       &lt;/p&gt;
                       
                       &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block lineWrapping: false&quot;&gt;
-                        &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;base16-dark&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:true,&amp;quot;fileName&amp;quot;:&amp;quot;New-DummyComputer.ps1&amp;quot;,&amp;quot;className&amp;quot;:&amp;quot;lineWrapping: false&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;[CmdletBinding(DefaultParameterSetName = 'Default')]
+                        &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;base16-dark&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;fileName&quot;:&quot;New-DummyComputer.ps1&quot;,&quot;className&quot;:&quot;lineWrapping: false&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;[CmdletBinding(DefaultParameterSetName = 'Default')]
 </code></pre>
 <p>param(
 [Parameter(Mandatory=$False)] [String] $deviceName = &ldquo;&rdquo;,
@@ -250,12 +250,12 @@ exit 1
                         &lt;pre&gt;&lt;code&gt;.\New-DummyADComputer.ps1 -deviceName &quot;device-name-here&quot; -nameMap&lt;/code&gt;&lt;/pre&gt;
                       &lt;/div&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
                       
-                      &lt;img loading=&quot;lazy&quot; width=&quot;1010&quot; height=&quot;53&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/04/image-8.png&quot; alt=&quot;&quot; class=&quot;wp-image-2641&quot; srcset=&quot;https:/wp-content/uploads/2021/04/image-8.png 1010w, https:/wp-content/uploads/2021/04/image-8-300x16.png 300w, https:/wp-content/uploads/2021/04/image-8-768x40.png 768w, https:/wp-content/uploads/2021/04/image-8-100x5.png 100w, https:/wp-content/uploads/2021/04/image-8-855x45.png 855w&quot; sizes=&quot;(max-width: 1010px) 100vw, 1010px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+                      ![](image-8.png)&lt;/figure&gt; &lt;p&gt;
                         After using the script for a test device, you should see the computer object in your AD.
                       &lt;/p&gt;
                       
                       &lt;div class=&quot;wp-block-image&quot;&gt;
-                        &lt;figure class=&quot;aligncenter size-large&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;520&quot; height=&quot;583&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/04/image-9.png&quot; alt=&quot;&quot; class=&quot;wp-image-2642&quot; srcset=&quot;https:/wp-content/uploads/2021/04/image-9.png 520w, https:/wp-content/uploads/2021/04/image-9-268x300.png 268w, https:/wp-content/uploads/2021/04/image-9-100x112.png 100w&quot; sizes=&quot;(max-width: 520px) 100vw, 520px&quot; /&gt;&lt;/figure&gt;
+                        &lt;figure class=&quot;aligncenter size-large&quot;&gt;![](image-9.png)&lt;/figure&gt;
                       &lt;/div&gt;
                       
                       &lt;p&gt;
@@ -271,7 +271,7 @@ exit 1
                       &lt;/p&gt;
                       
                       &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                        &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;base16-dark&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:true,&amp;quot;readOnly&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;Sync-DummyComputers.ps1&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;[CmdletBinding(DefaultParameterSetName = 'Default')]
+                        &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;base16-dark&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;fileName&quot;:&quot;Sync-DummyComputers.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;[CmdletBinding(DefaultParameterSetName = 'Default')]
 </code></pre>
 <p>param(
 [Parameter(Mandatory=$True)] [String] $TenantId = &ldquo;&rdquo;,
@@ -373,7 +373,7 @@ Write-Host &ldquo;$($DummyDevice.Name) does not exist in Autopilot.&rdquo; -Fore
 <p>
 </p>
 <pre><code>                      &lt;div class=&quot;wp-block-image&quot;&gt;
-                        &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;&lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/04/image-3-1024x71.png&quot; alt=&quot;&quot; class=&quot;wp-image-2693&quot; width=&quot;1015&quot; height=&quot;70&quot; srcset=&quot;https:/wp-content/uploads/2021/04/image-3-1024x71.png 1024w, https:/wp-content/uploads/2021/04/image-3-300x21.png 300w, https:/wp-content/uploads/2021/04/image-3-768x53.png 768w, https:/wp-content/uploads/2021/04/image-3-1536x106.png 1536w, https:/wp-content/uploads/2021/04/image-3-100x7.png 100w, https:/wp-content/uploads/2021/04/image-3-855x59.png 855w, https:/wp-content/uploads/2021/04/image-3-1234x85.png 1234w, https:/wp-content/uploads/2021/04/image-3.png 1597w&quot; sizes=&quot;(max-width: 1015px) 100vw, 1015px&quot; /&gt;&lt;/figure&gt;
+                        &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;![](image-3-1024x71.png)&lt;/figure&gt;
                       &lt;/div&gt;
                       
                       &lt;p&gt;
@@ -381,7 +381,7 @@ Write-Host &ldquo;$($DummyDevice.Name) does not exist in Autopilot.&rdquo; -Fore
                       &lt;/p&gt;
                       
                       &lt;div class=&quot;wp-block-image&quot;&gt;
-                        &lt;figure class=&quot;aligncenter size-large&quot;&gt;&lt;img loading=&quot;lazy&quot; width=&quot;380&quot; height=&quot;83&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2021/04/image-15.png&quot; alt=&quot;&quot; class=&quot;wp-image-2694&quot; srcset=&quot;https:/wp-content/uploads/2021/04/image-15.png 380w, https:/wp-content/uploads/2021/04/image-15-300x66.png 300w, https:/wp-content/uploads/2021/04/image-15-100x22.png 100w&quot; sizes=&quot;(max-width: 380px) 100vw, 380px&quot; /&gt;&lt;/figure&gt;
+                        &lt;figure class=&quot;aligncenter size-large&quot;&gt;![](image-15.png)&lt;/figure&gt;
                       &lt;/div&gt;
                       
                       &lt;p&gt;
@@ -426,7 +426,7 @@ Write-Host &ldquo;$($DummyDevice.Name) does not exist in Autopilot.&rdquo; -Fore
                       &lt;/p&gt;
                       
                       &lt;p&gt;
-                        I'm not sure why Microsoft hasn't considered this or even followed up to the &lt;a href=&quot;https://docs.microsoft.com/en-us/answers/questions/57999/device-certificate-scep-based-authentication-again.html&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;linked post above&lt;/a&gt;. In an ideal world, Microsoft might create some sort of connector for on-prem. NPS to check AAD, as well as the local AD, for devices during authentications.
+                        I'm not sure why Microsoft hasn't considered this or even followed up to the [linked post above](https://docs.microsoft.com/en-us/answers/questions/57999/device-certificate-scep-based-authentication-again.html). In an ideal world, Microsoft might create some sort of connector for on-prem. NPS to check AAD, as well as the local AD, for devices during authentications.
                       &lt;/p&gt;
                       
                       &lt;p&gt;
@@ -435,7 +435,8 @@ Write-Host &ldquo;$($DummyDevice.Name) does not exist in Autopilot.&rdquo; -Fore
                       
                       &lt;p&gt;
                         I hope this gets you to a decent starting point when you are considering device based authentication for your AADJ Windows devices.
-                      &lt;/p&gt;</code></pre>
+                      &lt;/p&gt;
+</code></pre>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
@@ -454,7 +455,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

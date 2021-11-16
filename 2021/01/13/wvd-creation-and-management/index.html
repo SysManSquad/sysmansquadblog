@@ -8,18 +8,18 @@
 <meta name=description content="A community blog and subsidiary of WinAdmins.io">
 <link rel="shortcut icon" href=/img/favicon.ico>
 <title>Windows Virtual Desktop: Creation and Management-SysManSquad | Systems Management Squad</title>
-<link rel=canonical href=/2020/01/13/wvd-creation-and-management/>
+<link rel=canonical href=/2021/01/13/wvd-creation-and-management/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Windows Virtual Desktop: Creation and Management">
 <meta name=twitter:description content="THIS GUIDE IS NOW OUTDATED WITH THE RELEASE OF WVD 2.0 I will create a new blog with the updated info in the future! Some of the info below is still valid! Why Windows Virtual Desktop?  Windows Virtual Desktop allows you to create virtual Windows 10 machines that can be accessed from virtually anywhere. This means you can give someone a full desktop experience from virtually anywhere including android and iOS!">
 </head>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -115,12 +115,18 @@
 </tr>
 </tbody>
 </table>
-<p>This guide assumes you have either Azure Active Directory Domain Services (Azure AD DS) or a network connection from your Azure tenant to your on-premises network. In the following guide I will be going over the Azure AD DS method, but both are similar.</p>
-<p>You will also need Marcel Meurer&rsquo;s tool (I provide download links farther down). Several of the items I will be covering are a re-hash of what he has in his post but with more steps for using the tool and creating a master virtual machine (VM).</p>
+<p>This guide assumes you have either <a href=https://docs.microsoft.com/en-us/azure/active-directory-domain-services/>Azure Active Directory Domain Services (Azure AD DS)</a> or a network connection from your Azure tenant to your on-premises network. In the following guide I will be going over the Azure AD DS method, but both are similar.</p>
+<p>You will also need <a href=https://blog.itprocloud.de/Windows-Virtual-Desktop-Admin/>Marcel Meurer&rsquo;s tool</a> (I provide download links farther down). Several of the items I will be covering are a re-hash of what he has in his post but with more steps for using the tool and creating a master virtual machine (VM).</p>
 <h2 id=2-creating-resource-groups>Creating Resource Groups</h2>
 <ol>
 <li>Login to the Azure portal <a href=https://portal.azure.com/>https://portal.azure.com/</a></li>
-<li>Click the <strong>Create a resource</strong> button</li>
+<li>Click the <strong>Create a resource</strong> button<div class=image>
+<figure>
+<a href=image-1.png target=_blank>
+<img src=image-1.png alt>
+</a>
+</figure>
+</div></li>
 <li>Search for Resource group</li>
 <li>Create a Resource group called DOMAIN-Master-VMs or whatever you&rsquo;d like your golden images to be based off (YES WVD is essentially build and capture/reference image)</li>
 <li>Create a second Resource group and give it whatever name you&rsquo;d like. EX. I&rsquo;m going to deploy AutoCAD so I&rsquo;ll name it DOMAIN-AutoCAD-HostPool</li>
@@ -156,7 +162,13 @@
 </ol>
 <h3 id=5-creating-a-wvd-tenant>Creating a WVD tenant</h3>
 <p>Time for some powershell! The following powershell will add a WVD tenant. Please use an administrative account when signing in as you have to grant access for your tenant.</p>
-<p> Successful execution</p>
+<p><div class=image>
+<figure>
+<a href=powershell_rJBQfXUtgx.png target=_blank>
+<img src=powershell_rJBQfXUtgx.png alt>
+</a>
+</figure>
+</div> Successful execution</p>
 <h3 id=6-setting-up-marcels-tool-and-creating-a-network-share>Setting up Marcel&rsquo;s tool and creating a network share</h3>
 <p>Earlier I mentioned I will be going over the method with Azure AD DS. I currently have a tools server in Azure that I&rsquo;m using to manage everything so I will be signing into that. This gives me access to view and manage Azure AD DS and install any other tools I might need such as WVD. One thing I don&rsquo;t cover in this guide is Network Security Groups. I would strongly suggest blocking all RDP access except from Specific IPs so that only you can access the MasterVMs and your tools server.</p>
 <p>You will need to download 4 items at this point:</p>
@@ -168,7 +180,7 @@
 <p><a href=https://blog.itprocloud.de/assets/files/AutoUpdate/Scripts/ITPC-WVD-Image-Processing.ps1.txt>ITPC-WVD-Image-Processing.ps1</a></p>
 </li>
 <li>
-<p><a href=https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrmXv>Microsoft.RDInfra.RDAgent.msi</a> </p>
+<p><a href=https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrmXv>Microsoft.RDInfra.RDAgent.msi</a></p>
 </li>
 <li>
 <p><a href=https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrxrH>Microsoft.RDInfra.RDAgentBootLoader.msi</a></p>
@@ -189,7 +201,13 @@
 <p>Give Everyone Read Access</p>
 </li>
 <li>
-<p>Move the 3 files we downloaded and renamed earlier into this folder; it should look like the following</p>
+<p>Move the 3 files we downloaded and renamed earlier into this folder; it should look like the following<div class=image>
+<figure>
+<a href=mstsc_n4qL8uv5Vs.png target=_blank>
+<img src=mstsc_n4qL8uv5Vs.png alt>
+</a>
+</figure>
+</div></p>
 </li>
 <li>
 <p>Next install Marcel&rsquo;s tool. You can leave all the options to default</p>
@@ -210,7 +228,13 @@
 <li>Navigate to the Master-VMs resource group we created earlier</li>
 <li>Create a new resource by selecting the Add button</li>
 <li>Search for Microsoft Windows 10 + Office 365 ProPlus (you do the + Office 365 ProPlus because the non-office version isn&rsquo;t the latest release of windows) and make sure you&rsquo;re selecting the latest version </li>
-<li>Click Create</li>
+<li>Click Create<div class=image>
+<figure>
+<a href=GetImage.png target=_blank>
+<img src=GetImage.png alt>
+</a>
+</figure>
+</div></li>
 <li>For Virtual Machine name change it to whatever your preference in my case i&rsquo;ll be calling it AutoCAD after the program that I&rsquo;ll be installing</li>
 <li>You can leave the Size default I typically select B2Ms as I like to penny pinch (Please note this server won&rsquo;t cost you anything other than the storage of the drive when we are done with it)</li>
 <li>Scroll down and set an administrator account. This is a local admin account</li>
@@ -259,6 +283,14 @@
 <li>This process takes on average about 10 minutes</li>
 </ol>
 <h3 id=creating-a-host-pool>Creating a host pool</h3>
+<p><div class=image>
+<figure>
+<a href=giphy.gif target=_blank>
+<img src=giphy.gif alt>
+</a>
+</figure>
+</div><br>
+Now that we have a template image, we are ready to create the host pool!</p>
 <ol>
 <li>Navigate to your Tenant name on the left-hand side</li>
 <li>Right click on your tenant</li>
@@ -268,7 +300,13 @@
 <li>Expand your Resource Groups</li>
 <li>Right click the image that we created earlier</li>
 <li>Select Create a session host from image</li>
-<li>Your screen at this point should look like this:</li>
+<li>Your screen at this point should look like this:<div class=image>
+<figure>
+<a href=mstsc_dJ47TcxRQX.png target=_blank>
+<img src=mstsc_dJ47TcxRQX.png alt>
+</a>
+</figure>
+</div></li>
 <li>First we can apply a VM Name. You&rsquo;ll notice at the end we have ###, this will auto number the VM based on the Count to the right so if I have a count of two it will create two VMs in the host pool called WVD-PROD-001 and WVD-PROD-002</li>
 <li>We will select our Image</li>
 <li>Select the host pool we created at the beginning of these steps</li>
@@ -293,7 +331,13 @@
 </ul>
 <h3 id=assigning-groups-and-access>Assigning Groups and Access</h3>
 <p>Now that we have a host-pool we can start assigning access to them. On the resource we created earlier under our tenant in the WVD Admin application you should be able to see the session hosts that we just made. You&rsquo;ll also notice that a tab called Host Pool opens up.<br>
-</p>
+<div class=image>
+<figure>
+<a href=mstsc_8jOwEORRJs.png target=_blank>
+<img src=mstsc_8jOwEORRJs.png alt>
+</a>
+</figure>
+</div></p>
 <p>From here we can change several things; the two important ones being the Max Session Limit and Load Balancer Type. Max Session limit should be pretty straight forward, how many sessions can each VM in the Session host accept. Load Balancer Type gives you three options:</p>
 <ol>
 <li>Breadth First - Users will be evenly spread out across all the VMs in the host pool</li>
@@ -312,7 +356,13 @@
 <li>Right click and select Add Application Group</li>
 <li>Give the group a name (EX AutoCAD)</li>
 <li>Right click the newly created group and select Add Remote Application</li>
-<li>Give it a name as well (EX Revit):</li>
+<li>Give it a name as well (EX Revit):<div class=image>
+<figure>
+<a href=mstsc_uuyZLfch9A.png target=_blank>
+<img src=mstsc_uuyZLfch9A.png alt>
+</a>
+</figure>
+</div></li>
 <li>I personally set CLI settings to DoNotAllow because I&rsquo;m not passing any Azure CLI commands to these VMs (More info can be found <a href="https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest">HERE</a>)</li>
 <li>File Path will be the path to the EXE that you should have copied down earlier when installing your applications, you can also set Icon Path to this as well</li>
 <li>If you want the app to appear in a folder you can give it a folder name, but I personally do not</li>
@@ -320,7 +370,13 @@
 <li>Select Save Changes</li>
 </ol>
 <p>We are almost there! Take a minute to breathe or grab a drink!<br>
-</p>
+<div class=image>
+<figure>
+<a href=giphy-1.gif target=_blank>
+<img src=giphy-1.gif alt>
+</a>
+</figure>
+</div></p>
 <p>Next, we are going to assign access to the application group we made. Currently in WVD we have to do manual assignments&mldr; it does not support groups but will in the future.</p>
 <ol>
 <li>Go to the application group we created (EX AutoCAD)</li>
@@ -332,8 +388,8 @@
 You did it you&rsquo;re done! Aside from having to test said applications!</li>
 </ol>
 <p>To access these apps you can use one of the following:</p>
-<p><a href=http://aka.ms/wvd/clients/windows>Remote Desktop Client<br>
-</a> <a href=https://rdweb.wvd.microsoft.com/webclient/index.html>Remote Desktop Web client</a></p>
+<p><a href=http://aka.ms/wvd/clients/windows>Remote Desktop Client</a>
+<a href=https://rdweb.wvd.microsoft.com/webclient/index.html>Remote Desktop Web client</a></p>
 <p>I strongly recommend using the Remote Desktop Client option as the second just loads the app in a webpage. Once downloaded and installed you can subscribe with the user you granted access to and you should see the applications that were granted. If you double click on the app you will be prompted to sign in (Currently SSO only works with ADFS this will change in the future). The first sign in will be a little slower as it&rsquo;s creating a profile for the user in the background. This can be alleviated with solutions such as <a href=https://docs.microsoft.com/en-us/fslogix/overview>FSLogix</a> which is very easy to setup. In any event we are done and you&rsquo;re now the proud owner of a WVD environment.</p>
 </div>
 <div class=post-share>
@@ -353,7 +409,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

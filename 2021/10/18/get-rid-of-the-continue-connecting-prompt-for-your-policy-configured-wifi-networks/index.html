@@ -10,18 +10,18 @@
 <title>Get rid of the “Continue connecting?” prompt for your policy-configured wifi networks-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/10/18/get-rid-of-the-continue-connecting-prompt-for-your-policy-configured-wifi-networks/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Get rid of the “Continue connecting?” prompt for your policy-configured wifi networks">
-<meta name=twitter:description content="As of Windows 11, we noticed that we were getting prompted to continue connecting to a network that we&rsquo;d never had a problem with before. It&rsquo;s already defined in group policy, so this new behavior is puzzling and annoying. The certificate in question is for the NPS/Radius server our network uses to validate credentials for the wifi. I really had no idea how to even begin googling for this problem, but while talking to some of my fellow nerds on the WinadminsDiscord server, tossing around some ideas on what could be causing this, looking to see whether there was a problem with the certificate, etc.">
+<meta name=twitter:description content="As of Windows 11, we noticed that we were getting prompted to continue connecting to a network that we&rsquo;d never had a problem with before. It&rsquo;s already defined in group policy, so this new behavior is puzzling and annoying. The certificate in question is for the NPS/Radius server our network uses to validate credentials for the wifi.     I really had no idea how to even begin googling for this problem, but while talking to some of my fellow nerds on the Winadmins Discord server, tossing around some ideas on what could be causing this, looking to see whether there was a problem with the certificate, etc.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -69,7 +69,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -80,7 +80,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -94,8 +94,14 @@
 </div>
 <div class=post-entry>
 <p>As of Windows 11, we noticed that we were getting prompted to continue connecting to a network that we&rsquo;d never had a problem with before. It&rsquo;s already defined in group policy, so this new behavior is puzzling and annoying. The certificate in question is for the NPS/Radius server our network uses to validate credentials for the wifi. </p>
-<p> </p>
-<p>I really had no idea how to even begin googling for this problem, but while talking to some of my fellow nerds on the Winadmins Discord server, tossing around some ideas on what could be causing this, looking to see whether there was a problem with the certificate, etc. While I was poking around and testing these suggestions I stumbled across the fix.</p>
+<p><div class=image>
+<figure>
+<a href=image.png target=_blank>
+<img src=image.png alt>
+</a>
+</figure>
+</div> </p>
+<p>I really had no idea how to even begin googling for this problem, but while talking to some of my fellow nerds on the <a href=http://winadmins.io/>Winadmins</a> Discord server, tossing around some ideas on what could be causing this, looking to see whether there was a problem with the certificate, etc. While I was poking around and testing these suggestions I stumbled across the fix.</p>
 <p>In the group policy editor, find the defined wifi policies under Computer -> policies > windows settings > Wireless Network (802.11) Policies. Open the properties for the configuration in question.</p>
 <p>On the General tab, find the SSID you&rsquo;ve configured and click Edit. On the Security tab, under the authentication method (Microsoft: Protected EAP in my case), click properties.</p>
 <p>On the Protected EAP Properties tab, the checkmark for &ldquo;Verify the server&rsquo;s identity by validating the certificate&rdquo; was already checked. The fix ended up being to select the checkmark by my company&rsquo;s internal CA service. After updating the group policy on the laptop in question, the network connects properly on login again with no further questions.</p>
@@ -110,7 +116,7 @@
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

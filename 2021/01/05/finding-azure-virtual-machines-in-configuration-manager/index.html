@@ -10,16 +10,16 @@
 <title>Finding Azure Virtual Machines in Configuration Manager-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2021/01/05/finding-azure-virtual-machines-in-configuration-manager/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Finding Azure Virtual Machines in Configuration Manager">
 <meta name=twitter:description content="A request came in from my System Admin group to push certain policies only to VMs hosted in Azure. Currently, they had a naming convention being used (well, supposed to be used) to simply prefix the hostname with AZ-, but they came across a couple Domain Controllers that hadn&rsquo;t installed Updates in 7+ months, and of course the names didn&rsquo;t follow the accepted standard.
  <p> Officially, the Azure Metadata Service is: </p> <pre class=&#34;wp-block-code&#34;><code>[.">
@@ -70,7 +70,7 @@
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -81,7 +81,7 @@
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -114,7 +114,7 @@
                 &lt;/p&gt;
                 
                 &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;shell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;text/x-sh&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;xq-light&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:false,&amp;quot;readOnly&amp;quot;:false,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;Shell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;shell&amp;quot;}&quot;&gt;curl -H Metadata:true --noproxy &quot;*&quot; &quot;http://169.254.169.254/metadata/instance?api-version=2020-09-01&quot;&lt;/pre&gt;
+                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;shell&quot;,&quot;mime&quot;:&quot;text/x-sh&quot;,&quot;theme&quot;:&quot;xq-light&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:false,&quot;readOnly&quot;:false,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;Shell&quot;,&quot;modeName&quot;:&quot;shell&quot;}&quot;&gt;curl -H Metadata:true --noproxy &quot;*&quot; &quot;http://169.254.169.254/metadata/instance?api-version=2020-09-01&quot;&lt;/pre&gt;
                 &lt;/div&gt;
                 
                 &lt;p&gt;
@@ -122,7 +122,7 @@
                 &lt;/p&gt;
                 
                 &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;pastel-on-dark&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:false,&amp;quot;readOnly&amp;quot;:false,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;Invoke-RestMethod -Headers @{&quot;Metadata&quot;=&quot;true&quot;} -Uri &quot;http://169.254.169.254/metadata/instance/compute?api-version=2018-10-01&quot;&lt;/pre&gt;
+                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;pastel-on-dark&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:false,&quot;readOnly&quot;:false,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;Invoke-RestMethod -Headers @{&quot;Metadata&quot;=&quot;true&quot;} -Uri &quot;http://169.254.169.254/metadata/instance/compute?api-version=2018-10-01&quot;&lt;/pre&gt;
                 &lt;/div&gt;
                 
                 &lt;p&gt;
@@ -130,7 +130,7 @@
                 &lt;/p&gt;
                 
                 &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;pastel-on-dark&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:false,&amp;quot;readOnly&amp;quot;:false,&amp;quot;languageLabel&amp;quot;:&amp;quot;language&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;FUNCTION Test-IsAzureVM {
+                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;pastel-on-dark&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:false,&quot;readOnly&quot;:false,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;FUNCTION Test-IsAzureVM {
 IF(Invoke-RestMethod -Headers @{&quot;Metadata&quot;=&quot;true&quot;} -URI &quot;http://169.254.169.254/metadata/instance/compute?api-version=2017-08-01&quot;){
   $true
 }ELSE{
@@ -143,16 +143,16 @@ IF(Invoke-RestMethod -Headers @{&quot;Metadata&quot;=&quot;true&quot;} -URI &quo
                   And test on an Azure VM to make sure it works
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                &lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/image-14-1024x332.png&quot; alt=&quot;&quot; class=&quot;wp-image-2095&quot; width=&quot;1024&quot; height=&quot;332&quot; srcset=&quot;https:/wp-content/uploads/2020/12/image-14-1024x332.png 1024w, https:/wp-content/uploads/2020/12/image-14-300x97.png 300w, https:/wp-content/uploads/2020/12/image-14-768x249.png 768w, https:/wp-content/uploads/2020/12/image-14-100x32.png 100w, https:/wp-content/uploads/2020/12/image-14-855x277.png 855w, https:/wp-content/uploads/2020/12/image-14.png 1052w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+                ![](image-14-1024x332.png)&lt;/figure&gt; &lt;p&gt;
                   Success!&lt;br /&gt;Now let's make sure it works on a non-Azure VM
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                &lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/Snag_233efd31-1024x321.png&quot; alt=&quot;&quot; class=&quot;wp-image-2098&quot; width=&quot;1024&quot; height=&quot;321&quot; srcset=&quot;https:/wp-content/uploads/2020/12/Snag_233efd31-1024x321.png 1024w, https:/wp-content/uploads/2020/12/Snag_233efd31-300x94.png 300w, https:/wp-content/uploads/2020/12/Snag_233efd31-768x241.png 768w, https:/wp-content/uploads/2020/12/Snag_233efd31-100x31.png 100w, https:/wp-content/uploads/2020/12/Snag_233efd31-855x268.png 855w, https:/wp-content/uploads/2020/12/Snag_233efd31-1234x387.png 1234w, https:/wp-content/uploads/2020/12/Snag_233efd31.png 1336w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+                ![](Snag_233efd31-1024x321.png)&lt;/figure&gt; &lt;p&gt;
                   Yikes. Ok, now to handle that error message. We could try adding &lt;code&gt;-Erroraction silentlycontinue&lt;/code&gt;
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                &lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/Snag_234114b7-1024x276.png&quot; alt=&quot;&quot; class=&quot;wp-image-2099&quot; width=&quot;1024&quot; height=&quot;276&quot; srcset=&quot;https:/wp-content/uploads/2020/12/Snag_234114b7-1024x276.png 1024w, https:/wp-content/uploads/2020/12/Snag_234114b7-300x81.png 300w, https:/wp-content/uploads/2020/12/Snag_234114b7-768x207.png 768w, https:/wp-content/uploads/2020/12/Snag_234114b7-1536x414.png 1536w, https:/wp-content/uploads/2020/12/Snag_234114b7-100x27.png 100w, https:/wp-content/uploads/2020/12/Snag_234114b7-855x230.png 855w, https:/wp-content/uploads/2020/12/Snag_234114b7-1234x332.png 1234w, https:/wp-content/uploads/2020/12/Snag_234114b7.png 1600w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
-                  Dang, still isn't suppressing that exception.&lt;br /&gt;Looking up the documentation for &lt;a href=&quot;https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-webrequest?view=powershell-7.1#example-7--catch-non-success-messages-from-invoke-webrequest&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener nofollow&quot;&gt;Invoke-WebRequest&lt;/a&gt;, Microsoft states
+                ![](Snag_234114b7-1024x276.png)&lt;/figure&gt; &lt;p&gt;
+                  Dang, still isn't suppressing that exception.&lt;br /&gt;Looking up the documentation for [Invoke-WebRequest](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-webrequest?view=powershell-7.1#example-7--catch-non-success-messages-from-invoke-webrequest), Microsoft states
                 &lt;/p&gt;
                 
                 &lt;div class=&quot;wp-block-group&quot;&gt;
@@ -169,16 +169,16 @@ IF(Invoke-RestMethod -Headers @{&quot;Metadata&quot;=&quot;true&quot;} -URI &quo
                   Ok, let's try adding the Try/Catch
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                &lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/Snag_23486006-1024x241.png&quot; alt=&quot;&quot; class=&quot;wp-image-2100&quot; width=&quot;1024&quot; height=&quot;241&quot; srcset=&quot;https:/wp-content/uploads/2020/12/Snag_23486006-1024x241.png 1024w, https:/wp-content/uploads/2020/12/Snag_23486006-300x71.png 300w, https:/wp-content/uploads/2020/12/Snag_23486006-768x181.png 768w, https:/wp-content/uploads/2020/12/Snag_23486006-1536x361.png 1536w, https:/wp-content/uploads/2020/12/Snag_23486006-100x24.png 100w, https:/wp-content/uploads/2020/12/Snag_23486006-855x201.png 855w, https:/wp-content/uploads/2020/12/Snag_23486006-1234x290.png 1234w, https:/wp-content/uploads/2020/12/Snag_23486006.png 1570w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+                ![](Snag_23486006-1024x241.png)&lt;/figure&gt; &lt;p&gt;
                   Wait, where's the output??&lt;br /&gt;It looks as though, since the metadata &quot;URI&quot; doesn't exist on non-Azure VMs, there's no response even sent back to the &lt;code&gt;$Response&lt;/code&gt; variable. &lt;br /&gt;&lt;br /&gt;To fix this, we can forcibly set &lt;code&gt;Invoke-Webrequest&lt;/code&gt; to use Boolean instead, since all we're looking for is a True/False output
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                &lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/Snag_234d2101-1024x262.png&quot; alt=&quot;&quot; class=&quot;wp-image-2101&quot; width=&quot;1024&quot; height=&quot;262&quot; srcset=&quot;https:/wp-content/uploads/2020/12/Snag_234d2101-1024x262.png 1024w, https:/wp-content/uploads/2020/12/Snag_234d2101-300x77.png 300w, https:/wp-content/uploads/2020/12/Snag_234d2101-768x197.png 768w, https:/wp-content/uploads/2020/12/Snag_234d2101-100x26.png 100w, https:/wp-content/uploads/2020/12/Snag_234d2101-855x219.png 855w, https:/wp-content/uploads/2020/12/Snag_234d2101-1234x316.png 1234w, https:/wp-content/uploads/2020/12/Snag_234d2101.png 1449w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+                ![](Snag_234d2101-1024x262.png)&lt;/figure&gt; &lt;p&gt;
                   Great! Here's the finished function
                 &lt;/p&gt;
                 
                 &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&amp;quot;mode&amp;quot;:&amp;quot;powershell&amp;quot;,&amp;quot;mime&amp;quot;:&amp;quot;application/x-powershell&amp;quot;,&amp;quot;theme&amp;quot;:&amp;quot;pastel-on-dark&amp;quot;,&amp;quot;lineNumbers&amp;quot;:true,&amp;quot;styleActiveLine&amp;quot;:true,&amp;quot;lineWrapping&amp;quot;:false,&amp;quot;readOnly&amp;quot;:false,&amp;quot;fileName&amp;quot;:&amp;quot;Test-IsAzureVM&amp;quot;,&amp;quot;language&amp;quot;:&amp;quot;PowerShell&amp;quot;,&amp;quot;modeName&amp;quot;:&amp;quot;powershell&amp;quot;}&quot;&gt;FUNCTION Test-IsAzureVM {
+                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;pastel-on-dark&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:false,&quot;readOnly&quot;:false,&quot;fileName&quot;:&quot;Test-IsAzureVM&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;FUNCTION Test-IsAzureVM {
 </code></pre>
 <p>TRY{
 $Output = [bool](Invoke-RestMethod -Headers @{&ldquo;Metadata&rdquo;=&ldquo;true&rdquo;} -URI &ldquo;http://169.254.169.254/metadata/instance/compute?api-version=2017-08-01&rdquo;)
@@ -201,7 +201,7 @@ $Output
                   In your ConfigMgr Admin Console, navigate to &lt;code&gt;\Assets and Compliance\Overview\Compliance Settings\Configuration Items&lt;/code&gt; and Create a new Configuration Item
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                &lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/Snag_2366eb5c-968x1024.png&quot; alt=&quot;&quot; class=&quot;wp-image-2106&quot; width=&quot;968&quot; height=&quot;1024&quot; srcset=&quot;https:/wp-content/uploads/2020/12/Snag_2366eb5c-968x1024.png 968w, https:/wp-content/uploads/2020/12/Snag_2366eb5c-284x300.png 284w, https:/wp-content/uploads/2020/12/Snag_2366eb5c-768x812.png 768w, https:/wp-content/uploads/2020/12/Snag_2366eb5c-100x106.png 100w, https:/wp-content/uploads/2020/12/Snag_2366eb5c-855x904.png 855w, https:/wp-content/uploads/2020/12/Snag_2366eb5c.png 1063w&quot; sizes=&quot;(max-width: 968px) 100vw, 968px&quot; /&gt;&lt;/figure&gt; &lt;ol&gt;
+                ![](Snag_2366eb5c-968x1024.png)&lt;/figure&gt; &lt;ol&gt;
                   &lt;li&gt;
                     Setting Type: &lt;code&gt;Script&lt;/code&gt;
                   &lt;/li&gt;
@@ -213,7 +213,7 @@ $Output
                   &lt;/li&gt;
                 &lt;/ol&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
                 
-                &lt;img loading=&quot;lazy&quot; width=&quot;608&quot; height=&quot;634&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/Snag_23698fff.png&quot; alt=&quot;&quot; class=&quot;wp-image-2107&quot; srcset=&quot;https:/wp-content/uploads/2020/12/Snag_23698fff.png 608w, https:/wp-content/uploads/2020/12/Snag_23698fff-288x300.png 288w, https:/wp-content/uploads/2020/12/Snag_23698fff-100x104.png 100w&quot; sizes=&quot;(max-width: 608px) 100vw, 608px&quot; /&gt;&lt;/figure&gt; &lt;ol&gt;
+                ![](Snag_23698fff.png)&lt;/figure&gt; &lt;ol&gt;
                   &lt;li&gt;
                     Values: &lt;code&gt;true&lt;/code&gt;
                   &lt;/li&gt;
@@ -234,7 +234,7 @@ $Output
                   In the console, move down to the Configuration Baseline section and create a new Baseline, adding the Configuration Item we previously created
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                &lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/image-15.png&quot; alt=&quot;&quot; class=&quot;wp-image-2108&quot; width=&quot;626&quot; height=&quot;609&quot; srcset=&quot;https:/wp-content/uploads/2020/12/image-15.png 626w, https:/wp-content/uploads/2020/12/image-15-300x292.png 300w, https:/wp-content/uploads/2020/12/image-15-100x97.png 100w&quot; sizes=&quot;(max-width: 626px) 100vw, 626px&quot; /&gt;&lt;/figure&gt; &lt;h2&gt;
+                ![](image-15.png)&lt;/figure&gt; &lt;h2&gt;
                   Deploy Baseline
                 &lt;/h2&gt;
                 
@@ -242,7 +242,7 @@ $Output
                   Now you can Deploy your newly created Baseline to whichever devices you wish. For this example, we're deploying to the &lt;em&gt;All Systems&lt;/em&gt; collection and we're only going to run the baseline evaluation once per device, but there's no real harm in having it run every month or so (the data we're looking at is static and shouldn't vary at all).
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                &lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/image-17-1024x640.png&quot; alt=&quot;&quot; class=&quot;wp-image-2110&quot; width=&quot;1024&quot; height=&quot;640&quot; srcset=&quot;https:/wp-content/uploads/2020/12/image-17-1024x640.png 1024w, https:/wp-content/uploads/2020/12/image-17-300x188.png 300w, https:/wp-content/uploads/2020/12/image-17-768x480.png 768w, https:/wp-content/uploads/2020/12/image-17-100x63.png 100w, https:/wp-content/uploads/2020/12/image-17-855x535.png 855w, https:/wp-content/uploads/2020/12/image-17.png 1092w&quot; sizes=&quot;(max-width: 1024px) 100vw, 1024px&quot; /&gt;&lt;/figure&gt; &lt;h1&gt;
+                ![](image-17-1024x640.png)&lt;/figure&gt; &lt;h1&gt;
                   Create Collections
                 &lt;/h1&gt;
                 
@@ -250,11 +250,11 @@ $Output
                   The only real &quot;required&quot; collection to make is based on Compliant devices with the Baseline we deployed. To do that, click the Baseline, then the Deployments tab at the bottom, and right-click the &lt;strong&gt;Deployment&lt;/strong&gt; &gt; &lt;strong&gt;Create New Collection&lt;/strong&gt; &gt; &lt;strong&gt;Compliant&lt;/strong&gt;, and follow the on-screen prompts to finish the Collection
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                &lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/image-18.png&quot; alt=&quot;&quot; class=&quot;wp-image-2111&quot; width=&quot;615&quot; height=&quot;332&quot; srcset=&quot;https:/wp-content/uploads/2020/12/image-18.png 615w, https:/wp-content/uploads/2020/12/image-18-300x162.png 300w, https:/wp-content/uploads/2020/12/image-18-100x54.png 100w&quot; sizes=&quot;(max-width: 615px) 100vw, 615px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+                ![](image-18.png)&lt;/figure&gt; &lt;p&gt;
                   I named my Collection &quot;&lt;em&gt;All Systems_Azure&lt;/em&gt;&quot;
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                &lt;img loading=&quot;lazy&quot; src=&quot;https://sysmansquad.com/wp-content/uploads/2020/12/image-19.png&quot; alt=&quot;&quot; class=&quot;wp-image-2112&quot; width=&quot;553&quot; height=&quot;977&quot; srcset=&quot;https:/wp-content/uploads/2020/12/image-19.png 553w, https:/wp-content/uploads/2020/12/image-19-170x300.png 170w, https:/wp-content/uploads/2020/12/image-19-100x177.png 100w&quot; sizes=&quot;(max-width: 553px) 100vw, 553px&quot; /&gt;&lt;/figure&gt; &lt;p&gt;
+                ![](image-19.png)&lt;/figure&gt; &lt;p&gt;
                   and now you can create collections based on this collection, for example:
                 &lt;/p&gt;
                 
@@ -290,7 +290,8 @@ $Output
                 
                 &lt;p&gt;
                   Once I completed this, I found 34 additional Azure VMs that weren't showing up in our previous Collection that was querying based on the hostname prefix.
-                &lt;/p&gt;</code></pre>
+                &lt;/p&gt;
+</code></pre>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -302,7 +303,7 @@ $Output
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

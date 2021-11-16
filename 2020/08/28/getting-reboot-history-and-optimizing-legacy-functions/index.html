@@ -10,19 +10,19 @@
 <title>Getting Reboot History and Optimizing Legacy Functions-SysManSquad | Systems Management Squad</title>
 <link rel=canonical href=/2020/08/28/getting-reboot-history-and-optimizing-legacy-functions/>
 <link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://www.sysmansquad.com/css/custom.css>
+<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
-<script src=https://www.sysmansquad.com/js/jquery.slicknav.js></script>
-<script src=https://www.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
-<script src=https://www.sysmansquad.com/js/custom.js></script>
+<script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
+<script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
+<script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://www.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Getting Reboot History and Optimizing Legacy Functions">
 <meta name=twitter:description content="The other day, I logged on to a jump server and, while investigating an unrelated issue, I noticed the BG Info background showed the Last Reboot as March 1st, 2020. &ldquo;That can&rsquo;t be right,&rdquo; I thought. &ldquo;We have weekly maintenance windows to reboot these servers.&rdquo;
-As I opened an old stand-by function from my stash (originally posted here: https://gallery.technet.microsoft.com/scriptcenter/Get-RebootHistory-bc804819in 2015) and ran it, I was a bit annoyed at how SLOW it was.">
+As I opened an old stand-by function from my stash (originally posted here: https://gallery.technet.microsoft.com/scriptcenter/Get-RebootHistory-bc804819 in 2015) and ran it, I was a bit annoyed at how SLOW it was.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -70,7 +70,7 @@ As I opened an old stand-by function from my stash (originally posted here: http
 <div class=show-search>
 <form role=search method=get action=https://www.google.com/search id=searchform>
 <input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
-<input type=hidden name=sitesearch value=https://www.sysmansquad.com>
+<input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
 <button type=submit value=Search>
 </form>
 </div>
@@ -81,7 +81,7 @@ As I opened an old stand-by function from my stash (originally posted here: http
 <header id=header class=noslider>
 <div class=container>
 <div id=logo>
-<h1><a href=https://www.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
+<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
 </div>
 </div>
 </header>
@@ -122,9 +122,21 @@ Remove-Variable Params,count</p>
 <p>Now we need to replace <code>Get-WMIObject</code> with <code>Get-WinEvent</code> and compare the outputs. Referencing good ol' <a href=https://devblogs.microsoft.com/scripting/use-filterhashtable-to-filter-event-log-with-powershell/>Dr. Scripto&rsquo;s blog on the FilterHashtable param</a>, we replace the WMI splat and the <code>$Events</code> line with:</p>
 <p>Next we&rsquo;ll need to verify the integrity of this <code>Switch</code> statement</p>
 <p>Testing the output of our new <code>$Events</code> variable, we see the properties of the first element do not have the same property names. Most are easy enough to match up, save for the <code>InsertionStrings</code> property<br>
-<br>
+<div class=image>
+<figure>
+<a href=Snag_2180a815.png target=_blank>
+<img src=Snag_2180a815.png alt="Event property compare">
+</a>
+</figure>
+</div><br>
 For the <code>InsertionStrings</code> property, I just went exploring and tried this, which had the corresponding values:<br>
-<br>
+<div class=image>
+<figure>
+<a href=Snag_2184b929.png target=_blank>
+<img src=Snag_2184b929.png alt="6008 properties">
+</a>
+</figure>
+</div><br>
 and led to the new Switch statement:</p>
 <p>Finally, we validate the <code>$ShutdownDetail</code> values:</p>
 <p>Once again, there are values to modify by comparing the output of the WMI event object to the new object, but I came across one property that didn&rsquo;t translate well, the <code>LastShutdownUser</code> property. With WMI, the readable User Name was placed in the <code>$Events[0].InsertionStrings</code> property, but <code>Get-WinEvent</code> provides just the SID. I put together a quick CIM function to grab the User name:</p>
@@ -144,7 +156,7 @@ Enjoy!</p>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://www.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
