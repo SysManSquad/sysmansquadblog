@@ -116,12 +116,9 @@
                 &lt;p&gt;
                   Language Pack (LP), Language Experience Pack (LXP), Language Interface Pack (LIP) and Features on Demand (FoD). For simplicity I’m just going to use acronyms from here on out.
                 &lt;/p&gt;
-                
-                &lt;h2&gt;
-                  What changed?
-                &lt;/h2&gt;
-                
-                &lt;p&gt;
+</code></pre>
+<h2 id=what-changed>What changed?</h2>
+<pre><code>                &lt;p&gt;
                   Microsoft created a difference between system default language and user default language.
                 &lt;/p&gt;
                 
@@ -147,7 +144,7 @@
                   &lt;/p&gt;
                   
                   &lt;p&gt;
-                    &lt;strong&gt;System user interface default language: en-US&lt;br /&gt;System locale: fr-FR&lt;/strong&gt;&lt;br /&gt;Default time zone: GMT Standard Time&lt;br /&gt;Active keypad (s): 040c: 0000040c&lt;br /&gt;Keyboard Layer Driver: Not Installed.
+                    **System user interface default language: en-US&lt;br /&gt;System locale: fr-FR**&lt;br /&gt;Default time zone: GMT Standard Time&lt;br /&gt;Active keypad (s): 040c: 0000040c&lt;br /&gt;Keyboard Layer Driver: Not Installed.
                   &lt;/p&gt;
                   
                   &lt;p&gt;
@@ -179,14 +176,14 @@
                   Specifically, the issue they would have seen is a halted IPU / feature upgrade, with &lt;code&gt;setupact.log&lt;/code&gt; and [SetupDiag.exe](https://docs.microsoft.com/en-us/windows/deployment/upgrade/setupdiag) complaining about:
                 &lt;/p&gt;
                 
-                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;Target language en-US is not compatible with the host language&lt;/code&gt;&lt;/pre&gt;
+                `Target language en-US is not compatible with the host language`
                 
                 &lt;p&gt;
                   This new change means we don't have to do anything special or overly cumbersome in our task sequence! All we need is to specify the language we want in the &lt;code&gt;Apply Windows Settings&lt;/code&gt; step. And more importantly, we can do so without worrying about it coming back to bite us later when you upgrade the system to a newer version of Windows 10.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  I don't know how much work the lucky people in the Windows team did behind the scenes in order to make this work, but if you think about what they've done, they've nailed it. They solved the problem by not giving us any special instructions to follow. We literally no longer need to do anything special in our builds, or arguably any different compared to the way we &lt;strong&gt;should&lt;/strong&gt; have been doing in all along, and it just works.
+                  I don't know how much work the lucky people in the Windows team did behind the scenes in order to make this work, but if you think about what they've done, they've nailed it. They solved the problem by not giving us any special instructions to follow. We literally no longer need to do anything special in our builds, or arguably any different compared to the way we **should** have been doing in all along, and it just works.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -196,12 +193,9 @@
                 [![](multilingualosdwin1020h2-12.png)](multilingualosdwin1020h2-12.png)&lt;figcaption&gt;HKLM:SYSTEM\CurrentControlSet\Control\Nls\Language:InstallLanguage&lt;/figcaption&gt;&lt;/figure&gt; &lt;p&gt;
                   Above is what &lt;code&gt;HKLM:SYSTEM\CurrentControlSet\Control\Nls\Language&lt;/code&gt; looks like after building a Windows 10 2004 or 20H2 system and changing the user default language to French (fr-fr - 040c), not the system default language (en-us - 0409)!
                 &lt;/p&gt;
-                
-                &lt;h2&gt;
-                  Prerequisites
-                &lt;/h2&gt;
-                
-                &lt;p&gt;
+</code></pre>
+<h2 id=prerequisites>Prerequisites</h2>
+<pre><code>                &lt;p&gt;
                   Before we get started, [I still recommend you create LXP and FoD repositories](https://sysmansquad.com/2020/06/08/deploy-languages-via-software-center-with-pscmwin10language/).
                 &lt;/p&gt;
                 
@@ -231,7 +225,7 @@
                 &lt;/div&gt;
                 
                 &lt;p&gt;
-                  &lt;strong&gt;Note:&lt;/strong&gt; yes you will be downloading content for 2004, even though we are building a 20H2 task seqeuence.
+                  **Note:** yes you will be downloading content for 2004, even though we are building a 20H2 task seqeuence.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -277,25 +271,33 @@
                 &lt;p&gt;
                   [I did write another blog post](https://sysmansquad.com/2020/06/08/deploy-languages-via-software-center-with-pscmwin10language/) which covers how to use this module in a little more detail if you need it.
                 &lt;/p&gt;
-                
-                &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:false,&quot;readOnly&quot;:true,&quot;fileName&quot;:&quot;PowerShell&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;Install-Module &quot;PSCMWin10Language&quot; -Scope CurrentUser
 </code></pre>
-<p>Import-Module &ldquo;PSCMWin10Language&rdquo;
-New-LPRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rdquo; -SourcePath &ldquo;D:\x64\langpacks" -TargetPath &ldquo;G:\OSD\Windows10-1903-Languages"
-New-LXPRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rdquo; -SourcePath &ldquo;D:\LocalExperiencePack&rdquo; -TargetPath &ldquo;G:\OSD\Windows10-1903-Languages"
-New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rdquo; -SourcePath &ldquo;E:" -TargetPath &ldquo;G:\OSD\Windows10-1903-Languages"
-</p>
-<pre><code>                &lt;div class=&quot;wp-block-image&quot;&gt;
-                  &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;[![](multilingualosdwin1020h2-5-1007x1024.png)](multilingualosdwin1020h2-5.png)&lt;figcaption&gt;New-LPRepository&lt;br /&gt;&lt;em&gt;(click to enlarge)&lt;/em&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Install-Module</span> <span style=color:#d14>&#34;PSCMWin10Language&#34;</span> -Scope CurrentUser
+<span style=color:#0086b3>Import-Module</span> <span style=color:#d14>&#34;PSCMWin10Language&#34;</span>
+<span style=color:#0086b3>New-LPRepository</span> -Language <span style=color:#d14>&#34;fr-FR&#34;</span>, <span style=color:#d14>&#34;de-DE&#34;</span> -SourcePath <span style=color:#d14>&#34;D:\x64\langpacks\&#34;</span> -TargetPath <span style=color:#d14>&#34;G:\OSD\Windows10-1903-Languages\&#34;</span>
+<span style=color:#0086b3>New-LXPRepository</span> -Language <span style=color:#d14>&#34;fr-FR&#34;</span>, <span style=color:#d14>&#34;de-DE&#34;</span> -SourcePath <span style=color:#d14>&#34;D:\LocalExperiencePack&#34;</span> -TargetPath <span style=color:#d14>&#34;G:\OSD\Windows10-1903-Languages\&#34;</span>
+<span style=color:#0086b3>New-FoDLanguageFeaturesRepository</span> -Language <span style=color:#d14>&#34;fr-FR&#34;</span>, <span style=color:#d14>&#34;de-DE&#34;</span> -SourcePath <span style=color:#d14>&#34;E:\&#34;</span> -TargetPath <span style=color:#d14>&#34;G:\OSD\Windows10-1903-Languages\&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                &lt;div class=&quot;wp-block-image&quot;&gt;
+                  &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;[![](multilingualosdwin1020h2-5-1007x1024.png)](multilingualosdwin1020h2-5.png)&lt;figcaption&gt;New-LPRepository&lt;br /&gt;*(click to enlarge)*&lt;/figcaption&gt;&lt;/figure&gt;
                 &lt;/div&gt;
                 
                 &lt;div class=&quot;wp-block-image&quot;&gt;
-                  &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;[![](multilingualosdwin1020h2-6-1007x1024.png)](multilingualosdwin1020h2-6.png)&lt;figcaption&gt;New-LXPRepository&lt;br /&gt;&lt;em&gt;(click to enlarge)&lt;/em&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+                  &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;[![](multilingualosdwin1020h2-6-1007x1024.png)](multilingualosdwin1020h2-6.png)&lt;figcaption&gt;New-LXPRepository&lt;br /&gt;*(click to enlarge)*&lt;/figcaption&gt;&lt;/figure&gt;
                 &lt;/div&gt;
                 
                 &lt;div class=&quot;wp-block-image&quot;&gt;
-                  &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;[![](multilingualosdwin1020h2-7-1007x1024.png)](multilingualosdwin1020h2-7.png)&lt;figcaption&gt;New-FoDLanguageFeaturesRepository&lt;br /&gt;&lt;em&gt;(click to enlarge)&lt;/em&gt;&lt;/figcaption&gt;&lt;/figure&gt;
+                  &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;[![](multilingualosdwin1020h2-7-1007x1024.png)](multilingualosdwin1020h2-7.png)&lt;figcaption&gt;New-FoDLanguageFeaturesRepository&lt;br /&gt;*(click to enlarge)*&lt;/figcaption&gt;&lt;/figure&gt;
                 &lt;/div&gt;
                 
                 &lt;p&gt;
@@ -303,7 +305,7 @@ New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rd
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  &lt;strong&gt;Note:&lt;/strong&gt; PSCMWin10Language will not create these Packages for you.
+                  **Note:** PSCMWin10Language will not create these Packages for you.
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
                 
                 [![](multilingualosdwin1020h2-8-1024x497.png)](multilingualosdwin1020h2-8.png)&lt;figcaption&gt;Packages for Windows 10 2004 LP, LXP and FoD&lt;/figcaption&gt;&lt;/figure&gt; &lt;p&gt;
@@ -321,12 +323,9 @@ New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rd
                 &lt;p&gt;
                   Using the OSDWindowsSettings* collection variables so they're picked up in your task sequence is completely optional. If you you prefer, you can of course use your own conditions in your task sequence and have multiple &lt;code&gt;Apply Windows Settings&lt;/code&gt; steps if you prefer, and for each of those &lt;code&gt;Apply Windows Settings&lt;/code&gt; steps you would choose the language options from each dropdown.
                 &lt;/p&gt;
-                
-                &lt;h2&gt;
-                  Shut up and give me the task sequence
-                &lt;/h2&gt;
-                
-                &lt;p&gt;
+</code></pre>
+<h2 id=shut-up-and-give-me-the-task-sequence>Shut up and give me the task sequence</h2>
+<pre><code>                &lt;p&gt;
                   [Download Exported Task Sequence](https://github.com/SysManSquad/BlogFiles/raw/master/codaamok/Multilingual%20Windows%2010%2020H2%20OSD%20with%20ConfigMgr/SysManSquadMultilingualWindows10TaskSequence-20200213.zip)
                 &lt;/p&gt;
                 
@@ -339,10 +338,10 @@ New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rd
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
                 
                 ![](multilingualosdwin1020h2-10.png)&lt;figcaption&gt;Import SysManSquadMultilingualWindows10TaskSequence-20200213.zip&lt;/figcaption&gt;&lt;/figure&gt; &lt;p&gt;
-                  You will need to set the option to &lt;strong&gt;ignore dependencies&lt;/strong&gt;, simply because the PackageID references in the task sequence would not resolve in your environment.
+                  You will need to set the option to **ignore dependencies**, simply because the PackageID references in the task sequence would not resolve in your environment.
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
                 
-                ![](multilingualosdwin1020h2-11.png)&lt;figcaption&gt;Set the &lt;strong&gt;Action&lt;/strong&gt; to &lt;strong&gt;Ignore Depedency&lt;/strong&gt;&lt;/figcaption&gt;&lt;/figure&gt; &lt;p&gt;
+                ![](multilingualosdwin1020h2-11.png)&lt;figcaption&gt;Set the **Action** to **Ignore Depedency**&lt;/figcaption&gt;&lt;/figure&gt; &lt;p&gt;
                   Once imported, you will see that beyond the initial few steps of formatting the drive and applying the OS image, there's nothing more complicated than the 3 steps for each language you want in your task sequence: installing the LP, LXP and FoD language content.
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
                 
@@ -361,13 +360,10 @@ New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rd
                 &lt;p&gt;
                   After running the task sequence, the result on the device is that it will have a system default language of en-us, and a user default language of either fr-fr or de-de.
                 &lt;/p&gt;
-                
-                &lt;h2&gt;
-                  Trust but verify
-                &lt;/h2&gt;
-                
-                &lt;p&gt;
-                  &lt;em&gt;-shudders-&lt;/em&gt;
+</code></pre>
+<h2 id=trust-but-verify>Trust but verify</h2>
+<pre><code>                &lt;p&gt;
+                  *-shudders-*
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -381,20 +377,14 @@ New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rd
                 &lt;p&gt;
                   Therefore the moment Windows 10 21H1 comes out, we should all be testing we can upgrade IPU / feature update from 2004, with no InstallLanguage issue. In theory, the InstallLanguage is literally non-existent and we can see that now from looking at the registry of a 2004/20H2 system today.
                 &lt;/p&gt;
-                
-                &lt;h2&gt;
-                  Wrap up
-                &lt;/h2&gt;
-                
-                &lt;p&gt;
+</code></pre>
+<h2 id=wrap-up>Wrap up</h2>
+<pre><code>                &lt;p&gt;
                   I hope you found my content on localising Windows 10 helpful. I get a kick out of doing this for the community when I know I've helped someone. If you have any issues/questions, comment below or DM/tweet on Twitter [@codaamok](https://twitter.com/codaamok). Equally, if any of this helped, still let me know.
                 &lt;/p&gt;
-                
-                &lt;h2&gt;
-                  Further reading
-                &lt;/h2&gt;
-                
-                &lt;ul&gt;
+</code></pre>
+<h2 id=further-reading>Further reading</h2>
+<pre><code>                &lt;ul&gt;
                   &lt;li&gt;
                     [Reduce the size of multilingual Windows images with LXPs](https://techcommunity.microsoft.com/t5/windows-it-pro-blog/reduce-the-size-of-multilingual-windows-images-with-lxps/ba-p/1503381)
                   &lt;/li&gt;

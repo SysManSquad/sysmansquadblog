@@ -216,75 +216,189 @@
 <p>Now that I knew what information I needed to use to query the AdminService over CMG, I was ready to make the necessary modifications to my script.</p>
 <h3 id=1-new-parameters-and-parametersets>1) New parameters and ParameterSets</h3>
 <p>Depending on if the client is on the internet or not, my script would require a different set of parameters. This was the perfect opportunity to use <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parameter_sets?view=powershell-7.1">parameter sets</a>.</p>
-<p>[parameter(Mandatory = $true, ParameterSetName = &ldquo;Internet&rdquo;)]
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>[<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$true</span>, <span style=color:#000;font-weight:700>ParameterSetName</span> = <span style=color:#d14>&#34;Intranet&#34;</span>)]
 [ValidateNotNullOrEmpty()]
-[string]$ExternalUrl,</p>
-<p>[parameter(Mandatory = $true, ParameterSetName = &ldquo;Internet&rdquo;)]
+<span style=color:teal>[string]</span><span style=color:teal>$ServerFQDN</span>,
+
+[<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$true</span>, <span style=color:#000;font-weight:700>ParameterSetName</span> = <span style=color:#d14>&#34;Internet&#34;</span>)]
 [ValidateNotNullOrEmpty()]
-[string]$TenantID,</p>
-<p>[parameter(Mandatory = $true, ParameterSetName = &ldquo;Internet&rdquo;)]
+<span style=color:teal>[string]</span><span style=color:teal>$ExternalUrl</span>,
+
+[<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$true</span>, <span style=color:#000;font-weight:700>ParameterSetName</span> = <span style=color:#d14>&#34;Internet&#34;</span>)]
 [ValidateNotNullOrEmpty()]
-[string]$ClientID,</p>
-<p>[parameter(Mandatory = $false, ParameterSetName = &ldquo;Internet&rdquo;)]
+<span style=color:teal>[string]</span><span style=color:teal>$TenantID</span>,
+
+[<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$true</span>, <span style=color:#000;font-weight:700>ParameterSetName</span> = <span style=color:#d14>&#34;Internet&#34;</span>)]
 [ValidateNotNullOrEmpty()]
-[string]$ApplicationIdUri = &lsquo;https://ConfigMgrService&rsquo;,</p>
-<p>[parameter(Mandatory = $false, ParameterSetName = &ldquo;Intranet&rdquo;)]
-[parameter(Mandatory = $true, ParameterSetName = &ldquo;Internet&rdquo;)]
+<span style=color:teal>[string]</span><span style=color:teal>$ClientID</span>,
+
+[<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$false</span>, <span style=color:#000;font-weight:700>ParameterSetName</span> = <span style=color:#d14>&#34;Internet&#34;</span>)]
 [ValidateNotNullOrEmpty()]
-[string]$Username,</p>
-<p>[parameter(Mandatory = $false, ParameterSetName = &ldquo;Intranet&rdquo;)]
-[parameter(Mandatory = $true, ParameterSetName = &ldquo;Internet&rdquo;)]
+<span style=color:teal>[string]</span><span style=color:teal>$ApplicationIdUri</span> = <span style=color:#d14>&#39;https://ConfigMgrService&#39;</span>,
+
+
+[<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$false</span>, <span style=color:#000;font-weight:700>ParameterSetName</span> = <span style=color:#d14>&#34;Intranet&#34;</span>)]
+[<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$true</span>, <span style=color:#000;font-weight:700>ParameterSetName</span> = <span style=color:#d14>&#34;Internet&#34;</span>)]
 [ValidateNotNullOrEmpty()]
-[string]$Password,</p>
-<p>[parameter(Mandatory = $false, ParameterSetName = &ldquo;Intranet&rdquo;)]
-[parameter(Mandatory = $false, ParameterSetName = &ldquo;Internet&rdquo;)]
-[bool]$BypassCertCheck = $false,</p>
-<h3 id=2-verify-install-and-import-the-msalps-module>2) Verify, Install and Import the MSAL.PS module</h3>
+<span style=color:teal>[string]</span><span style=color:teal>$Username</span>,
+
+[<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$false</span>, <span style=color:#000;font-weight:700>ParameterSetName</span> = <span style=color:#d14>&#34;Intranet&#34;</span>)]
+[<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$true</span>, <span style=color:#000;font-weight:700>ParameterSetName</span> = <span style=color:#d14>&#34;Internet&#34;</span>)]
+[ValidateNotNullOrEmpty()]
+<span style=color:teal>[string]</span><span style=color:teal>$Password</span>,
+
+[<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$false</span>, <span style=color:#000;font-weight:700>ParameterSetName</span> = <span style=color:#d14>&#34;Intranet&#34;</span>)]
+[<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$false</span>, <span style=color:#000;font-weight:700>ParameterSetName</span> = <span style=color:#d14>&#34;Internet&#34;</span>)]
+<span style=color:teal>[bool]</span><span style=color:teal>$BypassCertCheck</span> = <span style=color:teal>$false</span>,
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=2-verify-install-and-import-the-msalps-module>2) Verify, Install and Import the MSAL.PS module</h3>
 <p>I wrote a function to handle installing & importing the MSAL.PS.</p>
 <p>The tricky part here is that the MSAL.PS module requires us to accept the license agreement before we can install the module. There is a parameter <strong>-AcceptLicense</strong> for the Install-Module function but it is only available in the <a href=https://docs.microsoft.com/en-us/powershell/module/powershellget>PowerShellGet module</a> version 2 or higher.</p>
 <p>This function checks for the availability of the MSAL.PS module and if it’s not there it will check for the prerequisites to install before it can import the module.</p>
-<pre><code>    Add-TextToCMLog $LogFile &quot;MSAL.PS is not installed, checking for prerequisites before installing module.&quot; $component 1
-    
-    Add-TextToCMLog $LogFile &quot;Checking for NuGet package provider... &quot; $component 1
-    If(-not (Get-PackageProvider -Name NuGet -ListAvailable -ErrorAction SilentlyContinue)){
-        Add-TextToCMLog $LogFile &quot;NuGet package provider is not installed, installing NuGet...&quot; $component 1
-        $NuGetVersion = Install-PackageProvider -Name NuGet -Force -ErrorAction Stop | Select-Object -ExpandProperty Version
-        Add-TextToCMLog $LogFile &quot;NuGet package provider version $($NuGetVersion) installed.&quot; $component 1
-    }
-    
-    Add-TextToCMLog $LogFile &quot;Checking for PowerShellGet module version 2 or higher &quot; $component 1
-    $PowerShellGetLatestVersion = Get-Module -ListAvailable -Name PowerShellGet | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version       
-    If((-not $PowerShellGetLatestVersion)){
-        Add-TextToCMLog $LogFile &quot;Could not find any version of PowerShellGet installed.&quot; $component 1
-    }
-    If(($PowerShellGetLatestVersion.Major -lt 2)){
-        Add-TextToCMLog $LogFile &quot;Current PowerShellGet version is $($PowerShellGetLatestVersion) and needs to be updated.&quot; $component 1
-    }
-    If((-not $PowerShellGetLatestVersion) -or ($PowerShellGetLatestVersion.Major -lt 2)){
-        Add-TextToCMLog $LogFile &quot;Installing latest version of PowerShellGet...&quot; $component 1
-        Install-Module -Name PowerShellGet -AllowClobber -Force
-        $InstalledVersion = Get-Module -ListAvailable -Name PowerShellGet | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
-        Add-TextToCMLog $LogFile &quot;PowerShellGet module version $($InstalledVersion) installed.&quot; $component 1
-    }
-    
-    Add-TextToCMLog $LogFile &quot;Installing MSAL.PS module...&quot; $component 1
-    If((-not $PowerShellGetLatestVersion) -or ($PowerShellGetLatestVersion.Major -lt 2)){
-        Add-TextToCMLog $LogFile &quot;Starting another powershell process to install the module...&quot; $component 1
-        $result = Start-Process -FilePath powershell.exe -ArgumentList &quot;Install-Module MSAL.PS -AcceptLicense -Force&quot; -PassThru -Wait -NoNewWindow
-        If($result.ExitCode -ne 0){
-            Add-TextToCMLog $LogFile &quot;Failed to install MSAL.PS module&quot; $component 3
-            Throw &quot;Failed to install MSAL.PS module&quot;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#000;font-weight:700>Function</span> <span style=color:#0086b3>Import-MSALPSModule</span>{
+    <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;Checking if MSAL.PS module is available on the device.&#34;</span> <span style=color:teal>$component</span> 1
+    <span style=color:teal>$MSALModule</span> = <span style=color:#0086b3>Get-Module</span> -ListAvailable MSAL.<span style=color:#0086b3>PS
+</span><span style=color:#0086b3></span>    <span style=color:#000;font-weight:700>If</span>(<span style=color:teal>$MSALModule</span>){
+        <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;Module is already available.&#34;</span> <span style=color:teal>$component</span> 1
+    }<span style=color:#000;font-weight:700>Else</span>{
+        <span style=color:#998;font-style:italic>#Setting PowerShell to use TLS 1.2 for PowerShell Gallery</span>
+        <span style=color:teal>[Net.ServicePointManager]</span>::SecurityProtocol = <span style=color:teal>[Net.SecurityProtocolType]</span>::Tls12
+        
+        <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;MSAL.PS is not installed, checking for prerequisites before installing module.&#34;</span> <span style=color:teal>$component</span> 1
+        
+        <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;Checking for NuGet package provider... &#34;</span> <span style=color:teal>$component</span> 1
+        <span style=color:#000;font-weight:700>If</span>(<span style=color:#000;font-weight:700>-not</span> (<span style=color:#0086b3>Get-PackageProvider</span> -Name NuGet -ListAvailable -ErrorAction SilentlyContinue)){
+            <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;NuGet package provider is not installed, installing NuGet...&#34;</span> <span style=color:teal>$component</span> 1
+            <span style=color:teal>$NuGetVersion</span> = <span style=color:#0086b3>Install-PackageProvider</span> -Name NuGet -Force -ErrorAction Stop | <span style=color:#0086b3>Select-Object</span> -ExpandProperty Version
+            <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;NuGet package provider version </span>$(<span style=color:teal>$NuGetVersion</span>)<span style=color:#d14> installed.&#34;</span> <span style=color:teal>$component</span> 1
         }
-    }Else{
-        Install-Module MSAL.PS -AcceptLicense -Force
+        
+        <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;Checking for PowerShellGet module version 2 or higher &#34;</span> <span style=color:teal>$component</span> 1
+        <span style=color:teal>$PowerShellGetLatestVersion</span> = <span style=color:#0086b3>Get-Module</span> -ListAvailable -Name PowerShellGet | <span style=color:#0086b3>Sort-Object</span> -Property Version -Descending | <span style=color:#0086b3>Select-Object</span> -First 1 -ExpandProperty Version       
+        <span style=color:#000;font-weight:700>If</span>((<span style=color:#000;font-weight:700>-not</span> <span style=color:teal>$PowerShellGetLatestVersion</span>)){
+            <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;Could not find any version of PowerShellGet installed.&#34;</span> <span style=color:teal>$component</span> 1
+        }
+        <span style=color:#000;font-weight:700>If</span>((<span style=color:teal>$PowerShellGetLatestVersion</span>.Major <span style=color:#000;font-weight:700>-lt</span> 2)){
+            <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;Current PowerShellGet version is </span>$(<span style=color:teal>$PowerShellGetLatestVersion</span>)<span style=color:#d14> and needs to be updated.&#34;</span> <span style=color:teal>$component</span> 1
+        }
+        <span style=color:#000;font-weight:700>If</span>((<span style=color:#000;font-weight:700>-not</span> <span style=color:teal>$PowerShellGetLatestVersion</span>) <span style=color:#000;font-weight:700>-or</span> (<span style=color:teal>$PowerShellGetLatestVersion</span>.Major <span style=color:#000;font-weight:700>-lt</span> 2)){
+            <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;Installing latest version of PowerShellGet...&#34;</span> <span style=color:teal>$component</span> 1
+            <span style=color:#0086b3>Install-Module</span> -Name PowerShellGet -AllowClobber -Force
+            <span style=color:teal>$InstalledVersion</span> = <span style=color:#0086b3>Get-Module</span> -ListAvailable -Name PowerShellGet | <span style=color:#0086b3>Sort-Object</span> -Property Version -Descending | <span style=color:#0086b3>Select-Object</span> -First 1 -ExpandProperty Version
+            <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;PowerShellGet module version </span>$(<span style=color:teal>$InstalledVersion</span>)<span style=color:#d14> installed.&#34;</span> <span style=color:teal>$component</span> 1
+        }
+        
+        <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;Installing MSAL.PS module...&#34;</span> <span style=color:teal>$component</span> 1
+        <span style=color:#000;font-weight:700>If</span>((<span style=color:#000;font-weight:700>-not</span> <span style=color:teal>$PowerShellGetLatestVersion</span>) <span style=color:#000;font-weight:700>-or</span> (<span style=color:teal>$PowerShellGetLatestVersion</span>.Major <span style=color:#000;font-weight:700>-lt</span> 2)){
+            <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;Starting another powershell process to install the module...&#34;</span> <span style=color:teal>$component</span> 1
+            <span style=color:teal>$result</span> = <span style=color:#0086b3>Start-Process</span> -FilePath powershell.exe -ArgumentList <span style=color:#d14>&#34;Install-Module MSAL.PS -AcceptLicense -Force&#34;</span> -PassThru -Wait -NoNewWindow
+            <span style=color:#000;font-weight:700>If</span>(<span style=color:teal>$result</span>.ExitCode <span style=color:#000;font-weight:700>-ne</span> 0){
+                <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;Failed to install MSAL.PS module&#34;</span> <span style=color:teal>$component</span> 3
+                <span style=color:#000;font-weight:700>Throw</span> <span style=color:#d14>&#34;Failed to install MSAL.PS module&#34;</span>
+            }
+        }<span style=color:#000;font-weight:700>Else</span>{
+            <span style=color:#0086b3>Install-Module</span> MSAL.<span style=color:#0086b3>PS </span>-AcceptLicense -Force
+        }
     }
+    <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;Importing MSAL.PS module...&#34;</span> <span style=color:teal>$component</span> 1
+    <span style=color:#0086b3>Import-module</span> MSAL.<span style=color:#0086b3>PS </span>-Force
+    <span style=color:#0086b3>Add-TextToCMLog</span> <span style=color:teal>$LogFile</span> <span style=color:#d14>&#34;MSAL.PS module successfully imported.&#34;</span> <span style=color:teal>$component</span> 1
 }
-Add-TextToCMLog $LogFile &quot;Importing MSAL.PS module...&quot; $component 1
-Import-module MSAL.PS -Force
-Add-TextToCMLog $LogFile &quot;MSAL.PS module successfully imported.&quot; $component 1
-</code></pre>
-<p>}</p>
-<h4 id=what-about-winpe-powershell-gallery-does-not-work-in-winpe>What about WinPE? PowerShell Gallery does not work in WinPE!</h4>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id=what-about-winpe-powershell-gallery-does-not-work-in-winpe>What about WinPE? PowerShell Gallery does not work in WinPE!</h4>
 <p>You are right, by default PowerShell Gallery does not work in WinPE. To solve this issue, you have 2 options:</p>
 <pre><code>  &lt;div class=&quot;wp-block-media-text__content&quot;&gt;
     &lt;p&gt;
@@ -306,7 +420,39 @@ Add-TextToCMLog $LogFile &quot;MSAL.PS module successfully imported.&quot; $comp
 <p>If you decide to go with enabling support for PowerShell Gallery in WinPE, you can disable the step to manually install the module in the task sequence.</p>
 <h3 id=3-querying-the-adminservice>3) Querying the AdminService</h3>
 <p>Now, depending on what parameters were used, we will query the AdminService locally or via the CMG:</p>
-<p>The rest of the script to filter and select the most suitable package did not change.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#000;font-weight:700>switch</span>(<span style=color:teal>$PSCmdlet</span>.<span style=color:#000;font-weight:700>ParameterSetName</span>){
+    <span style=color:#d14>&#39;Intranet&#39;</span>{
+        <span style=color:teal>$Packages</span> = <span style=color:#0086b3>Invoke-RestMethod</span> -Method Get -Uri <span style=color:teal>$WMIPackageURL</span> -Body <span style=color:teal>$Body</span> <span style=color:teal>@InvokeRestMethodCredential</span> | <span style=color:#0086b3>Select-Object</span> -ExpandProperty value
+    }
+    <span style=color:#d14>&#39;Internet&#39;</span>{
+        <span style=color:teal>$authHeader</span> = @{
+            <span style=color:#d14>&#39;Content-Type&#39;</span>  = <span style=color:#d14>&#39;application/json&#39;</span>
+            <span style=color:#d14>&#39;Authorization&#39;</span> = <span style=color:#d14>&#34;Bearer &#34;</span> + <span style=color:teal>$token</span>.AccessToken
+            <span style=color:#d14>&#39;ExpiresOn&#39;</span>	    = <span style=color:teal>$token</span>.ExpiresOn
+        }
+        <span style=color:teal>$Packages</span> = <span style=color:#0086b3>Invoke-RestMethod</span> -Method Get -Uri <span style=color:teal>$WMIPackageURL</span> -Headers <span style=color:teal>$authHeader</span> -Body <span style=color:teal>$Body</span> | <span style=color:#0086b3>Select-Object</span> -ExpandProperty value
+    }
+} 
+</code></pre></td></tr></table>
+</div>
+</div><p>The rest of the script to filter and select the most suitable package did not change.</p>
 <h2 id=improvements-to-the-task-sequence>Improvements to the task sequence</h2>
 <p>Now that the script itself supports querying over CMG, I needed to make some adjustments to the “<strong>Query AdminService for PackageID</strong>” task sequence to properly call the script with the right parameters.</p>
 <h3 id=1-is-the-client-on-internet>1) Is the client on Internet?</h3>
@@ -321,6 +467,15 @@ Add-TextToCMLog $LogFile &quot;MSAL.PS module successfully imported.&quot; $comp
 </div> </p>
 <p>Note: In my limited testing, I found that if a task sequence does not reference any package, this variable may not be set.</p>
 <p>If the “ClientIsOnInternet” is still not set after this step and device is not in WinPE, we use the following PowerShell command to determine if the device is on Internet:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Get-CimInstance</span> -ClassName <span style=color:#d14>&#34;ClientInfo&#34;</span> -Namespace <span style=color:#d14>&#34;Root\CCM&#34;</span> | <span style=color:#0086b3>Select-Object</span> -ExpandProperty InInternet
+</code></pre></td></tr></table>
+</div>
+</div>
 <p><div class=image>
 <figure>
 <a href=clientinfo-1024x613.png target=_blank>
@@ -331,9 +486,25 @@ Add-TextToCMLog $LogFile &quot;MSAL.PS module successfully imported.&quot; $comp
 <h3 id=2-additional-parameters-for-internet-clients>2) Additional Parameters for Internet clients</h3>
 <p>Here you fill out your environment-specific information. The additional parameters needed for CMG support are:</p>
 <ul>
-<li>ExternalUrl: The ExternalUrl to access the AdminService from your CMG. The followinfg query can be used to find the ExternalUrl:</li>
+<li>ExternalUrl: The ExternalUrl to access the AdminService from your CMG. The following query can be used to find the ExternalUrl:</li>
 </ul>
-<ul>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#000;font-weight:700>SELECT</span><span style=color:#bbb> 
+</span><span style=color:#bbb></span>ProxyServerName,<span style=color:#bbb>
+</span><span style=color:#bbb></span>ExternalUrl<span style=color:#bbb> 
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>FROM</span><span style=color:#bbb> </span>[dbo].[vProxy_Routings]<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>WHERE</span><span style=color:#bbb> </span>[dbo].[vProxy_Routings].ExternalEndpointName<span style=color:#bbb> </span><span style=color:#000;font-weight:700>=</span><span style=color:#bbb> </span><span style=color:#d14>&#39;AdminService&#39;</span><span style=color:#bbb>
+</span></code></pre></td></tr></table>
+</div>
+</div><ul>
 <li>TenantId: Your Azure AD Tenant ID</li>
 <li>ClientId: The Client ID of the application registration that you created to interact with the AdminService. See <a href="https://sysmansquad.com/wp-admin/post.php?post=2552&action=edit#additional-configuration-to-use-the-adminservice-over-cmg">additional configuration to use the AdminService over CMG</a> for details.</li>
 <li>ApplicationIdUri: The application ID Uri for your application registration. The default value of &ldquo;https://ConfigMgrService&rdquo; will probably be OK for most people.</li>

@@ -96,18 +96,14 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
 <div class=post-entry>
 <p>Welcome back! We&rsquo;re now going to move on to the actual effort it takes to build your lab. As you recall we got pretty far last time in documenting the beginnings of our network. For this lab I&rsquo;ll be using <a href=https://www.vmware.com/products/workstation-pro.html>VMWare Workstation</a>, but you can accomplish this with <a href=https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/about/>Microsoft Hyper-V</a>, <a href=https://www.virtualbox.org/>Oracle VirtualBox</a>, the free tier of <a href=https://www.vmware.com/products/vsphere.html>VMWare&rsquo;s ESX</a>, or <a href=https://xcp-ng.org/>XCP-NG</a>.</p>
 <p>If you haven&rsquo;t read the previous post, please have a look <a href=https://sysmansquad.com/2019/12/17/net-101-create-a-basic-lab-network-design/>here</a> as each post builds upon the last.</p>
-<p>I&rsquo;m not going to cover a lot of the implementation details of any particular hypervisor other than as a general concept. You can view manuals for most hypervisors and find a ton of tutorials for how to create a VM. </p>
-<pre><code>                &lt;h2 id=&quot;0-a-note-about-pinging&quot;&gt;
-                  A Note About Pinging
-                &lt;/h2&gt;
-                
-                &lt;p&gt;
+<p>I&rsquo;m not going to cover a lot of the implementation details of any particular hypervisor other than as a general concept. You can view manuals for most hypervisors and find a ton of tutorials for how to create a VM.</p>
+<h2 id=a-note-about-pinging>A Note About Pinging</h2>
+<pre><code>                &lt;p&gt;
                   You might find yourself wanting to ping things to verify that you have your IP settings correct. In this article, the only thing you'll be able to ping is the default gateway. By default the Windows Firewall rules consider any network they're on as a 'public' network for purposes of the firewall. Just leave all that alone for now, and we'll make some changes later. For now, just ping the gateway
                 &lt;/p&gt;
                 
-                &lt;h2 id=&quot;1-documentation&quot;&gt;
-                  Documentation
-                &lt;/h2&gt;
+                ## Documentation
+                
                 
                 &lt;p&gt;
                   In a previous revision of the last article I made 2 mistakes : I picked 'my.example' as our DNS name. Windows DNS rejects this name as not allowed, for it's own reasons. The error message was pretty useless if I'm honest, but it doesn't really matter. We're going to proceed with &quot;lab.test&quot; instead. Since we haven't actually implemented anything yet, now is the time to fix the mistake.
@@ -120,92 +116,79 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
                 &lt;p&gt;
                   It's time to upgrade our documentation.
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-table is-style-stripes&quot;&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subnet ID</td>
+<td>IPv4: <strong>10.248.100.0/24</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>IPv6: <strong>fdda:f6d4:f5a2:f1e6::/64</strong></td>
+</tr>
+<tr>
+<td>Default Gateway</td>
+<td>IPv4: <strong>10.248.100.1/24</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>IPv6: <strong>fdda:f6d4:f5a2:f1e6::1/64</strong></td>
+</tr>
+<tr>
+<td>DNS Server</td>
+<td>Hostname: <strong>lab-dns</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>IPv4: <strong>10.248.100.2/24</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>IPv6: <strong>fdda:f6d4:f5a2:f1e6::2/64</strong></td>
+</tr>
+<tr>
+<td>DNS Domain</td>
+<td><strong>lab.test.</strong></td>
+</tr>
+<tr>
+<td>DHCP Server</td>
+<td>Hostname: <strong>lab-dhcp</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>IPv4:<strong>10.248.100.3/24</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>IPv6:<strong>fdda:f6d4:f5a2:f1e6::3/64</strong></td>
+</tr>
+<tr>
+<td>DHCP Range</td>
+<td><strong>10.248.100.[50-99]/24</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>fdda:f6d4:f5a2:f1e6::[32-*]/64</strong></td>
+</tr>
+<tr>
+<td>VLAN ID</td>
+<td><strong>77</strong></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<pre><code>                ## The Admin Workstation
                 
-                &lt;table class=&quot;&quot;&gt;
-                  &lt;tr&gt;
-                    &lt;td&gt;
-                      &lt;strong&gt;Item&lt;/strong&gt;
-                    &lt;/td&gt;
-                    
-                    &lt;td&gt;
-                      &lt;strong&gt;Value&lt;/strong&gt;
-                    &lt;/td&gt;
-                  &lt;/tr&gt;
-                  
-                  &lt;tr&gt;
-                    &lt;td&gt;
-                      Subnet ID
-                    &lt;/td&gt;
-                    
-                    &lt;td&gt;
-                      IPv4: &lt;strong&gt;10.248.100.0/24&lt;/strong&gt;&lt;br /&gt;IPv6: &lt;strong&gt;fdda:f6d4:f5a2:f1e6::/64&lt;/strong&gt;
-                    &lt;/td&gt;
-                  &lt;/tr&gt;
-                  
-                  &lt;tr&gt;
-                    &lt;td&gt;
-                      Default Gateway
-                    &lt;/td&gt;
-                    
-                    &lt;td&gt;
-                      IPv4: &lt;strong&gt;10.248.100.1/24&lt;/strong&gt;&lt;br /&gt;IPv6: &lt;strong&gt;fdda:f6d4:f5a2:f1e6::1/64&lt;/strong&gt;
-                    &lt;/td&gt;
-                  &lt;/tr&gt;
-                  
-                  &lt;tr&gt;
-                    &lt;td&gt;
-                      DNS Server
-                    &lt;/td&gt;
-                    
-                    &lt;td&gt;
-                      Hostname: &lt;strong&gt;lab-dns&lt;/strong&gt;&lt;br /&gt;IPv4: &lt;strong&gt;10.248.100.2/24&lt;/strong&gt;&lt;br /&gt;IPv6: &lt;strong&gt;fdda:f6d4:f5a2:f1e6::2/64&lt;/strong&gt;
-                    &lt;/td&gt;
-                  &lt;/tr&gt;
-                  
-                  &lt;tr&gt;
-                    &lt;td&gt;
-                      DNS Domain
-                    &lt;/td&gt;
-                    
-                    &lt;td&gt;
-                      &lt;strong&gt;lab.test.&lt;/strong&gt;
-                    &lt;/td&gt;
-                  &lt;/tr&gt;
-                  
-                  &lt;tr&gt;
-                    &lt;td&gt;
-                      DHCP Server
-                    &lt;/td&gt;
-                    
-                    &lt;td&gt;
-                      Hostname: &lt;strong&gt;lab-dhcp&lt;/strong&gt;&lt;br /&gt;IPv4: &lt;strong&gt;10.248.100.3/24&lt;/strong&gt;&lt;br /&gt;IPv6:&lt;strong&gt;fdda:f6d4:f5a2:f1e6::3/64&lt;/strong&gt;
-                    &lt;/td&gt;
-                  &lt;/tr&gt;
-                  
-                  &lt;tr&gt;
-                    &lt;td&gt;
-                      DHCP Range
-                    &lt;/td&gt;
-                    
-                    &lt;td&gt;
-                      &lt;strong&gt;10.248.100.[50-99]/24&lt;/strong&gt;&lt;br /&gt;&lt;strong&gt;fdda:f6d4:f5a2:f1e6::[32-*]/&lt;/strong&gt;64
-                    &lt;/td&gt;
-                  &lt;/tr&gt;
-                  
-                  &lt;tr&gt;
-                    &lt;td&gt;
-                      VLAN ID
-                    &lt;/td&gt;
-                    
-                    &lt;td&gt;
-                      &lt;strong&gt;77&lt;/strong&gt;
-                    &lt;/td&gt;
-                  &lt;/tr&gt;
-                &lt;/table&gt;&lt;/figure&gt; 
-                
-                &lt;h2 id=&quot;2-the-admin-workstation&quot;&gt;
-                  The Admin Workstation
-                &lt;/h2&gt;
                 
                 &lt;p&gt;
                   You're going to need a machine to use to work from inside your lab network and reach the management address of your gateway/firewall.
@@ -228,7 +211,7 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  If you're not sure, open the Windows Calculator, switch to the programmer view and type the number you'd like to use and you'll see a &lt;strong&gt;HEX&lt;/strong&gt;adecimal, &lt;strong&gt;DEC&lt;/strong&gt;imal, &lt;strong&gt;OCT&lt;/strong&gt;al and &lt;strong&gt;BIN&lt;/strong&gt;ary notation version of the number. It also includes a bit-toggling keypad you can use to get a better feel for how binary math works.
+                  If you're not sure, open the Windows Calculator, switch to the programmer view and type the number you'd like to use and you'll see a **HEX**adecimal, **DEC**imal, **OCT**al and **BIN**ary notation version of the number. It also includes a bit-toggling keypad you can use to get a better feel for how binary math works.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -236,16 +219,15 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  &lt;strong&gt;IPv4&lt;/strong&gt;: &lt;br /&gt;10.248.100.10 &lt;br /&gt;&lt;strong&gt;Netmask&lt;/strong&gt; 255.255.255.0 ( this is equivalent to /24 )&lt;br /&gt;Fill in the &lt;strong&gt;Gateway&lt;/strong&gt;, &lt;strong&gt;DNS server &lt;/strong&gt;address from your network documentation you've created last time.&lt;br /&gt;&lt;br /&gt;&lt;strong&gt;IPv6&lt;/strong&gt;: fdda:f6d4:f5a2:f1e6::a/64 &lt;br /&gt;Fill in the &lt;strong&gt;subnet prefix length&lt;/strong&gt;, &lt;strong&gt;default gateway&lt;/strong&gt;, and &lt;strong&gt;DNS server&lt;/strong&gt; from your documentation.&lt;br /&gt;&lt;br /&gt;The parent network interface will be set for DHCP.
+                  **IPv4**: &lt;br /&gt;10.248.100.10 &lt;br /&gt;**Netmask** 255.255.255.0 ( this is equivalent to /24 )&lt;br /&gt;Fill in the **Gateway**, **DNS server **address from your network documentation you've created last time.&lt;br /&gt;&lt;br /&gt;**IPv6**: fdda:f6d4:f5a2:f1e6::a/64 &lt;br /&gt;Fill in the **subnet prefix length**, **default gateway**, and **DNS server** from your documentation.&lt;br /&gt;&lt;br /&gt;The parent network interface will be set for DHCP.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  After setting your addresses, if you open a terminal (either &lt;strong&gt;cmd&lt;/strong&gt; or &lt;strong&gt;PowerShell&lt;/strong&gt;) and run &lt;code&gt;ipconfig&lt;/code&gt;, you will see that you have 2 IPv6 addresses and 1 IPv4 address on the listing. One of these IPv6 addresses is the one you set, the other is called a link-local address. Please consult the links to documentation on IPv6 address types from the last article if you'd like to know why.
+                  After setting your addresses, if you open a terminal (either **cmd** or **PowerShell**) and run &lt;code&gt;ipconfig&lt;/code&gt;, you will see that you have 2 IPv6 addresses and 1 IPv4 address on the listing. One of these IPv6 addresses is the one you set, the other is called a link-local address. Please consult the links to documentation on IPv6 address types from the last article if you'd like to know why.
                 &lt;/p&gt;
                 
-                &lt;h2 id=&quot;3-the-default-gateway&quot;&gt;
-                  The Default Gateway
-                &lt;/h2&gt;
+                ## The Default Gateway
+                
                 
                 &lt;p&gt;
                   We touched on what this is and what it does last time, so you know that this will serve as the default gateway for the network. It is also the firewall and IPv4 NAT appliance. Grab the latest [PFSense ](https://www.pfsense.org/download/)ISO and install a VM with ~2048MB RAM and two ethernet interfaces. The first will be the parent network, in this case your home or business network, the second will be the in-lab network. Consult the pfsense documentation for installing and setting the IP addresses you've chosen for the in-lab interface. The parent network interface should be set to DHCP.
@@ -255,9 +237,8 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
                   For now the only setting you need to set on the gateway is it's IPv4 and IPv6 addresses, aside from setting a new default password for the admin account.
                 &lt;/p&gt;
                 
-                &lt;h2 id=&quot;4-the-dns-server&quot;&gt;
-                  The DNS Server
-                &lt;/h2&gt;
+                ## The DNS Server
+                
                 
                 &lt;p&gt;
                   For fun, we're going to use a Windows Core install for this machine. Why a core install? Because there are no buttons to push. It is all command line on the server itself, and the configuration is done either via shell commands, PowerShell, or Remote Management Tools.
@@ -279,12 +260,11 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
                   Now that you have a good login for this machine, you'll be sitting at a command window. You'll do the initial configuration by running the command &lt;code&gt;sconfig&lt;/code&gt;
                 &lt;/p&gt;
                 
-                &lt;h3 id=&quot;5-initial-configuration&quot;&gt;
-                  Initial Configuration
-                &lt;/h3&gt;
+                ### Initial Configuration
+                
                 
                 &lt;p&gt;
-                  Run the &lt;code&gt;sconfig&lt;/code&gt; command and choose option 2 to set the hostname or &quot;Computer Name&quot; of this machine. We didn't cover what the hostnames are for these machines when we were creating our documentation, so we're going to set them and add them to the documentation now. I'm going to name the DNS server &quot;&lt;strong&gt;lab-dns&lt;/strong&gt;&quot;, so it's FQDN (Fully Qualified Domain Name) is &quot;lab-dns.lab.test&quot;. Set the computer name to your chosen short name and we'll cover the rest a bit later. When you've set the computer name, you'll be prompted to restart. You don't need to do this quite yet.
+                  Run the &lt;code&gt;sconfig&lt;/code&gt; command and choose option 2 to set the hostname or &quot;Computer Name&quot; of this machine. We didn't cover what the hostnames are for these machines when we were creating our documentation, so we're going to set them and add them to the documentation now. I'm going to name the DNS server &quot;**lab-dns**&quot;, so it's FQDN (Fully Qualified Domain Name) is &quot;lab-dns.lab.test&quot;. Set the computer name to your chosen short name and we'll cover the rest a bit later. When you've set the computer name, you'll be prompted to restart. You don't need to do this quite yet.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -292,7 +272,7 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  You may also choose to enable remote desktop while you are in &lt;strong&gt;sconfig&lt;/strong&gt;. It'll be the same command line interface you have now, but it may come in handy if you need to paste a command. You'll want to choose the recommended option to require Network Level Authentication.
+                  You may also choose to enable remote desktop while you are in **sconfig**. It'll be the same command line interface you have now, but it may come in handy if you need to paste a command. You'll want to choose the recommended option to require Network Level Authentication.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -300,7 +280,7 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
                 &lt;/p&gt;
                 
                 &lt;p class=&quot;has-background has-very-light-gray-background-color&quot;&gt;
-                  NOTE: &lt;strong&gt;sconfig&lt;/strong&gt; only handles IPv4 addressing. We will cover setting the IPv6 address a bit later.
+                  NOTE: **sconfig** only handles IPv4 addressing. We will cover setting the IPv6 address a bit later.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -308,11 +288,11 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  Now that you're restarted, log back in and run the &lt;strong&gt;hostname&lt;/strong&gt; command to make sure the short computer name is correct. If you're using my settings, the hostname will be 'lab-dns'. You can also run the &lt;strong&gt;ipconfig&lt;/strong&gt; command and make sure the IPv4 address is what you expected.
+                  Now that you're restarted, log back in and run the **hostname** command to make sure the short computer name is correct. If you're using my settings, the hostname will be 'lab-dns'. You can also run the **ipconfig** command and make sure the IPv4 address is what you expected.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  You'll notice that the connection-specific DNS suffix is 'localdomain', and there will be a &lt;strong&gt;link-local&lt;/strong&gt; ipv6 address present, even though you didn't set one. This is normal.
+                  You'll notice that the connection-specific DNS suffix is 'localdomain', and there will be a **link-local** ipv6 address present, even though you didn't set one. This is normal.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -320,11 +300,11 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  Now, we need to finish configuring our network addressing since we have a working IPv4 RDP connection. Let's open &lt;strong&gt;powershell&lt;/strong&gt;. Simply type &lt;strong&gt;powershell&lt;/strong&gt; at the command prompt.
+                  Now, we need to finish configuring our network addressing since we have a working IPv4 RDP connection. Let's open **powershell**. Simply type **powershell** at the command prompt.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  Here are some commands we'll need to type to get a working IPv6 config as well as finishing out some commands &lt;strong&gt;sconfig&lt;/strong&gt; couldn't handle. I would suggest pasting this code block into a notepad (or better yet, VSCode) session on your admin workstation, editing, then pasting it into a powershell session you have running over RDP.
+                  Here are some commands we'll need to type to get a working IPv6 config as well as finishing out some commands **sconfig** couldn't handle. I would suggest pasting this code block into a notepad (or better yet, VSCode) session on your admin workstation, editing, then pasting it into a powershell session you have running over RDP.
                 &lt;/p&gt;
                 
                 &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;# Change these to match the config in your documentation
@@ -363,9 +343,8 @@ Type = &lsquo;Unicast&rsquo;
                   Whew. That's a lot to read. If you're not familiar with powershell, the lines beginning with '#' are comments. They are there to give you an idea of what's happening even if you don't understand the code.
                 &lt;/p&gt;
                 
-                &lt;h3 id=&quot;6-installing-amp-configuring-dns-server-role&quot;&gt;
-                  Installing &amp; Configuring DNS server role
-                &lt;/h3&gt;
+                ### Installing &amp; Configuring DNS server role
+                
                 
                 &lt;p&gt;
                   Once again in powershell:
@@ -398,7 +377,7 @@ Add-DnsServerPrimaryZone -NetworkId $IPv6NetworkID -ZoneFile $IPv6ReverseName
                   Again, pretty simple. No fancy or difficult-to-read powershell here. Let's check our work:
                 &lt;/p&gt;
                 
-                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;PS C:\Users\Administrator&amp;gt; Get-DnsServerZone|select ZoneName
+                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;PS C:\Users\Administrator&gt; Get-DnsServerZone|select ZoneName
 </code></pre>
 <h2 id=zonename>ZoneName</h2>
 <p>0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa
@@ -445,7 +424,7 @@ Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -AAAA -Name &lsquo;lab
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  So - Why did we create three zones? The first - 'lab.test' is a &lt;strong&gt;forward&lt;/strong&gt; lookup zone. The ones tied to the network IDs are &lt;strong&gt;reverse&lt;/strong&gt; zones. They enable you to look up an IP address and see what its hostname is. Records tying an IP address to a hostname are called &lt;strong&gt;PTR&lt;/strong&gt;, or pointer records. That is why we created the reverse zones up front, then had powershell add the pointer records at the same time as the A or AAAA records by tacking on the '-CreatePtr' flag to the Add-DnsServerResourceRecord cmdlet.
+                  So - Why did we create three zones? The first - 'lab.test' is a **forward** lookup zone. The ones tied to the network IDs are **reverse** zones. They enable you to look up an IP address and see what its hostname is. Records tying an IP address to a hostname are called **PTR**, or pointer records. That is why we created the reverse zones up front, then had powershell add the pointer records at the same time as the A or AAAA records by tacking on the '-CreatePtr' flag to the Add-DnsServerResourceRecord cmdlet.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -456,24 +435,22 @@ Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -AAAA -Name &lsquo;lab
                   Neat. Now we have a functioning DNS server. You can close your connection to the DNS server now.
                 &lt;/p&gt;
                 
-                &lt;h2 id=&quot;7-the-dhcp-server&quot;&gt;
-                  The DHCP Server
-                &lt;/h2&gt;
+                ## The DHCP Server
                 
-                &lt;h3 id=&quot;8-initial-config&quot;&gt;
-                  Initial Config
-                &lt;/h3&gt;
+                
+                ### Initial Config
+                
                 
                 &lt;p&gt;
                   By now you've installed a Windows Server OS at least once, so create a vm with ~2048MB ram and a minimum 60gb disk space. You'll also want a core install on this machine.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  I'm going to name it &lt;strong&gt;lab-dhcp&lt;/strong&gt; and apply the same configuration steps for &lt;strong&gt;sconfig &lt;/strong&gt;as we did for the DNS server.
+                  I'm going to name it **lab-dhcp** and apply the same configuration steps for **sconfig **as we did for the DNS server.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  When you are in &lt;strong&gt;sconfig&lt;/strong&gt;, configure the DNS server settings to use the DNS server address for your lab.
+                  When you are in **sconfig**, configure the DNS server settings to use the DNS server address for your lab.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -509,9 +486,8 @@ Type = &lsquo;Unicast&rsquo;
 }
 New-NetIPAddress @IPv6Arguments
 </p>
-<pre><code>                &lt;h3 id=&quot;9-installing--amp-configuring-the-dhcp-role&quot;&gt;
-                  Installing &amp; Configuring the DHCP role
-                &lt;/h3&gt;
+<pre><code>                ### Installing &amp; Configuring the DHCP role
+                
                 
                 &lt;p&gt;
                   In powershell on the DHCP server:
@@ -525,7 +501,7 @@ New-NetIPAddress @IPv6Arguments
                 &lt;/p&gt;
                 
                 &lt;p&gt;
-                  A&amp;nbsp;DHCP&amp;nbsp;server's&amp;nbsp;job&amp;nbsp;is&amp;nbsp;to&amp;nbsp;configure&amp;nbsp;the&amp;nbsp;clients&amp;nbsp;so&amp;nbsp;you&amp;nbsp;don't&amp;nbsp;have&amp;nbsp;to&amp;nbsp;manually&amp;nbsp;set&amp;nbsp;up&amp;nbsp;each&amp;nbsp;individual&amp;nbsp;host.&amp;nbsp;We&amp;nbsp;will&amp;nbsp;set&amp;nbsp;several&amp;nbsp;settings&amp;nbsp;for&amp;nbsp;the&amp;nbsp;DHCP&amp;nbsp;server&amp;nbsp;to&amp;nbsp;tell&amp;nbsp;clients&amp;nbsp;about.&amp;nbsp;Some&amp;nbsp;will&amp;nbsp;be&amp;nbsp;on&amp;nbsp;a&amp;nbsp;scope,&amp;nbsp;some&amp;nbsp;at&amp;nbsp;a&amp;nbsp;&amp;nbsp;server&amp;nbsp;level.&amp;nbsp;
+                  ADHCPserver'sjobistoconfiguretheclientssoyoudon'thavetomanuallysetupeachindividualhost.WewillsetseveralsettingsfortheDHCPservertotellclientsabout.Somewillbeonascope,someataserverlevel.
                 &lt;/p&gt;
                 
                 &lt;p&gt;
@@ -570,9 +546,8 @@ Prefix = &lsquo;fdda:f6d4:f5a2:f1e6::&rsquo;
 }
 Add-DhcpServerv6ExclusionRange @V6ExclusionRange</p>
 <h1 id=were-not-setting-a-router-address---ipv6-includes-an-automatic-address-all-routers-listen-on-also-router-advertisements-are-a-thingcodepre>We&rsquo;re not setting a router address - IPv6 includes an automatic address all routers listen on. Also router advertisements are a thing.</h1>
-<pre><code>                &lt;h2 id=&quot;10-conclusion-amp-testing&quot;&gt;
-                  Conclusion &amp; Testing
-                &lt;/h2&gt;
+<pre><code>                ## Conclusion &amp; Testing
+                
                 
                 &lt;p&gt;
                   At this point, install some workstation class OS on a new vm and see whether you get a usable workstation out of the box without configuring any IP addressing. Try resolving some DNS names and see if they resolve properly. Be sure and check both A and AAAA records, as well as browsing the internet. At this point your workstation should be fully functional.

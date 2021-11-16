@@ -118,56 +118,130 @@ It removes the chat by writing the registry key that disables it    the TaskbarM
 <p>Then it simply uninstalls the appx package for the consumer teams app, note that this has no effect on the regular teams app. The two are completely different.</p>
 <h2 id=code>Code</h2>
 <p>Pretty simple stuff,</p>
-<pre><code># check the reg key for the taskbar teams app icon
-# Reg2CI (c) 2021 by Roger Zander
-if ( (Get-ItemPropertyValue -LiteralPath 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced' -Name 'TaskbarMn' -ErrorAction Stop ) -eq 0 ) { $RegCompliance = $true }
-else { $RegCompliance = $false } 
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Detection</span>
+<span style=color:#000;font-weight:700>try</span> {
 
-# check if the teams app is installed
-if ($null -eq (Get-AppxPackage -Name MicrosoftTeams) ) { $AppCompliance = $true }
-else { $AppCompliance = $false }
+    <span style=color:#998;font-style:italic># check the reg key for the taskbar teams app icon</span>
+    <span style=color:#998;font-style:italic># Reg2CI (c) 2021 by Roger Zander</span>
+    <span style=color:#000;font-weight:700>if</span> ( (<span style=color:#0086b3>Get-ItemPropertyValue</span> -LiteralPath <span style=color:#d14>&#39;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&#39;</span> -Name <span style=color:#d14>&#39;TaskbarMn&#39;</span> -ErrorAction Stop ) <span style=color:#000;font-weight:700>-eq</span> 0 ) { <span style=color:teal>$RegCompliance</span> = <span style=color:teal>$true</span> }
+    <span style=color:#000;font-weight:700>else</span> { <span style=color:teal>$RegCompliance</span> = <span style=color:teal>$false</span> } 
 
-# evaluate the compliance
-if ($RegCompliance -and $AppCompliance -eq $true) {
+    <span style=color:#998;font-style:italic># check if the teams app is installed</span>
+    <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$null</span> <span style=color:#000;font-weight:700>-eq</span> (<span style=color:#0086b3>Get-AppxPackage</span> -Name MicrosoftTeams) ) { <span style=color:teal>$AppCompliance</span> = <span style=color:teal>$true</span> }
+    <span style=color:#000;font-weight:700>else</span> { <span style=color:teal>$AppCompliance</span> = <span style=color:teal>$false</span> }
+    
+    <span style=color:#998;font-style:italic># evaluate the compliance</span>
+    <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$RegCompliance</span> <span style=color:#000;font-weight:700>-and</span> <span style=color:teal>$AppCompliance</span> <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$true</span>) {
 
-    Write-Host &quot;Success, app/reg removed&quot;
-    exit 0
+        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;Success, app/reg removed&#34;</span>
+        exit 0
+    }
+    <span style=color:#000;font-weight:700>else</span> {
+        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;Failure, app/reg detected&#34;</span>
+        exit 1
+    }
+   
+    
 }
-else {
-    Write-Host &quot;Failure, app/reg detected&quot;
+<span style=color:#000;font-weight:700>catch</span> {
+    <span style=color:teal>$errMsg</span> = _.Exception.Message
+    <span style=color:#0086b3>Write-Host</span> <span style=color:teal>$errMsg</span>
     exit 1
 }
-</code></pre>
-<p>}
-catch {
-$errMsg = _.Exception.Message
-Write-Host $errMsg
-exit 1
-}</p>
-<p>Here is the remediation code, parts of it were made using the <a href=https://reg2ps.azurewebsites.net/>reg2ps website</a> which i highly recommend.</p>
-<p>try {</p>
-<pre><code># remove the taskbar icon
-# Reg2CI (c) 2021 by Roger Zander
-if ((Test-Path -LiteralPath &quot;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&quot;) -ne $true) {
-    New-Item &quot;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&quot; -Force -ErrorAction Stop 
+</code></pre></td></tr></table>
+</div>
+</div><p>Here is the remediation code, parts of it were made using the <a href=https://reg2ps.azurewebsites.net/>reg2ps website</a> which i highly recommend.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Remediation</span>
+
+<span style=color:#000;font-weight:700>try</span> {
+
+    <span style=color:#998;font-style:italic># remove the taskbar icon</span>
+    <span style=color:#998;font-style:italic># Reg2CI (c) 2021 by Roger Zander</span>
+    <span style=color:#000;font-weight:700>if</span> ((<span style=color:#0086b3>Test-Path</span> -LiteralPath <span style=color:#d14>&#34;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&#34;</span>) <span style=color:#000;font-weight:700>-ne</span> <span style=color:teal>$true</span>) {
+        <span style=color:#0086b3>New-Item</span> <span style=color:#d14>&#34;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&#34;</span> -Force -ErrorAction Stop 
+    }
+    <span style=color:#0086b3>New-ItemProperty</span> -LiteralPath <span style=color:#d14>&#39;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&#39;</span> -Name <span style=color:#d14>&#39;TaskbarMn&#39;</span> -Value 0 -PropertyType DWord -Force -ErrorAction Stop
+    
+
+    <span style=color:#998;font-style:italic># uninstall the teams consumer app</span>
+    <span style=color:#0086b3>Get-AppxPackage</span> -Name MicrosoftTeams | <span style=color:#0086b3>Remove-AppxPackage</span> -ErrorAction stop
+
+    <span style=color:#998;font-style:italic># as nothing errored out, we will report success</span>
+    <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;Success, regkey set and app uninstalled&#34;</span>
+    exit 0
 }
-New-ItemProperty -LiteralPath 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced' -Name 'TaskbarMn' -Value 0 -PropertyType DWord -Force -ErrorAction Stop
 
-
-# uninstall the teams consumer app
-Get-AppxPackage -Name MicrosoftTeams | Remove-AppxPackage -ErrorAction stop
-
-# as nothing errored out, we will report success
-Write-Host &quot;Success, regkey set and app uninstalled&quot;
-exit 0
-</code></pre>
-<p>}</p>
-<p>catch {
-$errMsg = _.Exception.Message
-Write-Host $errMsg
-exit 1
-}</p>
-<h2 id=setting-it-up>Setting it up</h2>
+<span style=color:#000;font-weight:700>catch</span> {
+    <span style=color:teal>$errMsg</span> = _.Exception.Message
+    <span style=color:#0086b3>Write-Host</span> <span style=color:teal>$errMsg</span>
+    exit 1
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=setting-it-up>Setting it up</h2>
 <p>Go to the <a href=https://endpoint.microsoft.com/#blade/Microsoft_Intune_Enrollment/UXAnalyticsMenu/proactiveRemediations>Proactive Remediations blade</a> in the Intune admin portal, create a new PR and add the detection and remediation scripts, configure the PR to run in user context and 64bit, and deploy accordingly.</p>
 <p><div class=image>
 <figure>

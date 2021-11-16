@@ -114,6 +114,15 @@ It downloads all the necessary files for you, including the CB or TP installatio
 <p>At the time I found AutomatedLab, the ConfigMgr / SCCM / MEMCM / MECM (ARGH!) CustomRole in AutomatedLab&rsquo;s repository only had version 1802, so I thought I&rsquo;d chip in.</p>
 <h3 id=getting-started>Getting started</h3>
 <p>First things first, make sure you have got the latest version of the AutomatedLab module installed. Compare your installed version with what&rsquo;s available on the <a href=https://github.com/AutomatedLab/AutomatedLab/releases>AutomatedLab repository assets page</a>:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cmd data-lang=cmd>PS C:\&gt; Get-Module <span style=color:#d14>&#34;AutomatedLab&#34;</span> -ListAvailable
+</code></pre></td></tr></table>
+</div>
+</div>
 <p>To get started you&rsquo;ll need two things:</p>
 <ul>
 <li>The <code>CM-2002.ps1</code> script.</li>
@@ -122,16 +131,35 @@ It downloads all the necessary files for you, including the CB or TP installatio
 <p>You can source these things from either my <a href=https://github.com/codaamok/posh>PoSH GitHub repository</a>, the <a href=https://github.com/AutomatedLab/AutomatedLab>AutomatedLab GitHub repository</a> or they&rsquo;re are bundled within the AutomatedLab installer so you probably already have them on disk right now.</p>
 <p>However, there&rsquo;s a high probability that what&rsquo;s in my repository is going to contain the latest fixes than anywhere else. So let&rsquo;s roll with that.</p>
 <p>Download using either <code>git</code> or just download ZIP from the repository&rsquo;s web page:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cmd data-lang=cmd><span style=color:#000;font-weight:700>cd</span> C:\path\to\where\you\want\to\download
+git clone https://github.com/codaamok/PoSH.git
+</code></pre></td></tr></table>
+</div>
+</div>
 <p>Now the content is downloaded, we must copy only the <code>CustomRole\CM-2002</code> folder to the correct location on disk so AutomatedLab can use the scripts inside it. The location of <code>CM-2002.ps1</code> isn&rsquo;t important.</p>
 <p>If you were to use PowerShell, the command would look like this:</p>
-<p>Make sure you have a Windows Server 2016 or 2019 ISO (Evaluation will be fine) in your <code>C:\LabSources\ISOs</code> directory.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Copy-Item</span> -Path <span style=color:#d14>&#34;C:\path\to\where\you\downloaded\PoSH\AutomatedLab\CustomRoles\CM-2002&#34;</span> -Destination <span style=color:#d14>&#34;C:\LabSources\CustomRoles&#34;</span> -Recurse -Force
+</code></pre></td></tr></table>
+</div>
+</div><p>Make sure you have a Windows Server 2016 or 2019 ISO (Evaluation will be fine) in your <code>C:\LabSources\ISOs</code> directory.</p>
 <p>Now you can just call <code>CM-2002.ps1</code> as is, without any parameters! It will download all the prerequisites and necessary binaries, and install everything for you.</p>
 <p>Of course parameters are available to further customise your lab, however as is will give you a functional lab with the below configurations:</p>
 <ul>
 <li>1x AutomatedLab lab
 <ul>
 <li>Name: &ldquo;CMLab01&rdquo;</li>
-<li>VMPath: <em></em>:\AutomatedLab-VMs where <em></em> is the fastest drive available</li>
+<li>VMPath: <em><code>&lt;drive</code>></em>:\AutomatedLab-VMs where <em><code>&lt;drive</code>></em> is the fastest drive available</li>
 <li>AddressSpace: An unused and available subnet increasing 192.168.1.0 by 1 until one is found.</li>
 <li>ExternalVMSwitch: Allows physical network access via Hyper-V external switch named &ldquo;Internet&rdquo;. &ldquo;Default Switch&rdquo; is an acceptable value to leverage an independent virtual network behind NAT.</li>
 </ul>
@@ -154,7 +182,7 @@ It downloads all the necessary files for you, including the CB or TP installatio
 <li>Roles: &ldquo;RootDC&rdquo;, &ldquo;Routing&rdquo;</li>
 </ul>
 </li>
-<li>1x Configuration Manager primary site server:
+<li>1x ConfigurationManagerprimarysiteserver:
 <ul>
 <li>Name: &ldquo;CM01&rdquo;</li>
 <li>vCPU: 4</li>

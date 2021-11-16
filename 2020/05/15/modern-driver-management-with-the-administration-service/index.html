@@ -125,8 +125,35 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <p>I think the title of the script (Invoke-GetPackageIDFromAdminService) explains well what it does&mldr; I wrote the script so that I could use it for both Driver & BIOS packages.</p>
 <p>The actual query to the AdminService is quite simple. I&rsquo;m querying for all packages with a package name that starts with &ldquo;Drivers -&rdquo; or &ldquo;Bios Update -&rdquo; depending on the value of &ldquo;PackageType&rdquo;. Instead of returning all the properties of the packages, I select a few properties that will help me filter which is the best package for the device.</p>
 <p>The rest of the script is simply filtering which driver package is the most suitable with the information provided and then it returns a PackageID. Here is a snippet of the relevant part of the script where we retrieve a list of packages from the AdminService:</p>
-<pre><code>    $Packages = (Invoke-RestMethod -Method Get -Uri $WMIPackageURL -Body $Body @Global:InvokeRestMethodCredential | Select-Object -ExpandProperty value)&lt;/pre&gt;
-</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>        <span style=color:#000;font-weight:700>If</span>(<span style=color:teal>$PackageType</span> <span style=color:#000;font-weight:700>-eq</span> <span style=color:#d14>&#34;DriverPackage&#34;</span>){
+            <span style=color:teal>$Filter</span> = <span style=color:#d14>&#34;startswith(Name,&#39;Drivers - &#39;)&#34;</span>
+        }<span style=color:#000;font-weight:700>ElseIf</span>(<span style=color:teal>$PackageType</span> <span style=color:#000;font-weight:700>-eq</span> <span style=color:#d14>&#34;BIOSPackage&#34;</span>){
+            <span style=color:teal>$Filter</span> = <span style=color:#d14>&#34;startswith(Name,&#39;BIOS Update - &#39;)&#34;</span>
+        }
+        <span style=color:teal>$Body</span> = @{
+            <span style=color:#d14>&#34;</span><span style=color:#d14>`$</span><span style=color:#d14>filter&#34;</span> = <span style=color:teal>$Filter</span>
+            <span style=color:#d14>&#34;</span><span style=color:#d14>`$</span><span style=color:#d14>select&#34;</span> = <span style=color:#d14>&#34;Name,Description,Manufacturer,Version,SourceDate,PackageID&#34;</span>
+        }
+
+        <span style=color:teal>$Packages</span> = (<span style=color:#0086b3>Invoke-RestMethod</span> -Method Get -Uri <span style=color:teal>$WMIPackageURL</span> -Body <span style=color:teal>$Body</span> <span style=color:teal>@Global:InvokeRestMethodCredential</span> | <span style=color:#0086b3>Select-Object</span> -ExpandProperty value)
+</code></pre></td></tr></table>
+</div>
+</div>
 <p>The script is hosted on <a href=https://github.com/CharlesNRU/mdm-adminservice>GitHub</a> and I invite you to send me pull requests if you believe you can improve the script. I do not have that many different PC models to test and I might have missed something.</p>
 <h4 id=task-sequence-to-query-the-adminservice>Task Sequence to query the AdminService</h4>
 <p>The goal of this task sequence is to identify the manufacturer, model and SKU of the current system and make sure it matches the naming convention used by the Driver Automation Tool.</p>

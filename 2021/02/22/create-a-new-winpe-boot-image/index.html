@@ -21,7 +21,7 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Create a new WinPE boot image">
-<meta name=twitter:description content="<h2> Introduction </h2> <p> In this post I'll show you how you can create a new boot image in ConfigMgr. </p> <p> There's plenty of good content out there already on this, but I was interested to write this because I didn't see many PowerShell examples out there until I came across Michael Niehaus' post on [Build your own Windows PE image](https://oofhours.com/2021/01/17/build-your-own-windows-pe-image/). A fantastic post, highly recommend reading it. Michael provided a useful script at the end of this post in a .">
+<meta name=twitter:description content="Introduction  <p> In this post I'll show you how you can create a new boot image in ConfigMgr. </p> <p> There's plenty of good content out there already on this, but I was interested to write this because I didn't see many PowerShell examples out there until I came across Michael Niehaus' post on [Build your own Windows PE image](https://oofhours.com/2021/01/17/build-your-own-windows-pe-image/). A fantastic post, highly recommend reading it. Michael provided a useful script at the end of this post in a .">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -93,11 +93,8 @@
 <span class=post-date>February 22, 2021</span>
 </div>
 <div class=post-entry>
-<pre><code>        &lt;h2&gt;
-          Introduction
-        &lt;/h2&gt;
-        
-        &lt;p&gt;
+<h2 id=introduction>Introduction</h2>
+<pre><code>        &lt;p&gt;
           In this post I'll show you how you can create a new boot image in ConfigMgr.
         &lt;/p&gt;
         
@@ -121,12 +118,9 @@
         &lt;p&gt;
           Generally, it's better to not modify the default boot images that come out of the box with ConfigMgr. But if you've modified them, don't sweat it, at least you'll have this post to help you create a fresh one in future if need.
         &lt;/p&gt;
-        
-        &lt;h2&gt;
-          The &quot;GUI&quot; way
-        &lt;/h2&gt;
-        
-        &lt;ol&gt;
+</code></pre>
+<h2 id=the-gui-way>The &ldquo;GUI&rdquo; way</h2>
+<pre><code>        &lt;ol&gt;
           &lt;li&gt;
             Navigate to your ADK installation directory. It'll likely be &lt;code&gt;C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment&lt;/code&gt;
           &lt;/li&gt;
@@ -157,7 +151,7 @@
         &lt;/ol&gt;
         
         &lt;p&gt;
-          For each change you make to this boot image, ConfigMgr will always start with a fresh copy from the original - the one without the PackageID in the file name. &lt;strong&gt;Don't delete it&lt;/strong&gt;!Otherwise you'll find yourself making a new one, again, when you come to update drivers or add new components later.
+          For each change you make to this boot image, ConfigMgr will always start with a fresh copy from the original - the one without the PackageID in the file name. **Don't delete it**!Otherwise you'll find yourself making a new one, again, when you come to update drivers or add new components later.
         &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
         
         [![](createnewbootimageconfigmgr-3-1024x358.png)](createnewbootimageconfigmgr-3.png)&lt;figcaption&gt;Boot image on disk and in console after imported&lt;/figcaption&gt;&lt;/figure&gt; &lt;ol start=&quot;8&quot;&gt;
@@ -171,14 +165,11 @@
         &lt;/p&gt;
         
         &lt;p&gt;
-          When we come to do this using PowerShell, our new boot image will contain all the same drivers and optional components, however when we right click and go to Properties like I demonstrated in the screenshots above, you won't actually see anything in the &lt;strong&gt;Drivers&lt;/strong&gt; or &lt;strong&gt;Optional Components&lt;/strong&gt; tabs.
+          When we come to do this using PowerShell, our new boot image will contain all the same drivers and optional components, however when we right click and go to Properties like I demonstrated in the screenshots above, you won't actually see anything in the **Drivers** or **Optional Components** tabs.
         &lt;/p&gt;
-        
-        &lt;h2&gt;
-          Using PowerShell
-        &lt;/h2&gt;
-        
-        &lt;p&gt;
+</code></pre>
+<h2 id=using-powershell>Using PowerShell</h2>
+<pre><code>        &lt;p&gt;
           This was inspired by Michael Niehaus's script but I added some improvements.
         &lt;/p&gt;
         
@@ -193,17 +184,23 @@
             Execute the script. Customise any of the parameters to suit your needs:
           &lt;/li&gt;
         &lt;/ol&gt;
-        
-        &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-          &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;fileName&quot;:&quot;PowerShell&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;.\New-WinPEWIM.ps1 -Platforms amd64 -OptionalComponents &quot;WinPE-WDS-Tools&quot;, &quot;WinPE-Scripting&quot;, &quot;WinPE-WMI&quot;, &quot;WinPE-SecureStartup&quot;, &quot;WinPE-NetFx&quot;, &quot;WinPE-PowerShell&quot;, &quot;WinPE-StorageWMI&quot;, &quot;WinPE-DismCmdlets&quot; -OutputDirectory &quot;G:\OSD\BootImages&quot; -DriversDirectory &quot;G:\Drivers\WINPE10.0-DRIVERS-A22-3GVJN\x64&quot;&lt;/pre&gt;
-        &lt;/div&gt;&lt;figure class=&quot;wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio&quot;&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>.\<span style=color:#0086b3>New-WinPEWIM</span>.ps1 -Platforms amd64 -OptionalComponents <span style=color:#d14>&#34;WinPE-WDS-Tools&#34;</span>, <span style=color:#d14>&#34;WinPE-Scripting&#34;</span>, <span style=color:#d14>&#34;WinPE-WMI&#34;</span>, <span style=color:#d14>&#34;WinPE-SecureStartup&#34;</span>, <span style=color:#d14>&#34;WinPE-NetFx&#34;</span>, <span style=color:#d14>&#34;WinPE-PowerShell&#34;</span>, <span style=color:#d14>&#34;WinPE-StorageWMI&#34;</span>, <span style=color:#d14>&#34;WinPE-DismCmdlets&#34;</span> -OutputDirectory <span style=color:#d14>&#34;G:\OSD\BootImages&#34;</span> -DriversDirectory <span style=color:#d14>&#34;G:\Drivers\WINPE10.0-DRIVERS-A22-3GVJN\x64&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>        &lt;figure class=&quot;wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio&quot;&gt;
         
         &lt;div class=&quot;wp-block-embed__wrapper&quot;&gt;
           &lt;span class=&quot;embed-youtube&quot; style=&quot;text-align:center; display: block;&quot;&gt;&lt;/span&gt;
         &lt;/div&gt;&lt;figcaption&gt;YouTube video on using New-WinPEWIM.ps1&lt;/figcaption&gt;&lt;/figure&gt; 
         
         &lt;p&gt;
-          You'll notice that when you import this to ConfigMgr, the &lt;strong&gt;Drivers &lt;/strong&gt;and &lt;strong&gt;Optional Components&lt;/strong&gt; tabs will be blank. Since ConfigMgr wasn't the tool used to inject drivers or optional components, it doesn't know what it doesn't know!
+          You'll notice that when you import this to ConfigMgr, the **Drivers **and **Optional Components** tabs will be blank. Since ConfigMgr wasn't the tool used to inject drivers or optional components, it doesn't know what it doesn't know!
         &lt;/p&gt;
         
         &lt;p&gt;
@@ -214,11 +211,9 @@
         &lt;/div&gt;
         
         &lt;div class=&quot;uagb-section__inner-wrap&quot;&gt;
-          &lt;h4&gt;
-            Update
-          &lt;/h4&gt;
-          
-          &lt;p&gt;
+</code></pre>
+<h4 id=update>Update</h4>
+<pre><code>          &lt;p&gt;
             Adam Gross has a script on his GitHub where you can import a new WinPE boot image to your ConfigMgr site while still being able to get those juicy tabs / metadata fields populated!
           &lt;/p&gt;
           

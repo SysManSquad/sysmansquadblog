@@ -100,11 +100,9 @@ Well you can - and finding the information can be so easy. Read on below to see 
 </code></pre>
 <pre><code>                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h2&gt;
-                            Introduction
-                          &lt;/h2&gt;
-                          
-                          &lt;p&gt;
+</code></pre>
+<h2 id=introduction>Introduction</h2>
+<pre><code>                          &lt;p&gt;
                             Take for example this report on a [Proactive Remediation](https://endpoint.microsoft.com/#blade/Microsoft_Intune_Enrollment/UXAnalyticsMenu/proactiveRemediations). I used one of the built in Proactive Remediations for the example, but it could easily be one of our other [Proactive Remediation](https://sysmansquad.com/category/endpoint-management/proactive-remediation/) posts, like [Dynamic Outlook Signatures](https://sysmansquad.com/2020/07/08/dynamic-outlook-email-signature-using-with-intune-endpoint-analytics-proactive-remediations/), [Building VPN Connections](https://sysmansquad.com/2020/07/07/intune-autopilot-proactive-remediation/), or [Repairing Folder permissions](https://sysmansquad.com/2020/07/27/setting-acl-using-intune-endpoint-analytics-proactive-remediations/).
                           &lt;/p&gt;&lt;figure class=&quot;wp-block-image alignwide&quot;&gt;
                           
@@ -118,9 +116,8 @@ Well you can - and finding the information can be so easy. Read on below to see 
                       
                       &lt;div class=&quot;wp-block-group&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h2 id=&quot;api-endpoint-hell&quot;&gt;
-                            So, wandering API Endpoint Hell?
-                          &lt;/h2&gt;
+                          ## So, wandering API Endpoint Hell?
+                          
                           
                           &lt;p&gt;
                             You could absolutely go through the docs pages for [Microsoft Graph](https://docs.microsoft.com/en-us/graph/) or other APIs and find the [Get deviceHealthScriptRunSummary](https://docs.microsoft.com/graph/api/intune-devices-devicehealthscriptrunsummary-get?view=graph-rest-beta) - but the Portal is already fetching the information somehow - a lot of times you can just look at how the Portal fetches the information, and do the same thing yourself.
@@ -134,12 +131,11 @@ Well you can - and finding the information can be so easy. Read on below to see 
                       
                       &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h2 id=&quot;watching-the-portal-work&quot;&gt;
-                            Watching how the Portal works
-                          &lt;/h2&gt;
+                          ## Watching how the Portal works
+                          
                           
                           &lt;p&gt;
-                            First up, let's open the [Proactive Remediations area](https://endpoint.microsoft.com/#blade/Microsoft_Intune_Enrollment/UXAnalyticsMenu/proactiveRemediations) and navigate down to the &lt;strong&gt;Restart stopped Office C2R svc&lt;/strong&gt;.
+                            First up, let's open the [Proactive Remediations area](https://endpoint.microsoft.com/#blade/Microsoft_Intune_Enrollment/UXAnalyticsMenu/proactiveRemediations) and navigate down to the **Restart stopped Office C2R svc**.
                           &lt;/p&gt;
                           
                           &lt;p&gt;
@@ -167,7 +163,7 @@ Well you can - and finding the information can be so easy. Read on below to see 
                                   Disable Cache
                                 &lt;/li&gt;
                                 &lt;li&gt;
-                                  If there are still a lot of entries, Filtering to &lt;strong&gt;XHR&lt;/strong&gt; type can be useful
+                                  If there are still a lot of entries, Filtering to **XHR** type can be useful
                                 &lt;/li&gt;
                               &lt;/ul&gt;
                             &lt;/li&gt;
@@ -191,33 +187,41 @@ Well you can - and finding the information can be so easy. Read on below to see 
                           &lt;p id=&quot;queryURL-example&quot;&gt;
                             So, here we can easily see that our URL that the report is referencing is
                           &lt;/p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>https://graph.microsoft.com/beta/deviceManagement/deviceHealthScripts/02a4e7e8-195a-4824-8044-08b3a7f2d555/runSummary
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                        &lt;/div&gt;
+                      &lt;/div&gt;
+                      
+                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
+                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
+                          ## Using the Documentation
                           
-                          &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
-                            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;webidl&quot;,&quot;mime&quot;:&quot;text/x-webidl&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;fileName&quot;:&quot;QueryURL&quot;,&quot;align&quot;:&quot;wide&quot;,&quot;language&quot;:&quot;Web IDL&quot;,&quot;modeName&quot;:&quot;webidl&quot;}&quot;&gt;https://graph.microsoft.com/beta/deviceManagement/deviceHealthScripts/02a4e7e8-195a-4824-8044-08b3a7f2d555/runSummary&lt;/pre&gt;
-                          &lt;/div&gt;
-                        &lt;/div&gt;
-                      &lt;/div&gt;
-                      
-                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
-                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                        &lt;/div&gt;
-                      &lt;/div&gt;
-                      
-                      &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
-                        &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h2 id=&quot;using-the-documentation&quot;&gt;
-                            Using the Documentation
-                          &lt;/h2&gt;
                           
                           &lt;p&gt;
                             So, from our URL - we have three key terms to look up
                           &lt;/p&gt;
-                          
-                          &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
-                            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;webidl&quot;,&quot;mime&quot;:&quot;text/x-webidl&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;align&quot;:&quot;wide&quot;,&quot;language&quot;:&quot;Web IDL&quot;,&quot;modeName&quot;:&quot;webidl&quot;}&quot;&gt;https://graph.microsoft.com/beta/deviceManagement/deviceHealthScripts/02a4e7e8-195a-4824-8044-08b3a7f2d555/runSummary&lt;/pre&gt;
-                          &lt;/div&gt;
-                          
-                          &lt;ul&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>https://graph.microsoft.com/beta/deviceManagement/deviceHealthScripts/02a4e7e8-195a-4824-8044-08b3a7f2d555/runSummary
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                          &lt;ul&gt;
                             &lt;li&gt;
                               deviceManagement
                             &lt;/li&gt;
@@ -230,7 +234,7 @@ Well you can - and finding the information can be so easy. Read on below to see 
                           &lt;/ul&gt;
                           
                           &lt;p&gt;
-                            In general, the further to the right, the more specific area you are looking for. So here we are doing the action &lt;strong&gt;runSummary&lt;/strong&gt; on a specific &lt;strong&gt;deviceHealthScripts&lt;/strong&gt;. If you search these up, you can find the MS Graph endpoint [Get deviceHealthScriptRunSummary](https://docs.microsoft.com/graph/api/intune-devices-devicehealthscriptrunsummary-get?view=graph-rest-beta).
+                            In general, the further to the right, the more specific area you are looking for. So here we are doing the action **runSummary** on a specific **deviceHealthScripts**. If you search these up, you can find the MS Graph endpoint [Get deviceHealthScriptRunSummary](https://docs.microsoft.com/graph/api/intune-devices-devicehealthscriptrunsummary-get?view=graph-rest-beta).
                           &lt;/p&gt;
                           
                           &lt;p&gt;
@@ -243,9 +247,8 @@ Well you can - and finding the information can be so easy. Read on below to see 
                       
                       &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h2 id=&quot;getting-a-token&quot;&gt;
-                            Getting a token for your API calls
-                          &lt;/h2&gt;
+                          ## Getting a token for your API calls
+                          
                           
                           &lt;p&gt;
                             Now that we know what Permissions Scopes we need to use, we can work on setting up our access methods to use this information in a script.
@@ -262,42 +265,60 @@ Well you can - and finding the information can be so easy. Read on below to see 
                           &lt;p&gt;
                             Here is what a full script to implement the above query might look like
                           &lt;/p&gt;
-                          
-                          &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
-                            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;fileName&quot;:&quot;QueryUserAuthenticationMethods.ps1&quot;,&quot;align&quot;:&quot;wide&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;Install-Module MSAL.PS
 </code></pre>
-<p>$AuthParams = @{
-ClientID = $YourAppID
-TenantID = &lsquo;contoso.one&rsquo; #Also could use the GUID form from decoding your JWT token, like &lsquo;492d0e46-26b0-475c-82d0-102c962ea477&rsquo;
-Scopes = &lsquo;DeviceManagementConfiguration.Read.All&rsquo;
-LoginHint = &lsquo;<a href=mailto:YourUPN@Contoso.one>YourUPN@Contoso.one</a>&rsquo;
-}</p>
-<p>$Token = Get-MSALToken @AuthParams</p>
-<p>$QueryParams = @{
-queryURL = &lsquo;<a href="https://graph.microsoft.com/beta/deviceManagement/deviceHealthScripts/02a4e7e8-195a-4824-8044-08b3a7f2d555/runSummary'">https://graph.microsoft.com/beta/deviceManagement/deviceHealthScripts/02a4e7e8-195a-4824-8044-08b3a7f2d555/runSummary'</a>
-Method = &lsquo;GET&rsquo;
-}
-Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)"} @QueryParams
-</p>
-<pre><code>                          &lt;p&gt;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Install-Module</span> MSAL.<span style=color:#0086b3>PS
+</span><span style=color:#0086b3></span><span style=color:teal>$AuthParams</span> =  @{
+	ClientID  = <span style=color:teal>$YourAppID</span>
+    TenantID  = <span style=color:#d14>&#39;contoso.one&#39;</span> <span style=color:#998;font-style:italic>#Also could use the GUID form from decoding your JWT token, like &#39;492d0e46-26b0-475c-82d0-102c962ea477&#39; </span>
+    Scopes    = <span style=color:#d14>&#39;DeviceManagementConfiguration.Read.All&#39;</span>
+    LoginHint = <span style=color:#d14>&#39;YourUPN@Contoso.one&#39;</span> 
+    }
+
+<span style=color:teal>$Token</span> = <span style=color:#0086b3>Get-MSALToken</span> <span style=color:teal>@AuthParams</span>
+    
+<span style=color:teal>$QueryParams</span> =  @{
+    queryURL = <span style=color:#d14>&#39;https://graph.microsoft.com/beta/deviceManagement/deviceHealthScripts/02a4e7e8-195a-4824-8044-08b3a7f2d555/runSummary&#39;</span>
+    Method   = <span style=color:#d14>&#39;GET&#39;</span>
+    }
+<span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{Authorization = <span style=color:#d14>&#34;Bearer </span>$(<span style=color:teal>$Token</span>.AccessToken)<span style=color:#d14>&#34;</span>} <span style=color:teal>@QueryParams</span>
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                          &lt;p&gt;
                           &lt;/p&gt;
                         &lt;/div&gt;
                       &lt;/div&gt;
                       
                       &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h2&gt;
-                            Another Example with a Less Common API
-                          &lt;/h2&gt;
-                          
-                          &lt;p&gt;
-                            Let's find the &lt;strong&gt;[Authentication Methods Registration Detail](https://portal.azure.com/#blade/Microsoft_AAD_IAM/AuthenticationMethodsMenuBlade/UserRegistrationDetails/menuId/UserRegistrationDetails)&lt;/strong&gt; report data.
+</code></pre>
+<h2 id=another-example-with-a-less-common-api>Another Example with a Less Common API</h2>
+<pre><code>                          &lt;p&gt;
+                            Let's find the **[Authentication Methods Registration Detail](https://portal.azure.com/#blade/Microsoft_AAD_IAM/AuthenticationMethodsMenuBlade/UserRegistrationDetails/menuId/UserRegistrationDetails)** report data.
                           &lt;/p&gt;&lt;figure class=&quot;wp-block-image alignwide size-large&quot;&gt;
                           
                           ![](image-10-1024x376.png)&lt;/figure&gt; 
                           
                           &lt;p&gt;
-                            We go through the same DevTools process that we outlined above in &lt;strong&gt;[Watching How the Portal Works](#watching-the-portal-work)&lt;/strong&gt;.
+                            We go through the same DevTools process that we outlined above in **[Watching How the Portal Works](#watching-the-portal-work)**.
                           &lt;/p&gt;&lt;figure class=&quot;wp-block-image alignwide&quot;&gt;
                           
                           ![This image has an empty alt attribute; its file name is image-11.png](image-11.png)&lt;/figure&gt; 
@@ -305,12 +326,16 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                           &lt;p&gt;
                             This gives us the Query URL below.
                           &lt;/p&gt;
-                          
-                          &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
-                            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;fileName&quot;:&quot;QueryURL&quot;,&quot;align&quot;:&quot;wide&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;https://graph.windows.net/myorganization/activities/authenticationMethodUserDetails?$orderby=userPrincipalName%20asc&amp;api-version=beta&lt;/pre&gt;
-                          &lt;/div&gt;
-                          
-                          &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>https<span style=color:#a61717;background-color:#e3d2d2>:</span>//graph.windows.net/myorganization/activities/authenticationMethodUserDetails?<span style=color:teal>$orderby</span>=userPrincipalName<span style=color:#000;font-weight:700>%</span>20asc&amp;<span style=color:#0086b3>api-version</span>=beta
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                          &lt;p&gt;
                             Voila! Well... somewhat. Most people know of Microsoft Graph, but there are other Microsoft APIs that are available. Some variations include:
                           &lt;/p&gt;&lt;section class=&quot;wp-block-uagb-columns uagb-columns__wrap uagb-columns__background-undefined uagb-columns__stack-mobile uagb-columns__valign-undefined uagb-columns__gap-10 alignwide uagb-block-6aff5a46&quot; id=&quot;various-apis&quot;&gt;
                           
@@ -373,39 +398,36 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                           &lt;/p&gt;
                           
                           &lt;p&gt;
-                            However, this example above references &lt;strong&gt;graph.windows.net&lt;/strong&gt; - which I know means it is using the [Legacy Azure AD Graph](https://docs.microsoft.com/azure/active-directory/develop/active-directory-graph-api). Now this is currently supported, but is actually already recommending to [migrate to Microsoft Graph](https://go.microsoft.com/fwlink/?linkid=2132805). For this example, I am focusing on recreating what the Portal is actively doing, so I won't look at the Microsoft Graph equivalent here (though it looks like this might be fairly similar - [credentialUserRegistrationDetails](https://docs.microsoft.com/graph/api/reportroot-list-credentialuserregistrationdetails))
+                            However, this example above references **graph.windows.net** - which I know means it is using the [Legacy Azure AD Graph](https://docs.microsoft.com/azure/active-directory/develop/active-directory-graph-api). Now this is currently supported, but is actually already recommending to [migrate to Microsoft Graph](https://go.microsoft.com/fwlink/?linkid=2132805). For this example, I am focusing on recreating what the Portal is actively doing, so I won't look at the Microsoft Graph equivalent here (though it looks like this might be fairly similar - [credentialUserRegistrationDetails](https://docs.microsoft.com/graph/api/reportroot-list-credentialuserregistrationdetails))
                           &lt;/p&gt;
                         &lt;/div&gt;
                       &lt;/div&gt;
                       
                       &lt;div class=&quot;wp-block-group&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h3 id=&quot;what-api-is-it&quot;&gt;
-                            OK - so what API &lt;em&gt;IS&lt;/em&gt; it using?
-                          &lt;/h3&gt;
+                          ### OK - so what API *IS* it using?
+                          
                           
                           &lt;p&gt;
                             Well - for the more obscure APIs - this can be a bit hard to find, and so hard to look up documentation for. Sometimes, there just isn't really public documentation for it.
                           &lt;/p&gt;
                           
                           &lt;p&gt;
-                            If you are stuck trying to figure out what you are using, some very useful information can be gathered from your &lt;strong&gt;Bearer Token&lt;/strong&gt;. But first, we need to get one.
+                            If you are stuck trying to figure out what you are using, some very useful information can be gathered from your **Bearer Token**. But first, we need to get one.
                           &lt;/p&gt;
                         &lt;/div&gt;
                       &lt;/div&gt;
                       
                       &lt;div class=&quot;wp-block-group&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h4 id=&quot;finding-your-token&quot;&gt;
-                            Finding your Token
-                          &lt;/h4&gt;
-                          
-                          &lt;p&gt;
-                            Now, you can get tokens lots of ways, like [MSAL](https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-overview), a number of [assorted Authentication Flows](https://docs.microsoft.com/en-us/azure/active-directory/develop/authentication-flows-app-scenarios), but we're watching the portal right now, and we already logged in. If we jump back to our F12 DevTools &gt; Network Tab - we can click on the entry we found before in [this section](#watching-the-portal-work), open the &lt;strong&gt;Headers&lt;/strong&gt; &gt; Scroll to the &lt;strong&gt;Request Headers&lt;/strong&gt; section &gt; &lt;strong&gt;Authorization&lt;/strong&gt;
+</code></pre>
+<h4 id=finding-your-token>Finding your Token</h4>
+<pre><code>                          &lt;p&gt;
+                            Now, you can get tokens lots of ways, like [MSAL](https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-overview), a number of [assorted Authentication Flows](https://docs.microsoft.com/en-us/azure/active-directory/develop/authentication-flows-app-scenarios), but we're watching the portal right now, and we already logged in. If we jump back to our F12 DevTools &gt; Network Tab - we can click on the entry we found before in [this section](#watching-the-portal-work), open the **Headers** &gt; Scroll to the **Request Headers** section &gt; **Authorization**
                           &lt;/p&gt;
                           
                           &lt;p&gt;
-                            This will give you a big beautiful base64 &lt;strong&gt;Bearer &lt;/strong&gt;blob, which is how the Portal authenticates for it's API calls in the background. You just have to de-crumple it into a usable state.
+                            This will give you a big beautiful base64 **Bearer **blob, which is how the Portal authenticates for it's API calls in the background. You just have to de-crumple it into a usable state.
                           &lt;/p&gt;
                           
                           &lt;div class=&quot;wp-block-image&quot;&gt;
@@ -419,12 +441,10 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                       
                       &lt;div class=&quot;wp-block-group&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h4 id=&quot;decoding-your-token&quot;&gt;
-                            Decoding your Token
-                          &lt;/h4&gt;
-                          
-                          &lt;p&gt;
-                            Now, usually when you get a token for these APIs, it is a &lt;strong&gt;Bearer&lt;/strong&gt; token and a &lt;strong&gt;JSON Web Token&lt;/strong&gt; or &lt;strong&gt;JWT&lt;/strong&gt;. Now JWT's are an excellent and open standard you can read more about [here](https://jwt.io/), but the short version is that inside this big beautiful base64 blob are three parts.
+</code></pre>
+<h4 id=decoding-your-token>Decoding your Token</h4>
+<pre><code>                          &lt;p&gt;
+                            Now, usually when you get a token for these APIs, it is a **Bearer** token and a **JSON Web Token** or **JWT**. Now JWT's are an excellent and open standard you can read more about [here](https://jwt.io/), but the short version is that inside this big beautiful base64 blob are three parts.
                           &lt;/p&gt;
                           
                           &lt;ul&gt;
@@ -440,10 +460,10 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                           &lt;/ul&gt;
                           
                           &lt;p&gt;
-                            The &lt;strong&gt;Bearer&lt;/strong&gt; at the beginning just references the type of token, but everything bolded below is one big chunk with all three parts. Well - if you want you can run it through a [Base64Decoder](https://www.base64decode.org/) - but the Signature part at the end comes out looking like random high ASCII.
+                            The **Bearer** at the beginning just references the type of token, but everything bolded below is one big chunk with all three parts. Well - if you want you can run it through a [Base64Decoder](https://www.base64decode.org/) - but the Signature part at the end comes out looking like random high ASCII.
                           &lt;/p&gt;
                           
-                          &lt;pre id=&quot;bearer-example&quot; class=&quot;wp-block-preformatted&quot;&gt;Bearer&amp;nbsp;&lt;strong&gt;e01lc3NhZ2U6ICJEaWQgeW91IHRoaW5rIHRoaXMgd2FzIGdvaW5nIHRvIGhhdmUgYW4gYWN0dWFsIHJlYWwgdG9rZW4gaW4gaXQ/IEhhISAKV2VsbCBhcyBsb25nIGFzIHlvdSdyZSBoZXJlIC0gV2hhdCBpcyB5b3VyIGZhdm9yaXRlIGNvbG9yPyBPaC4uLiBobW1tLi4uIEkgd29uJ3QgcmVhbGx5IHNlZSB5b3VyIHJlc3BvbnNlIGhlcmUuIERhbW4uIFdlbGwgLSB0aGUgYmVzdCB3YXkgdG8gY2hhdCB3aXRoIG1lIGlzIHRvIGNvbWUgYnkgdGhlIFdpbkFkbWlucyBEaXNjb3JkLiBZb3UgY2FuIGdldCBhbiBpbnZpdGUgb3ZlciBoZXJlIGh0dHBzOi8vd2luYWRtaW5zLmlvL2Rpc2NvcmQgLiBDb21lIG9uIGJ5IHNvbWV0aW1lLCBhbmQgZmVlbCBmcmVlIHRvIHRhZyBtZSBhdCBAUHN5Y2hvRGF0YSBhbmQgdGVsbCBtZSB5b3VyIGZhdm9yaXRlIGNvbG9yISAKCkJldHRlciB5ZXQsIHNvbWV0aGluZyBmdW4uLi4uLiB0ZWxsIG1lIHlvdSBmb3VuZCBteSBsb3N0IHNvY2shIEl0IHdpbGwgY29uZnVzZSBldmVyeW9uZSBlbHNlIGFuZCBiZSBsb3RzIG9mIGdvb2QgZnVuISAKCldlbGwsIEknbSBhYm91dCBvdXQgb2YgdGhpbmdzIHRvIHJhbWJsZSBhYm91dC4uLiBTby4uIHVoaCBibHVyLXBsZT8gTW9udGdvbWVyeS4gVHVybnBpa2UuIFRoYXQncyBhbGwgSSBoYXZlIHNvIGhvcGUgdG8gY2hhdCBpbiBEaXNjb3JkIHNvbWUgdGltZSEiIH0KJeGIadj0TKLmjz_kgjH0byyuyGZA0CSRQDOP3tbP27tGoERHMQcyyWxv1J0ZtCDbAC7OWRQdxsf6YmcgKNmvyWCZDac2p6e2HGf9ZESfOCj6iFIQBR05FvByqudE_tPZlQgQk0wotkr3oQoxJQ&lt;/strong&gt;&lt;/pre&gt;
+                          &lt;pre id=&quot;bearer-example&quot; class=&quot;wp-block-preformatted&quot;&gt;Bearer**e01lc3NhZ2U6ICJEaWQgeW91IHRoaW5rIHRoaXMgd2FzIGdvaW5nIHRvIGhhdmUgYW4gYWN0dWFsIHJlYWwgdG9rZW4gaW4gaXQ/IEhhISAKV2VsbCBhcyBsb25nIGFzIHlvdSdyZSBoZXJlIC0gV2hhdCBpcyB5b3VyIGZhdm9yaXRlIGNvbG9yPyBPaC4uLiBobW1tLi4uIEkgd29uJ3QgcmVhbGx5IHNlZSB5b3VyIHJlc3BvbnNlIGhlcmUuIERhbW4uIFdlbGwgLSB0aGUgYmVzdCB3YXkgdG8gY2hhdCB3aXRoIG1lIGlzIHRvIGNvbWUgYnkgdGhlIFdpbkFkbWlucyBEaXNjb3JkLiBZb3UgY2FuIGdldCBhbiBpbnZpdGUgb3ZlciBoZXJlIGh0dHBzOi8vd2luYWRtaW5zLmlvL2Rpc2NvcmQgLiBDb21lIG9uIGJ5IHNvbWV0aW1lLCBhbmQgZmVlbCBmcmVlIHRvIHRhZyBtZSBhdCBAUHN5Y2hvRGF0YSBhbmQgdGVsbCBtZSB5b3VyIGZhdm9yaXRlIGNvbG9yISAKCkJldHRlciB5ZXQsIHNvbWV0aGluZyBmdW4uLi4uLiB0ZWxsIG1lIHlvdSBmb3VuZCBteSBsb3N0IHNvY2shIEl0IHdpbGwgY29uZnVzZSBldmVyeW9uZSBlbHNlIGFuZCBiZSBsb3RzIG9mIGdvb2QgZnVuISAKCldlbGwsIEknbSBhYm91dCBvdXQgb2YgdGhpbmdzIHRvIHJhbWJsZSBhYm91dC4uLiBTby4uIHVoaCBibHVyLXBsZT8gTW9udGdvbWVyeS4gVHVybnBpa2UuIFRoYXQncyBhbGwgSSBoYXZlIHNvIGhvcGUgdG8gY2hhdCBpbiBEaXNjb3JkIHNvbWUgdGltZSEiIH0KJeGIadj0TKLmjz_kgjH0byyuyGZA0CSRQDOP3tbP27tGoERHMQcyyWxv1J0ZtCDbAC7OWRQdxsf6YmcgKNmvyWCZDac2p6e2HGf9ZESfOCj6iFIQBR05FvByqudE_tPZlQgQk0wotkr3oQoxJQ**&lt;/pre&gt;
                           
                           &lt;p&gt;
                             However, there are services that know how to gracefully decode all the Microsoft Style bits and bobs. There is one public JWT decoder that you can paste your token into [here](https://jwt.io/#debugger-io), but Microsoft actually runs one of their own, and it will automatically identify the issuer of certain types of the tokens as well.
@@ -453,13 +473,12 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                       
                       &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h2 id=&quot;jwt-decoder&quot;&gt;
-                            Useful Tools: Microsoft's JWT Decoder
-                          &lt;/h2&gt;
+                          ## Useful Tools: Microsoft's JWT Decoder
                           
-                          &lt;p class=&quot;has-text-align-center&quot;&gt;
+                          
+                          
                             [jwt.ms](https://jwt.ms)
-                          &lt;/p&gt;
+                          
                           
                           &lt;p&gt;
                             The tool is very simple to use. Just paste your token (from a [browser session](#finding-your-token) or a token you [fetched yourself](#getting-a-token)) in the top of the page, and it is decoded on the bottom half.
@@ -473,7 +492,7 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                           
                           &lt;ul&gt;
                             &lt;li&gt;
-                              what scopes (&lt;strong&gt;scp&lt;/strong&gt;) you have issued &lt;ul&gt;
+                              what scopes (**scp**) you have issued &lt;ul&gt;
                                 &lt;li&gt;
                                   These are roughly equivalent to the permissions that you are requesting to use
                                 &lt;/li&gt;
@@ -481,18 +500,18 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                             &lt;/li&gt;
                             
                             &lt;li&gt;
-                              from what issuer (&lt;strong&gt;iss&lt;/strong&gt;) &lt;ul&gt;
+                              from what issuer (**iss**) &lt;ul&gt;
                                 &lt;li&gt;
                                   This is the authority that issued a token. Most times you will see &quot;STS&quot; which stands for Security Token Service
                                 &lt;/li&gt;
                                 &lt;li&gt;
-                                  This often relates to the tenant that is verifying you for example a issuer of https://sts.windows.net/efff978e-7235-6548-2347-09b768955994/ is issuing the token from tenant ID &lt;strong&gt;efff978e-7235-6548-2347-09b768955994&lt;/strong&gt;
+                                  This often relates to the tenant that is verifying you for example a issuer of https://sts.windows.net/efff978e-7235-6548-2347-09b768955994/ is issuing the token from tenant ID **efff978e-7235-6548-2347-09b768955994**
                                 &lt;/li&gt;
                               &lt;/ul&gt;
                             &lt;/li&gt;
                             
                             &lt;li&gt;
-                              for what site/service or audience (&lt;strong&gt;aud&lt;/strong&gt;) &lt;ul&gt;
+                              for what site/service or audience (**aud**) &lt;ul&gt;
                                 &lt;li&gt;
                                   The Audience is often related closely to the API or Service that you are signing into, and is often related to the domain-portion of the Query URL you find in the DevTools Network tab.
                                 &lt;/li&gt;
@@ -500,7 +519,7 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                             &lt;/li&gt;
                             
                             &lt;li&gt;
-                              what tenant ID you authenticated from (&lt;strong&gt;tid&lt;/strong&gt;)&lt;ul&gt;
+                              what tenant ID you authenticated from (**tid**)&lt;ul&gt;
                                 &lt;li&gt;
                                   This often relates to the STS mentioned above
                                 &lt;/li&gt;
@@ -508,7 +527,7 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                             &lt;/li&gt;
                             
                             &lt;li&gt;
-                              the authentication methods for this token (&lt;strong&gt;amr&lt;/strong&gt;)&lt;ul&gt;
+                              the authentication methods for this token (**amr**)&lt;ul&gt;
                                 &lt;li&gt;
                                   This can sometimes be used to tell if someone has entered a password, or especially if the user's session is verified with MFA
                                 &lt;/li&gt;
@@ -516,7 +535,7 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                             &lt;/li&gt;
                             
                             &lt;li&gt;
-                              the expiration timestamp of the token (&lt;strong&gt;exp&lt;/strong&gt;)&lt;ul&gt;
+                              the expiration timestamp of the token (**exp**)&lt;ul&gt;
                                 &lt;li&gt;
                                   If you are testing, particularly if you got a token manually, your token might have expired on you. The error messages will usually help identify this, but you can pop it into the decoder to check
                                 &lt;/li&gt;
@@ -535,9 +554,8 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                       
                       &lt;div class=&quot;wp-block-group&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h2 id=&quot;api-explorer-sites&quot;&gt;
-                            Useful Tools: API Explorer websites
-                          &lt;/h2&gt;
+                          ## Useful Tools: API Explorer websites
+                          
                           
                           &lt;p&gt;
                             Several APIs have explorer websites. Here are several below, and there are probably more, and if you know of some, come by the [WinAdmins Discord](https://winadmins.io/discord), and tag me there [@PsychoData](https://discordapp.com/users/264652399824601088) or on [Twitter @PsychoData](https://twitter.com/psychodata) to let me know!
@@ -563,11 +581,9 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                       
                       &lt;div class=&quot;wp-block-group&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h2&gt;
-                            Conclusion
-                          &lt;/h2&gt;
-                          
-                          &lt;p&gt;
+</code></pre>
+<h2 id=conclusion>Conclusion</h2>
+<pre><code>                          &lt;p&gt;
                             With these processes, we have talked about how you can
                           &lt;/p&gt;
                           
@@ -610,14 +626,12 @@ Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Token.AccessToken)
                       
                       &lt;div class=&quot;wp-block-group&quot;&gt;
                         &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                          &lt;h4&gt;
-                            Where to find me
-                          &lt;/h4&gt;
-                          
-                          &lt;div class=&quot;wp-block-columns are-vertically-aligned-center&quot;&gt;
+</code></pre>
+<h4 id=where-to-find-me>Where to find me</h4>
+<pre><code>                          &lt;div class=&quot;wp-block-columns are-vertically-aligned-center&quot;&gt;
                             &lt;div class=&quot;wp-block-column is-vertically-aligned-center&quot; style=&quot;flex-basis:66.66%&quot;&gt;
                               &lt;p&gt;
-                                If you have questions, are having problems, or just want to chat over something, you can leave a comment below or reach me on the&amp;nbsp;[WinAdmins Discord](https://discord.com/invite/winadmins)&amp;nbsp;at&amp;nbsp;[@PsychoData](https://discordapp.com/users/264652399824601088)
+                                If you have questions, are having problems, or just want to chat over something, you can leave a comment below or reach me on the[WinAdmins Discord](https://discord.com/invite/winadmins)at[@PsychoData](https://discordapp.com/users/264652399824601088)
                               &lt;/p&gt;
                             &lt;/div&gt;
                             

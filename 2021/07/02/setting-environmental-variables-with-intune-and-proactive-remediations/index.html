@@ -23,8 +23,7 @@
 <meta name=twitter:title content="Setting Environmental Variables with Intune and proactive remediations">
 <meta name=twitter:description content="As you may have noticed by now, there doesn&rsquo;t seem to be any nice built in way to set environmental variables in intune 🙁
 The Problem Setting a user environmental variable using powershell is an easy task to accomplish, you basically just run the following:
-This works just fine, but won&rsquo;t take effect until the user either reboots or signs into the device again. Which is obviously not ideal.
-I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a WM_SETTINGCHANGE message is broadcast to the system and that refreshes them, but how you do that with powershell?">
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  This works just fine, but won't take effect until the user either reboots or signs into the device again.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -99,11 +98,43 @@ I spent a little time looking into this and i found out that when you change the
 <p>As you may have noticed by now, there doesn&rsquo;t seem to be any nice built in way to set environmental variables in intune 🙁</p>
 <h2 id=the-problem>The Problem</h2>
 <p>Setting a user environmental variable using powershell is an easy task to accomplish, you basically just run the following:</p>
-<p>This works just fine, but won&rsquo;t take effect until the user either reboots or signs into the device again. Which is obviously not ideal.</p>
-<p>I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a <a href=https://docs.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange>WM_SETTINGCHANGE message</a> is broadcast to the system and that refreshes them, but how you do that with powershell?</p>
-<h2 id=the-solution>The Solution</h2>
-<p>As it turned out, my fellow sysmansquad member <a href=https://sysmansquad.com/author/gduk/>Grant Dickins</a> had a solution to the problem.</p>
-<p>Which both sets the variable and broadcasts the change to the rest of the system!</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>
+
+
+This works just fine, but won<span style=color:#d14>&#39;t take effect until the user either reboots or signs into the device again. Which is obviously not ideal.
+</span><span style=color:#d14>
+</span><span style=color:#d14>I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a [WM_SETTINGCHANGE message](https://docs.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange) is broadcast to the system and that refreshes them, but how you do that with powershell?
+</span><span style=color:#d14>
+</span><span style=color:#d14>## The Solution
+</span><span style=color:#d14>
+</span><span style=color:#d14>As it turned out, my fellow sysmansquad member [Grant Dickins](https://sysmansquad.com/author/gduk/) had a solution to the problem.
+</span><span style=color:#d14>
+</span><span style=color:#d14>
+</span><span style=color:#d14>  ```powershell 
+</span><span style=color:#d14>[System.Environment]::SetEnvironmentVariable(&#39;</span>TEMP<span style=color:#d14>&#39;,&#39;</span>c:\temp\<span style=color:#d14>&#39;,&#39;</span>User<span style=color:#a61717;background-color:#e3d2d2>&#39;</span>)
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Which both sets the variable and broadcasts the change to the rest of the system!</p>
 <h2 id=putting-it-all-together>Putting it all together</h2>
 <p>Intune has a very nice feature called Proactive Remediation that is part of endpoint analytics. and its the perfect tool for the job!</p>
 <p>If you are new to using Proactive Remediations, check out Jake Shackelford&rsquo;s <a href=https://sysmansquad.com/2020/07/07/intune-autopilot-proactive-remediation/>blog post,</a> it will get you up to speed in no time.</p>
@@ -118,63 +149,144 @@ I spent a little time looking into this and i found out that when you change the
 <h2 id=the-script>The Script</h2>
 <p>First up is the Detection script, pretty simple stuff, it checks if the temp and tmp variables are set to the path i want.</p>
 <p>Note that if you want to use a different path, just change line 5 in both scripts.</p>
-<h1 id=path-to-the-directory-that-temp-and-tmp-should-point-towards>path to the directory that TEMP and TMP should point towards</h1>
-<h1 id=make-sure-its-the-same-in-both-the-remediation-and-discovery-scripts>Make sure its the same in both the remediation and discovery scripts</h1>
-<p>$value = &ldquo;c:\temp"</p>
-<p>try {</p>
-<pre><code># create the temp directory if it doesn't exist, no need to use a remediation to do that
-if ( (Test-Path -Path $value -ErrorAction stop) -eq $false ) {
-    Write-Host &quot;$value directory missing&quot;
-    exit 1
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Discovery</span>
+
+<span style=color:#998;font-style:italic># path to the directory that TEMP and TMP should point towards</span>
+<span style=color:#998;font-style:italic># Make sure its the same in both the remediation and discovery scripts</span>
+<span style=color:teal>$value</span> = <span style=color:#d14>&#34;c:\temp\&#34;</span>
+
+<span style=color:#000;font-weight:700>try</span> {
+
+    <span style=color:#998;font-style:italic># create the temp directory if it doesn&#39;t exist, no need to use a remediation to do that</span>
+    <span style=color:#000;font-weight:700>if</span> ( (<span style=color:#0086b3>Test-Path</span> -Path <span style=color:teal>$value</span> -ErrorAction stop) <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$false</span> ) {
+        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;$value directory missing&#34;</span>
+        exit 1
+    }
+
+    <span style=color:#998;font-style:italic># check the TEMP environmental variable</span>
+    <span style=color:teal>$TempVar</span> = <span style=color:teal>[System.Environment]</span>::GetEnvironmentVariable(<span style=color:#d14>&#39;TEMP&#39;</span>, <span style=color:#d14>&#39;User&#39;</span>)
+    <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$TempVar</span> <span style=color:#000;font-weight:700>-ne</span> <span style=color:teal>$value</span>) {
+        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;failure, Temp is set to $TempVar&#34;</span>
+        exit 1
+    }
+
+    <span style=color:#998;font-style:italic># check the TMP environmental variable</span>
+    <span style=color:teal>$TmpVar</span> = <span style=color:teal>[System.Environment]</span>::GetEnvironmentVariable(<span style=color:#d14>&#39;TMP&#39;</span>, <span style=color:#d14>&#39;User&#39;</span>)
+    <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$TmpVar</span> <span style=color:#000;font-weight:700>-ne</span> <span style=color:teal>$value</span>) {
+        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;failure, Tmp is set to $TmpVar&#34;</span>
+        exit 1
+    }
+
+    <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;Temp/tmp Variables set correctly&#34;</span>
+    exit 0
+
 }
-
-# check the TEMP environmental variable
-$TempVar = [System.Environment]::GetEnvironmentVariable('TEMP', 'User')
-if ($TempVar -ne $value) {
-    Write-Host &quot;failure, Temp is set to $TempVar&quot;
-    exit 1
+<span style=color:#000;font-weight:700>catch</span> {
+    <span style=color:teal>$errMsg</span> = <span style=color:teal>$_</span>.Exception.Message
+    <span style=color:#0086b3>Write-Host</span> <span style=color:teal>$errMsg</span>
+    exit 1 
 }
+</code></pre></td></tr></table>
+</div>
+</div><p>The remediation is not much to write home about. It sets the variables and runs the code needed to refresh the system.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Remediation</span>
 
-# check the TMP environmental variable
-$TmpVar = [System.Environment]::GetEnvironmentVariable('TMP', 'User')
-if ($TmpVar -ne $value) {
-    Write-Host &quot;failure, Tmp is set to $TmpVar&quot;
-    exit 1
+<span style=color:#998;font-style:italic># path to the directory that TEMP and TMP should point towards</span>
+<span style=color:#998;font-style:italic># Make sure its the same in both the remediation and discovery scripts</span>
+<span style=color:teal>$value</span> = <span style=color:#d14>&#34;c:\temp\&#34;</span>
+
+<span style=color:#000;font-weight:700>try</span> {
+
+    <span style=color:#998;font-style:italic># create the temp directory if it doesn&#39;t exist</span>
+    <span style=color:#000;font-weight:700>if</span> ( (<span style=color:#0086b3>Test-Path</span> -Path <span style=color:teal>$value</span>) <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$false</span> ) {
+        <span style=color:#0086b3>New-Item</span> -Path <span style=color:teal>$value</span> -ItemType Directory
+    }
+
+    <span style=color:#998;font-style:italic># set the variables</span>
+    <span style=color:teal>[System.Environment]</span>::SetEnvironmentVariable(<span style=color:#d14>&#39;TEMP&#39;</span>, <span style=color:#d14>&#34;$value&#34;</span>, <span style=color:#d14>&#39;User&#39;</span>)
+    <span style=color:teal>[System.Environment]</span>::SetEnvironmentVariable(<span style=color:#d14>&#39;TMP&#39;</span>, <span style=color:#d14>&#34;$value&#34;</span>, <span style=color:#d14>&#39;User&#39;</span>)
+
+    <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;User variables Changed&#34;</span>
+    exit 0
 }
-
-Write-Host &quot;Temp/tmp Variables set correctly&quot;
-exit 0
-</code></pre>
-<p>}
-catch {
-$errMsg = $_.Exception.Message
-Write-Host $errMsg
-exit 1
-}</p>
-<p>The remediation is not much to write home about. It sets the variables and runs the code needed to refresh the system.</p>
-<h1 id=path-to-the-directory-that-temp-and-tmp-should-point-towards-1>path to the directory that TEMP and TMP should point towards</h1>
-<h1 id=make-sure-its-the-same-in-both-the-remediation-and-discovery-scripts-1>Make sure its the same in both the remediation and discovery scripts</h1>
-<p>$value = &ldquo;c:\temp"</p>
-<p>try {</p>
-<pre><code># create the temp directory if it doesn't exist
-if ( (Test-Path -Path $value) -eq $false ) {
-    New-Item -Path $value -ItemType Directory
+<span style=color:#000;font-weight:700>catch</span> {
+    <span style=color:teal>$errMsg</span> = <span style=color:teal>$_</span>.Exception.Message
+    <span style=color:#0086b3>Write-Host</span> <span style=color:teal>$errMsg</span>
+    exit 1 
 }
-
-# set the variables
-[System.Environment]::SetEnvironmentVariable('TEMP', &quot;$value&quot;, 'User')
-[System.Environment]::SetEnvironmentVariable('TMP', &quot;$value&quot;, 'User')
-
-Write-Host &quot;User variables Changed&quot;
-exit 0
-</code></pre>
-<p>}
-catch {
-$errMsg = $_.Exception.Message
-Write-Host $errMsg
-exit 1
-}</p>
-<h2 id=outro>Outro</h2>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=outro>Outro</h2>
 <p>So there you go, a simple proactive remediation that you can use to change user environmental variables with relative ease. You can trivially adopt this to change any other variable. Either user or System variable.</p>
 </div>
 <comments id=comments>

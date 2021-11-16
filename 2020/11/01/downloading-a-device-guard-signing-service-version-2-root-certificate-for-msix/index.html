@@ -179,21 +179,63 @@ And select <strong>user_impresonation</strong>.</p>
 <h2 id=get-dgssv2rootcert>Get-DGSSv2RootCert</h2>
 <p>Since for most people, downloading the root certificate is a one time operation, I elected to run this this in a <a href=https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-overview>windows sandbox</a>. but that is 100% optional.</p>
 <p>Paste the application GUID into the $AppID variable and you should be ready to go.</p>
-<h1 id=please-add-your-own-app-id>please add your own App ID</h1>
-<p>$AppID = &ldquo;PUT YOUR GUID HERE&rdquo;</p>
-<h1 id=we-need-to-add-nuget-as-a-package-source-first>we need to add nuget as a package source first</h1>
-<p>Register-PackageSource -Name MyNuGet -Location <a href=https://www.nuget.org/api/v2>https://www.nuget.org/api/v2</a> -ProviderName NuGet -Confirm:$false -Force</p>
-<h1 id=installing-the-package>installing the package</h1>
-<p>Install-Package Microsoft.Acs.Dgss.Client -Source mynuget -Confirm:$false -Force -Verbose</p>
-<h1 id=importing-the-module>importing the module</h1>
-<p>Import-Module &ldquo;C:\Program Files\PackageManagement\NuGet\Packages\Microsoft.Acs.Dgss.Client.1.0.11\PowerShell\Microsoft.Acs.Dgss.Client.dll&rdquo;</p>
-<h1 id=just-for-convenience>just for convenience</h1>
-<p>New-Item -Path c:\ -Name &ldquo;DGCertv2&rdquo; -ItemType Directory -Force</p>
-<h1 id=downloading-the-cert-to-the-folder-specified-above-this-step-is-not-instant-ive-seen-it-take-a-while>downloading the cert to the folder specified above, this step is not instant, ive seen it take a while</h1>
-<p>Get-RootCertificate -PassThru -OutFile C:\DGCertv2\DGSSv2root.cer -AppId $AppID</p>
-<h1 id=voila-the-cert-appears-before-your-eyes>voila! the cert appears before your eyes</h1>
-<p>start C:\DGCertv2&lt;/pre></p>
-<p>Congrats, you now have a Device Guard Signing Service v2 Root Certificate in your possession.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># This simple script is used to download the Device Guard Signing Service v2 Root Certificate</span>
+
+
+<span style=color:#998;font-style:italic># please add your own App ID</span>
+<span style=color:teal>$AppID</span> = <span style=color:#d14>&#34;PUT YOUR GUID HERE&#34;</span>
+
+
+
+<span style=color:#998;font-style:italic># we need to add nuget as a package source first</span>
+<span style=color:#0086b3>Register-PackageSource</span> -Name MyNuGet -Location https<span style=color:#a61717;background-color:#e3d2d2>:</span>//www.nuget.org/api/v2 -ProviderName NuGet -Confirm<span style=color:#a61717;background-color:#e3d2d2>:</span><span style=color:teal>$false</span> -Force
+
+<span style=color:#998;font-style:italic># installing the package</span>
+<span style=color:#0086b3>Install-Package</span> Microsoft.Acs.Dgss.Client -Source mynuget -Confirm<span style=color:#a61717;background-color:#e3d2d2>:</span><span style=color:teal>$false</span> -Force -Verbose
+
+<span style=color:#998;font-style:italic># importing the module</span>
+<span style=color:#0086b3>Import-Module</span> <span style=color:#d14>&#34;C:\Program Files\PackageManagement\NuGet\Packages\Microsoft.Acs.Dgss.Client.1.0.11\PowerShell\Microsoft.Acs.Dgss.Client.dll&#34;</span>
+
+<span style=color:#998;font-style:italic># just for convenience</span>
+<span style=color:#0086b3>New-Item</span> -Path c:\ -Name <span style=color:#d14>&#34;DGCertv2&#34;</span> -ItemType Directory -Force
+
+<span style=color:#998;font-style:italic># downloading the cert to the folder specified above, this step is not instant, ive seen it take a while</span>
+<span style=color:#0086b3>Get-RootCertificate</span> -PassThru -OutFile C:\DGCertv2\DGSSv2root.cer -AppId <span style=color:teal>$AppID</span>
+
+<span style=color:#998;font-style:italic># voila! the cert appears before your eyes</span>
+<span style=color:#0086b3>start </span>C:\DGCertv2\
+</code></pre></td></tr></table>
+</div>
+</div><p>Congrats, you now have a Device Guard Signing Service v2 Root Certificate in your possession.</p>
 <p>Now you can deploy the cert to your clients using your delivery mechanism of choice.</p>
 </div>
 <comments id=comments>

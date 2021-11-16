@@ -95,7 +95,7 @@
 <div class=post-entry>
 <p>This post is intended to help others who might want to better understand why their Operating System Deployment (OSD) task sequence (TS) is failing during the <strong>Setup Windows and Configuration Manager</strong> step with an error code of <strong><a href=https://twitter.com/TheNotoriousDRR/status/1163132463843106818>0x80004005</a></strong> and how to identify the unsigned drivers in your driver package that might be causing it. Maybe my google-fu was failing me, but I didn&rsquo;t see anything else out there that was a guided tour with pictures through the old <a href=https://support.microsoft.com/en-us/help/2012889/configmgr-2007-windows-setup-fails-when-installing-drivers-during-an-c>Microsoft article</a> on this issue. Admit it - sometimes picture guides are just easier, especially if you can pass the task <em>present a growth opportunity</em> to a junior member of your team.</p>
 <blockquote>
-<p><em>YES - Before you mention it - I recognize that I should be using <a href=https://github.com/AdamGrossTX/PowershellScripts/tree/master/ConfigMgr/BootImage>DART</a> in my boot image so I can capture screenshots and not have to crop cell phone pictures, but I just haven&rsquo;t yet and I wanted to get this process documented</em>&mldr;<br>
+<p><em>YES - Before you mention it - I recognize that I should be using<a href=https://github.com/AdamGrossTX/PowershellScripts/tree/master/ConfigMgr/BootImage>DART</a>in my boot image so I can capture screenshots and not have to crop cell phone pictures, but I just haven&rsquo;t yet and I wanted to get this process documented</em>&mldr;<br>
 <a href=http://www.ravishly.com/you-arent-lazy-youre-just-terrified-paralysis-and-perfectionism-mental-health><div class=image>
 <figure>
 <a href=OCDame_Am-I-Crazy_002.png target=_blank>
@@ -104,7 +104,7 @@
 </figure>
 </div></a></p>
 <p><em><a href=http://www.ravishly.com/you-arent-lazy-youre-just-terrified-paralysis-and-perfectionism-mental-health>If I wait for perfectionism, then my procrastination and paralysis will kick in.</a></em></p>
-<p><em>I reserve the right to revisit the post and replace images in the future.</em> </p>
+<p><strong>I reserve the right to revisit the post and replace images in the future.</strong> </p>
 </blockquote>
 <h2 id=the-error>The Error&mldr;</h2>
 <p>Okay &mldr; your OSD task sequence just failed and the timer is started. You have 15 minutes, by default, to read the logs and find the bad driver before all of the OEM inf files are wiped from the x: drive! You could always click the link in the image caption below and learn how to extend the default timeout (courtesy of <a href=https://twitter.com/AArwidmark>Ami Arwidmark</a>), but where is the fun in that?! </p>

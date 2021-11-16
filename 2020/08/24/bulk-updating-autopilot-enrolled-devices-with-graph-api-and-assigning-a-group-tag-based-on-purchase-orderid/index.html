@@ -192,26 +192,81 @@
 </ol>
 <h3 id=the-script>The Script</h3>
 <p>You will need to update 4 fields in the below script with information you copied earlier. Those fields being line 2,3,4, and 6 if you changed the group tag for your dynamic device query. The script will use the App we created earlier to authenticate and grab information for all devices and create an array of devices based on Purchase Order ID. that you manually enter via prompt. It then loops through that array and assigns the Group Tag to all devices . Once all group tags have been assigned it will push a refresh to your portal, bare in mind that you may have to wait an hour or so for the new group tags to show up. This is incredibly helpful for large bulk orders.</p>
-<p>$ReqTokenBody = @{
-Grant_Type = &ldquo;client_credentials&rdquo;
-Scope = &ldquo;<a href=https://graph.microsoft.com/.default%22>https://graph.microsoft.com/.default"</a>
-client_Id = $clientID
-Client_Secret = $clientSecret
-}</p>
-<p>$TokenResponse = Invoke-RestMethod -Uri &ldquo;<a href=https://login.microsoftonline.com/$TenantName/oauth2/v2.0/token%22>https://login.microsoftonline.com/$TenantName/oauth2/v2.0/token"</a> -Method POST -Body $ReqTokenBody
-$apiUrl = &lsquo;<a href="https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeviceIdentities/'">https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeviceIdentities/'</a>
-$Data = Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($TokenResponse.access_token)"} -Uri $apiUrl -Method Get
-$Devices = ($Data | select-object Value).Value</p>
-<p>$devices = ($data.value | where purchaseOrderIdentifier -eq $purchaseOrderId).id</p>
-<p>$body = &lsquo;{&ldquo;groupTag&rdquo;:"'+$groupTag+'"}&rsquo;</p>
-<p>foreach ($device in $Devices) {
-$apiUrl = &ldquo;<a href=https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeviceIdentities/$device/UpdateDeviceProperties%22>https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeviceIdentities/$device/UpdateDeviceProperties"</a>
-$rest = Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($TokenResponse.access_token)"} -Uri $apiUrl -Body $body -Method Post -ContentType &lsquo;application/json&rsquo;
-Write-Host ($device + ' has been added to the ' + $grouptag)
-}</p>
-<p>#Special thanks to @JGKPS, @portaldotjay, @AdamGross</p>
-<p>$apiUrl2 = &ldquo;<a href=https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotSettings/sync%22>https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotSettings/sync"</a>
-Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($TokenResponse.access_token)"} -Uri $apiUrl2 -Method Post</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Application (client) ID, tenant Name and secret</span>
+<span style=color:teal>$clientid</span> = <span style=color:#d14>&#34;&#34;</span>
+<span style=color:teal>$clientSecret</span> = <span style=color:#d14>&#34;-&#34;</span>
+<span style=color:teal>$TenantName</span> = <span style=color:#d14>&#34;&#34;</span>
+<span style=color:teal>$resource</span> = <span style=color:#d14>&#34;https://graph.microsoft.com/&#34;</span>
+<span style=color:teal>$grouptag</span> = <span style=color:#d14>&#34;StandardMachine&#34;</span>
+<span style=color:teal>$purchaseOrderId</span> = <span style=color:#0086b3>Read-Host</span> -Prompt <span style=color:#d14>&#39;Input an order ID&#39;</span>
+
+<span style=color:teal>$ReqTokenBody</span> = @{
+    Grant_Type    = <span style=color:#d14>&#34;client_credentials&#34;</span>
+    Scope         = <span style=color:#d14>&#34;https://graph.microsoft.com/.default&#34;</span>
+    client_Id     = <span style=color:teal>$clientID</span>
+    Client_Secret = <span style=color:teal>$clientSecret</span>
+} 
+
+<span style=color:teal>$TokenResponse</span> = <span style=color:#0086b3>Invoke-RestMethod</span> -Uri <span style=color:#d14>&#34;https://login.microsoftonline.com/$TenantName/oauth2/v2.0/token&#34;</span> -Method POST -Body <span style=color:teal>$ReqTokenBody</span>
+<span style=color:teal>$apiUrl</span> = <span style=color:#d14>&#39;https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeviceIdentities/&#39;</span>
+<span style=color:teal>$Data</span> = <span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{Authorization = <span style=color:#d14>&#34;Bearer </span>$(<span style=color:teal>$TokenResponse</span>.access_token)<span style=color:#d14>&#34;</span>} -Uri <span style=color:teal>$apiUrl</span> -Method Get
+<span style=color:teal>$Devices</span> = (<span style=color:teal>$Data</span> | <span style=color:#0086b3>select-object</span> Value).Value
+
+<span style=color:teal>$devices</span> = (<span style=color:teal>$data</span>.value | <span style=color:#0086b3>where </span>purchaseOrderIdentifier <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$purchaseOrderId</span>).id
+
+<span style=color:teal>$body</span> = <span style=color:#d14>&#39;{&#34;groupTag&#34;:&#34;&#39;</span>+<span style=color:teal>$groupTag</span>+<span style=color:#d14>&#39;&#34;}&#39;</span>
+
+<span style=color:#000;font-weight:700>foreach</span> (<span style=color:teal>$device</span> <span style=color:#000;font-weight:700>in</span> <span style=color:teal>$Devices</span>) {
+    <span style=color:teal>$apiUrl</span> = <span style=color:#d14>&#34;https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeviceIdentities/$device/UpdateDeviceProperties&#34;</span>
+    <span style=color:teal>$rest</span> = <span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{Authorization = <span style=color:#d14>&#34;Bearer </span>$(<span style=color:teal>$TokenResponse</span>.access_token)<span style=color:#d14>&#34;</span>} -Uri <span style=color:teal>$apiUrl</span> -Body <span style=color:teal>$body</span> -Method Post -ContentType <span style=color:#d14>&#39;application/json&#39;</span>
+    <span style=color:#0086b3>Write-Host</span> (<span style=color:teal>$device</span> + <span style=color:#d14>&#39; has been added to the &#39;</span> + <span style=color:teal>$grouptag</span>)
+}
+
+<span style=color:#998;font-style:italic>#Special thanks to @JGKPS, @portaldotjay, @AdamGross</span>
+
+<span style=color:teal>$apiUrl2</span> = <span style=color:#d14>&#34;https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotSettings/sync&#34;</span>
+<span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{Authorization = <span style=color:#d14>&#34;Bearer </span>$(<span style=color:teal>$TokenResponse</span>.access_token)<span style=color:#d14>&#34;</span>} -Uri <span style=color:teal>$apiUrl2</span> -Method Post
+</code></pre></td></tr></table>
+</div>
+</div>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>

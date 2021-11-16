@@ -162,6 +162,23 @@
 </ol>
 <h3 id=5-creating-a-wvd-tenant>Creating a WVD tenant</h3>
 <p>Time for some powershell! The following powershell will add a WVD tenant. Please use an administrative account when signing in as you have to grant access for your tenant.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:teal>$ApplicationID</span> = PASTE YOUR SERVICE PRINCIPAL ACCOUNT APP ID HERE
+<span style=color:teal>$TenantName</span> = PASTE YOUR FULL TENANT NAME HERE
+<span style=color:#0086b3>Install-Module</span> -Name Microsoft.RDInfra.RDPowerShell
+<span style=color:#0086b3>Add-RdsAccount</span> -DeploymentUrl <span style=color:#d14>&#34;https://rdbroker.wvd.microsoft.com&#34;</span>
+<span style=color:#0086b3>New-RdsRoleAssignment</span> -TenantName <span style=color:teal>$TenantName</span> -RoleDefinitionName <span style=color:#d14>&#34;RDS Owner&#34;</span> -ApplicationId <span style=color:teal>$ApplicationID</span>
+</code></pre></td></tr></table>
+</div>
+</div>
 <p><div class=image>
 <figure>
 <a href=powershell_rJBQfXUtgx.png target=_blank>
@@ -227,7 +244,7 @@
 <ol>
 <li>Navigate to the Master-VMs resource group we created earlier</li>
 <li>Create a new resource by selecting the Add button</li>
-<li>Search for Microsoft Windows 10 + Office 365 ProPlus (you do the + Office 365 ProPlus because the non-office version isn&rsquo;t the latest release of windows) and make sure you&rsquo;re selecting the latest version </li>
+<li>Search for Microsoft Windows 10 + Office 365 ProPlus (you do the + Office 365 ProPlus because the non-office version isn&rsquo;t the latest release of windows) and make sure you&rsquo;re selecting the latest version</li>
 <li>Click Create<div class=image>
 <figure>
 <a href=GetImage.png target=_blank>
@@ -258,14 +275,43 @@
 <li>Make any registry changes you want. I personally use the list below</li>
 <li>Shutdown the VM</li>
 </ol>
-<p>reg add &ldquo;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&rdquo; /v fResetBroken /t REG_DWORD /d 1 /f</p>
-<p>reg add &ldquo;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&rdquo; /v MaxConnectionTime /t REG_DWORD /d 10800000 /f</p>
-<p>reg add &ldquo;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&rdquo; /v RemoteAppLogoffTimeLimit /t REG_DWORD /d 0 /f</p>
-<p>reg add &ldquo;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&rdquo; /v MaxDisconnectionTime /t REG_DWORD /d 5000 /f</p>
-<p>reg add &ldquo;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&rdquo; /v MaxIdleTime /t REG_DWORD /d 10800000 /f</p>
-<p>reg add &ldquo;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&rdquo; /v fEnableTimeZoneRedirection /t REG_DWORD /d 1 /f</p>
-<p>reg add &ldquo;HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy&rdquo; /v 01 /t REG_DWORD /d 0 /f </p>
-<h3 id=9-creating-a-template-image>Creating a Template Image</h3>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>reg add <span style=color:#d14>&#34;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&#34;</span> /v RemoteAppLogoffTimeLimit /t REG_DWORD /d 0 /f 
+
+reg add <span style=color:#d14>&#34;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&#34;</span> /v fResetBroken /t REG_DWORD /d 1 /f 
+
+reg add <span style=color:#d14>&#34;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&#34;</span> /v MaxConnectionTime /t REG_DWORD /d 10800000 /f 
+
+reg add <span style=color:#d14>&#34;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&#34;</span> /v RemoteAppLogoffTimeLimit /t REG_DWORD /d 0 /f 
+
+reg add <span style=color:#d14>&#34;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&#34;</span> /v MaxDisconnectionTime /t REG_DWORD /d 5000 /f 
+
+reg add <span style=color:#d14>&#34;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&#34;</span> /v MaxIdleTime /t REG_DWORD /d 10800000 /f 
+
+reg add <span style=color:#d14>&#34;HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services&#34;</span> /v fEnableTimeZoneRedirection /t REG_DWORD /d 1 /f 
+
+reg add <span style=color:#d14>&#34;HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy&#34;</span> /v 01 /t REG_DWORD /d 0 /f 
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=9-creating-a-template-image>Creating a Template Image</h3>
 <p>Now that we have a VM that&rsquo;s ready to go let&rsquo;s create a template of it! Using this method, the tool creates a temporary VM and creates an image based off that temporary VM. Once it&rsquo;s done the temporary VM is deleted and you&rsquo;re left with your original VM and a template image. This is great because if we want to go back and apply updates to the applications or windows itself we can boot up the original VM apply our changes and make a new template image from it.</p>
 <ol>
 <li>Open WVD Admin tool</li>

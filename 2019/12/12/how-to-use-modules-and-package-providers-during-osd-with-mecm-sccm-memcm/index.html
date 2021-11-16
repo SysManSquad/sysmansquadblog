@@ -119,9 +119,23 @@
 <p>Once we have these two folders in a folder on our SCCM, we can create a package.</p>
 <p>Now please forgive me for my terrible PS skills I&rsquo;m working on improving them!</p>
 <p>Create a script in the same folder you put PackageManagemet and WindowsPowerShell that looks like the following</p>
-<p>copy-item $executingScriptDirectory\PackageManagement $env:ProgramFiles -force -Recurse</p>
-<p>copy-item $executingScriptDirectory\WindowsPowershell $env:ProgramFiles -force -Recurse</p>
-<p>In my case, I called this script <strong>MoveItems.ps1</strong></p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:teal>$executingScriptDirectory</span> = <span style=color:#0086b3>Split-Path</span> -Path <span style=color:teal>$MyInvocation</span>.MyCommand.Definition -Parent
+
+<span style=color:#0086b3>copy-item</span> <span style=color:teal>$executingScriptDirectory</span>\PackageManagement <span style=color:teal>$env:ProgramFiles</span> -force -Recurse
+
+<span style=color:#0086b3>copy-item</span> <span style=color:teal>$executingScriptDirectory</span>\WindowsPowershell <span style=color:teal>$env:ProgramFiles</span> -force -Recurse
+</code></pre></td></tr></table>
+</div>
+</div><p>In my case, I called this script <strong>MoveItems.ps1</strong></p>
 <p>Once you have this complete create a package with all the content.</p>
 <p>In your OSD task Sequence create a run PowerShell script step and reference the package you made like so</p>
 <p><div class=image>
@@ -132,8 +146,17 @@
 </figure>
 </div></p>
 <p>Next, in your original script that&rsquo;s failing to run, you&rsquo;ll want to IMPORT those modules or packageproviders as opposed to installing them since you now have the content copied to that local machine. In my case the code looks like so: (This will look different depending on the modules you are trying to import)</p>
-<p>Import-PackageProvider -Name &ldquo;Nuget&rdquo; -Verbose</p>
-<p>Add another Run PowerShell script to your task sequence and reference your script with the newly added Import commands and you should be good to go! Don&rsquo;t forget to update your distribution point for the package you created!</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Import-Module</span> -Name <span style=color:teal>$env:ProgramFiles</span>\WindowsPowerShell\Modules\SnipeitPS -Verbose
+<span style=color:#0086b3>Import-PackageProvider</span> -Name <span style=color:#d14>&#34;Nuget&#34;</span> -Verbose
+</code></pre></td></tr></table>
+</div>
+</div><p>Add another Run PowerShell script to your task sequence and reference your script with the newly added Import commands and you should be good to go! Don&rsquo;t forget to update your distribution point for the package you created!</p>
 <p>If anyone is interested in the actual SnipeIT script feel free to come to the <a href=https://aka.ms/winadmins>WinAdmins</a> discord and send me a message!</p>
 </div>
 <comments id=comments>

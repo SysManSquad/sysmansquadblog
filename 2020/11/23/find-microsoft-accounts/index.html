@@ -94,27 +94,24 @@
 </div>
 <div class=post-entry>
 <p>The other day I was helping someone over in the <a href=https://aka.ms/WinAdmins>WinAdmins Discord</a>. Their users kept getting confused about what their passwords were, and it was causing a lot of HelpDesk tickets. Let&rsquo;s find out what users have Microsoft accounts on the company domain so we can help move those accounts elsewhere to streamline the user experience.</p>
+<h2 id=update-on-prevention>Update on Prevention:</h2>
 <pre><code>                        &lt;blockquote class=&quot;wp-block-quote&quot;&gt;
                           &lt;p&gt;
-                            Microsoft has introduced some changes that at least seem to prevent &lt;em&gt;NEW &lt;/em&gt;Microsoft Accounts on Company Domains. I added more details in the [Preventing](#preventing) section if you want to read more about this. If you just want to find the accounts, jump to [Identifying the Problem](#identifying-the-problem).
+                            Microsoft has introduced some changes that at least seem to prevent *NEW *Microsoft Accounts on Company Domains. I added more details in the [Preventing](#preventing) section if you want to read more about this. If you just want to find the accounts, jump to [Identifying the Problem](#identifying-the-problem).
                           &lt;/p&gt;
                         &lt;/blockquote&gt;
                       &lt;/div&gt;
                     &lt;/div&gt;
                     
-                    &lt;h3 id=&quot;preventing&quot;&gt;
-                      Preventing new registration
-                    &lt;/h3&gt;
+                    ### Preventing new registration
+                    
                     
                     &lt;p&gt;
-                      Microsoft has introduced some changes that at least seem to prevent &lt;em&gt;NEW &lt;/em&gt;Microsoft Accounts on Company Domains. I haven't been able to find any specific announcement about this feature/capability, but supposedly all you need to do is have the relevant domain in your Office 365 Domains as Managed.
+                      Microsoft has introduced some changes that at least seem to prevent *NEW *Microsoft Accounts on Company Domains. I haven't been able to find any specific announcement about this feature/capability, but supposedly all you need to do is have the relevant domain in your Office 365 Domains as Managed.
                     &lt;/p&gt;
-                    
-                    &lt;h3&gt;
-                      What the blocking looks like
-                    &lt;/h3&gt;
-                    
-                    &lt;p&gt;
+</code></pre>
+<h3 id=what-the-blocking-looks-like>What the blocking looks like</h3>
+<pre><code>                    &lt;p&gt;
                       So far, it seems that the blocking will prevent them from Registering a new account with a validated work email domain, or from adding that email as an alias.
                     &lt;/p&gt;
                     
@@ -138,12 +135,9 @@
                         &lt;/div&gt;
                       &lt;/div&gt;
                     &lt;/div&gt;
-                    
-                    &lt;h2&gt;
-                      Identifying the Problem
-                    &lt;/h2&gt;
-                    
-                    &lt;p&gt;
+</code></pre>
+<h2 id=identifying-the-problem>Identifying the Problem</h2>
+<pre><code>                    &lt;p&gt;
                       This prompt is the main source of the user’s confusion; the email address is the same for the user’s Work/School account and a Microsoft account. When an app supports signing in with both a Work/School and Personal account, it prompts the user for which type of account they want to use. Most users don't know what the difference is, or where the Microsoft account came from.
                     &lt;/p&gt;
                     
@@ -154,29 +148,25 @@
                     &lt;p&gt;
                       As that link in the screenshot says, you can [Rename the personal Microsoft ](https://go.microsoft.com/fwlink/p/?LinkID=733247)[account](https://go.microsoft.com/fwlink/p/?LinkID=733247), but how can you know which users have a conflicting Microsoft account?
                     &lt;/p&gt;
-                    
-                    &lt;h2&gt;
-                      Designing a Solution
-                    &lt;/h2&gt;
-                    
-                    &lt;p&gt;
+</code></pre>
+<h2 id=designing-a-solution>Designing a Solution</h2>
+<pre><code>                    &lt;p&gt;
                       To find these conflicting Microsoft accounts, we can ... abuse... an Azure App Registrations capabilities. We create a custom application that we register to only accept Microsoft accounts, not AzureAD/Work/School accounts. – if you try to use an email for your domain that doesn’t have a Microsoft account, it will just throw back an error that no Microsoft account could be found.
                     &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large image-shadow&quot;&gt;
                     
                     ![This screenshot shows that a microsoft Account sign in prompt will return a warning if you give it an email address with no Microsoft Account associated ](image-2-edited.png)&lt;/figure&gt; &lt;p&gt;
-                      Even better! We can leverage this, along with &lt;strong&gt;[login hints](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-optional-claims#:~:text=app%2Buser%20token.-,login_hint,-Login%20hint)&lt;/strong&gt;, to scale this up and make a scriptable solution to find any domain emails that have a Microsoft account conflicting with their Work account.
+                      Even better! We can leverage this, along with **[login hints](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-optional-claims#:~:text=app%2Buser%20token.-,login_hint,-Login%20hint)**, to scale this up and make a scriptable solution to find any domain emails that have a Microsoft account conflicting with their Work account.
                     &lt;/p&gt;
                     
                     &lt;p&gt;
                       At this time, I don’t know of a way to prevent Microsoft accounts on the company domain, or automatically move them - but we can at least find the conflicts. This will allow the Help Desk to contact the end-user and help them relocate the personal account.
                     &lt;/p&gt;
                     
-                    &lt;h2 id=&quot;Creating-App-Registration&quot;&gt;
-                      Setting up your App Registration
-                    &lt;/h2&gt;
+                    ## Setting up your App Registration
+                    
                     
                     &lt;p&gt;
-                      To set this up, we need to head to the [Azure Portal](https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps) and create a new &lt;strong&gt;app registration&lt;/strong&gt;
+                      To set this up, we need to head to the [Azure Portal](https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps) and create a new **app registration**
                     &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large image-shadow&quot;&gt;
                     
                     ![Navigate to portal.azure.com, search for App Registrations, and select New Registration](image-3.png)&lt;/figure&gt; &lt;p&gt;
@@ -196,7 +186,7 @@
                     &lt;/p&gt;
                     
                     &lt;p&gt;
-                      Under &lt;strong&gt;API Permissions&lt;/strong&gt;, we need to add a permission of some sort for it to request access to. The least amount of permissions was just the &lt;strong&gt;Profile&lt;/strong&gt; permission.
+                      Under **API Permissions**, we need to add a permission of some sort for it to request access to. The least amount of permissions was just the **Profile** permission.
                     &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large image-shadow&quot;&gt;
                     
                     ![select the minimum amount of permissions that you can. They should never be signed into anyway ](image-5.png)&lt;/figure&gt; &lt;p&gt;
@@ -204,14 +194,13 @@
                     &lt;/p&gt;
                     
                     &lt;p&gt;
-                      Under &lt;strong&gt;Certificates and Secrets&lt;/strong&gt;, I created a New Client Secret. You do not need to save the key values
+                      Under **Certificates and Secrets**, I created a New Client Secret. You do not need to save the key values
                     &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large image-shadow&quot;&gt;
                     
                     ![Create a Dummy client secret, for the Microsoft backend. you do not need to keep the key](image-6.png)&lt;/figure&gt; &lt;div class=&quot;wp-block-group&quot;&gt;
                       &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                        &lt;h2 id=&quot;Constructing-App-Auth-URL&quot;&gt;
-                          Constructing our App Authorization URL
-                        &lt;/h2&gt;
+                        ## Constructing our App Authorization URL
+                        
                         
                         &lt;p&gt;
                           Next, we need to gather the information for our authentication URL.
@@ -239,7 +228,7 @@
                         &lt;div class=&quot;wp-block-group&quot;&gt;
                           &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
                             &lt;p&gt;
-                              [https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?&lt;br /&gt;&amp;nbsp; &amp;nbsp; client_id=&lt;strong&gt;bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&lt;/strong&gt;&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;scope=user.read&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;response_type=code&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;state=23424&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;login_hint=&lt;strong&gt;TinaFey@contoso.one&lt;/strong&gt;](https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&amp;scope=user.read&amp;response_type=code&amp;state=23424&amp;login_hint=TinaFey@contoso.one)
+                              [https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?&lt;br /&gt;  client_id=**bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c**&lt;br /&gt;  &amp;scope=user.read&lt;br /&gt;  &amp;response_type=code&lt;br /&gt;  &amp;state=23424&lt;br /&gt;  &amp;login_hint=**TinaFey@contoso.one**](https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&amp;scope=user.read&amp;response_type=code&amp;state=23424&amp;login_hint=TinaFey@contoso.one)
                             &lt;/p&gt;
                             
                             &lt;p&gt;
@@ -248,7 +237,7 @@
                         &lt;/div&gt;
                         
                         &lt;p&gt;
-                          You can test this URL above live for yourself, or use your own app created with the process above. Just adjust the &lt;strong&gt;Client_ID&lt;/strong&gt; to match your &lt;strong&gt;Application ID&lt;/strong&gt;, and adjust the &lt;strong&gt;login_hint&lt;/strong&gt; to match your user
+                          You can test this URL above live for yourself, or use your own app created with the process above. Just adjust the **Client_ID** to match your **Application ID**, and adjust the **login_hint** to match your user
                         &lt;/p&gt;
                       &lt;/div&gt;
                     &lt;/div&gt;
@@ -257,9 +246,9 @@
                       &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
                         &lt;div class=&quot;wp-block-columns&quot;&gt;
                           &lt;div class=&quot;wp-block-column&quot;&gt;
-                            &lt;h5&gt;
-                              &lt;strong&gt;Valid Microsoft Account&lt;/strong&gt;
-                            &lt;/h5&gt;&lt;figure class=&quot;wp-block-image image-shadow&quot;&gt;
+</code></pre>
+<h5 id=valid-microsoft-account><strong>Valid Microsoft Account</strong></h5>
+<pre><code>                            &lt;figure class=&quot;wp-block-image image-shadow&quot;&gt;
                             
                             ![Providing a Valid Microsoft Account email continues to a Password Prompt](image-7.png)&lt;figcaption&gt;Note: the email address is recognized, and the prompt has switched to “Enter password”&lt;/figcaption&gt;&lt;/figure&gt; 
                             
@@ -268,9 +257,9 @@
                           &lt;/div&gt;
                           
                           &lt;div class=&quot;wp-block-column&quot;&gt;
-                            &lt;h5&gt;
-                              &lt;strong&gt;No Valid Microsoft Account&lt;/strong&gt;
-                            &lt;/h5&gt;&lt;figure class=&quot;wp-block-image image-shadow&quot;&gt;
+</code></pre>
+<h5 id=no-valid-microsoft-account><strong>No Valid Microsoft Account</strong></h5>
+<pre><code>                            &lt;figure class=&quot;wp-block-image image-shadow&quot;&gt;
                             
                             ![Providing an invalid Microsoft Account email throws a watning that the Microsoft Account does not exists](image-8.png)&lt;figcaption&gt;Note: the email address is not recognized, and the prompt still shows “That Microsoft account doesn’t exist”&lt;/figcaption&gt;&lt;/figure&gt; 
                             
@@ -288,71 +277,98 @@
                     
                     &lt;div class=&quot;wp-block-group&quot;&gt;
                       &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                        &lt;h2 id=&quot;Scripting-the-process&quot;&gt;
-                          Scripting the verification Process
-                        &lt;/h2&gt;
+                        ## Scripting the verification Process
+                        
                         
                         &lt;p&gt;
                           Below is a quick script I made to build a list of all the company emails and iterate through checking them.
                         &lt;/p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic>#$emailAddresses = &#39;tinafey@contoso.one&#39;,&#39;username@domain.com&#39;,&#39;ronswanson@contoso.one&#39;</span>
+<span style=color:teal>$emailAddresses</span> = <span style=color:#0086b3>Get-EXORecipient</span> -RecipientTypeDetails UserMailbox -PropertySets Minimum | <span style=color:#0086b3>select </span>-ExpandProperty Emailaddresses | <span style=color:#0086b3>where </span>{<span style=color:teal>$_</span> <span style=color:#000;font-weight:700>-match</span> <span style=color:#d14>&#34;SMTP:&#34;</span>} | <span style=color:#000;font-weight:700>foreach</span> {<span style=color:teal>$_</span> <span style=color:#000;font-weight:700>-replace</span> <span style=color:#d14>&#39;^smtp:&#39;</span>} 
+
+<span style=color:teal>$ApplicationID</span>  = <span style=color:#d14>&#39;bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&#39;</span>
+<span style=color:teal>$scope</span>          = <span style=color:#d14>&#39;user.read&#39;</span>
+
+<span style=color:teal>$results</span> = <span style=color:teal>[System.Collections.ArrayList]</span>::new()
+<span style=color:teal>$emailAddresses</span> | <span style=color:#000;font-weight:700>foreach</span> -Begin { <span style=color:teal>$i</span> = 1} -Process {
+    <span style=color:#0086b3>Write-Progress</span> -Activity <span style=color:#d14>&#39;Checking Email Addresses for Microsoft Accounts&#39;</span> -CurrentOperation (<span style=color:#d14>&#34;Checking {0} - {1}/{2}&#34;</span> <span style=color:#000;font-weight:700>-f</span> <span style=color:teal>$_</span>,<span style=color:teal>$i</span>,<span style=color:teal>$emailAddresses</span>.Count) -PercentComplete (<span style=color:teal>$i</span>/(<span style=color:teal>$emailAddresses</span>.count)*100)
+    <span style=color:teal>$UserURL</span>  = <span style=color:#d14>&#39;https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id={0}&amp;scope={1}&amp;response_type=code&amp;state=23424&amp;login_hint={2}&#39;</span> <span style=color:#000;font-weight:700>-f</span> <span style=color:teal>$ApplicationID</span>,<span style=color:teal>$scope</span>,<span style=color:teal>$_</span>
+    <span style=color:teal>$response</span> = <span style=color:#0086b3>Invoke-WebRequest</span> -Uri <span style=color:teal>$UserURL</span> 
+
+    <span style=color:teal>$results</span>.Add( 
+        <span style=color:teal>[psCustomobject]</span>@{
+            EmailAddress = <span style=color:teal>$_</span>
+            HasMSAccount = <span style=color:teal>$response</span> <span style=color:#000;font-weight:700>-match</span> <span style=color:#d14>&#39;&#34;HasPassword&#34;:1&#39;</span> 
+            Result       = <span style=color:teal>$response</span>.StatusCode
+        }
+    ) | <span style=color:#0086b3>Out-Null</span>
+    <span style=color:teal>$i</span>++
+} 
+<span style=color:teal>$results</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                        &lt;figure class=&quot;wp-block-image size-large&quot;&gt;
                         
-                        &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                          &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;fileName&quot;:&quot;FindMicrosoftAccounts.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;#$emailAddresses = 'tinafey@contoso.one','username@domain.com','ronswanson@contoso.one'
-</code></pre>
-<p>$emailAddresses = Get-EXORecipient -RecipientTypeDetails UserMailbox -PropertySets Minimum | select -ExpandProperty Emailaddresses | where {$_ -match &ldquo;SMTP:"} | foreach {$_ -replace &lsquo;^smtp:'}</p>
-<p>$ApplicationID = &lsquo;bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&rsquo;
-$scope = &lsquo;user.read&rsquo;</p>
-<p>$results = [System.Collections.ArrayList]::new()
-$emailAddresses | foreach -Begin { $i = 1} -Process {
-Write-Progress -Activity &lsquo;Checking Email Addresses for Microsoft Accounts&rsquo; -CurrentOperation (&ldquo;Checking {0} - {1}/{2}&rdquo; -f $<em>,$i,$emailAddresses.Count) -PercentComplete ($i/($emailAddresses.count)*100)
-$UserURL = &lsquo;<a href="https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=%7B0%7D&scope=%7B1%7D&response_type=code&state=23424&login_hint=%7B2%7D'">https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id={0}&scope={1}&response_type=code&state=23424&login_hint={2}'</a> -f $ApplicationID,$scope,$</em>
-$response = Invoke-WebRequest -Uri $UserURL</p>
-<pre><code>$results.Add( 
-    [psCustomobject]@{
-        EmailAddress = $_
-        HasMSAccount = $response -match '&quot;HasPassword&quot;:1' 
-        Result       = $response.StatusCode
-    }
-) | Out-Null
-$i++
-</code></pre>
-<p>}
-$results
-</p>
-<pre><code>                        ![](image-10.png)&lt;/figure&gt;
+                        ![](image-10.png)&lt;/figure&gt;
                       &lt;/div&gt;
                     &lt;/div&gt;
                     
                     &lt;div class=&quot;wp-block-group&quot;&gt;
                       &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                        &lt;h2 id=&quot;Sample-User-Consent-Prompt&quot;&gt;
-                          User Consent Prompt
-                        &lt;/h2&gt;
+                        ## User Consent Prompt
+                        
                         
                         &lt;p&gt;
                           Our app doesn’t have any server code. We only need to get to the pre-login experience to confirm whether an email address has a Microsoft account associated with it. This means that users don’t need to finish logging in and authorize the app, but if they do finish logging in, they will get a consent prompt like this.
                         &lt;/p&gt;&lt;figure class=&quot;wp-block-image image-shadow&quot;&gt;
                         
-                        ![If a user does sign into this app fully, they will be prompted to approve the permissions requested earlier](image-9.png)&lt;figcaption&gt;Note: &lt;strong&gt;Unverified&lt;/strong&gt; is the default state, but you can verify your tenant to show your company’s name instead. Details [here](https://go.microsoft.com/fwlink/?linkid=2121525&amp;clcid=0x9)&lt;/figcaption&gt;&lt;/figure&gt;
+                        ![If a user does sign into this app fully, they will be prompted to approve the permissions requested earlier](image-9.png)&lt;figcaption&gt;Note: **Unverified** is the default state, but you can verify your tenant to show your company’s name instead. Details [here](https://go.microsoft.com/fwlink/?linkid=2121525&amp;clcid=0x9)&lt;/figcaption&gt;&lt;/figure&gt;
                       &lt;/div&gt;
                     &lt;/div&gt;
                     
                     &lt;div class=&quot;wp-block-group&quot;&gt;
                       &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                        &lt;h2&gt;
-                          Wrap up
-                        &lt;/h2&gt;
-                        
-                        &lt;p&gt;
+</code></pre>
+<h2 id=wrap-up>Wrap up</h2>
+<pre><code>                        &lt;p&gt;
                           With this app we made, we can verify whether any email address has a Microsoft account associated with it with an automated method that we can script against.
                         &lt;/p&gt;
                         
                         &lt;p&gt;
-                          To test any email address manually, just remove the &lt;strong&gt;login_hint&lt;/strong&gt; parameter from the URL and you can enter any email address to check it, even without their password.
+                          To test any email address manually, just remove the **login_hint** parameter from the URL and you can enter any email address to check it, even without their password.
                         &lt;/p&gt;
                         
                         &lt;p&gt;
-                          [https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?&lt;br /&gt;&amp;nbsp; &amp;nbsp; client_id=&lt;strong&gt;bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&lt;/strong&gt;&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;scope=user.read&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;response_type=code&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;state=23424&lt;br /&gt;](https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&amp;scope=user.read&amp;response_type=code&amp;state=23424&amp;login_hint=TinaFey@contoso.one)
+                          [https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?&lt;br /&gt;  client_id=**bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c**&lt;br /&gt;  &amp;scope=user.read&lt;br /&gt;  &amp;response_type=code&lt;br /&gt;  &amp;state=23424&lt;br /&gt;](https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=bd53bb89-0cc1-4eb3-90b7-ba008b1f2a2c&amp;scope=user.read&amp;response_type=code&amp;state=23424&amp;login_hint=TinaFey@contoso.one)
                         &lt;/p&gt;
                       &lt;/div&gt;
                     &lt;/div&gt;

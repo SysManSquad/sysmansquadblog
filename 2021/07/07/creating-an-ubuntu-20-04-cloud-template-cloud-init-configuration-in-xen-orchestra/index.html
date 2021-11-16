@@ -115,19 +115,91 @@ Quick Walkthrough Here is the short version of how this works:
 <li>Click &ldquo;Create&rdquo;</li>
 </ol>
 <h2 id=example-cloud-init-configs>Example cloud-init configs:</h2>
-<p>ca-certs:
-trusted:</p>
-<ul>
-<li>|
-&mdash;&ndash;BEGIN CERTIFICATE&mdash;&ndash;
-<h1 id=the-indented-contents-of-your-ca-cert-go-here>The indented contents of your CA cert go here:</h1>
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-&mdash;&ndash;END CERTIFICATE&mdash;&ndash;</li>
-</ul>
-<h2 id=caveats>Caveats</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic>#cloud-config</span>
+hostname<span style=color:#a61717;background-color:#e3d2d2>:</span> {name}
+users<span style=color:#a61717;background-color:#e3d2d2>:</span>
+  - name<span style=color:#a61717;background-color:#e3d2d2>:</span> jappleseed
+    gecos<span style=color:#a61717;background-color:#e3d2d2>:</span> jappleseed
+    primary_group<span style=color:#a61717;background-color:#e3d2d2>:</span> jappleseed
+    groups<span style=color:#a61717;background-color:#e3d2d2>:</span> adm
+    lock_passwd<span style=color:#a61717;background-color:#e3d2d2>:</span> false
+    shell<span style=color:#a61717;background-color:#e3d2d2>:</span> /bin/bash
+    sudo<span style=color:#a61717;background-color:#e3d2d2>:</span> ALL=(ALL) NOPASSWD<span style=color:#a61717;background-color:#e3d2d2>:</span>ALL
+    ssh_authorized_keys<span style=color:#a61717;background-color:#e3d2d2>:</span>
+      - <span style=color:#0086b3>ssh-rsa</span> KEYCONTENTS user<span style=color:teal>@HOSTNAME</span>
+
+<span style=color:#0086b3>ca-certs</span><span style=color:#a61717;background-color:#e3d2d2>:</span>
+  trusted<span style=color:#a61717;background-color:#e3d2d2>:</span> 
+  - |
+    -----BEGIN CERTIFICATE-----
+    <span style=color:#998;font-style:italic># The indented contents of your CA cert go here:</span>
+    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    -----END CERTIFICATE-----
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id=network-config>Network config</h4>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic>#network:</span>
+    version<span style=color:#a61717;background-color:#e3d2d2>:</span> 2
+    renderer<span style=color:#a61717;background-color:#e3d2d2>:</span> networkd
+    ethernets<span style=color:#a61717;background-color:#e3d2d2>:</span>
+        eth0<span style=color:#a61717;background-color:#e3d2d2>:</span>
+            addresses<span style=color:#a61717;background-color:#e3d2d2>:</span>
+                - 192.168.0.124/24
+                - 2001<span style=color:#a61717;background-color:#e3d2d2>:</span>db8::1<span style=color:#a61717;background-color:#e3d2d2>:</span>9f/64
+            gateway4<span style=color:#a61717;background-color:#e3d2d2>:</span> 192.168.0.1
+            nameservers<span style=color:#a61717;background-color:#e3d2d2>:</span>
+                search<span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:teal>[example.com]</span>
+                addresses<span style=color:#a61717;background-color:#e3d2d2>:</span> [192.168.0.1, 8.8.8.8]
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=caveats>Caveats</h2>
 <p>This approach is fast, but doesn&rsquo;t properly install the xcp-ng guest tools. You&rsquo;ll probably want those if you want XCP-NG or Xen-Orchestra to be able to dive into each guest VM and display a useful level of detail about the guest. You can do a normal install from an iso, install some packages and run &ldquo;cloud-init clean&rdquo;, then immediately shut down the VM. This will force cloud init to run the same way it would if this were a fresh machine - generating host keys, naming the machine and applying any other config you pass in.</p>
 </div>
 <div class=post-share>

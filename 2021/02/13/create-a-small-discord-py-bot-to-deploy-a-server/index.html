@@ -110,30 +110,111 @@
 <h3 id=python-setup>Python Setup</h3>
 <p>Because I have been exposed to Python before, I was already aware that python projects should make use of <a href=https://docs.python.org/3/tutorial/venv.html>virtual environments</a>. I created a folder for my code, initialized <a href=https://www.atlassian.com/git/tutorials>git</a> in the folder to help me keep track of code revisions and began to write.</p>
 <p>I created my virtual environment as a sub-folder. I couldn&rsquo;t possibly say whether it&rsquo;s good practice, but it worked. The virtual environment was in a subfolder called &lsquo;venv&rsquo; so I added it to my <code>.gitignore</code> file. You may find <a href=https://github.com/pyenv/pyenv>pyenv</a> useful.</p>
-<p>Having activated my virtual environment, I followed the instructions to use <code>pip</code> to add the required modules for Discord.py, and added a few of my own. I wanted to avoid storing credentials in a git repository, and the best way to do that is to hand them off to a vault of some kind. A quick google search found me a module called <code>keyring</code>. I also wanted to make sure that as I typed the token to save it, it wouldn&rsquo;t echo to the screen, so that led me to another module called <code>getpass</code>. Seems simple enough so far - they all seem to do what they say they will. The bot&rsquo;s name is MR_FLOOFY.</p>
-<p>service_id=&lsquo;MR_FLOOFY&rsquo;
-token=getpass.getpass(prompt=&lsquo;Token: &lsquo;, stream=None)
-keyring.set_password(service_id, service_id, token)</p>
-<p>Having a few extra python <code>pip</code> modules in place, I followed the instructions to use <code>pip</code> to freeze the list of installed modules in my environment to <code>requirements.txt</code>. This will allow me to quickly re-create this virtual environment if it is destroyed, or I need to change where it&rsquo;s hosted.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>venv/
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Having activated my virtual environment, I followed the instructions to use <code>pip</code> to add the required modules for Discord.py, and added a few of my own. I wanted to avoid storing credentials in a git repository, and the best way to do that is to hand them off to a vault of some kind. A quick google search found me a module called <code>keyring</code>. I also wanted to make sure that as I typed the token to save it, it wouldn&rsquo;t echo to the screen, so that led me to another module called <code>getpass</code>. Seems simple enough so far - they all seem to do what they say they will. The bot&rsquo;s name is MR_FLOOFY.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#000;font-weight:700>import</span> <span style=color:#555>keyring</span>
+<span style=color:#000;font-weight:700>import</span> <span style=color:#555>getpass</span>
+
+service_id<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;MR_FLOOFY&#39;</span>
+token<span style=color:#000;font-weight:700>=</span>getpass<span style=color:#000;font-weight:700>.</span>getpass(prompt<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;Token: &#39;</span>, stream<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>None</span>)
+keyring<span style=color:#000;font-weight:700>.</span>set_password(service_id, service_id, token)
+</code></pre></td></tr></table>
+</div>
+</div><p>Having a few extra python <code>pip</code> modules in place, I followed the instructions to use <code>pip</code> to freeze the list of installed modules in my environment to <code>requirements.txt</code>. This will allow me to quickly re-create this virtual environment if it is destroyed, or I need to change where it&rsquo;s hosted.</p>
 <p>With a Secure Enough™ way of saving and retrieving the token devised, I headed back to Discord&rsquo;s developer portal, my app, and the Bot tab to get the token I&rsquo;d need to allow the bot to connect.</p>
 <p>I&rsquo;m not going to describe the entire, frustrating process of learning just enough about python and Discord.py to make this work, I&rsquo;m just going to describe how the code works now that it works well enough for my purposes. In the future I&rsquo;ll probably keep refining it.</p>
 <h2 id=the-bot>The Bot</h2>
 <p>The first thing one typically does in a python file is import the modules you&rsquo;ll need in the script.</p>
-<p>Next, we set some discord-specific options, retrieve our token and build objects to use later. The <code>intents</code> object is used to tell Discord what things the bot will need access to, so we create the object with the defaults, then also ask for the member list.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#000;font-weight:700>import</span> <span style=color:#555>sys</span>
+<span style=color:#000;font-weight:700>import</span> <span style=color:#555>discord</span>
+<span style=color:#000;font-weight:700>import</span> <span style=color:#555>keyring</span>
+<span style=color:#000;font-weight:700>import</span> <span style=color:#555>logging</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Next, we set some discord-specific options, retrieve our token and build objects to use later. The <code>intents</code> object is used to tell Discord what things the bot will need access to, so we create the object with the defaults, then also ask for the member list.</p>
 <p>The <code>client</code> object is what we&rsquo;ll use later to make things go. The <code>logging</code> object seems to come for free because we used <code>import logging</code> earlier , I didn&rsquo;t have to specifically create it. We define the service id that matches the service id from when we ran <code>save_key.py</code> earlier. We then retrieve the token to use later.</p>
 <p>The logging settings are also very important - if you screw up and do too many things to some API endpoints, you&rsquo;ll get locked out of it for a period of time. Some of the endpoint limits are ridiculously low and the logging will print to the screen to let you know when you&rsquo;ve hit one of those limits so you don&rsquo;t enrage yourself wondering why code that worked a few minutes ago doesn&rsquo;t work now.</p>
-<p>This bot is meant to listen for messages that meet criteria, so we use this code to define what the bot will look for. I mostly looked through the Discord.py examples linked earlier to figure out how to get started.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>intents <span style=color:#000;font-weight:700>=</span> discord<span style=color:#000;font-weight:700>.</span>Intents<span style=color:#000;font-weight:700>.</span>default()
+intents<span style=color:#000;font-weight:700>.</span>members <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>True</span>
+client <span style=color:#000;font-weight:700>=</span> discord<span style=color:#000;font-weight:700>.</span>Client(intents<span style=color:#000;font-weight:700>=</span>intents)
+logging<span style=color:#000;font-weight:700>.</span>basicConfig(level<span style=color:#000;font-weight:700>=</span>logging<span style=color:#000;font-weight:700>.</span>INFO)
+service_id <span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;MR_FLOOFY&#39;</span>
+TOKEN<span style=color:#000;font-weight:700>=</span>keyring<span style=color:#000;font-weight:700>.</span>get_password(service_id, service_id)
+</code></pre></td></tr></table>
+</div>
+</div><p>This bot is meant to listen for messages that meet criteria, so we use this code to define what the bot will look for. I mostly looked through the Discord.py examples linked earlier to figure out how to get started.</p>
 <p>We define the event we care about, then say what should happen when that event fires, in our case <code>on_message</code>. I believe this is a &lsquo;callback&rsquo; but don&rsquo;t quote me. The <code>message</code> object contains the contents of the message, who sent it, the server it came from, and a number of other useful properties.</p>
 <p>If the message meets some criteria, we do some stuff, then <code>return</code> to end processing. In this case the only one that needs to issue commands is me, so our first two conditions just check to see if the bot is talking to itself, or whether the caller is not me. Obviously the second condition would make the first condition completely irrelevant - but I&rsquo;m leaving it in for this example.</p>
-<pre><code># I don't want the bot to react to anyone but me.
-if message.author.id != 00000000000:
-    return
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#3c5d5d;font-weight:700>@client</span><span style=color:#000;font-weight:700>.</span>event
+<span style=color:#000;font-weight:700>async</span> <span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>on_message</span>(message):
+    <span style=color:#998;font-style:italic># we do not want the bot to reply to itself</span>
+    <span style=color:#000;font-weight:700>if</span> message<span style=color:#000;font-weight:700>.</span>author <span style=color:#000;font-weight:700>==</span> client<span style=color:#000;font-weight:700>.</span>user:
+        <span style=color:#000;font-weight:700>return</span>
 
-if message.content.startswith('!exit'):
-    print('Exit command received')
-    await client.close()&lt;/pre&gt;
-</code></pre>
-<p>CCDC games are run by <a href=https://www.nationalccdc.org/index.php/competition/competitors/rules>several teams</a>. Given the audience of this Discord server and it&rsquo;s purpose, I have to code for 5 separate roles.</p>
+    <span style=color:#998;font-style:italic># I don&#39;t want the bot to react to anyone but me.</span>
+    <span style=color:#000;font-weight:700>if</span> message<span style=color:#000;font-weight:700>.</span>author<span style=color:#000;font-weight:700>.</span>id <span style=color:#000;font-weight:700>!=</span> <span style=color:#099>00000000000</span>:
+        <span style=color:#000;font-weight:700>return</span>
+
+    <span style=color:#000;font-weight:700>if</span> message<span style=color:#000;font-weight:700>.</span>content<span style=color:#000;font-weight:700>.</span>startswith(<span style=color:#d14>&#39;!exit&#39;</span>):
+        <span style=color:#0086b3>print</span>(<span style=color:#d14>&#39;Exit command received&#39;</span>)
+        <span style=color:#000;font-weight:700>await</span> client<span style=color:#000;font-weight:700>.</span>close()
+</code></pre></td></tr></table>
+</div>
+</div><p>CCDC games are run by <a href=https://www.nationalccdc.org/index.php/competition/competitors/rules>several teams</a>. Given the audience of this Discord server and it&rsquo;s purpose, I have to code for 5 separate roles.</p>
 <ul>
 <li>Gold team - organizers of the competition</li>
 <li>Black team - infrastructure for the game, including the game machines themselves</li>
@@ -143,112 +224,279 @@ if message.content.startswith('!exit'):
 </ul>
 <p>I originally had all of this bundled up in one command. It was <em>really</em> fun to issue one command and watch an entire discord server populate, but like all good things - it got too complicated and debugging turned into a pain.</p>
 <p>This next stanza sets up the non-competition roles, along with what color they should appear as, whether the role members should be listed apart from all other server members ('<em>hoisted</em>') , server-wide <a href=https://discordapi.com/permissions.html>permissions</a>, etc.</p>
-<p>Now, we need to create a category of channels for staff using these roles, along with customized permissions for channels inside that category.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>    <span style=color:#000;font-weight:700>if</span> message<span style=color:#000;font-weight:700>.</span>content<span style=color:#000;font-weight:700>.</span>startswith(<span style=color:#d14>&#39;!staffroles&#39;</span>):
+        guild <span style=color:#000;font-weight:700>=</span> message<span style=color:#000;font-weight:700>.</span>guild
+        <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_role(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Gold Team&#34;</span>, color<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>Color(<span style=color:#099>0xe6bc00</span>), hoist<span style=color:#000;font-weight:700>=</span><span style=color:#099>1</span>, permissions<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>Permissions(permissions<span style=color:#000;font-weight:700>=</span><span style=color:#099>1341648705</span>))
+        <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_role(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Black Team&#34;</span>, color<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>Color(<span style=color:#099>0x004d27</span>), hoist<span style=color:#000;font-weight:700>=</span><span style=color:#099>1</span>, permissions<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>Permissions(permissions<span style=color:#000;font-weight:700>=</span><span style=color:#099>1341648705</span>))
+        <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_role(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;White Team&#34;</span>, color<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>Color(<span style=color:#099>0xffffff</span>), hoist<span style=color:#000;font-weight:700>=</span><span style=color:#099>1</span>, permissions<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>Permissions(permissions<span style=color:#000;font-weight:700>=</span><span style=color:#099>1341648705</span>))
+        <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_role(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Coach&#34;</span>, color<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>Color(<span style=color:#099>0xff3333</span>), hoist<span style=color:#000;font-weight:700>=</span><span style=color:#099>1</span>, permissions<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>Permissions(permissions<span style=color:#000;font-weight:700>=</span><span style=color:#099>68224000</span>))
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Now, we need to create a category of channels for staff using these roles, along with customized permissions for channels inside that category.</p>
 <p>We begin by getting the role objects we created earlier. We then create permission override objects we&rsquo;ll use when we create the channels. Following that, we create the category, get an object representing it, and create channels using the category object and the permission overrides.</p>
-<pre><code>    role_black=discord.utils.get(guild.roles, name=&quot;Black Team&quot;)
-    role_gold=discord.utils.get(guild.roles, name=&quot;Gold Team&quot;)
-    role_white=discord.utils.get(guild.roles, name=&quot;White Team&quot;)
-    role_coach=discord.utils.get(guild.roles, name=&quot;Coach&quot;)
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>    <span style=color:#000;font-weight:700>if</span> message<span style=color:#000;font-weight:700>.</span>content<span style=color:#000;font-weight:700>.</span>startswith(<span style=color:#d14>&#39;!staffchannels&#39;</span>):
+        guild <span style=color:#000;font-weight:700>=</span> message<span style=color:#000;font-weight:700>.</span>guild
 
-    all_staff_overwrites = {
-        guild.default_role: discord.PermissionOverwrite(read_messages=False),
-        role_gold: discord.PermissionOverwrite(read_messages=True),
-        role_black: discord.PermissionOverwrite(read_messages=True),
-        role_white: discord.PermissionOverwrite(read_messages=True)
-    }
+        role_black<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>roles, name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Black Team&#34;</span>)
+        role_gold<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>roles, name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Gold Team&#34;</span>)
+        role_white<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>roles, name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;White Team&#34;</span>)
+        role_coach<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>roles, name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Coach&#34;</span>)
 
-    gold_team_overwrites = {
-        guild.default_role: discord.PermissionOverwrite(read_messages=False),
-        role_gold: discord.PermissionOverwrite(read_messages=True),
-        role_black: discord.PermissionOverwrite(read_messages=False),
-        role_white: discord.PermissionOverwrite(read_messages=False)
-    }
+        all_staff_overwrites <span style=color:#000;font-weight:700>=</span> {
+            guild<span style=color:#000;font-weight:700>.</span>default_role: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>False</span>),
+            role_gold: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+            role_black: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+            role_white: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>)
+        }
 
-    black_team_overwrites = {
-        guild.default_role: discord.PermissionOverwrite(read_messages=False),
-        role_black: discord.PermissionOverwrite(read_messages=True),
-        role_gold: discord.PermissionOverwrite(read_messages=False),
-        role_white: discord.PermissionOverwrite(read_messages=False)
-    }    
-    gold_x_black_team_overwrites = {
-        guild.default_role: discord.PermissionOverwrite(read_messages=False),
-        role_gold: discord.PermissionOverwrite(read_messages=True),
-        role_black: discord.PermissionOverwrite(read_messages=True),
-        role_white: discord.PermissionOverwrite(read_messages=False)
-    }
-    coach_overwrites = {
-        guild.default_role: discord.PermissionOverwrite(read_messages=False),
-        role_gold: discord.PermissionOverwrite(read_messages=True),
-        role_black: discord.PermissionOverwrite(read_messages=True),
-        role_white: discord.PermissionOverwrite(read_messages=True),
-        role_coach: discord.PermissionOverwrite(read_messages=True,send_messages=True)
-    }
+        gold_team_overwrites <span style=color:#000;font-weight:700>=</span> {
+            guild<span style=color:#000;font-weight:700>.</span>default_role: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>False</span>),
+            role_gold: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+            role_black: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>False</span>),
+            role_white: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>False</span>)
+        }
 
-    await guild.create_category_channel(name=&quot;Staff&quot;, overwrites=all_staff_overwrites)
-    staff_category=discord.utils.get(guild.categories, name=&quot;Staff&quot;)
+        black_team_overwrites <span style=color:#000;font-weight:700>=</span> {
+            guild<span style=color:#000;font-weight:700>.</span>default_role: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>False</span>),
+            role_black: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+            role_gold: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>False</span>),
+            role_white: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>False</span>)
+        }    
+        gold_x_black_team_overwrites <span style=color:#000;font-weight:700>=</span> {
+            guild<span style=color:#000;font-weight:700>.</span>default_role: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>False</span>),
+            role_gold: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+            role_black: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+            role_white: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>False</span>)
+        }
+        coach_overwrites <span style=color:#000;font-weight:700>=</span> {
+            guild<span style=color:#000;font-weight:700>.</span>default_role: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>False</span>),
+            role_gold: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+            role_black: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+            role_white: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+            role_coach: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>,send_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>)
+        }
 
-    await guild.create_text_channel(name=&quot;Gold Team&quot;, category=staff_category, overwrites=gold_team_overwrites)
-    await guild.create_text_channel(name=&quot;Black Team&quot;, category=staff_category, overwrites=black_team_overwrites)
-    await guild.create_text_channel(name=&quot;Gold x Black Team&quot;, category=staff_category, overwrites=gold_x_black_team_overwrites)
-    await guild.create_text_channel(name=&quot;coaches&quot;, category=staff_category, overwrites=coach_overwrites)
-    await guild.create_text_channel(name=&quot;White Team&quot;, category=staff_category)&lt;/pre&gt;
-</code></pre>
-<p>Here we come to the meat of the script - how do you quickly create a number of teams along with some work channels, locked down to keep each blue team out of each other&rsquo;s business? Some loops mostly, using the code we&rsquo;ve already seen above.</p>
+        <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_category_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Staff&#34;</span>, overwrites<span style=color:#000;font-weight:700>=</span>all_staff_overwrites)
+        staff_category<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>categories, name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Staff&#34;</span>)
+
+        <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_text_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Gold Team&#34;</span>, category<span style=color:#000;font-weight:700>=</span>staff_category, overwrites<span style=color:#000;font-weight:700>=</span>gold_team_overwrites)
+        <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_text_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Black Team&#34;</span>, category<span style=color:#000;font-weight:700>=</span>staff_category, overwrites<span style=color:#000;font-weight:700>=</span>black_team_overwrites)
+        <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_text_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Gold x Black Team&#34;</span>, category<span style=color:#000;font-weight:700>=</span>staff_category, overwrites<span style=color:#000;font-weight:700>=</span>gold_x_black_team_overwrites)
+        <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_text_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;coaches&#34;</span>, category<span style=color:#000;font-weight:700>=</span>staff_category, overwrites<span style=color:#000;font-weight:700>=</span>coach_overwrites)
+        <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_text_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;White Team&#34;</span>, category<span style=color:#000;font-weight:700>=</span>staff_category)
+</code></pre></td></tr></table>
+</div>
+</div><p>Here we come to the meat of the script - how do you quickly create a number of teams along with some work channels, locked down to keep each blue team out of each other&rsquo;s business? Some loops mostly, using the code we&rsquo;ve already seen above.</p>
 <p>Generally speaking, here&rsquo;s how the permissions for teams are supposed to work:</p>
 <p>Black/Gold/White/[1 Blue team] should have r/w for text and voice, while coaches can see everything and say nothing. This is to replicate the in-person experience where team coaches serve as room monitors for all teams except their own. It&rsquo;s not just about rule enforcement however, coaches have access to this level of information because it will help them coach their teams and learn from other team experiences. Since the ultimate goal of the competition is education, this aligns with that goal without making the competition unfair.</p>
 <p>The coach role permissions below are not good enough, they allow the guild-wide permissions for the coach role to filter down to the teams. I&rsquo;ll change how those work in future versions of Mr Floofy.</p>
-<pre><code>    numTeams = int(message.content.split(' ')[1])
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>    <span style=color:#000;font-weight:700>if</span> message<span style=color:#000;font-weight:700>.</span>content<span style=color:#000;font-weight:700>.</span>startswith(<span style=color:#d14>&#39;!deployteams&#39;</span>):
+        guild <span style=color:#000;font-weight:700>=</span> message<span style=color:#000;font-weight:700>.</span>guild
 
-    role_black=discord.utils.get(guild.roles, name=&quot;Black Team&quot;)
-    role_gold=discord.utils.get(guild.roles, name=&quot;Gold Team&quot;)
-    role_white=discord.utils.get(guild.roles, name=&quot;White Team&quot;)
-    role_coach=discord.utils.get(guild.roles, name=&quot;Coach&quot;)
+        numTeams <span style=color:#000;font-weight:700>=</span> <span style=color:#0086b3>int</span>(message<span style=color:#000;font-weight:700>.</span>content<span style=color:#000;font-weight:700>.</span>split(<span style=color:#d14>&#39; &#39;</span>)[<span style=color:#099>1</span>])
 
-    for i in range(1,numTeams):
-        await guild.create_role(name=&quot;Team{:02d}&quot;.format(i),color=discord.Color(0x0d6dc9),hoist=1,permissions=discord.Permissions(permissions=36818496))
-        role=discord.utils.get(guild.roles,name=&quot;Team{:02d}&quot;.format(i))
+        role_black<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>roles, name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Black Team&#34;</span>)
+        role_gold<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>roles, name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Gold Team&#34;</span>)
+        role_white<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>roles, name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;White Team&#34;</span>)
+        role_coach<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>roles, name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Coach&#34;</span>)
 
-        blue_team_overwrites = {
-            guild.default_role: discord.PermissionOverwrite(read_messages=False),
-            role_gold: discord.PermissionOverwrite(read_messages=True),
-            role_black: discord.PermissionOverwrite(read_messages=True),
-            role_white: discord.PermissionOverwrite(read_messages=True),
-            role_coach: discord.PermissionOverwrite(read_messages=True),
-            role: discord.PermissionOverwrite(read_messages=True)
-        }
+        <span style=color:#000;font-weight:700>for</span> i <span style=color:#000;font-weight:700>in</span> <span style=color:#0086b3>range</span>(<span style=color:#099>1</span>,numTeams):
+            <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_role(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Team</span><span style=color:#d14>{:02d}</span><span style=color:#d14>&#34;</span><span style=color:#000;font-weight:700>.</span>format(i),color<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>Color(<span style=color:#099>0x0d6dc9</span>),hoist<span style=color:#000;font-weight:700>=</span><span style=color:#099>1</span>,permissions<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>Permissions(permissions<span style=color:#000;font-weight:700>=</span><span style=color:#099>36818496</span>))
+            role<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>roles,name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Team</span><span style=color:#d14>{:02d}</span><span style=color:#d14>&#34;</span><span style=color:#000;font-weight:700>.</span>format(i))
 
-        await guild.create_category_channel(name=&quot;Team{:02d}&quot;.format(i), overwrites=blue_team_overwrites)
-        category=discord.utils.get(guild.categories,name=&quot;Team{:02d}&quot;.format(i))
+            blue_team_overwrites <span style=color:#000;font-weight:700>=</span> {
+                guild<span style=color:#000;font-weight:700>.</span>default_role: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>False</span>),
+                role_gold: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+                role_black: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+                role_white: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+                role_coach: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>),
+                role: discord<span style=color:#000;font-weight:700>.</span>PermissionOverwrite(read_messages<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>True</span>)
+            }
 
-        # Use the category to create child-channels. This section is easy to modify if we want to give more than the allotted amount of channels below to allow teams to split communication.
-        await guild.create_text_channel(name=&quot;Team{:02d} General&quot;.format(i),category=category, topic='General chit-chat')
-        await guild.create_text_channel(name=&quot;Team{:02d} Retrospective&quot;.format(i),category=category, topic='Notes for after-action - what went wrong, what went right for your team and SWCCDC staff.')
-        await guild.create_text_channel(name=&quot;Team{:02d} A&quot;.format(i),category=category, topic='Channel to separate efforts and reduce cross-talk')
-        await guild.create_text_channel(name=&quot;Team{:02d} B&quot;.format(i),category=category, topic='Channel to separate efforts and reduce cross-talk')
-        await guild.create_text_channel(name=&quot;Team{:02d} C&quot;.format(i),category=category, topic='Channel to separate efforts and reduce cross-talk')
-        await guild.create_voice_channel(name=&quot;Team{:02d} Voice 1&quot;.format(i),category=category)
-        await guild.create_voice_channel(name=&quot;Team{:02d} Voice 2&quot;.format(i),category=category)
-</code></pre>
-<p></p>
-<p>As you can see, we create a number of channels. Between the number of categories and channels involved, doing this by hand would be prohibitive and prone to failure.</p>
+            <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_category_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Team</span><span style=color:#d14>{:02d}</span><span style=color:#d14>&#34;</span><span style=color:#000;font-weight:700>.</span>format(i), overwrites<span style=color:#000;font-weight:700>=</span>blue_team_overwrites)
+            category<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>categories,name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Team</span><span style=color:#d14>{:02d}</span><span style=color:#d14>&#34;</span><span style=color:#000;font-weight:700>.</span>format(i))
+
+            <span style=color:#998;font-style:italic># Use the category to create child-channels. This section is easy to modify if we want to give more than the allotted amount of channels below to allow teams to split communication.</span>
+            <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_text_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Team</span><span style=color:#d14>{:02d}</span><span style=color:#d14> General&#34;</span><span style=color:#000;font-weight:700>.</span>format(i),category<span style=color:#000;font-weight:700>=</span>category, topic<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;General chit-chat&#39;</span>)
+            <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_text_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Team</span><span style=color:#d14>{:02d}</span><span style=color:#d14> Retrospective&#34;</span><span style=color:#000;font-weight:700>.</span>format(i),category<span style=color:#000;font-weight:700>=</span>category, topic<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;Notes for after-action - what went wrong, what went right for your team and SWCCDC staff.&#39;</span>)
+            <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_text_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Team</span><span style=color:#d14>{:02d}</span><span style=color:#d14> A&#34;</span><span style=color:#000;font-weight:700>.</span>format(i),category<span style=color:#000;font-weight:700>=</span>category, topic<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;Channel to separate efforts and reduce cross-talk&#39;</span>)
+            <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_text_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Team</span><span style=color:#d14>{:02d}</span><span style=color:#d14> B&#34;</span><span style=color:#000;font-weight:700>.</span>format(i),category<span style=color:#000;font-weight:700>=</span>category, topic<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;Channel to separate efforts and reduce cross-talk&#39;</span>)
+            <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_text_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Team</span><span style=color:#d14>{:02d}</span><span style=color:#d14> C&#34;</span><span style=color:#000;font-weight:700>.</span>format(i),category<span style=color:#000;font-weight:700>=</span>category, topic<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;Channel to separate efforts and reduce cross-talk&#39;</span>)
+            <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_voice_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Team</span><span style=color:#d14>{:02d}</span><span style=color:#d14> Voice 1&#34;</span><span style=color:#000;font-weight:700>.</span>format(i),category<span style=color:#000;font-weight:700>=</span>category)
+            <span style=color:#000;font-weight:700>await</span> guild<span style=color:#000;font-weight:700>.</span>create_voice_channel(name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;Team</span><span style=color:#d14>{:02d}</span><span style=color:#d14> Voice 2&#34;</span><span style=color:#000;font-weight:700>.</span>format(i),category<span style=color:#000;font-weight:700>=</span>category)
+
+</code></pre></td></tr></table>
+</div>
+</div><p>As you can see, we create a number of channels. Between the number of categories and channels involved, doing this by hand would be prohibitive and prone to failure.</p>
 <p>Lastly, as a final command to help set things up, I wanted a way to automate assigning a user to a role in a way where I could easily paste some commands and get a team in their roles from a spreadsheet, given how the list of team members would be sent to me.</p>
-<pre><code>    role=discord.utils.get(guild.roles, name=teamid)
-    if(userobject == None):
-        await message.channel.send('They are not here yet!')
-        return
-    try:
-        await userobject.add_roles(role)
-    except Exception as e:
-        await message.channel.send('There was an error running this command ' + str(e))
-    else:
-        await message.channel.send('I think it worked')
-</code></pre>
-<p></p>
-<p>It should be noted that the roles are case-sensitive here.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>    <span style=color:#000;font-weight:700>if</span> message<span style=color:#000;font-weight:700>.</span>content<span style=color:#000;font-weight:700>.</span>startswith(<span style=color:#d14>&#39;!assign&#39;</span>):
+        guild <span style=color:#000;font-weight:700>=</span> message<span style=color:#000;font-weight:700>.</span>guild
+        userid <span style=color:#000;font-weight:700>=</span> <span style=color:#0086b3>int</span>(message<span style=color:#000;font-weight:700>.</span>content<span style=color:#000;font-weight:700>.</span>split(<span style=color:#d14>&#39; &#39;</span>)[<span style=color:#099>1</span>])
+        teamid <span style=color:#000;font-weight:700>=</span> <span style=color:#0086b3>str</span>(message<span style=color:#000;font-weight:700>.</span>content<span style=color:#000;font-weight:700>.</span>split(<span style=color:#d14>&#39; &#39;</span>)[<span style=color:#099>2</span>])
+        userobject <span style=color:#000;font-weight:700>=</span> guild<span style=color:#000;font-weight:700>.</span>get_member(userid)
+
+        role<span style=color:#000;font-weight:700>=</span>discord<span style=color:#000;font-weight:700>.</span>utils<span style=color:#000;font-weight:700>.</span>get(guild<span style=color:#000;font-weight:700>.</span>roles, name<span style=color:#000;font-weight:700>=</span>teamid)
+        <span style=color:#000;font-weight:700>if</span>(userobject <span style=color:#000;font-weight:700>==</span> <span style=color:#000;font-weight:700>None</span>):
+            <span style=color:#000;font-weight:700>await</span> message<span style=color:#000;font-weight:700>.</span>channel<span style=color:#000;font-weight:700>.</span>send(<span style=color:#d14>&#39;They are not here yet!&#39;</span>)
+            <span style=color:#000;font-weight:700>return</span>
+        <span style=color:#000;font-weight:700>try</span>:
+            <span style=color:#000;font-weight:700>await</span> userobject<span style=color:#000;font-weight:700>.</span>add_roles(role)
+        <span style=color:#000;font-weight:700>except</span> <span style=color:#900;font-weight:700>Exception</span> <span style=color:#000;font-weight:700>as</span> e:
+            <span style=color:#000;font-weight:700>await</span> message<span style=color:#000;font-weight:700>.</span>channel<span style=color:#000;font-weight:700>.</span>send(<span style=color:#d14>&#39;There was an error running this command &#39;</span> <span style=color:#000;font-weight:700>+</span> <span style=color:#0086b3>str</span>(e))
+        <span style=color:#000;font-weight:700>else</span>:
+            <span style=color:#000;font-weight:700>await</span> message<span style=color:#000;font-weight:700>.</span>channel<span style=color:#000;font-weight:700>.</span>send(<span style=color:#d14>&#39;I think it worked&#39;</span>)
+
+</code></pre></td></tr></table>
+</div>
+</div><p>It should be noted that the roles are case-sensitive here.</p>
 <p>Lastly, we need an event to fire when the script has initialized and begun to run. We&rsquo;ll use the objects from the top of the script and tell the bot to go.</p>
-<p>client.run(TOKEN)
-</p>
-<h2 id=conclusion>Conclusion</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#3c5d5d;font-weight:700>@client</span><span style=color:#000;font-weight:700>.</span>event
+<span style=color:#000;font-weight:700>async</span> <span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>on_ready</span>():
+    <span style=color:#0086b3>print</span>(client<span style=color:#000;font-weight:700>.</span>user<span style=color:#000;font-weight:700>.</span>id)
+    <span style=color:#0086b3>print</span>(<span style=color:#d14>&#39;------&#39;</span>)
+
+client<span style=color:#000;font-weight:700>.</span>run(TOKEN)
+
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=conclusion>Conclusion</h2>
 <p>It has been an interesting experience building this bot, and as simple as it is, I&rsquo;m very proud of it. I look forward to extending or replacing it with a proper PowerShell bot, perhaps <a href=https://github.com/poshbotio/PoshBot>PoshBot</a>. I deeply hate the experience of trying to debug python, especially in the context of a bot like this.</p>
 <p>I hope it&rsquo;s been instructive to you.</p>
 <p>I want to thank my friend <a href=https://twitter.com/duplico>George</a> for both his expertise and patience as I struggled through some of the nastier parts of getting used to Python.</p>

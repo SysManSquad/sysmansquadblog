@@ -101,26 +101,64 @@
 <li>Follow the onscreen options to add/remove mapped drives as needed</li>
 <li>Select <strong>Download Powershell Script</strong></li>
 <li>Edit the powershell script, near the bottom you will see the following line<br>
-<code>$trigger&amp;nbsp;=&amp;nbsp;New-ScheduledTaskTrigger&amp;nbsp;-AtLogOn</code></li>
+<code>$trigger=New-ScheduledTaskTrigger-AtLogOn</code></li>
 <li>Remove everything below that point and add the following</li>
 </ol>
-<p>$class = cimclass MSFT_TaskEventTrigger root/Microsoft/Windows/TaskScheduler
-$trigger2 = $class | New-CimInstance -ClientOnly
-$trigger2.Enabled = $True
-$trigger2.Subscription = &lsquo;&lt;QueryList>&lt;Query Id=&ldquo;0&rdquo; Path=&ldquo;Microsoft-Windows-NetworkProfile/Operational&rdquo;>&lt;Select Path=&ldquo;Microsoft-Windows-NetworkProfile/Operational&rdquo;>*[System[Provider[@Name=&lsquo;&lsquo;Microsoft-Windows-NetworkProfile&rsquo;'] and EventID=10002]]&lt;/Select>&lt;/Query>&lt;/QueryList>&rsquo;</p>
-<p>$trigger3 = $class | New-CimInstance -ClientOnly
-$trigger3.Enabled = $True
-$trigger3.Subscription = &lsquo;&lt;QueryList>&lt;Query Id=&ldquo;0&rdquo; Path=&ldquo;Microsoft-Windows-NetworkProfile/Operational&rdquo;>&lt;Select Path=&ldquo;Microsoft-Windows-NetworkProfile/Operational&rdquo;>*[System[Provider[@Name=&lsquo;&lsquo;Microsoft-Windows-NetworkProfile&rsquo;'] and EventID=4004]]&lt;/Select>&lt;/Query>&lt;/QueryList>&rsquo;</p>
-<p>#Execute task in users context
-$principal= New-ScheduledTaskPrincipal -GroupId &ldquo;S-1-5-32-545&rdquo; -Id &ldquo;Author&rdquo;</p>
-<p>#call the vbscript helper and pass the PosH script as argument
-$action = New-ScheduledTaskAction -Execute $wscriptPath -Argument &ldquo;<code>"$dummyScriptPath</code>&rdquo; <code>"$scriptPath</code>""</p>
-<p>$settings= New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries</p>
-<p>$null=Register-ScheduledTask -TaskName $schtaskName -Trigger $trigger,$trigger2,$trigger3 -Action $action -Principal $principal -Settings $settings -Description $schtaskDescription -Force</p>
-<p>Start-ScheduledTask -TaskName $schtaskName
-stop-Transcript
-}</p>
-<h2 id=upload-to-intune>Upload to Intune</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:teal>$trigger</span> = <span style=color:#0086b3>New-ScheduledTaskTrigger</span> -AtLogOn
+
+<span style=color:teal>$class</span> = cimclass MSFT_TaskEventTrigger root/Microsoft/Windows/TaskScheduler
+<span style=color:teal>$trigger2</span> = <span style=color:teal>$class</span> | <span style=color:#0086b3>New-CimInstance</span> -ClientOnly
+<span style=color:teal>$trigger2</span>.Enabled = <span style=color:teal>$True</span>
+<span style=color:teal>$trigger2</span>.Subscription = <span style=color:#d14>&#39;QueryList&gt;Query Id=&#34;0&#34; Path=&#34;Microsoft-Windows-NetworkProfile/Operational&#34;&gt;Select Path=&#34;Microsoft-Windows-NetworkProfile/Operational&#34;&gt;*[System[Provider[@Name=&#39;&#39;Microsoft-Windows-NetworkProfile&#39;&#39;] and EventID=10002]]/Select&gt;/Query&gt;/QueryList&gt;&#39;</span>
+
+<span style=color:teal>$trigger3</span> = <span style=color:teal>$class</span> | <span style=color:#0086b3>New-CimInstance</span> -ClientOnly
+<span style=color:teal>$trigger3</span>.Enabled = <span style=color:teal>$True</span>
+<span style=color:teal>$trigger3</span>.Subscription = <span style=color:#d14>&#39;QueryList&gt;Query Id=&#34;0&#34; Path=&#34;Microsoft-Windows-NetworkProfile/Operational&#34;&gt;Select Path=&#34;Microsoft-Windows-NetworkProfile/Operational&#34;&gt;*[System[Provider[@Name=&#39;&#39;Microsoft-Windows-NetworkProfile&#39;&#39;] and EventID=4004]]/Select&gt;/Query&gt;/QueryList&gt;&#39;</span>
+
+<span style=color:#998;font-style:italic>#Execute task in users context</span>
+<span style=color:teal>$principal</span>= <span style=color:#0086b3>New-ScheduledTaskPrincipal</span> -GroupId <span style=color:#d14>&#34;S-1-5-32-545&#34;</span> -Id <span style=color:#d14>&#34;Author&#34;</span>
+
+<span style=color:#998;font-style:italic>#call the vbscript helper and pass the PosH script as argument</span>
+<span style=color:teal>$action</span> = <span style=color:#0086b3>New-ScheduledTaskAction</span> -Execute <span style=color:teal>$wscriptPath</span> -Argument <span style=color:#d14>&#34;</span><span style=color:#d14>`&#34;</span><span style=color:#d14>$dummyScriptPath</span><span style=color:#d14>`&#34;</span><span style=color:#d14> </span><span style=color:#d14>`&#34;</span><span style=color:#d14>$scriptPath</span><span style=color:#d14>`&#34;</span><span style=color:#d14>&#34;</span>
+
+<span style=color:teal>$settings</span>= <span style=color:#0086b3>New-ScheduledTaskSettingsSet</span> -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+
+<span style=color:teal>$null</span>=<span style=color:#0086b3>Register-ScheduledTask</span> -TaskName <span style=color:teal>$schtaskName</span> -Trigger <span style=color:teal>$trigger</span>,<span style=color:teal>$trigger2</span>,<span style=color:teal>$trigger3</span> -Action <span style=color:teal>$action</span>  -Principal <span style=color:teal>$principal</span> -Settings <span style=color:teal>$settings</span> -Description <span style=color:teal>$schtaskDescription</span> -Force
+
+<span style=color:#0086b3>Start-ScheduledTask</span> -TaskName <span style=color:teal>$schtaskName</span>
+<span style=color:#0086b3>stop-Transcript</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=upload-to-intune>Upload to Intune</h2>
 <ol>
 <li>Navigate to <a href=https://endpoint.microsoft.com/>https://endpoint.microsoft.com/</a></li>
 <li>Select <strong>Devices</strong></li>
@@ -132,7 +170,7 @@ stop-Transcript
 <li>Select <strong>Add</strong></li>
 </ol>
 <h2 id=verify-the-scheduled-task-exists>Verify the Scheduled Task Exists</h2>
-<p>Once you have deployed the script to the selected group, you can sync Intune policies through Company Portal. Remember it can take up to 8 hours for this to appear. You should see a scheduled Task named <code>&lt;strong>IntuneDriveMapping&lt;/strong></code> and the triggers should look like the below.</p>
+<p>Once you have deployed the script to the selected group, you can sync Intune policies through Company Portal. Remember it can take up to 8 hours for this to appear. You should see a scheduled Task named <code>**IntuneDriveMapping**</code> and the triggers should look like the below.</p>
 <p><div class=image>
 <figure>
 <a href=MicrosoftTeams-image-2-1024x439.png target=_blank>

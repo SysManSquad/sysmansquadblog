@@ -104,90 +104,228 @@ In this blog post we will be get familiar with a somewhat novel idea that proact
 <h2 id=discovery>Discovery</h2>
 <p>Now on to the fun part. We need a discovery script that will checks if the Outlook signature file exists, how old it is and if no file exists, report non-compliance. If the file is older than current day, its also non compliant.</p>
 <p>Note the <code>$signatureFileName</code> variable on line 2, you need to decide on the signature name. It can be anything you want.</p>
-<h1 id=check-if-signaturefile-even-exists>check if signaturefile even exists</h1>
-<p>try {
-if ( (Test-Path $env:APPDATA\microsoft\signatures$signatureFileName -ErrorAction stop) -eq $false) {</p>
-<pre><code>    Write-Host &quot;$signatureFileName does not exist&quot;
-    exit 1
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># must be the same name as the file that is generated by the Remediation script</span>
+<span style=color:teal>$signatureFileName</span> = <span style=color:#d14>&#34;contoso.htm&#34;</span>
 
+<span style=color:#998;font-style:italic># check if signaturefile even exists</span>
+<span style=color:#000;font-weight:700>try</span> {
+    <span style=color:#000;font-weight:700>if</span> ( (<span style=color:#0086b3>Test-Path</span> <span style=color:teal>$env:APPDATA</span>\microsoft\signatures\<span style=color:teal>$signatureFileName</span> -ErrorAction stop) <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$false</span>) {
+
+        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;$signatureFileName does not exist&#34;</span>
+        exit 1
+
+    }
 }
-</code></pre>
-<p>}</p>
-<p>catch {
-$errmeg = $_.exception.message
-Write-Error $errmeg
-exit 1
-}</p>
-<h1 id=check-if-the-file-is-out-of-date>check if the file is out of date</h1>
-<p>try {
-# check date
-$lastwritetimeday = (Get-ItemProperty -Path &ldquo;$env:APPDATA\microsoft\signatures$signatureFileName&rdquo;).LastWriteTime.DayOfYear
-$today = (Get-Date).DayOfYear</p>
-<pre><code>if ($lastwritetimeday -lt $today) {
-    Write-Host &quot;signature is out of date&quot;
+
+<span style=color:#000;font-weight:700>catch</span> {
+    <span style=color:teal>$errmeg</span> = <span style=color:teal>$_</span>.exception.message
+    <span style=color:#0086b3>Write-Error</span> <span style=color:teal>$errmeg</span>
     exit 1
 }
-</code></pre>
-<p>}</p>
-<p>catch {
-$errmeg = $_.exception.message
-Write-Error $errmeg
-exit 1
-}</p>
-<h2 id=remediation>Remediation</h2>
+
+<span style=color:#998;font-style:italic># check if the file is out of date</span>
+<span style=color:#000;font-weight:700>try</span> {
+    <span style=color:#998;font-style:italic># check date</span>
+    <span style=color:teal>$lastwritetimeday</span> = (<span style=color:#0086b3>Get-ItemProperty</span> -Path <span style=color:#d14>&#34;$env:APPDATA\microsoft\signatures\$signatureFileName&#34;</span>).LastWriteTime.DayOfYear
+    <span style=color:teal>$today</span> = (<span style=color:#0086b3>Get-Date</span>).DayOfYear
+
+    <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$lastwritetimeday</span> <span style=color:#000;font-weight:700>-lt</span> <span style=color:teal>$today</span>) {
+        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;signature is out of date&#34;</span>
+        exit 1
+    }
+}
+
+<span style=color:#000;font-weight:700>catch</span> {
+    <span style=color:teal>$errmeg</span> = <span style=color:teal>$_</span>.exception.message
+    <span style=color:#0086b3>Write-Error</span> <span style=color:teal>$errmeg</span>
+    exit 1
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=remediation>Remediation</h2>
 <p>Now on to the remediation part. You will need to populate a few variables.</p>
 <p><code>$signatureFileName</code> (same as in the discovery script)</p>
 <p>The information required for these can be found in Azure AD in the app properties, as detailed in Brads blog:<br>
 <code>$clientId</code><br>
 <code>$tenantName</code><br>
 <code>$clientSecret</code></p>
-<h1 id=application-client-id-tenant-name-and-secret>Application (client) ID, tenant Name and secret</h1>
-<p>$clientId = ""
-$tenantName = &ldquo;contoso.onmicrosoft.com&rdquo;
-$clientSecret = &ldquo;Hunter2&rdquo;
-$resource = &ldquo;<a href=https://graph.microsoft.com/%22>https://graph.microsoft.com/"</a></p>
-<p>$ReqTokenBody = @{
-Grant_Type = &ldquo;client_credentials&rdquo;
-Scope = &ldquo;<a href=https://graph.microsoft.com/.default%22>https://graph.microsoft.com/.default"</a>
-client_Id = $clientID
-Client_Secret = $clientSecret
-}</p>
-<p>$TokenResponse = Invoke-RestMethod -Uri &ldquo;<a href=https://login.microsoftonline.com/$TenantName/oauth2/v2.0/token%22>https://login.microsoftonline.com/$TenantName/oauth2/v2.0/token"</a> -Method POST -Body $ReqTokenBody</p>
-<h1 id=apiurl--httpsgraphmicrosoftcombetausers7b613445-d1b8-4af3-938b-c08a4e5b1160>$apiUrl = &lsquo;<a href="https://graph.microsoft.com/beta/users/7b613445-d1b8-4af3-938b-c08a4e5b1160'">https://graph.microsoft.com/beta/users/7b613445-d1b8-4af3-938b-c08a4e5b1160'</a></h1>
-<h1 id=who-is-currently-logged-on-to-the-system>who is currently logged on to the system</h1>
-<p>$upn = whoami /upn
-$apiUrl = &lsquo;<a href="https://graph.microsoft.com/v1.0/users/%7B0%7D'">https://graph.microsoft.com/v1.0/users/{0}'</a> -f $upn</p>
-<p>$Data = Invoke-RestMethod -Headers @{Authorization = &ldquo;Bearer $($Tokenresponse.access_token)&rdquo; } -Uri $apiUrl -Method Get</p>
-<p>#EndRegion Microsoft Graph</p>
-<p>#Region Variables</p>
-<h1 id=lets-put-the-data-into-variables-so-easier-placement-in-the-html>lets put the data into variables so easier placement in the HTML</h1>
-<p>$displayname = $data.displayName
-$jobtitle = $data.jobTitle
-$businessphone = $data.businessPhones
-$mail = $data.mail
-$officelocation = $data.officeLocation
-#EndRegion Variables</p>
-<p>#Region HTML</p>
-<h1 id=keep-in-mind-that-if-you-use-css-you-need-to-put-it-its-own-here-string-as-the--in-css-dont-mix-well-with-the--f-format-operator>keep in mind that if you use CSS, you need to put it its own here string, as the {} in CSS don&rsquo;t mix well with the -f format operator</h1>
-<p>$HTML = @&rsquo;
-&lt;p>displayname: {0} &lt;/p>
-&lt;p>jobtitle: {1} &lt;/p>
-&lt;p>phone: {2} &lt;/p>
-&lt;p>email: {3} &lt;/p>
-&lt;p>location: {4} &lt;/p>
-&lsquo;@ -f $displayname, $jobtitle, $($businessphone), $mail, $officelocation
-#EndRegion HTML</p>
-<p>#Region Output</p>
-<h1 id=check-if-the-signatures-directory-exists-if-not-create-it>check if the signatures directory exists, if not, create it</h1>
-<p>if ((Test-Path $env:APPDATA\microsoft\signatures) -eq $false) {new-item -ItemType directory -Name &ldquo;signatures&rdquo; -Path $env:APPDATA\microsoft}</p>
-<h1 id=output-the-htm-signature-file>output the .htm signature file</h1>
-<p>$html | out-file $env:APPDATA\microsoft\signatures$signatureFileName -Force</p>
-<p>#EndRegion Output</p>
-<h2 id=deployment>Deployment</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59>59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60>60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61>61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62>62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63>63</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic>#Region Microsoft Graph</span>
+<span style=color:#998;font-style:italic># must be the same name as specified in the discovery script</span>
+<span style=color:teal>$signatureFileName</span> = <span style=color:#d14>&#34;Contoso.htm&#34;</span>
+
+<span style=color:#998;font-style:italic># Application (client) ID, tenant Name and secret</span>
+<span style=color:teal>$clientId</span> = <span style=color:#d14>&#34;&#34;</span>
+<span style=color:teal>$tenantName</span> = <span style=color:#d14>&#34;contoso.onmicrosoft.com&#34;</span>
+<span style=color:teal>$clientSecret</span> = <span style=color:#d14>&#34;Hunter2&#34;</span>
+<span style=color:teal>$resource</span> = <span style=color:#d14>&#34;https://graph.microsoft.com/&#34;</span>
+  
+<span style=color:teal>$ReqTokenBody</span> = @{
+    Grant_Type    = <span style=color:#d14>&#34;client_credentials&#34;</span>
+    Scope         = <span style=color:#d14>&#34;https://graph.microsoft.com/.default&#34;</span>
+    client_Id     = <span style=color:teal>$clientID</span>
+    Client_Secret = <span style=color:teal>$clientSecret</span>
+} 
+ 
+<span style=color:teal>$TokenResponse</span> = <span style=color:#0086b3>Invoke-RestMethod</span> -Uri <span style=color:#d14>&#34;https://login.microsoftonline.com/$TenantName/oauth2/v2.0/token&#34;</span> -Method POST -Body <span style=color:teal>$ReqTokenBody</span>
+
+
+<span style=color:#998;font-style:italic># $apiUrl = &#39;https://graph.microsoft.com/beta/users/7b613445-d1b8-4af3-938b-c08a4e5b1160&#39;</span>
+
+<span style=color:#998;font-style:italic># who is currently logged on to the system</span>
+<span style=color:teal>$upn</span> = whoami /upn
+<span style=color:teal>$apiUrl</span> = <span style=color:#d14>&#39;https://graph.microsoft.com/v1.0/users/{0}&#39;</span> <span style=color:#000;font-weight:700>-f</span> <span style=color:teal>$upn</span>
+
+
+<span style=color:teal>$Data</span> = <span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{Authorization = <span style=color:#d14>&#34;Bearer </span>$(<span style=color:teal>$Tokenresponse</span>.access_token)<span style=color:#d14>&#34;</span> } -Uri <span style=color:teal>$apiUrl</span> -Method Get
+
+<span style=color:#998;font-style:italic>#EndRegion Microsoft Graph</span>
+
+<span style=color:#998;font-style:italic>#Region Variables</span>
+<span style=color:#998;font-style:italic># lets put the data into variables so easier placement in the HTML</span>
+<span style=color:teal>$displayname</span> = <span style=color:teal>$data</span>.displayName
+<span style=color:teal>$jobtitle</span> = <span style=color:teal>$data</span>.jobTitle
+<span style=color:teal>$businessphone</span> = <span style=color:teal>$data</span>.businessPhones
+<span style=color:teal>$mail</span> = <span style=color:teal>$data</span>.mail
+<span style=color:teal>$officelocation</span> = <span style=color:teal>$data</span>.officeLocation
+<span style=color:#998;font-style:italic>#EndRegion Variables</span>
+
+<span style=color:#998;font-style:italic>#Region HTML</span>
+
+<span style=color:#998;font-style:italic># keep in mind that if you use CSS, you need to put it its own here string, as the {} in CSS don&#39;t mix well with the -f format operator</span>
+
+<span style=color:teal>$HTML</span> = @<span style=color:#d14>&#39; 
+</span><span style=color:#d14>&lt;p&gt;displayname: {0} &lt;/p&gt;
+</span><span style=color:#d14>&lt;p&gt;jobtitle: {1} &lt;/p&gt;
+</span><span style=color:#d14>&lt;p&gt;phone: {2} &lt;/p&gt;
+</span><span style=color:#d14>&lt;p&gt;email: {3} &lt;/p&gt;
+</span><span style=color:#d14>&lt;p&gt;location: {4} &lt;/p&gt;
+</span><span style=color:#d14>&#39;</span>@ <span style=color:#000;font-weight:700>-f</span> <span style=color:teal>$displayname</span>, <span style=color:teal>$jobtitle</span>, $(<span style=color:teal>$businessphone</span>), <span style=color:teal>$mail</span>, <span style=color:teal>$officelocation</span>
+<span style=color:#998;font-style:italic>#EndRegion HTML</span>
+
+
+<span style=color:#998;font-style:italic>#Region Output</span>
+<span style=color:#998;font-style:italic># check if the signatures directory exists, if not, create it</span>
+<span style=color:#000;font-weight:700>if</span> ((<span style=color:#0086b3>Test-Path</span> <span style=color:teal>$env:APPDATA</span>\microsoft\signatures) <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$false</span>) {<span style=color:#0086b3>new-item</span> -ItemType directory -Name <span style=color:#d14>&#34;signatures&#34;</span> -Path <span style=color:teal>$env:APPDATA</span>\microsoft\}
+
+<span style=color:#998;font-style:italic># output the .htm signature file</span>
+
+<span style=color:teal>$html</span> | <span style=color:#0086b3>out-file</span> <span style=color:teal>$env:APPDATA</span>\microsoft\signatures\<span style=color:teal>$signatureFileName</span> -Force
+
+<span style=color:#998;font-style:italic>#EndRegion Output</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=deployment>Deployment</h2>
 <p>Now you just need to deploy the script package to a group, make sure its set to run with the logged-on credentials and use 64-bit PowerShell. Follow the steps in Jake&rsquo;s post to create a new script and deploy it.</p>
 <p>Once the script package is on a client, the signature will appear in Outlook, though Outlook will not configure it as a default on its own. (perhaps an idea for another blog post).</p>
 <h3 id=questionsissues>Questions/Issues?</h3>
-<p>If you run into any issues or have questions about anything Intune head over to the <a href=https://aka.ms/winadmins>WinAdmins discord community</a> and go to the <code>#Intune</code> channel, and ask Jake to help you.</p>
+<p>If you run into any issues or have questions about anything Intune head over to the<a href=https://aka.ms/winadmins>WinAdmins discord community</a>and go to the <code>#Intune</code> channel, and ask Jake to help you.</p>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>

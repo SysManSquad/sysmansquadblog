@@ -107,8 +107,26 @@
 </div> </p>
 <p>For now we will not assign this to a group, this comes later.</p>
 <p>Next we are going to pull down this config into a file called AutopilotConfigurationFile.JSON. In powershell run the following commands:</p>
-<p>Sign into your tenant here and back in powershell run the following command:</p>
-<p>Save this file in a folder by itself on a share somewhere that ConfigMgr has access to.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Install-Module</span> WindowsAutopilotIntune -Force
+<span style=color:#0086b3>Connect-MSGraph</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Sign into your tenant here and back in powershell run the following command:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Get-AutopilotProfile</span> | <span style=color:#0086b3>ConvertTo-AutopilotConfigurationJSON</span> | <span style=color:#0086b3>Out-File</span> c:\Autopilot\AutopilotConfigurationFile.json -Encoding ASCII
+</code></pre></td></tr></table>
+</div>
+</div><p>Save this file in a folder by itself on a share somewhere that ConfigMgr has access to.</p>
 <p>Next we head into ConfigMgr and create a new package, this package can have any name, but make sure you check the box &ldquo;This package contains source files&rdquo; and point it to the folder that houses your config file. On the following page, select &ldquo;Do not create a program&rdquo;. Distribute this package to any DP&rsquo;s you will use.</p>
 <p>Now, create a new task sequence and select the option for &ldquo;Deploy Windows Autopilot for Existing Devices&rdquo;. The rest of these options can be default, just select your Windows image you want to use and on the Prepare System for Windows Autopilot screen, select the package that you just created that contains your JSON.</p>
 <p>Once the TS is created it should look something like this:</p>
@@ -135,9 +153,25 @@
 </a>
 </figure>
 </div> </p>
-<p>Distribute this content to your DP.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>cmd.exe /c xcopy AutopilotConfigurationFile.json %OSDTargetSystemDrive%\windows\provisioning\Autopilot\ /c
+</code></pre></td></tr></table>
+</div>
+</div><p>Distribute this content to your DP.</p>
 <p>At this point lets head back to MEMAC and create our dynamic device security group that we will be targeting with our AP profile. The dynamic membership rules will be as follows (This is based on my computer naming convention that is in the Autopilot Profile)</p>
-<p>Once this group is created, navigate to the Deployment Profiles blade that we linked at the beginning of the blog, select your AP profile and under properties, edit the assignments and assign the profile to the newly created dynamic group.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>  (device.displayName -startsWith <span style=color:#d14>&#34;LLP&#34;</span>)
+</code></pre></td></tr></table>
+</div>
+</div><p>Once this group is created, navigate to the Deployment Profiles blade that we linked at the beginning of the blog, select your AP profile and under properties, edit the assignments and assign the profile to the newly created dynamic group.</p>
 <p>Congrats! Most of the setup is complete at this point, we only have to deploy the new Task Sequence and run it! Back in ConfigMgr deploy your Provisioning TS to &ldquo;All Unknown Computers&rdquo; or to a collection if you want to convert already managed machines (there is an easier way to do this that I may blog about later) and PXE boot your device, run the task sequence! After some time (usually 20 min or so) you should be presented with the following screen:</p>
 <p><div class=image>
 <figure>

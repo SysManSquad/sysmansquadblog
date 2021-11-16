@@ -100,16 +100,14 @@
           [Install Instructions](#install-instructions)&lt;li class=&quot;uagb-toc__list&quot;&gt;
             [Conclusion](#conclusion)
           &lt;/li&gt;&lt;/ul&gt;&lt;/ol&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; 
-          &lt;h2&gt;
-            Introduction
-          &lt;/h2&gt;
-          
-          &lt;p&gt;
+</code></pre>
+<h2 id=introduction>Introduction</h2>
+<pre><code>          &lt;p&gt;
             In my [previous post](https://sysmansquad.com/2020/12/30/automating-changing-out-of-business-hours-responses/), we did some automation with client-side scripts and Microsoft Graph to update Outlook Auto-Responses on a schedule. Today we will be going in a different direction for something with almost no code in it at all - Power Automate.
           &lt;/p&gt;
           
           &lt;p&gt;
-            [Power Automate](https://flow.microsoft.com) is an excellent tool that can monitor for changes, run actions on a schedule, process events, or just run a multi-step process when you hit a button. It does all of this with you having to write no, or minimal, code by using &lt;strong&gt;Service Connectors&lt;/strong&gt; and abstracting out &lt;strong&gt;Events&lt;/strong&gt; and &lt;strong&gt;Actions&lt;/strong&gt; that you might need to take. This post assumes that you are somewhat familiar with Power Automate, for an introduction to Power Automate, check out this [Microsoft Docs Article](https://docs.microsoft.com/en-us/power-automate/getting-started), or this [Microsoft Learn Course](https://go.microsoft.com/fwlink/p/?linkid=2018566) on Automate.
+            [Power Automate](https://flow.microsoft.com) is an excellent tool that can monitor for changes, run actions on a schedule, process events, or just run a multi-step process when you hit a button. It does all of this with you having to write no, or minimal, code by using **Service Connectors** and abstracting out **Events** and **Actions** that you might need to take. This post assumes that you are somewhat familiar with Power Automate, for an introduction to Power Automate, check out this [Microsoft Docs Article](https://docs.microsoft.com/en-us/power-automate/getting-started), or this [Microsoft Learn Course](https://go.microsoft.com/fwlink/p/?linkid=2018566) on Automate.
           &lt;/p&gt;
           
           &lt;p&gt;
@@ -121,7 +119,7 @@
           &lt;/div&gt;
           
           &lt;p&gt;
-            However, when you look at the GitHub connector, it only supports a few &lt;strong&gt;triggers&lt;/strong&gt; related to &lt;strong&gt;Issues &lt;/strong&gt;and &lt;strong&gt;Pull Requests&lt;/strong&gt;, and if we check the GitHub Connector [triggers documentation](https://docs.microsoft.com/en-us/connectors/github/#triggers), then even those would require an API key. Since these are public repos, instead of repos we own, we won't have any way to get a API key anyway.
+            However, when you look at the GitHub connector, it only supports a few **triggers** related to **Issues **and **Pull Requests**, and if we check the GitHub Connector [triggers documentation](https://docs.microsoft.com/en-us/connectors/github/#triggers), then even those would require an API key. Since these are public repos, instead of repos we own, we won't have any way to get a API key anyway.
           &lt;/p&gt;
           
           &lt;p&gt;
@@ -130,9 +128,8 @@
           
           &lt;div class=&quot;wp-block-group&quot;&gt;
             &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-              &lt;h2 id=&quot;github-atom-feeds&quot;&gt;
-                GitHub supports Atom Feeds
-              &lt;/h2&gt;
+              ## GitHub supports Atom Feeds
+              
               
               &lt;div class=&quot;wp-block-group&quot;&gt;
                 &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
@@ -141,31 +138,29 @@
                   &lt;/p&gt;
                   
                   &lt;p&gt;
-                    From what I could find, these are supported on &lt;strong&gt;Releases&lt;/strong&gt;, &lt;strong&gt;Tags&lt;/strong&gt;, and &lt;strong&gt;Commits&lt;/strong&gt;. To get the feed, simply take the URL for the feeds and append &lt;code&gt;&amp;lt;strong&gt;.atom&amp;lt;/strong&gt;&lt;/code&gt; to the end.
+                    From what I could find, these are supported on **Releases**, **Tags**, and **Commits**. To get the feed, simply take the URL for the feeds and append &lt;code&gt;strong&gt;.atom/strong&gt;&lt;/code&gt; to the end.
                   &lt;/p&gt;
                 &lt;/div&gt;
               &lt;/div&gt;
               
               &lt;div class=&quot;wp-block-group&quot;&gt;
                 &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                  &lt;h4 id=&quot;sample-urls&quot;&gt;
-                    Sample URLs
-                  &lt;/h4&gt;
-                  
-                  &lt;p&gt;
-                    &lt;strong&gt;Releases · PowerShell&lt;br /&gt;&lt;/strong&gt;HTML - [https://github.com/PowerShell/PowerShell/releases](https://github.com/PowerShell/PowerShell/releases)&lt;br /&gt;ATOM - [https://github.com/PowerShell/PowerShell/releases.atom](https://github.com/PowerShell/PowerShell/releases.atom)
+</code></pre>
+<h4 id=sample-urls>Sample URLs</h4>
+<pre><code>                  &lt;p&gt;
+                    **Releases · PowerShell&lt;br /&gt;**HTML - [https://github.com/PowerShell/PowerShell/releases](https://github.com/PowerShell/PowerShell/releases)&lt;br /&gt;ATOM - [https://github.com/PowerShell/PowerShell/releases.atom](https://github.com/PowerShell/PowerShell/releases.atom)
                   &lt;/p&gt;
                   
                   &lt;p&gt;
-                    &lt;strong&gt;Tags · PowerShell&lt;/strong&gt;&lt;br /&gt;HTML - [https://github.com/PowerShell/PowerShell/tags](https://github.com/PowerShell/PowerShell/tags)&lt;br /&gt;ATOM - [https://github.com/PowerShell/PowerShell/tags.atom](https://github.com/PowerShell/PowerShell/tags.atom)
+                    **Tags · PowerShell**&lt;br /&gt;HTML - [https://github.com/PowerShell/PowerShell/tags](https://github.com/PowerShell/PowerShell/tags)&lt;br /&gt;ATOM - [https://github.com/PowerShell/PowerShell/tags.atom](https://github.com/PowerShell/PowerShell/tags.atom)
                   &lt;/p&gt;
                   
                   &lt;p&gt;
-                    &lt;strong&gt;Releases · Pester&lt;/strong&gt;&lt;br /&gt;HTML - [https://github.com/pester/Pester/releases](https://github.com/pester/Pester/releases)&lt;br /&gt;ATOM - [https://github](https://github.com/pester/Pester/releases.atom)[.com/pester/Pester/releases.atom](https://github.com/pester/Pester/releases.atom)
+                    **Releases · Pester**&lt;br /&gt;HTML - [https://github.com/pester/Pester/releases](https://github.com/pester/Pester/releases)&lt;br /&gt;ATOM - [https://github](https://github.com/pester/Pester/releases.atom)[.com/pester/Pester/releases.atom](https://github.com/pester/Pester/releases.atom)
                   &lt;/p&gt;
                   
                   &lt;p&gt;
-                    &lt;strong&gt;Commits · win-acme · Master Branch&lt;br /&gt;&lt;/strong&gt;HTML - [https://](https://github.com/pester/Pester/releases)[github.com/win-acme/win-acme/commits/master](https://github.com/win-acme/win-acme/commits/master)&lt;br /&gt;ATOM - [](https://github.com/win-acme/win-acme/commits/master.atom)[https://github.com/win-acme/win-acme/commits/master.atom](https://github.com/win-acme/win-acme/commits/master.atom)
+                    **Commits · win-acme · Master Branch&lt;br /&gt;**HTML - [https://](https://github.com/pester/Pester/releases)[github.com/win-acme/win-acme/commits/master](https://github.com/win-acme/win-acme/commits/master)&lt;br /&gt;ATOM - [](https://github.com/win-acme/win-acme/commits/master.atom)[https://github.com/win-acme/win-acme/commits/master.atom](https://github.com/win-acme/win-acme/commits/master.atom)
                   &lt;/p&gt;
                 &lt;/div&gt;
               &lt;/div&gt;
@@ -176,9 +171,8 @@
             &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
               &lt;div class=&quot;wp-block-group alignwide&quot;&gt;
                 &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-                  &lt;h2 class=&quot;alignwide has-text-align-center&quot;&gt;
-                    Discovering &amp; Testing RSS/Atom feeds
-                  &lt;/h2&gt;
+                  ## Discovering &amp; Testing RSS/Atom feeds
+                  
                   
                   &lt;p&gt;
                     If you are still having a hard time finding the URL, I found this [Edge Extension](https://microsoftedge.microsoft.com/addons/detail/get-rss-feed-url/pgbelohmepchkohpdldadopkblkgbjom) to discover Atom URLs for the current page, and a [Chrome Version](https://chrome.google.com/webstore/detail/get-rss-feed-url/kfghpdldaipanmkhfpdcjglncmilendn) as well.
@@ -206,9 +200,8 @@
           
           &lt;div class=&quot;wp-block-group&quot;&gt;
             &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-              &lt;h2 id=&quot;connecting-the-connectors&quot;&gt;
-                Connecting the Connectors
-              &lt;/h2&gt;
+              ## Connecting the Connectors
+              
               
               &lt;p&gt;
                 The useful fields available to us are below:
@@ -249,7 +242,7 @@
               ![](image-5.png)&lt;/figure&gt; 
               
               &lt;p&gt;
-                So from here, we can use the &lt;strong&gt;RSS Feed trigger&lt;/strong&gt;, build some variables, and send it to the &lt;strong&gt;Teams Connector&lt;/strong&gt;. From this, I refined the formatting a bit, and ended up with this.
+                So from here, we can use the **RSS Feed trigger**, build some variables, and send it to the **Teams Connector**. From this, I refined the formatting a bit, and ended up with this.
               &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
               
               ![](image-2.png)&lt;/figure&gt; 
@@ -262,9 +255,8 @@
             &lt;/div&gt;
           &lt;/div&gt;
           
-          &lt;h2 id=&quot;install&quot;&gt;
-            Install Instructions
-          &lt;/h2&gt;
+          ## Install Instructions
+          
           
           &lt;p&gt;
             You can [download this here](https://github.com/SysManSquad/BlogFiles/tree/master/PsychoData/GitHub_to_Teams_Notifications) to import this into your own environment and start getting your own notifications from Public Repos.
@@ -274,16 +266,15 @@
             You can also use this as a guide to set up alerts on any other RSS feeds or most Atom feeds as well. Since this is already in Power Automate, you could also use hundreds of different connectors to connect to other services like Azure [Automation](https://flow.microsoft.com/connectors/shared_azureautomation/azure-automation/), [DevOps](https://flow.microsoft.com/connectors/shared_visualstudioteamservices/azure-devops/), [Blob Storage](https://flow.microsoft.com/connectors/shared_azureblob/azure-blob-storage/), [FTP](https://flow.microsoft.com/connectors/shared_ftp/ftp/), [Slack](https://flow.microsoft.com/connectors/shared_slack/slack/), [Todoist](https://flow.microsoft.com/connectors/shared_todoist/todoist/), or even invoke a [Web API](https://docs.microsoft.com/connectors/webcontents/#get-web-resource).
           &lt;/p&gt;
           
-          &lt;h2 id=&quot;build-your-own&quot;&gt;
-            Conclusion
-          &lt;/h2&gt;
+          ## Conclusion
+          
           
           &lt;p&gt;
             In this post, we found a way to work around some limitations of the GitHub Connector, made a Power Automate flow that can be easily duplicated to subscribe to many feeds, and used Power Automate to post notifications to Teams Channels.
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image&quot;&gt;
           
           ![Image result for so much win jim halpert](https://uploads-ssl.webflow.com/5d2b950d9ea87fc61f0c1f3e/5daa2dfbe9a275421795e33d_ezgif.com-optimize%20(12).gif)&lt;/figure&gt; &lt;p&gt;
-            &lt;strong&gt;What kind of workflows would you like to automate&lt;/strong&gt;? Let me know what kind of things you are doing with &lt;strong&gt;Power Platform&lt;/strong&gt; on the [Discord below](#contact). For some ideas of automations you might be able to use, go [Browse Power Automate Templates](https://us.flow.microsoft.com/en-us/templates/), [Search Connectors](https://flow.microsoft.com/connectors/), or check out the Power Automate [Community](https://go.microsoft.com/fwlink/?LinkID=787467).
+            **What kind of workflows would you like to automate**? Let me know what kind of things you are doing with **Power Platform** on the [Discord below](#contact). For some ideas of automations you might be able to use, go [Browse Power Automate Templates](https://us.flow.microsoft.com/en-us/templates/), [Search Connectors](https://flow.microsoft.com/connectors/), or check out the Power Automate [Community](https://go.microsoft.com/fwlink/?LinkID=787467).
           &lt;/p&gt;
           
           &lt;p id=&quot;contact&quot;&gt;

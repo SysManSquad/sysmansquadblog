@@ -21,7 +21,7 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Getting started with AutomatedLab">
-<meta name=twitter:description content="<p> [AutomatedLab](https://github.com/automatedlab/automatedlab) is simply PowerShell module. In some ways it’s a framework because it encourages a particular workflow for managing named labs consisting of VMs with prefined applications / “roles” or custom roles. </p> <p> The benefit using AutomatedLab is the simplicity it offers to quickly fire up and throw away environments, and rebuild again. It also offers a huge range of functions to build out whatever you want. </p> <p> Generally, the workflow goes something like: </p> <ol> <li> <code>&amp;lt;strong>New-LabDefinition&amp;lt;/strong></code> </li> <li> <code>&amp;lt;strong>Add-LabMachineDefinition&amp;lt;/strong></code> </li> <li> <code>&amp;lt;strong>Install-Lab&amp;lt;/strong></code> </li> </ol> <p> Those commands have a bunch of different parameters to further configure your lab.">
+<meta name=twitter:description content="What is AutomatedLab?  <p> [AutomatedLab](https://github.com/automatedlab/automatedlab) is simply PowerShell module. In some ways it’s a framework because it encourages a particular workflow for managing named labs consisting of VMs with prefined applications / “roles” or custom roles. </p> <p> The benefit using AutomatedLab is the simplicity it offers to quickly fire up and throw away environments, and rebuild again. It also offers a huge range of functions to build out whatever you want.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -93,6 +93,7 @@
 <span class=post-date>June 15, 2020</span>
 </div>
 <div class=post-entry>
+<h2 id=what-is-automatedlab>What is AutomatedLab?</h2>
 <pre><code>                                                &lt;p&gt;
                                                   [AutomatedLab](https://github.com/automatedlab/automatedlab) is simply PowerShell module. In some ways it’s a framework because it encourages a particular workflow for managing named labs consisting of VMs with prefined applications / “roles” or custom roles.
                                                 &lt;/p&gt;
@@ -107,38 +108,32 @@
                                                 
                                                 &lt;ol&gt;
                                                   &lt;li&gt;
-                                                    &lt;code&gt;&amp;lt;strong&gt;New-LabDefinition&amp;lt;/strong&gt;&lt;/code&gt;
+                                                    &lt;code&gt;strong&gt;New-LabDefinition/strong&gt;&lt;/code&gt;
                                                   &lt;/li&gt;
                                                   &lt;li&gt;
-                                                    &lt;code&gt;&amp;lt;strong&gt;Add-LabMachineDefinition&amp;lt;/strong&gt;&lt;/code&gt;
+                                                    &lt;code&gt;strong&gt;Add-LabMachineDefinition/strong&gt;&lt;/code&gt;
                                                   &lt;/li&gt;
                                                   &lt;li&gt;
-                                                    &lt;code&gt;&amp;lt;strong&gt;Install-Lab&amp;lt;/strong&gt;&lt;/code&gt;
+                                                    &lt;code&gt;strong&gt;Install-Lab/strong&gt;&lt;/code&gt;
                                                   &lt;/li&gt;
                                                 &lt;/ol&gt;
                                                 
                                                 &lt;p&gt;
                                                   Those commands have a bunch of different parameters to further configure your lab. But generally, you 1) define your lab, 2) define the VMs and 3) initiate the build.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h2&gt;
-                                                  Support
-                                                &lt;/h2&gt;
-                                                
-                                                &lt;p&gt;
-                                                  Resources for AutomatedLab aren’t hard to find. I personally found everything I needed by looking at the&amp;nbsp;[wiki](https://github.com/AutomatedLab/AutomatedLab/wiki)&amp;nbsp;on&amp;nbsp;[GitHub](https://github.com/AutomatedLab/AutomatedLab), reviewing the documentation on their&amp;nbsp;[website](https://automatedlab.org/), and checking out the&amp;nbsp;[sample scripts folder](https://github.com/AutomatedLab/AutomatedLab/tree/master/LabSources/SampleScripts).
+</code></pre>
+<h2 id=support>Support</h2>
+<pre><code>                                                &lt;p&gt;
+                                                  Resources for AutomatedLab aren’t hard to find. I personally found everything I needed by looking at the[wiki](https://github.com/AutomatedLab/AutomatedLab/wiki)on[GitHub](https://github.com/AutomatedLab/AutomatedLab), reviewing the documentation on their[website](https://automatedlab.org/), and checking out the[sample scripts folder](https://github.com/AutomatedLab/AutomatedLab/tree/master/LabSources/SampleScripts).
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
                                                   In my experience so far the support by the developers in GitHub issues have been very helpful and proactive. At the time of writing this it’s in active development and has been for years.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h2&gt;
-                                                  Prerequisites
-                                                &lt;/h2&gt;
-                                                
-                                                &lt;p&gt;
-                                                  As per the&amp;nbsp;[documentation](http://automatedlab.org/en/latest/#requirements), at the time of writing this, the requirements are:
+</code></pre>
+<h2 id=prerequisites>Prerequisites</h2>
+<pre><code>                                                &lt;p&gt;
+                                                  As per the[documentation](http://automatedlab.org/en/latest/#requirements), at the time of writing this, the requirements are:
                                                 &lt;/p&gt;
                                                 
                                                 &lt;ul&gt;
@@ -167,28 +162,22 @@
                                                     An SSD for your machines is highly recommended as many issues arise from slow HDDs
                                                   &lt;/li&gt;
                                                 &lt;/ul&gt;
-                                                
-                                                &lt;h3&gt;
-                                                  Telemetry
-                                                &lt;/h3&gt;
-                                                
-                                                &lt;p&gt;
-                                                  AutomatedLab operates on an&amp;nbsp;&lt;strong&gt;opt-out&lt;/strong&gt;&amp;nbsp;telemetry system. The&amp;nbsp;[documentation](http://automatedlab.org/en/latest/#requirements)&amp;nbsp;on this heavily suggests no personal identifiable information is collected and it’s used purely for supportability and usage statistics. Snippets of json data which is sent back are included in the docs to give you insight to the amount of detail shared.
+</code></pre>
+<h3 id=telemetry>Telemetry</h3>
+<pre><code>                                                &lt;p&gt;
+                                                  AutomatedLab operates on an**opt-out**telemetry system. The[documentation](http://automatedlab.org/en/latest/#requirements)on this heavily suggests no personal identifiable information is collected and it’s used purely for supportability and usage statistics. Snippets of json data which is sent back are included in the docs to give you insight to the amount of detail shared.
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
-                                                  To opt out, you either set environment variable&amp;nbsp;&lt;strong&gt;&lt;code&gt;AUTOMATEDLAB_TELEMETRY_OPTIN&lt;/code&gt;&amp;nbsp;&lt;/strong&gt;to&amp;nbsp;&lt;code&gt;&amp;lt;strong&gt;false&amp;lt;/strong&gt;&lt;/code&gt;,&amp;nbsp;&lt;strong&gt;&lt;code&gt;no&lt;/code&gt;&amp;nbsp;&lt;/strong&gt;or&amp;nbsp;&lt;code&gt;&amp;lt;strong&gt;0&amp;lt;/strong&gt;&lt;/code&gt;. Or simply use&amp;nbsp;&lt;code&gt;&amp;lt;strong&gt;Disable-LabTelemetry&amp;lt;/strong&gt;&lt;/code&gt;&amp;nbsp;after installing.
+                                                  To opt out, you either set environment variable**&lt;code&gt;AUTOMATEDLAB_TELEMETRY_OPTIN&lt;/code&gt;**to&lt;code&gt;strong&gt;false/strong&gt;&lt;/code&gt;,**&lt;code&gt;no&lt;/code&gt;**or&lt;code&gt;strong&gt;0/strong&gt;&lt;/code&gt;. Or simply use&lt;code&gt;strong&gt;Disable-LabTelemetry/strong&gt;&lt;/code&gt;after installing.
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
                                                   They even share the [PowerBi dashboard of the data collected](https://msit.powerbi.com/view?r=eyJrIjoiN2Q3ZTU5Y2QtMjUyMi00YmFhLTkxNTMtZDBmYTA3MzcyYWQxIiwidCI6IjcyZjk4OGJmLTg2ZjEtNDFhZi05MWFiLTJkN2NkMDExZGI0NyIsImMiOjV9&amp;pageName=ReportSection67b5abc401bbec55e899).
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h3&gt;
-                                                  Security warning
-                                                &lt;/h3&gt;
-                                                
-                                                &lt;p&gt;
+</code></pre>
+<h3 id=security-warning>Security warning</h3>
+<pre><code>                                                &lt;p&gt;
                                                   Before you get started, you should know about some changes AutomatedLab wants to make to your computer when you first call an AutomatedLab script.
                                                 &lt;/p&gt;
                                                 
@@ -203,33 +192,27 @@
                                                 &lt;p&gt;
                                                   Below I’ll lay out what those changes are and the commands/options it sets.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h4&gt;
-                                                  Enabling WinRM CredSSP
-                                                &lt;/h4&gt;
-                                                
-                                                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;Enable-WSManCredSSP -Role Client -DelegateComputer * -Force&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
+<h4 id=enabling-winrm-credssp>Enabling WinRM CredSSP</h4>
+<pre><code>                                                `Enable-WSManCredSSP -Role Client -DelegateComputer * -Force`
                                                 
                                                 &lt;p&gt;
-                                                  The&amp;nbsp;[documentation](http://automatedlab.org/en/latest/Wiki/invokelabcommand/#double-hop-authentication-and-credssp)&amp;nbsp;on this gives the following reason for this change:
+                                                  The[documentation](http://automatedlab.org/en/latest/Wiki/invokelabcommand/#double-hop-authentication-and-credssp)on this gives the following reason for this change:
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
-                                                  &lt;em&gt;“Every machine deployed with AL has CredSsp enabled as a CredSsp server. This is like running “Enable-WSManCredSSP -Role Server”. Invoke-LabCommand always tries to make a connection with CredSsp. If this does not work you will see a warning and a connection without CredSsp is tried. This is definitely not a best practice for a production environment but makes life much easier in a lab. Using CredSsp you can create a remote session from a remote session which is extremely helpful when installing or setting up a lab. For example, reading an AD user account from a remote session does not work without CredSsp as reading data from Active Directory requires and authentication from the remote machine to a domain controller. Inside an AL lab the following code works out of the box.”&lt;/em&gt;
+                                                  *“Every machine deployed with AL has CredSsp enabled as a CredSsp server. This is like running “Enable-WSManCredSSP -Role Server”. Invoke-LabCommand always tries to make a connection with CredSsp. If this does not work you will see a warning and a connection without CredSsp is tried. This is definitely not a best practice for a production environment but makes life much easier in a lab. Using CredSsp you can create a remote session from a remote session which is extremely helpful when installing or setting up a lab. For example, reading an AD user account from a remote session does not work without CredSsp as reading data from Active Directory requires and authentication from the remote machine to a domain controller. Inside an AL lab the following code works out of the box.”*
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h4&gt;
-                                                  Enters a wildcard in your system's TrustedHosts file
-                                                &lt;/h4&gt;
-                                                
-                                                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;Set-Item -Path Microsoft.WSMan.Management\WSMan::localhost\Client\TrustedHosts -Value '*' -Force&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
+<h4 id=enters-a-wildcard-in-your-systems-trustedhosts-file>Enters a wildcard in your system&rsquo;s TrustedHosts file</h4>
+<pre><code>                                                `Set-Item -Path Microsoft.WSMan.Management\WSMan::localhost\Client\TrustedHosts -Value '*' -Force`
                                                 
                                                 &lt;p&gt;
-                                                  The&amp;nbsp;[exception message](https://github.com/AutomatedLab/AutomatedLab/blob/d1c5f04096c8bdef4ad29b4c495de05d25ca5a0a/AutomatedLab/AutomatedLab.psm1#L72)&amp;nbsp;thrown if you choose not to accept reads:
+                                                  The[exception message](https://github.com/AutomatedLab/AutomatedLab/blob/d1c5f04096c8bdef4ad29b4c495de05d25ca5a0a/AutomatedLab/AutomatedLab.psm1#L72)thrown if you choose not to accept reads:
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
-                                                  “&lt;em&gt;AutomatedLab requires the host to connect to any possible lab machine using NTLM.&lt;/em&gt;.. “
+                                                  “*AutomatedLab requires the host to connect to any possible lab machine using NTLM.*.. “
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
@@ -239,12 +222,9 @@
                                                 &lt;p&gt;
                                                   Putting a wild card in your TrustedHosts file will effectively mean your computer trusts all and any remote systems to make connections to, not from. In other words, this wildcard is not the config for allowing all and any remote systems to connect to your computer.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h4&gt;
-                                                  Allow credential delegation via local group policy settings
-                                                &lt;/h4&gt;
-                                                
-                                                &lt;p&gt;
+</code></pre>
+<h4 id=allow-credential-delegation-via-local-group-policy-settings>Allow credential delegation via local group policy settings</h4>
+<pre><code>                                                &lt;p&gt;
                                                   The following settings are configured with a link to their description:
                                                 &lt;/p&gt;
                                                 
@@ -285,13 +265,10 @@
                                                 &lt;p&gt;
                                                   These settings are relevant to allowing use of CredSSP; letting you feed “fresh” and “saved” credentials to remote systems in your lab.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h4&gt;
-                                                  Relaxes a setting for CredSSP patch CVE-2019-0886
-                                                &lt;/h4&gt;
-                                                
-                                                &lt;p&gt;
-                                                  The setting it changes for CVE-2018-0886 /&amp;nbsp;[KB4093492](https://support.microsoft.com/en-us/help/4093492/credssp-updates-for-cve-2018-0886-march-13-2018)&amp;nbsp;is&amp;nbsp;&lt;code&gt;&amp;lt;strong&gt;AllowEncryptionOracle&amp;lt;/strong&gt;&lt;/code&gt;&amp;nbsp;=&amp;nbsp;&lt;strong&gt;&lt;code&gt;2&lt;/code&gt;&lt;/strong&gt;:
+</code></pre>
+<h4 id=relaxes-a-setting-for-credssp-patch-cve-2019-0886>Relaxes a setting for CredSSP patch CVE-2019-0886</h4>
+<pre><code>                                                &lt;p&gt;
+                                                  The setting it changes for CVE-2018-0886 /[KB4093492](https://support.microsoft.com/en-us/help/4093492/credssp-updates-for-cve-2018-0886-march-13-2018)is&lt;code&gt;strong&gt;AllowEncryptionOracle/strong&gt;&lt;/code&gt;=**&lt;code&gt;2&lt;/code&gt;**:
                                                 &lt;/p&gt;
                                                 
                                                 &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;New-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\CredSSP\Parameters -Force | Out-Null
@@ -323,29 +300,23 @@
                                                     [Accidental Sabotage: Beware of CredSSP](https://www.powershellmagazine.com/2014/03/06/accidental-sabotage-beware-of-credssp/)
                                                   &lt;/li&gt;
                                                 &lt;/ul&gt;
-                                                
-                                                &lt;h2&gt;
-                                                  Installing AutomatedLab
-                                                &lt;/h2&gt;
-                                                
-                                                &lt;p&gt;
+</code></pre>
+<h2 id=installing-automatedlab>Installing AutomatedLab</h2>
+<pre><code>                                                &lt;p&gt;
                                                   Decided to use it still? Great! I personally use it in my home lab.
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
-                                                  I’m not going to reinvent the wheel. The&amp;nbsp;[Installation docs](https://automatedlab.org/en/latest/Wiki/Basic/install/)&amp;nbsp;are good enough!
+                                                  I’m not going to reinvent the wheel. The[Installation docs](https://automatedlab.org/en/latest/Wiki/Basic/install/)are good enough!
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h3&gt;
-                                                  Folders
-                                                &lt;/h3&gt;
-                                                
-                                                &lt;p&gt;
+</code></pre>
+<h3 id=folders>Folders</h3>
+<pre><code>                                                &lt;p&gt;
                                                   Once installed, you’ll see C:\LabSources folder. During installation you can configure where to store LabSources if you don’t want to save it on C.
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
-                                                  LabSources is not the directory where VMs are stored. It’s where installation media / sources and scripts are kept. By default, VMs are stored in in a directory named AutomatedLab-VMs but this is also configurable on a per lab basis using&amp;nbsp;[-VmPath](http://automatedlab.org/en/latest/AutomatedLabDefinition/en-us/New-LabDefinition/#-vmpath)&amp;nbsp;parameter.
+                                                  LabSources is not the directory where VMs are stored. It’s where installation media / sources and scripts are kept. By default, VMs are stored in in a directory named AutomatedLab-VMs but this is also configurable on a per lab basis using[-VmPath](http://automatedlab.org/en/latest/AutomatedLabDefinition/en-us/New-LabDefinition/#-vmpath)parameter.
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
@@ -359,72 +330,48 @@
                                                 &lt;p&gt;
                                                   Within each folder for LabSources you’ll have some description detailed within a README.md but I’ll offer some more insight.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h4&gt;
-                                                  LabSources\CustomRoles
-                                                &lt;/h4&gt;
-                                                
-                                                &lt;p&gt;
-                                                  AutomatedLab has a concept of “roles” that are installed after a VM OS is installed.&amp;nbsp;[Here are a list](http://automatedlab.org/en/latest/Wiki/roles/)&amp;nbsp;of predefined / “built in” roles. Associating a role with a VM will install applications such as Exchange, Active Directory, SharePoint, SQL, lots of good stuff and more. You associate a role with a VM using the&amp;nbsp;&lt;code&gt;&amp;lt;strong&gt;-Roles&amp;lt;/strong&gt;&lt;/code&gt;&amp;nbsp;parameter with the&amp;nbsp;&lt;code&gt;&amp;lt;strong&gt;Add-LabMachineDefinition&amp;lt;/strong&gt;&lt;/code&gt;&amp;nbsp;command.
+</code></pre>
+<h4 id=labsourcescustomroles>LabSources\CustomRoles</h4>
+<pre><code>                                                &lt;p&gt;
+                                                  AutomatedLab has a concept of “roles” that are installed after a VM OS is installed.[Here are a list](http://automatedlab.org/en/latest/Wiki/roles/)of predefined / “built in” roles. Associating a role with a VM will install applications such as Exchange, Active Directory, SharePoint, SQL, lots of good stuff and more. You associate a role with a VM using the&lt;code&gt;strong&gt;-Roles/strong&gt;&lt;/code&gt;parameter with the&lt;code&gt;strong&gt;Add-LabMachineDefinition/strong&gt;&lt;/code&gt;command.
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
                                                   Custom roles is the ability to create your own role. Your custom role’s name is the name of the directory you save in LabSources\CustomRoles and AutomatedLab calls LabSources\CustomRoles\MyCustomRole\HostStart.ps1 once the VM’s OS is installed. From there, your imagination is the limit.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h4&gt;
-                                                  LabSources\ISOs
-                                                &lt;/h4&gt;
-                                                
-                                                &lt;p&gt;
+</code></pre>
+<h4 id=labsourcesisos>LabSources\ISOs</h4>
+<pre><code>                                                &lt;p&gt;
                                                   VMs need ISO media for operating system installs and some applications sources for roles such as SQL. This is where you must store ISOs. This directory is scanned at runtime when initiating a build and an error will be thrown if what’s required isn’t present.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h4&gt;
-                                                  LabSources\OSUpdates
-                                                &lt;/h4&gt;
-                                                
-                                                &lt;p&gt;
+</code></pre>
+<h4 id=labsourcesosupdates>LabSources\OSUpdates</h4>
+<pre><code>                                                &lt;p&gt;
                                                   See the README.md for more information, but essentially, it’s a folder to store updates for you to then trigger regeneration of a new ISO for your lab’s operating systems.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h4&gt;
-                                                  LabSources\PostInstallationActivities
-                                                &lt;/h4&gt;
-                                                
-                                                &lt;p&gt;
+</code></pre>
+<h4 id=labsourcespostinstallationactivities>LabSources\PostInstallationActivities</h4>
+<pre><code>                                                &lt;p&gt;
                                                   A folder that you shouldn’t need to touch. It’s used internally by AutomatedLab to achieve some customisations for some predefined / “builtin” roles.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h4&gt;
-                                                  LabSources\SampleScripts
-                                                &lt;/h4&gt;
-                                                
-                                                &lt;p&gt;
+</code></pre>
+<h4 id=labsourcessamplescripts>LabSources\SampleScripts</h4>
+<pre><code>                                                &lt;p&gt;
                                                   A nice folder containing lots of examples where you can glean insight on how to build your own AutomatedLab scripts.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h4&gt;
-                                                  LabSources\SoftwarePackages
-                                                &lt;/h4&gt;
-                                                
-                                                &lt;p&gt;
+</code></pre>
+<h4 id=labsourcessoftwarepackages>LabSources\SoftwarePackages</h4>
+<pre><code>                                                &lt;p&gt;
                                                   Software to-be-installed on VMs in your lab download to this folder and copied to the VMs. In your scripts, if you need to do any similar type of functions of downloading and installing, use this directory.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h4&gt;
-                                                  LabSources\Tools
-                                                &lt;/h4&gt;
-                                                
-                                                &lt;p&gt;
-                                                  This folder can be copied to all VMs in a lab so if there’s files/folders you want in common, populate this folder with what you want and use the&amp;nbsp;&lt;code&gt;&amp;lt;strong&gt;-ToolsPath&amp;lt;/strong&gt;&lt;/code&gt;&amp;nbsp;parameter with the&amp;nbsp;&lt;code&gt;&amp;lt;strong&gt;Add-LabMachineDefinition&amp;lt;/strong&gt;&lt;/code&gt;&amp;nbsp;command.
+</code></pre>
+<h4 id=labsourcestools>LabSources\Tools</h4>
+<pre><code>                                                &lt;p&gt;
+                                                  This folder can be copied to all VMs in a lab so if there’s files/folders you want in common, populate this folder with what you want and use the&lt;code&gt;strong&gt;-ToolsPath/strong&gt;&lt;/code&gt;parameter with the&lt;code&gt;strong&gt;Add-LabMachineDefinition/strong&gt;&lt;/code&gt;command.
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h2&gt;
-                                                  Creating a simple lab
-                                                &lt;/h2&gt;
-                                                
-                                                &lt;p&gt;
+</code></pre>
+<h2 id=creating-a-simple-lab>Creating a simple lab</h2>
+<pre><code>                                                &lt;p&gt;
                                                   Before you save the below script and execute it, ensure you have a Windows Server 2019 ISO saved in your LabSources\ISOs folder.
                                                 &lt;/p&gt;
                                                 
@@ -434,13 +381,13 @@
                                                 
                                                 &lt;ul&gt;
                                                   &lt;li&gt;
-                                                    Create an AutomatedLab named whatever you passed for the&amp;nbsp;&lt;strong&gt;&lt;code&gt;-LabName&lt;/code&gt;&lt;/strong&gt;&amp;nbsp;parameter
+                                                    Create an AutomatedLab named whatever you passed for the**&lt;code&gt;-LabName&lt;/code&gt;**parameter
                                                   &lt;/li&gt;
                                                   &lt;li&gt;
                                                     Create a three VM lab all running Windows Server 2019 Datacenter (Desktop Experience)
                                                   &lt;/li&gt;
                                                   &lt;li&gt;
-                                                    The domain will be whatever you passed for the&amp;nbsp;&lt;code&gt;&amp;lt;strong&gt;-Domain&amp;lt;/strong&gt;&lt;/code&gt;&amp;nbsp;parameter
+                                                    The domain will be whatever you passed for the&lt;code&gt;strong&gt;-Domain/strong&gt;&lt;/code&gt;parameter
                                                   &lt;/li&gt;
                                                   &lt;li&gt;
                                                     All VMs will be networked only with each other using 192.168.123.0/24 address space
@@ -452,17 +399,14 @@
                                                     Each server has just 1 vCPU but dynamic memory configured (min 1GB max 4GB)
                                                   &lt;/li&gt;
                                                 &lt;/ul&gt;
-                                                
-                                                &lt;h2&gt;
-                                                  Adding or removing lab machines
-                                                &lt;/h2&gt;
-                                                
-                                                &lt;p&gt;
-                                                  While you can delete the Hyper-V virtual machines from the VMM service and vhdx/vmcx files off disk, AutomatedLab will still think they exist. AutomatedLab keeps track of what’s where within the realm of AutomatedLab via XML files which can be found in&amp;nbsp;&lt;strong&gt;&lt;code&gt;C:\ProgramData\AutomatedLab\Labs&lt;/code&gt;&lt;/strong&gt;.
+</code></pre>
+<h2 id=adding-or-removing-lab-machines>Adding or removing lab machines</h2>
+<pre><code>                                                &lt;p&gt;
+                                                  While you can delete the Hyper-V virtual machines from the VMM service and vhdx/vmcx files off disk, AutomatedLab will still think they exist. AutomatedLab keeps track of what’s where within the realm of AutomatedLab via XML files which can be found in**&lt;code&gt;C:\ProgramData\AutomatedLab\Labs&lt;/code&gt;**.
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
-                                                  To delete individual VMs, use&amp;nbsp;&lt;strong&gt;&lt;code&gt;&amp;lt;a href=&quot;http://automatedlab.org/en/latest/AutomatedLab/en-us/Remove-LabVM/&quot;&gt;Remove-LabVM&amp;lt;/a&gt;&lt;/code&gt;&lt;/strong&gt;. To remove all VMs associated with a lab, use&amp;nbsp;&lt;strong&gt;&lt;code&gt;&amp;lt;a href=&quot;http://automatedlab.org/en/latest/AutomatedLab/en-us/Remove-Lab/&quot;&gt;Remove-Lab&amp;lt;/a&gt;&lt;/code&gt;&lt;/strong&gt;&amp;nbsp;.
+                                                  To delete individual VMs, use**&lt;code&gt;a href=&quot;http://automatedlab.org/en/latest/AutomatedLab/en-us/Remove-LabVM/&quot;&gt;Remove-LabVM/a&gt;&lt;/code&gt;**. To remove all VMs associated with a lab, use**&lt;code&gt;a href=&quot;http://automatedlab.org/en/latest/AutomatedLab/en-us/Remove-Lab/&quot;&gt;Remove-Lab/a&gt;&lt;/code&gt;**.
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
@@ -470,18 +414,15 @@
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
-                                                  As for adding machines to an existing lab, at the time of writing this, there’s no function available within AutomatedLab to specifically add a new VM to an existing lab. It’s only achievable by modifying or creating a new AutomatedLab script with the same properties (e.g. domain, address space etc) and calling&amp;nbsp;&lt;code&gt;&amp;lt;strong&gt;Install-Lab -NoValidation&amp;lt;/strong&gt;&lt;/code&gt;.
+                                                  As for adding machines to an existing lab, at the time of writing this, there’s no function available within AutomatedLab to specifically add a new VM to an existing lab. It’s only achievable by modifying or creating a new AutomatedLab script with the same properties (e.g. domain, address space etc) and calling&lt;code&gt;strong&gt;Install-Lab -NoValidation/strong&gt;&lt;/code&gt;.
                                                 &lt;/p&gt;
                                                 
                                                 &lt;p&gt;
-                                                  It seems more appropriate functionality to add machines to an existing lab or domain created from AutomatedLab is incoming in&amp;nbsp;[version 6 of AutomatedLab](https://github.com/AutomatedLab/AutomatedLab/milestone/5)!
+                                                  It seems more appropriate functionality to add machines to an existing lab or domain created from AutomatedLab is incoming in[version 6 of AutomatedLab](https://github.com/AutomatedLab/AutomatedLab/milestone/5)!
                                                 &lt;/p&gt;
-                                                
-                                                &lt;h2&gt;
-                                                  Build a ConfigMgr lab with AutomatedLab
-                                                &lt;/h2&gt;
-                                                
-                                                &lt;p&gt;
+</code></pre>
+<h2 id=build-a-configmgr-lab-with-automatedlab>Build a ConfigMgr lab with AutomatedLab</h2>
+<pre><code>                                                &lt;p&gt;
                                                   [Check out this post to build a ConfIgMgr lab using AutomatedLab](https://sysmansquad.com/2020/06/15/build-a-configrmgr-lab-with-automatedlab/)!
                                                 &lt;/p&gt;
 </code></pre>

@@ -140,7 +140,7 @@ I&rsquo;m sure someone was not happy about the overall user experience.">
 </a>
 </figure>
 </div> </p>
-<p>This result is achieved by using a <strong>Windows Scheduled Task</strong>. The PowerShell script that generates this task is found below at the <a href=#The-Script>end of the article</a>, and also on <a href=https://github.com/CodyMathis123/CM-Ramblings/blob/master/New-PostTeamsMachineWideInstallScheduledTask.ps1>GitHub</a>.</p>
+<p>This result is achieved by using a <strong>Windows Scheduled Task</strong>. The PowerShell script that generates this task is found below at the <a href=#The-Script>end of the article</a>, and also on <a href=https://github.com/CodyMathis123/CM-Ramblings/blob/master/New-PostTeamsMachineWideInstallScheduledTask.ps1><strong>GitHub</strong></a>.</p>
 <p>A scheduled task can be found in Task Scheduler after the script runs as shown below.</p>
 <p><div class=image>
 <figure>
@@ -174,30 +174,93 @@ I&rsquo;m sure someone was not happy about the overall user experience.">
 <p>This is <strong>not meant to be used as a standalone script</strong> as it is only useful if ran immediately after a Teams Machine Wide Installer executes.</p>
 <p>You are welcome to package the script alongside the Teams MSI and run them back to back using any mechanism you&rsquo;d like, whether that be your own cmd file, VB script, PowerShell, PSADT, or any other convoluted mechanism! The end goal is the MSI installs first, and the script runs second.</p>
 <h3 id=The-Script>Just Give Me The Script - I&rsquo;ll Figure Out the Rest</h3>
-<pre><code>    }
-    $false {
-        [string]$TeamsMachineInstaller = Get-ItemPropertyValue -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\ -Name TeamsMachineInstaller -ErrorAction Stop
-        [string]$Exe = $TeamsMachineInstaller.Substring(0, $TeamsMachineInstaller.IndexOf('.exe') + 4).Trim()
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic>#
+</span><span style=color:#998;font-style:italic></span><span style=color:#d14>.SYNOPSIS</span>
+    Launch the Teams install as the logged <span style=color:#000;font-weight:700>in</span> user via a scheduled task
+.DESCRIPTION
+    This script will create a scheduled task <span style=color:#000;font-weight:700>if</span> one is not found which is used to
+    install Microsoft Teams as the logged <span style=color:#000;font-weight:700>in</span> user. This scheduled task executes
+    the Teams.exe found <span style=color:#000;font-weight:700>in</span> <span style=color:#000;font-weight:700>%</span>ProgramFiles% so that a user can <span style=color:#0086b3>start </span>using Teams
+    shortly after the Machine Wide installer completes instead of having to 
+    log off and back on.
+.NOTES
+    Generally used as a script that runs after a Teams Machine Wide Installer completes
+<span style=color:#998;font-style:italic>#&gt;</span>
+<span style=color:#000;font-weight:700>if</span> (!(<span style=color:#0086b3>Get-ScheduledTask</span> -TaskName <span style=color:#d14>&#39;Teams User Install - Post Machine Wide Install&#39;</span> -ErrorAction SilentlyContinue)) {
+    <span style=color:#000;font-weight:700>switch</span> (<span style=color:teal>[System.Environment]</span>::Is64BitOperatingSystem) {
+        <span style=color:teal>$true</span> {
+            <span style=color:teal>[string]</span><span style=color:teal>$TeamsMachineInstaller</span> = <span style=color:#0086b3>Get-ItemPropertyValue</span> -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run\ -Name TeamsMachineInstaller -ErrorAction Stop
+            <span style=color:teal>[string]</span><span style=color:teal>$Exe</span> = <span style=color:teal>$TeamsMachineInstaller</span>.Substring(0, <span style=color:teal>$TeamsMachineInstaller</span>.IndexOf(<span style=color:#d14>&#39;.exe&#39;</span>) + 4).Trim() <span style=color:#000;font-weight:700>-Replace</span> <span style=color:#d14>&#34;C:\\Program Files\\&#34;</span>, <span style=color:#d14>&#34;${env:ProgramFiles(x86)}\&#34;</span>
+    
+        }
+        <span style=color:teal>$false</span> {
+            <span style=color:teal>[string]</span><span style=color:teal>$TeamsMachineInstaller</span> = <span style=color:#0086b3>Get-ItemPropertyValue</span> -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\ -Name TeamsMachineInstaller -ErrorAction Stop
+            <span style=color:teal>[string]</span><span style=color:teal>$Exe</span> = <span style=color:teal>$TeamsMachineInstaller</span>.Substring(0, <span style=color:teal>$TeamsMachineInstaller</span>.IndexOf(<span style=color:#d14>&#39;.exe&#39;</span>) + 4).Trim()
+        }
     }
+    <span style=color:teal>[string]</span><span style=color:teal>$InstallerArgs</span> = <span style=color:teal>$TeamsMachineInstaller</span>.Substring(<span style=color:teal>$Exe</span>.Length, <span style=color:teal>$TeamsMachineInstaller</span>.Length - <span style=color:teal>$exe</span>.Length).Trim()
+    <span style=color:teal>$newScheduledTaskSplat</span> = @{
+        Action      = <span style=color:#0086b3>New-ScheduledTaskAction</span> -Execute <span style=color:teal>$Exe</span> -Argument <span style=color:teal>$InstallerArgs</span>
+        Description = <span style=color:#d14>&#39;Start the Teams installer for the currently logged on user after a Teams Machine Wide install&#39;</span>
+        Settings    = <span style=color:#0086b3>New-ScheduledTaskSettingsSet</span> -Compatibility Vista -AllowStartIfOnBatteries -MultipleInstances IgnoreNew -ExecutionTimeLimit (<span style=color:#0086b3>New-TimeSpan</span> -Hours 1)
+        Trigger     = <span style=color:#0086b3>New-ScheduledTaskTrigger</span> -At (<span style=color:teal>$Start</span> = (<span style=color:#0086b3>Get-Date</span>).AddSeconds(5)) -Once
+        Principal   = <span style=color:#0086b3>New-ScheduledTaskPrincipal</span> -GroupId <span style=color:#d14>&#39;S-1-5-32-545&#39;</span> -RunLevel Limited
+    }
+    
+    <span style=color:teal>$ScheduledTask</span> = <span style=color:#0086b3>New-ScheduledTask</span> <span style=color:teal>@newScheduledTaskSplat</span>
+    <span style=color:teal>$ScheduledTask</span>.Settings.DeleteExpiredTaskAfter = <span style=color:#d14>&#34;PT0S&#34;</span>
+    <span style=color:teal>$ScheduledTask</span>.Triggers[0].StartBoundary = <span style=color:teal>$Start</span>.ToString(<span style=color:#d14>&#34;yyyy-MM-dd&#39;T&#39;HH:mm:ss&#34;</span>)
+    <span style=color:teal>$ScheduledTask</span>.Triggers[0].EndBoundary = <span style=color:teal>$Start</span>.AddMinutes(10).ToString(<span style=color:#d14>&#39;s&#39;</span>)
+    
+    <span style=color:#0086b3>Register-ScheduledTask</span> -InputObject <span style=color:teal>$ScheduledTask</span> -TaskName <span style=color:#d14>&#39;Teams User Install - Post Machine Wide Install&#39;</span>
 }
-[string]$InstallerArgs = $TeamsMachineInstaller.Substring($Exe.Length, $TeamsMachineInstaller.Length - $exe.Length).Trim()
-$newScheduledTaskSplat = @{
-    Action      = New-ScheduledTaskAction -Execute $Exe -Argument $InstallerArgs
-    Description = 'Start the Teams installer for the currently logged on user after a Teams Machine Wide install'
-    Settings    = New-ScheduledTaskSettingsSet -Compatibility Vista -AllowStartIfOnBatteries -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Hours 1)
-    Trigger     = New-ScheduledTaskTrigger -At ($Start = (Get-Date).AddSeconds(5)) -Once
-    Principal   = New-ScheduledTaskPrincipal -GroupId 'S-1-5-32-545' -RunLevel Limited
-}
-
-$ScheduledTask = New-ScheduledTask @newScheduledTaskSplat
-$ScheduledTask.Settings.DeleteExpiredTaskAfter = &quot;PT0S&quot;
-$ScheduledTask.Triggers[0].StartBoundary = $Start.ToString(&quot;yyyy-MM-dd'T'HH:mm:ss&quot;)
-$ScheduledTask.Triggers[0].EndBoundary = $Start.AddMinutes(10).ToString('s')
-
-Register-ScheduledTask -InputObject $ScheduledTask -TaskName 'Teams User Install - Post Machine Wide Install'
-</code></pre>
-<p>}</p>
-<p><a href=https://twitter.com/CodyMathis123>@CodyMathis123</a></p>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href=https://twitter.com/CodyMathis123>@CodyMathis123</a></p>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>

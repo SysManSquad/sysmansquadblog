@@ -119,7 +119,19 @@
 <p>While this might sound like a perfect use case for Endpoint analytics Proactive Remediations, you will run into a chicken-egg problem when a user starts up a brand new device, namely that the user has most likely logged into to a new device before the proactive remediation has run.</p>
 <p>To solve this, you should wrap up the script as a win32 app, deploy it as a required app to a relevant device group and <a href=https://docs.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status#block-access-to-a-device-until-a-specific-application-is-installed>make it required as part of the autopilot ESP</a>.</p>
 <p>Here is a dead simple example code you can use, just change the $DomainGUID to your own</p>
-<h2 id=final-words>Final words</h2>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:teal>$DomainGUID</span> = <span style=color:#d14>&#34;a2936ecb-ea97-4854-a494-82a39a3195be&#34;</span>
+<span style=color:#0086b3>new-item</span> -itemtype directory -path <span style=color:#d14>&#34;hklm:\Software\Policies\Microsoft\OneDrive&#34;</span> -force
+<span style=color:#0086b3>Set-ItemProperty</span> -Path <span style=color:#d14>&#34;hklm:\Software\Policies\Microsoft\OneDrive&#34;</span> -Name <span style=color:#d14>&#34;AADJMachineDomainGuid&#34;</span> -Value <span style=color:teal>$DomainGUID</span> -Force
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=final-words>Final words</h2>
 <p>Now keep in mind that you need to deploy this registry key to your Azure AD joined devices before you restrict the sync in the OneDrive Admin Center - otherwise your users will need to sign in to OneDrive again.</p>
 </div>
 <comments id=comments>

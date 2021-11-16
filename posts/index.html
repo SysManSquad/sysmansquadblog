@@ -216,8 +216,7 @@ Download the current 20.04 ubuntu cloud image OVA file, there should only be 1 o
 <p>
 As you may have noticed by now, there doesn&rsquo;t seem to be any nice built in way to set environmental variables in intune 🙁
 The Problem Setting a user environmental variable using powershell is an easy task to accomplish, you basically just run the following:
-This works just fine, but won&rsquo;t take effect until the user either reboots or signs into the device again. Which is obviously not ideal.
-I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a WM_SETTINGCHANGE message is broadcast to the system and that refreshes them, but how you do that with powershell?
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 This works just fine, but won't take effect until the user either reboots or signs into the device again.
 </p>
 </div>
 <div class=list-meta>
@@ -279,7 +278,7 @@ Add the detection and remediations scripts from below, and set it to run as the 
 </div>
 <div class=post-entry>
 <p>
-&lt;p> In this post, I'll show you a workaround to get device based wireless authentication working for AADJ Windows devices via NPS. Keep in mind this is a workaround and your mileage may vary. &lt;/p> &lt;h2> Background &lt;/h2> &lt;p> NPS does not play nice when it comes to AADJ device authentication. There is a fantastic writeup on this issue [here](https://docs.microsoft.com/en-us/answers/questions/57999/device-certificate-scep-based-authentication-again.html). &lt;/p> &lt;h5> &lt;strong>The tl;dr of the issue&lt;/strong> &lt;/h5> &lt;p> Device based authentication works when there is a computer object in your on-prem.
+Introduction &lt;p> In this post, I'll show you a workaround to get device based wireless authentication working for AADJ Windows devices via NPS. Keep in mind this is a workaround and your mileage may vary. &lt;/p> Background &lt;p> NPS does not play nice when it comes to AADJ device authentication. There is a fantastic writeup on this issue [here](https://docs.microsoft.com/en-us/answers/questions/57999/device-certificate-scep-based-authentication-again.html). &lt;/p> The tl;dr of the issue &lt;p> Device based authentication works when there is a computer object in your on-prem.
 </p>
 </div>
 <div class=list-meta>

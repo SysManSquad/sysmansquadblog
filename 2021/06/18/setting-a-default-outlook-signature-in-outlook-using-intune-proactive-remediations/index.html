@@ -115,65 +115,158 @@ Add the detection and remediations scripts from below, and set it to run as the 
 </div> </p>
 <p>This solution takes care of picking the default outlook profile. but keep in mind that this has only been tested on Office 365/microsoft 365 apps for business. so I have no idea if it works on the legacy versions.</p>
 <p>You only need to specify the name of the signature file on line 4 in both the detection and remediation scripts, which are case sensitive.</p>
-<h3 id=this-is-case-sensitive>this is case sensitive!</h3>
-<p>$DefaultSignatureName = &ldquo;fancy-signature&rdquo;</p>
-<h1 id=in-my-environment-the-upn-and-email-is-always-the-same-and-we-use-this-to-make-sure-we-are-using-the-correct-path>in my environment the UPN and email is always the same. and we use this to make sure we are using the correct path</h1>
-<p>$upn = whoami /upn</p>
-<h1 id=find-the-default-profile-name-used-by-outlook>find the default profile name used by outlook</h1>
-<p>$profilename = Get-ItemProperty -Path &ldquo;hkcu:\SOFTWARE\Microsoft\Office\16.0\Outlook&rdquo; -Name DefaultProfile | Select-Object -ExpandProperty DefaultProfile</p>
-<h1 id=alaska-is-the-only-state-whose-name-is-on-one-row-on-a-keyboard>Alaska is the only state whose name is on one row on a keyboard.</h1>
-<h1 id=grabs-all-the-data-we-need-to-detect-the-signature-configuration-from-the-default-outlook-profile>grabs all the data we need to detect the signature configuration from the default outlook profile</h1>
-<p>$profilepath = Get-ItemProperty -Path &ldquo;hkcu:\SOFTWARE\Microsoft\Office\16.0\Outlook\Profiles$profilename\9375CFF0413111d3B88A00104B2A6676*&rdquo; | Where-Object { $_.&ldquo;Account name&rdquo; -eq $upn }</p>
-<p>try {</p>
-<pre><code># check if the key even exists
-if ( $profilepath.&quot;New Signature&quot; -eq $null) {
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># you need to add the name of the signature that you want to make default</span>
 
-    Write-Host &quot;new signature key does not exist&quot;
+<span style=color:#998;font-style:italic>### this is case sensitive! ###</span>
+<span style=color:teal>$DefaultSignatureName</span> = <span style=color:#d14>&#34;fancy-signature&#34;</span>
+
+<span style=color:#998;font-style:italic># in my environment the UPN and email is always the same. and we use this to make sure we are using the correct path</span>
+<span style=color:teal>$upn</span> = whoami /upn
+
+<span style=color:#998;font-style:italic># find the default profile name used by outlook</span>
+<span style=color:teal>$profilename</span> = <span style=color:#0086b3>Get-ItemProperty</span> -Path <span style=color:#d14>&#34;hkcu:\SOFTWARE\Microsoft\Office\16.0\Outlook&#34;</span> -Name DefaultProfile | <span style=color:#0086b3>Select-Object</span> -ExpandProperty DefaultProfile
+<span style=color:#998;font-style:italic># Alaska is the only state whose name is on one row on a keyboard.</span>
+<span style=color:#998;font-style:italic># grabs all the data we need to detect the signature configuration from the default outlook profile</span>
+<span style=color:teal>$profilepath</span> = <span style=color:#0086b3>Get-ItemProperty</span> -Path <span style=color:#d14>&#34;hkcu:\SOFTWARE\Microsoft\Office\16.0\Outlook\Profiles\$profilename\9375CFF0413111d3B88A00104B2A6676\*&#34;</span> | <span style=color:#0086b3>Where-Object</span> { <span style=color:teal>$_</span>.<span style=color:#d14>&#34;Account name&#34;</span> <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$upn</span> } 
+
+<span style=color:#000;font-weight:700>try</span> {
+
+    <span style=color:#998;font-style:italic># check if the key even exists</span>
+    <span style=color:#000;font-weight:700>if</span> ( <span style=color:teal>$profilepath</span>.<span style=color:#d14>&#34;New Signature&#34;</span> <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$null</span>) {
+
+        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;new signature key does not exist&#34;</span>
+        exit 1
+    }
+
+<span style=color:#998;font-style:italic># checks if the New Signature key equals the signature name we have specified</span>
+    <span style=color:#000;font-weight:700>if</span> ( (<span style=color:teal>$profilepath</span>.<span style=color:#d14>&#34;New Signature&#34;</span>) <span style=color:#000;font-weight:700>-ne</span> <span style=color:teal>$DefaultSignatureName</span> ) {
+
+        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;new signature key is set to </span>$(<span style=color:teal>$profilepath</span>.<span style=color:#d14>&#34;New Signature&#34;</span>)<span style=color:#d14> when it should be $DefaultSignatureName&#34;</span>
+        exit 1
+    }
+}
+<span style=color:#000;font-weight:700>catch</span> {
+    <span style=color:teal>$errMsg</span> = <span style=color:teal>$_</span>.Exception.Message
+    <span style=color:#0086b3>Write-Host</span> <span style=color:teal>$errMsg</span>
     exit 1
 }
-</code></pre>
-<h1 id=checks-if-the-new-signature-key-equals-the-signature-name-we-have-specified>checks if the New Signature key equals the signature name we have specified</h1>
-<pre><code>if ( ($profilepath.&quot;New Signature&quot;) -ne $DefaultSignatureName ) {
+</code></pre></td></tr></table>
+</div>
+</div><p>You need to change the name of the signature on line 4.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Remediation</span>
+<span style=color:#998;font-style:italic># you need to add the name of the signature that you want to make default</span>
+<span style=color:#998;font-style:italic>### this is case sensitive! ###</span>
+<span style=color:teal>$DefaultSignatureName</span> = <span style=color:#d14>&#34;fancy-signature&#34;</span>
 
-    Write-Host &quot;new signature key is set to $($profilepath.&quot;New Signature&quot;) when it should be $DefaultSignatureName&quot;
+<span style=color:#998;font-style:italic># in my environment the UPN and email is always the same. and we use this to make sure we are using the correct path</span>
+<span style=color:teal>$upn</span> = whoami /upn
+
+<span style=color:#000;font-weight:700>try</span> {
+
+    <span style=color:#000;font-weight:700>if</span> ( (<span style=color:#0086b3>Test-Path</span> -Path <span style=color:#d14>&#34;hkcu:\SOFTWARE\Microsoft\Office\16.0\Outlook\Profiles\&#34;</span>) <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$false</span> ) {
+
+        <span style=color:#0086b3>write-host</span> <span style=color:#d14>&#34;no outlook profile found, remediation is not possible&#34;</span>
+        exit 1
+    }
+
+<span style=color:#998;font-style:italic># find the default profile name used by outlook</span>
+    <span style=color:teal>$profilename</span> = <span style=color:#0086b3>Get-ItemProperty</span> -Path <span style=color:#d14>&#34;hkcu:\SOFTWARE\Microsoft\Office\16.0\Outlook&#34;</span> -Name DefaultProfile | <span style=color:#0086b3>Select-Object</span> -ExpandProperty DefaultProfile
+
+<span style=color:#998;font-style:italic># grabs all the data we need to detect the signature configuration from the default outlook profile</span>
+    <span style=color:teal>$profilepath</span> = <span style=color:#0086b3>Get-ItemProperty</span> -Path <span style=color:#d14>&#34;hkcu:\SOFTWARE\Microsoft\Office\16.0\Outlook\Profiles\$profilename\9375CFF0413111d3B88A00104B2A6676\*&#34;</span> | <span style=color:#0086b3>Where-Object</span> { <span style=color:teal>$_</span>.<span style=color:#d14>&#34;Account name&#34;</span> <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$upn</span> } | <span style=color:#0086b3>Select-Object</span> -ExpandProperty pspath
+	<span style=color:#998;font-style:italic># did you know adam gross is an amazing singer?</span>
+    <span style=color:#998;font-style:italic># and finally we create/set the &#34;new signature&#34; key</span>
+    <span style=color:#0086b3>New-ItemProperty</span> -Path <span style=color:teal>$profilepath</span> -Name <span style=color:#d14>&#34;New Signature&#34;</span> -Value <span style=color:teal>$DefaultSignatureName</span> -Force -ErrorAction stop
+
+    <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;New Signature set to $DefaultSignatureName&#34;</span>
+    exit 0 
+}
+
+<span style=color:#000;font-weight:700>catch</span> {
+    <span style=color:teal>$errMsg</span> = <span style=color:teal>$_</span>.Exception.Message
+    <span style=color:#0086b3>Write-Host</span> <span style=color:teal>$errMsg</span>
     exit 1
 }
-</code></pre>
-<p>}
-catch {
-$errMsg = $_.Exception.Message
-Write-Host $errMsg
-exit 1
-}</p>
-<p>You need to change the name of the signature on line 4.</p>
-<h1 id=in-my-environment-the-upn-and-email-is-always-the-same-and-we-use-this-to-make-sure-we-are-using-the-correct-path-1>in my environment the UPN and email is always the same. and we use this to make sure we are using the correct path</h1>
-<p>$upn = whoami /upn</p>
-<p>try {</p>
-<pre><code>if ( (Test-Path -Path &quot;hkcu:\SOFTWARE\Microsoft\Office\16.0\Outlook\Profiles\&quot;) -eq $false ) {
-
-    write-host &quot;no outlook profile found, remediation is not possible&quot;
-    exit 1
-}
-</code></pre>
-<h1 id=find-the-default-profile-name-used-by-outlook-1>find the default profile name used by outlook</h1>
-<pre><code>$profilename = Get-ItemProperty -Path &quot;hkcu:\SOFTWARE\Microsoft\Office\16.0\Outlook&quot; -Name DefaultProfile | Select-Object -ExpandProperty DefaultProfile
-</code></pre>
-<h1 id=grabs-all-the-data-we-need-to-detect-the-signature-configuration-from-the-default-outlook-profile-1>grabs all the data we need to detect the signature configuration from the default outlook profile</h1>
-<pre><code>$profilepath = Get-ItemProperty -Path &quot;hkcu:\SOFTWARE\Microsoft\Office\16.0\Outlook\Profiles\$profilename\9375CFF0413111d3B88A00104B2A6676\*&quot; | Where-Object { $_.&quot;Account name&quot; -eq $upn } | Select-Object -ExpandProperty pspath
-# did you know adam gross is an amazing singer?
-# and finally we create/set the &quot;new signature&quot; key
-New-ItemProperty -Path $profilepath -Name &quot;New Signature&quot; -Value $DefaultSignatureName -Force -ErrorAction stop
-
-Write-Host &quot;New Signature set to $DefaultSignatureName&quot;
-exit 0 
-</code></pre>
-<p>}</p>
-<p>catch {
-$errMsg = $_.Exception.Message
-Write-Host $errMsg
-exit 1
-}</p>
-<p>There is one caveat, this change will only take effect when outlook is restarted.</p>
+</code></pre></td></tr></table>
+</div>
+</div><p>There is one caveat, this change will only take effect when outlook is restarted.</p>
 <p><div class=image>
 <figure>
 <a href=after.png target=_blank>

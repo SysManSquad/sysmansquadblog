@@ -21,7 +21,7 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Use the Task Sequence deployment type to deploy an application with sensitive information">
-<meta name=twitter:description content="<p class=&#34;has-text-align-justify&#34;> [Introduced with ConfigMgr 2002](https://docs.microsoft.com/en-us/mem/configmgr/core/plan-design/changes/whats-new-in-version-2002#task-sequence-as-an-app-model-deployment-type), the &#34;<strong>Task Sequence as an application deployment type</strong>&#34; feature is available in pre-release. That means it is still in active development and can contains bugs. Using a Task Sequence (TS) as a deployment type allows for more complex installation process that can even contains reboot. And as it is a Task Sequence, you can also benefit from many other feature like the use of TS variables.">
+<meta name=twitter:description content="[Introduced with ConfigMgr 2002](https://docs.microsoft.com/en-us/mem/configmgr/core/plan-design/changes/whats-new-in-version-2002#task-sequence-as-an-app-model-deployment-type), the &#34;**Task Sequence as an application deployment type**&#34; feature is available in pre-release. That means it is still in active development and can contains bugs. Using a Task Sequence (TS) as a deployment type allows for more complex installation process that can even contains reboot. And as it is a Task Sequence, you can also benefit from many other feature like the use of TS variables.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -93,55 +93,45 @@
 <span class=post-date>September 27, 2020</span>
 </div>
 <div class=post-entry>
-<pre><code>            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              [Introduced with ConfigMgr 2002](https://docs.microsoft.com/en-us/mem/configmgr/core/plan-design/changes/whats-new-in-version-2002#task-sequence-as-an-app-model-deployment-type), the &quot;&lt;strong&gt;Task Sequence as an application deployment type&lt;/strong&gt;&quot; feature is available in pre-release. That means it is still in active development and can contains bugs. Using a Task Sequence (TS) as a deployment type allows for more complex installation process that can even contains reboot. And as it is a Task Sequence, you can also benefit from many other feature like the use of TS variables. This will be the focus of this post.
-            &lt;/p&gt;
+<pre><code>              [Introduced with ConfigMgr 2002](https://docs.microsoft.com/en-us/mem/configmgr/core/plan-design/changes/whats-new-in-version-2002#task-sequence-as-an-app-model-deployment-type), the &quot;**Task Sequence as an application deployment type**&quot; feature is available in pre-release. That means it is still in active development and can contains bugs. Using a Task Sequence (TS) as a deployment type allows for more complex installation process that can even contains reboot. And as it is a Task Sequence, you can also benefit from many other feature like the use of TS variables. This will be the focus of this post.
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
+            
+            
               Indeed, some applications require that you provide a password or other sensitive information during the installation process. With a standard application deployment, it often means these information must be stored in clear text (which is not the best way to keep them secret). With the Task Sequence model, you can use TS variables that can be hidden. Though not 100% safe, it is harder to get access to the information that you want to hide.
-            &lt;/p&gt;
+</code></pre>
+<h2 id=prerequisites-and-limitations>Prerequisites and limitations</h2>
+<pre><code>              To use the &quot;Task sequence as an app model deployment type&quot; feature, you need to have at least Configuration Manager Current Branch 2002 installed. You also have [enable the pre-release feature](https://docs.microsoft.com/en-us/mem/configmgr/core/servers/manage/pre-release-features#enable-pre-release-features). Once this is done, you are all good.
             
-            &lt;h2&gt;
-              Prerequisites and limitations
-            &lt;/h2&gt;
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              To use the &quot;Task sequence as an app model deployment type&quot; feature, you need to have at least Configuration Manager Current Branch 2002 installed. You also have [enable the pre-release feature](https://docs.microsoft.com/en-us/mem/configmgr/core/servers/manage/pre-release-features#enable-pre-release-features). Once this is done, you are all good.
-            &lt;/p&gt;
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
               It is also important to note that there are [some limitations](https://docs.microsoft.com/en-us/mem/configmgr/apps/get-started/creating-windows-applications#prerequisites-for-a-task-sequence-deployment-type) inherent to the Task Sequence deployment type:
-            &lt;/p&gt;
+            
             
             &lt;ul&gt;
               &lt;li&gt;
-                You can only use &lt;strong&gt;non-OS deployment TS steps&lt;/strong&gt; (Like Install Package, Run Command Line or Run PowerShell Script);
+                You can only use **non-OS deployment TS steps** (Like Install Package, Run Command Line or Run PowerShell Script);
               &lt;/li&gt;
               &lt;li&gt;
-                You can’t select the option for a &lt;strong&gt;high-impact TS&lt;/strong&gt; in the User Notification tab.
+                You can’t select the option for a **high-impact TS** in the User Notification tab.
               &lt;/li&gt;
             &lt;/ul&gt;
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
+            
               There are also some [known issues](https://docs.microsoft.com/en-us/mem/configmgr/apps/get-started/creating-windows-applications#known-issues-for-a-task-sequence-deployment-type) (Remember the feature is still in pre-release):
-            &lt;/p&gt;
+            
             
             &lt;ul&gt;
               &lt;li&gt;
-                In version 2006 and earlier, you can’t deploy an application using a Task Sequence deployment type to a &lt;strong&gt;user collection&lt;/strong&gt;;
+                In version 2006 and earlier, you can’t deploy an application using a Task Sequence deployment type to a **user collection**;
               &lt;/li&gt;
               &lt;li&gt;
-                You can’t use the &lt;strong&gt;Install Application&lt;/strong&gt; step.
+                You can’t use the **Install Application** step.
               &lt;/li&gt;
             &lt;/ul&gt;
+</code></pre>
+<h2 id=how-to-create-an-application-with-a-task-sequence-deployment-type>How to create an application with a Task Sequence deployment type</h2>
+<pre><code>              Before beginning with the use case, here is a quick How-to that will explain how to create an application that is using a Task Sequence as a deployment type in a few easy steps.
             
-            &lt;h2&gt;
-              How to create an application with a Task Sequence deployment type
-            &lt;/h2&gt;
-            
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              Before beginning with the use case, here is a quick How-to that will explain how to create an application that is using a Task Sequence as a deployment type in a few easy steps.
-            &lt;/p&gt;
             
             &lt;div class=&quot;wp-block-group&quot;&gt;
               &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
@@ -155,7 +145,7 @@
                         &lt;span style=&quot;text-decoration: underline&quot;&gt;Create a Task Sequence&lt;/span&gt; that will execute all the actions needed to install your application (Including a step that will use the package previously created);
                       &lt;/li&gt;
                       &lt;li&gt;
-                        &lt;span style=&quot;text-decoration: underline&quot;&gt;Create an application&lt;/span&gt; and chose the &lt;strong&gt;Custom deployment&lt;/strong&gt; setting. When you are at the deployment type creation, select Task Sequence and pick your TS. You can also select a Task Sequence for the un-installation of the application;
+                        &lt;span style=&quot;text-decoration: underline&quot;&gt;Create an application&lt;/span&gt; and chose the **Custom deployment** setting. When you are at the deployment type creation, select Task Sequence and pick your TS. You can also select a Task Sequence for the un-installation of the application;
                       &lt;/li&gt;
                       &lt;li&gt;
                         &lt;span style=&quot;text-decoration: underline&quot;&gt;Deploy&lt;/span&gt; the application like any other.
@@ -181,61 +171,49 @@
               &lt;/li&gt;
             &lt;/ul&gt;&lt;/figure&gt; 
             
-            &lt;p class=&quot;has-text-align-justify has-pale-cyan-blue-background-color has-background&quot;&gt;
-              &lt;strong&gt;Note:&lt;/strong&gt; if you can’t find the TS in the drop-down menu, check your &lt;strong&gt;RBAC &lt;/strong&gt;permissions. To be able to add a TS deployment type, you need to have the &lt;strong&gt;Read Task Sequence permission&lt;/strong&gt;. It can be done by giving your account the Read-Only Analyst role (Which allows view on all Configuration Manager objects) or by creating a custom role with the sufficient permissions. If the permissions are good, double-check that the TS doesn't include the &lt;strong&gt;OS deployment or OS upgrade step&lt;/strong&gt; and that you have not marked it as a&lt;strong&gt; high-impact&lt;/strong&gt; Task Sequence.
-            &lt;/p&gt;
             
-            &lt;h2&gt;
-              Use case: installation of the Microsoft Monitoring Agent to report to Microsoft Defender ATP
-            &lt;/h2&gt;
+              **Note:** if you can’t find the TS in the drop-down menu, check your **RBAC **permissions. To be able to add a TS deployment type, you need to have the **Read Task Sequence permission**. It can be done by giving your account the Read-Only Analyst role (Which allows view on all Configuration Manager objects) or by creating a custom role with the sufficient permissions. If the permissions are good, double-check that the TS doesn't include the **OS deployment or OS upgrade step** and that you have not marked it as a** high-impact** Task Sequence.
+</code></pre>
+<h2 id=use-case-installation-of-the-microsoft-monitoring-agent-to-report-to-microsoft-defender-atp>Use case: installation of the Microsoft Monitoring Agent to report to Microsoft Defender ATP</h2>
+<pre><code>              After this (long) introduction, let's move to a real world use case and see how the Microsoft Monitoring Agent (MMA) can be installed and set up to report to Microsoft Defender ATP without ever showing the workspace information in clear (Whether it be in logs or application settings).
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              After this (long) introduction, let's move to a real world use case and see how the Microsoft Monitoring Agent (MMA) can be installed and set up to report to Microsoft Defender ATP without ever showing the workspace information in clear (Whether it be in logs or application settings).
-            &lt;/p&gt;
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
+            
               Indeed, when you want to set up the Microsoft Monitoring Agent to report to an Azure Log Analytics service (The component used by MD ATP to collect data from other OS than Windows 10 or Windows Server 2019), you will be required to add a Workspace ID and a Workspace Key. It is best if these two values are not visible in an installation script, some command lines, or logs so we are going to hide them.
-            &lt;/p&gt;
+</code></pre>
+<h5 id=1-package-creation>1. Package creation</h5>
+<pre><code>              The first step is to** create a package with the MMA source** (Remember you can’t use applications in a TS used as an application deployment type). This time, create a package with only the source and no program. Once it is created, **distribute the package** to your target Distribution Point(s).
             
-            &lt;h5&gt;
-              1. Package creation
-            &lt;/h5&gt;
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              The first step is to&lt;strong&gt; create a package with the MMA source&lt;/strong&gt; (Remember you can’t use applications in a TS used as an application deployment type). This time, create a package with only the source and no program. Once it is created, &lt;strong&gt;distribute the package&lt;/strong&gt; to your target Distribution Point(s).
-            &lt;/p&gt;
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
               Note that there is a particularity with the MMA executable. When you get the sources [from this page](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/agent-windows#install-agent-using-dsc-in-azure-automation), you need to extract them because the MMA-Setup_AMD64.exe file can't be used for a silent installation. Instead, use the following command to extract its content and use this extracted content as the source of your package.
-            &lt;/p&gt;
             
-            &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;MMASetup-AMD64.exe /c /t:&amp;lt;Full Extraction Path&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            ![](Package-1-1024x576.png)&lt;figcaption&gt;Package overview&lt;/figcaption&gt;&lt;/figure&gt; &lt;h5&gt;
-              2. Task Sequence creation
-            &lt;/h5&gt;
+            `MMASetup-AMD64.exe /c /t:Full Extraction Path&gt;`&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              Once it is done, you can start working on the Task Sequence. It will need only a few steps here.
-            &lt;/p&gt;
+            ![](Package-1-1024x576.png)&lt;figcaption&gt;Package overview&lt;/figcaption&gt;&lt;/figure&gt; 
+</code></pre>
+<h5 id=2-task-sequence-creation>2. Task Sequence creation</h5>
+<pre><code>              Once it is done, you can start working on the Task Sequence. It will need only a few steps here.
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              First, set two &lt;strong&gt;Task Sequence variables&lt;/strong&gt; to store the Workspace ID and the Workspace key that you can find in the MD-ATP portal. Then, set a third TS variable named [OSDDoNotLogCommand](https://docs.microsoft.com/en-us/mem/configmgr/osd/understand/task-sequence-variables#OSDDoNotLogCommand) to &lt;strong&gt;True&lt;/strong&gt; to hide the command line in the log. Alternatively, you can also set [OSDLogPowerShellParameters](https://docs.microsoft.com/en-us/mem/configmgr/osd/understand/task-sequence-variables#OSDLogPowerShellParameters) to &lt;strong&gt;False&lt;/strong&gt; to hide PowerShell parameters in smsts.log (If you are using PowerShell rather than CMD to install your application).
-            &lt;/p&gt;
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              The next step is the &lt;strong&gt;installation of the application&lt;/strong&gt; itself. Use the “&lt;strong&gt;Run Command Line&lt;/strong&gt;” step and select the package you previously created and the following command line (Taken from the [online documentation](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/agent-windows#install-agent-using-command-line)).
-            &lt;/p&gt;
             
-            &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;setup.exe /qn NOAPM=1 ADD_OPINSIGHTS_WORKSPACE=1 OPINSIGHTS_WORKSPACE_AZURE_CLOUD_TYPE=0 OPINSIGHTS_WORKSPACE_ID=&quot;%WorkspaceID%&quot; OPINSIGHTS_WORKSPACE_KEY=&quot;%WorkspaceKey%&quot; AcceptEndUserLicenseAgreement=1&lt;/code&gt;&lt;/pre&gt;
+              First, set two **Task Sequence variables** to store the Workspace ID and the Workspace key that you can find in the MD-ATP portal. Then, set a third TS variable named [OSDDoNotLogCommand](https://docs.microsoft.com/en-us/mem/configmgr/osd/understand/task-sequence-variables#OSDDoNotLogCommand) to **True** to hide the command line in the log. Alternatively, you can also set [OSDLogPowerShellParameters](https://docs.microsoft.com/en-us/mem/configmgr/osd/understand/task-sequence-variables#OSDLogPowerShellParameters) to **False** to hide PowerShell parameters in smsts.log (If you are using PowerShell rather than CMD to install your application).
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              Note that in place of the Workspace ID and key, you need to call the two TS variables that you have defined in the previous step. That is done by surrounding the variable name with the&lt;strong&gt; % character&lt;/strong&gt;.
-            &lt;/p&gt;
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
+            
+              The next step is the **installation of the application** itself. Use the “**Run Command Line**” step and select the package you previously created and the following command line (Taken from the [online documentation](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/agent-windows#install-agent-using-command-line)).
+            
+            
+            `setup.exe /qn NOAPM=1 ADD_OPINSIGHTS_WORKSPACE=1 OPINSIGHTS_WORKSPACE_AZURE_CLOUD_TYPE=0 OPINSIGHTS_WORKSPACE_ID=&quot;%WorkspaceID%&quot; OPINSIGHTS_WORKSPACE_KEY=&quot;%WorkspaceKey%&quot; AcceptEndUserLicenseAgreement=1`
+            
+            
+              Note that in place of the Workspace ID and key, you need to call the two TS variables that you have defined in the previous step. That is done by surrounding the variable name with the** % character**.
+            
+            
+            
               And voila! The Task Sequence is ready and as you can see, it is fairly simple.
-            &lt;/p&gt;&lt;figure class=&quot;wp-block-gallery aligncenter columns-2 is-cropped&quot;&gt;
+            &lt;figure class=&quot;wp-block-gallery aligncenter columns-2 is-cropped&quot;&gt;
             
             &lt;ul class=&quot;blocks-gallery-grid&quot;&gt;
               &lt;li class=&quot;blocks-gallery-item&quot;&gt;
@@ -246,37 +224,27 @@
               &lt;/li&gt;
             &lt;/ul&gt;&lt;/figure&gt; 
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              An alternative to the first step is to use &lt;strong&gt;Collection variables&lt;/strong&gt;. This way, you can have different pairs of variables if you want to report to different workspaces. In the screenshot above, you may note another variable named MMA_ProxyURL is used. This one is set using collection variables because depending on the server location, the proxy URL is not the same.
-            &lt;/p&gt;
             
-            &lt;h5&gt;
-              3. Application creation
-            &lt;/h5&gt;
+              An alternative to the first step is to use **Collection variables**. This way, you can have different pairs of variables if you want to report to different workspaces. In the screenshot above, you may note another variable named MMA_ProxyURL is used. This one is set using collection variables because depending on the server location, the proxy URL is not the same.
+</code></pre>
+<h5 id=3-application-creation>3. Application creation</h5>
+<pre><code>              The last step is the creation of the application itself. **Create a new application** and select Custom deployment type. When you need to select your deployment type, chose **Task Sequence**. This will lead you to a screen that allows the selection of two TS. One for the installation (Mandatory) and one for the uninstallation (Optional) of the application.
+            &lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              The last step is the creation of the application itself. &lt;strong&gt;Create a new application&lt;/strong&gt; and select Custom deployment type. When you need to select your deployment type, chose &lt;strong&gt;Task Sequence&lt;/strong&gt;. This will lead you to a screen that allows the selection of two TS. One for the installation (Mandatory) and one for the uninstallation (Optional) of the application.
-            &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
+            ![Task Sequence Selection](TS-Deployment-Type-TS-Selection.png)&lt;figcaption&gt;Task Sequence Selection&lt;/figcaption&gt;&lt;/figure&gt; 
+</code></pre>
+<h5 id=4-testing-the-result>4. Testing the result</h5>
+<pre><code>              Now that the application is ready, **deploy it to a device collection** to install the agent on a server. Once it is installed, give a look at the logs. You need to look at the **smsts.log** file as the installation is executed with a Task Sequence. As you can notice below, the Workspace ID and key are never shown (Look at the yellow line).
+            &lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            ![Task Sequence Selection](TS-Deployment-Type-TS-Selection.png)&lt;figcaption&gt;Task Sequence Selection&lt;/figcaption&gt;&lt;/figure&gt; &lt;h5&gt;
-              4. Testing the result
-            &lt;/h5&gt;
+            ![smsts.log content showing not command line](OneTrace-Logs-1024x546.png)&lt;figcaption&gt;smsts.log&lt;/figcaption&gt;&lt;/figure&gt; 
+              If you log onto your server and you start the Microsoft Monitoring Agent, you can see it is registered with the **Azure Logs Analytic** space, so everything worked as expected.
+            &lt;figure class=&quot;wp-block-image size-large&quot;&gt;
             
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              Now that the application is ready, &lt;strong&gt;deploy it to a device collection&lt;/strong&gt; to install the agent on a server. Once it is installed, give a look at the logs. You need to look at the &lt;strong&gt;smsts.log&lt;/strong&gt; file as the installation is executed with a Task Sequence. As you can notice below, the Workspace ID and key are never shown (Look at the yellow line).
-            &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-            
-            ![smsts.log content showing not command line](OneTrace-Logs-1024x546.png)&lt;figcaption&gt;smsts.log&lt;/figcaption&gt;&lt;/figure&gt; &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              If you log onto your server and you start the Microsoft Monitoring Agent, you can see it is registered with the &lt;strong&gt;Azure Logs Analytic&lt;/strong&gt; space, so everything worked as expected.
-            &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-            
-            ![Microsoft Monitoring Agent reporting succesfully to Azure Log Analytics (OMS)](MMA_Success.png)&lt;/figure&gt; &lt;h2&gt;
-              Conclusion
-            &lt;/h2&gt;
-            
-            &lt;p class=&quot;has-text-align-justify&quot;&gt;
-              &lt;strong&gt;Task Sequence as an application deployment type&lt;/strong&gt; can help you deploy applications that require a complex installation process. But they can also be used to deploy simple application that requires password or other sensitive information that need to be hid with the help of TS variables though all the steps involved (Creating a package, a TS and finally an application) will add a little overhead to the complete process of creating and deploying an application.
-            &lt;/p&gt;
+            ![Microsoft Monitoring Agent reporting succesfully to Azure Log Analytics (OMS)](MMA_Success.png)&lt;/figure&gt; 
+</code></pre>
+<h2 id=conclusion>Conclusion</h2>
+<pre><code>              **Task Sequence as an application deployment type** can help you deploy applications that require a complex installation process. But they can also be used to deploy simple application that requires password or other sensitive information that need to be hid with the help of TS variables though all the steps involved (Creating a package, a TS and finally an application) will add a little overhead to the complete process of creating and deploying an application.
 </code></pre>
 </div>
 <comments id=comments>

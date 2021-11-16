@@ -133,19 +133,19 @@ If you&rsquo;re continuing from NET-102 you&rsquo;ll already have the following 
 &lt;/td&gt;
 </code></pre>
 <pre><code>&lt;td&gt;
-  &lt;strong&gt;ad&lt;/strong&gt;
+  **ad**
 &lt;/td&gt;
 </code></pre>
 <pre><code>&lt;td&gt;
-  &lt;strong&gt;ad.lab.test&lt;/strong&gt;
+  **ad.lab.test**
 &lt;/td&gt;
 </code></pre>
 <pre><code>&lt;td&gt;
-  &lt;strong&gt;10.248.100.4&lt;/strong&gt;
+  **10.248.100.4**
 &lt;/td&gt;
 </code></pre>
 <pre><code>&lt;td&gt;
-  &lt;strong&gt;fdda:f6d4:f5a2:f1e6::4/64&lt;/strong&gt;
+  **fdda:f6d4:f5a2:f1e6::4/64**
 &lt;/td&gt;
 </code></pre>
 <p>Keep in mind that the AD domain name isn&rsquo;t changeable later without causing a large amount of headache for yourself. Keep it reasonably generic. You can certainly name it CONTOSOAD or whatever your company is named but keep in mind - company names change on occasion. Your company could rebrand, be acquired or acquire another company. This name will stick with you a long time, and is <strong>always visible to all staff</strong>, so don&rsquo;t try to be cute with it. You&rsquo;ll also probably find yourself typing it many times, so shorter is better.</p>
@@ -153,34 +153,132 @@ If you&rsquo;re continuing from NET-102 you&rsquo;ll already have the following 
 <h2 id=installing-your-first-ad-controller>Installing your first AD controller</h2>
 <p>Create a VM with ~2048MB RAM and a minimum 60GB disk space. By now you&rsquo;re acquainted with how to install a VM and choose a core install. You should also have a functioning DHCP server now, so your AD controller will start out with a valid DHCP-Provided IPv4 address. Use <code>sconfig</code> to configure the basic details like the hostname, IPv4 static address, patching, etc.</p>
 <p>Set the IP address:</p>
-<h1 id=use-our-dns-server-then-fall-back-to-the-gateway-if-the-dns-server-is-offline>Use our DNS server, then fall back to the gateway if the DNS server is offline</h1>
-<p>$DnsServerAddresses=($IPv4DNSServer,$IPv4Gateway,$IPv6DNSServer,$IPv6Gateway)</p>
-<h1 id=get-the-adapter>Get the adapter</h1>
-<p>$Adapter=(Get-NetAdapter)[0]
-Set-DnsClient -InterfaceIndex $Adapter.ifIndex -ConnectionSpecificSuffix $FQDN</p>
-<h1 id=turn-off-dhcp>turn off DHCP</h1>
-<p>Set-NetIPInterface -Dhcp Disabled -InterfaceIndex $Adapter.ifIndex</p>
-<h1 id=configure-dns-client>configure DNS client</h1>
-<p>Set-DnsClientServerAddress -InterfaceIndex $Adapter.ifIndex -ServerAddresses $DnsServerAddresses</p>
-<h1 id=create-the-ipv6-config-create-the-address>Create the IPv6 config, create the address</h1>
-<p>$IPv6Arguments =@{
-InterfaceIndex = $Adapter.ifIndex
-PrefixLength = $IPv6PrefixLength
-IPAddress = $IPv6Address
-DefaultGateway = $IPv6Gateway
-AddressFamily = &lsquo;IPv6&rsquo;
-Type = &lsquo;Unicast&rsquo;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Change these to match the config in your documentation</span>
+<span style=color:teal>$IPv6Address</span>=<span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::4&#39;</span>
+<span style=color:teal>$IPv6PrefixLength</span>=<span style=color:#d14>&#39;64&#39;</span>
+<span style=color:teal>$IPv6Gateway</span>=<span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::1&#39;</span>
+<span style=color:teal>$IPv6DNSServer</span>=<span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::2&#39;</span>
+<span style=color:teal>$IPv4Gateway</span>=<span style=color:#d14>&#39;10.248.100.1&#39;</span>
+<span style=color:teal>$IPv4DNSServer</span>=<span style=color:#d14>&#39;10.248.100.2&#39;</span>
+<span style=color:teal>$FQDN</span>=<span style=color:#d14>&#39;lab.test&#39;</span>
+
+<span style=color:#998;font-style:italic># Use our DNS server, then fall back to the gateway if the DNS server is offline</span>
+<span style=color:teal>$DnsServerAddresses</span>=(<span style=color:teal>$IPv4DNSServer</span>,<span style=color:teal>$IPv4Gateway</span>,<span style=color:teal>$IPv6DNSServer</span>,<span style=color:teal>$IPv6Gateway</span>)
+
+<span style=color:#998;font-style:italic># Get the adapter </span>
+<span style=color:teal>$Adapter</span>=(<span style=color:#0086b3>Get-NetAdapter</span>)[0]
+<span style=color:#0086b3>Set-DnsClient</span> -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex -ConnectionSpecificSuffix <span style=color:teal>$FQDN</span>
+<span style=color:#998;font-style:italic># turn off DHCP</span>
+<span style=color:#0086b3>Set-NetIPInterface</span> -Dhcp Disabled -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex
+<span style=color:#998;font-style:italic># configure DNS client</span>
+<span style=color:#0086b3>Set-DnsClientServerAddress</span> -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex -ServerAddresses <span style=color:teal>$DnsServerAddresses</span>
+
+<span style=color:#998;font-style:italic># Create the IPv6 config, create the address</span>
+<span style=color:teal>$IPv6Arguments</span> =@{
+    InterfaceIndex = <span style=color:teal>$Adapter</span>.ifIndex
+    PrefixLength = <span style=color:teal>$IPv6PrefixLength</span>
+    IPAddress = <span style=color:teal>$IPv6Address</span>
+    DefaultGateway = <span style=color:teal>$IPv6Gateway</span>
+    AddressFamily = <span style=color:#d14>&#39;IPv6&#39;</span>
+    <span style=color:#0086b3>Type </span>= <span style=color:#d14>&#39;Unicast&#39;</span>
 }
-New-NetIPAddress @IPv6Arguments</p>
-<p>Then you&rsquo;ll need to install the domain controller.</p>
-<p>For bonus points, spot the obvious error I&rsquo;ve left in this script to help you brush up on your powershell skills before you run it.</p>
+<span style=color:#0086b3>New-NetIPAddress</span> <span style=color:teal>@IPv6Arguments</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Then you&rsquo;ll need to install the domain controller.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:teal>$SafeModeAdminPassword</span>=<span style=color:#d14>&#39;P@ssw0rd2&#39;</span> <span style=color:#998;font-style:italic># Change this. </span>
+<span style=color:teal>$DomainName</span> = <span style=color:#a61717;background-color:#e3d2d2>&#39;</span>ad.lab.test
+<span style=color:#0086b3>Install-WindowsFeature</span> <span style=color:#0086b3>AD-Domain</span>-Services -IncludeManagementTools
+<span style=color:#998;font-style:italic># Install the domain with a very bad password for the safe-mode administrator</span>
+<span style=color:#0086b3>Install-ADDSForest</span> -DomainName <span style=color:teal>$DomainName</span> -SafeModeAdministratorPassword (<span style=color:teal>$SafeModeAdminPassword</span>|<span style=color:#0086b3>ConvertTo-SecureString</span> -AsPlainText -Force) -installDNS -Force
+</code></pre></td></tr></table>
+</div>
+</div><p>For bonus points, spot the obvious error I&rsquo;ve left in this script to help you brush up on your powershell skills before you run it.</p>
 <p>Obviously, you&rsquo;ll want to change the safe mode administrator password. Your AD controller will immediately reboot without asking when it&rsquo;s finished installing. You&rsquo;ll notice that this reboot takes a long time. This is expected behavior - there&rsquo;s a lot of work an AD controller does on first boot, and it&rsquo;ll pause at &ldquo;Applying computer settings&rdquo;. You now have a functioning domain, but there&rsquo;s a little bit more to do. All of your clients are configured to use your main stand-alone dns server now, and it doesn&rsquo;t know how to tell them how to find your new AD domain so they can join.</p>
 <p>Since your <code>dns</code> server is <em>authoritative</em> for <code>lab.test</code>, you will create a &ldquo;delegation&rdquo; for the subdomain <code>ad.lab.test</code> to authorize your new AD controller to handle it&rsquo;s own dns records.</p>
-<p>Add-DnsServerZoneDelegation -Name $ParentZone -ChildZoneName $ChildZone -IPAddress $IPv4Address -NameServer $AdcShortname -PassThru -Verbose
-Add-DnsServerZoneDelegation -Name $ParentZone -ChildZoneName $ChildZone -IPAddress $IPv6Address -NameServer $AdcShortname -PassThru -Verbose
-</p>
-<p>The delegation records now exist that will help your clients find your AD domain to join it. Now, using your <code>ad\administrator</code> credentials, you can join your new domain on each of your core installs through powershell:</p>
-<p>After joining, you will be able to use your <code>ad\administrator</code> credentials to sign into any of your machines. If you don&rsquo;t already have the RSAT tools installed on your windows 10 workstation, you&rsquo;ll want to get that done before proceeding.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic>#######################################################################################################</span>
+<span style=color:#998;font-style:italic># Run this from your existing DNS server, not your AD controller, even though it too is a DNS server. #</span>
+<span style=color:#998;font-style:italic>#######################################################################################################</span>
+<span style=color:teal>$ParentZone</span>=<span style=color:#d14>&#39;lab.test&#39;</span>
+<span style=color:teal>$AdcShortname</span>=<span style=color:#d14>&#39;adc&#39;</span>
+<span style=color:teal>$ChildZone</span>=<span style=color:#d14>&#39;ad&#39;</span>
+<span style=color:teal>$IPv4Address</span> = <span style=color:#d14>&#39;10.248.100.4&#39;</span>
+<span style=color:teal>$IPv6Address</span> = <span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::4&#39;</span>
+
+<span style=color:#0086b3>Add-DnsServerZoneDelegation</span> -Name <span style=color:teal>$ParentZone</span> -ChildZoneName <span style=color:teal>$ChildZone</span> -IPAddress <span style=color:teal>$IPv4Address</span> -NameServer <span style=color:teal>$AdcShortname</span> -PassThru -Verbose
+<span style=color:#0086b3>Add-DnsServerZoneDelegation</span> -Name <span style=color:teal>$ParentZone</span> -ChildZoneName <span style=color:teal>$ChildZone</span> -IPAddress <span style=color:teal>$IPv6Address</span> -NameServer <span style=color:teal>$AdcShortname</span> -PassThru -Verbose
+
+</code></pre></td></tr></table>
+</div>
+</div><p>The delegation records now exist that will help your clients find your AD domain to join it. Now, using your <code>ad\administrator</code> credentials, you can join your new domain on each of your core installs through powershell:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Add-Computer</span> <span style=color:#a61717;background-color:#e3d2d2>–</span>DomainName <span style=color:#d14>&#39;ad.lab.test&#39;</span> -restart <span style=color:#a61717;background-color:#e3d2d2>–</span>force
+</code></pre></td></tr></table>
+</div>
+</div><p>After joining, you will be able to use your <code>ad\administrator</code> credentials to sign into any of your machines. If you don&rsquo;t already have the RSAT tools installed on your windows 10 workstation, you&rsquo;ll want to get that done before proceeding.</p>
 <h2 id=administrating-a-domain-joined-dhcp-server>Administrating a domain-joined DHCP server</h2>
 <p>Now, log into your windows 10 workstation using the <code>ad\administrator</code> credentials. You&rsquo;ll be able to use the dns console to connect over to the DNS servers and look through your zones. Next, open the dhcp console and let&rsquo;s take a quick look at the state of the DHCP service.</p>
 <p>Windows DHCP servers that are NOT in a domain operate normally. Windows DHCP servers that are or have become joined to a domain do not operate until they have been <strong>authorized</strong>. Right click on the server name and authorize the server to allow it to continue to provide DHCP service.</p>

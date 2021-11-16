@@ -21,7 +21,7 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Manage Distribution Point Content Using PSCMContentMgmt">
-<meta name=twitter:description content="<p> I recently wrote [PSCMContentMgmt](https://github.com/codaamok/PSCMContentMgmt) which provides a simple and effective workflow for managing your MEMCM distribution points. Here are some of the things you can do with it: </p> <ul> <li> Query content objects which are distributed to distribution point(s) or distribution point group(s) </li> <li> Compare content objects distributed to distribution point(s) or distribution point group(s) </li> <li> Find content objects in a &#34;distribution failed&#34; state for all or selective distribution points </li> <li> Remove, distribute or redistribute content objects returned by any function to distribution point(s) </li> <li> Find an object in your site by searching on any arbitrary ID (useful when reading logs and want to know what object an ID resolves to) </li> <li> Migrate a distribution point's content to a new/different distribution point by exporting its content library to prestaged .">
+<meta name=twitter:description content="Introduction  <p> I recently wrote [PSCMContentMgmt](https://github.com/codaamok/PSCMContentMgmt) which provides a simple and effective workflow for managing your MEMCM distribution points. Here are some of the things you can do with it: </p> <ul> <li> Query content objects which are distributed to distribution point(s) or distribution point group(s) </li> <li> Compare content objects distributed to distribution point(s) or distribution point group(s) </li> <li> Find content objects in a &#34;distribution failed&#34; state for all or selective distribution points </li> <li> Remove, distribute or redistribute content objects returned by any function to distribution point(s) </li> <li> Find an object in your site by searching on any arbitrary ID (useful when reading logs and want to know what object an ID resolves to) </li> <li> Migrate a distribution point's content to a new/different distribution point by exporting its content library to prestaged .">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -93,6 +93,7 @@
 <span class=post-date>September 4, 2020</span>
 </div>
 <div class=post-entry>
+<h2 id=introduction>Introduction</h2>
 <pre><code>                                    &lt;p&gt;
                                       I recently wrote [PSCMContentMgmt](https://github.com/codaamok/PSCMContentMgmt) which provides a simple and effective workflow for managing your MEMCM distribution points. Here are some of the things you can do with it:
                                     &lt;/p&gt;
@@ -198,21 +199,23 @@
                                         [Start-DPGroupContentDistribution](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Start-DPGroupContentDistribution.md)
                                       &lt;/li&gt;
                                     &lt;/ul&gt;
-                                    
-                                    &lt;h2&gt;
-                                      Installing
-                                    &lt;/h2&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<h2 id=installing>Installing</h2>
+<pre><code>                                    &lt;p&gt;
                                       Install the module from the PowerShell gallery and import it to your session:
                                     &lt;/p&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;showPanel&quot;:false,&quot;fileName&quot;:&quot;shell.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Install-Module PSCMContentMgmt -Scope CurrentUser
 </code></pre>
-<p>PS C:&amp;gt; Import-Module PSCMContentMgmt
-</p>
-<pre><code>                                    &lt;p&gt;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Install-Module</span> PSCMContentMgmt -Scope CurrentUser
+<span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Import-Module</span> PSCMContentMgmt
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                                    &lt;p&gt;
                                       All functions of the module require use of &lt;code&gt;-SiteServer&lt;/code&gt; or &lt;code&gt;-SiteCode&lt;/code&gt; parameters. This can be tedious to repeatedly type out. Therefore upon importing the module, two variables will be set in your session:
                                     &lt;/p&gt;
                                     
@@ -242,104 +245,150 @@
                                     &lt;/p&gt;
                                     
                                     &lt;p&gt;
-                                      If you receive a warning along the lines of being unable to auto-populate variables&amp;nbsp;&lt;code&gt;$CMSiteServer&lt;/code&gt;&amp;nbsp;or&amp;nbsp;&lt;code&gt;$CMSiteCode&lt;/code&gt;, that means the module failed to read the previously mentioned registry value or the&amp;nbsp;&lt;code&gt;SMS_ProviderLocation&lt;/code&gt;&amp;nbsp;class on your site server.
+                                      If you receive a warning along the lines of being unable to auto-populate variables&lt;code&gt;$CMSiteServer&lt;/code&gt;or&lt;code&gt;$CMSiteCode&lt;/code&gt;, that means the module failed to read the previously mentioned registry value or the&lt;code&gt;SMS_ProviderLocation&lt;/code&gt;class on your site server.
                                     &lt;/p&gt;
                                     
                                     &lt;p&gt;
-                                      If the reason why the module could not set these variables itself is not known, or there's no viable workaround for you, then you can set&amp;nbsp;&lt;code&gt;$CMSiteServer&lt;/code&gt;&amp;nbsp;or&amp;nbsp;&lt;code&gt;$CMSiteCode&lt;/code&gt;&amp;nbsp;yourself. Alternatively you can use the&amp;nbsp;&lt;code&gt;-SiteServer&lt;/code&gt;&amp;nbsp;and&amp;nbsp;&lt;code&gt;-SiteCode&lt;/code&gt;&amp;nbsp;parameters on an ad-hoc basis.
+                                      If the reason why the module could not set these variables itself is not known, or there's no viable workaround for you, then you can set&lt;code&gt;$CMSiteServer&lt;/code&gt;or&lt;code&gt;$CMSiteCode&lt;/code&gt;yourself. Alternatively you can use the&lt;code&gt;-SiteServer&lt;/code&gt;and&lt;code&gt;-SiteCode&lt;/code&gt;parameters on an ad-hoc basis.
                                     &lt;/p&gt;
-                                    
-                                    &lt;h2&gt;
-                                      Examples
-                                    &lt;/h2&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<h2 id=examples>Examples</h2>
+<pre><code>                                    &lt;p&gt;
                                       I'll walk you through some key examples which I think most people will benefit from.
                                     &lt;/p&gt;
-                                    
-                                    &lt;h4&gt;
-                                      &lt;strong&gt;Comparing distributed content objects between two distribution points or distribution point groups&lt;/strong&gt;
-                                    &lt;/h4&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;showPanel&quot;:false,&quot;fileName&quot;:&quot;shell.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Compare-DPContent -Source &quot;dp1.contoso.com&quot; -Target &quot;dp2.contoso.com&quot;
 </code></pre>
-<p>ObjectName : 2020-03-1809
-Description :
-ObjectType : DeploymentPackage
-ObjectID : ACC000F3
-SourceSize : 324981
-DistributionPoint : dp1.contoso.com</p>
-<p>ObjectName : 2020-02-1809
-Description :
-ObjectType : DeploymentPackage
-ObjectID : ACC000F4
-SourceSize : 292894
-DistributionPoint : dp1.contoso.com</p>
-<p>&mldr;
-</p>
-<pre><code>                                    &lt;p&gt;
+<h4 id=comparing-distributed-content-objects-between-two-distribution-points-or-distribution-point-groups><strong>Comparing distributed content objects between two distribution points or distribution point groups</strong></h4>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Compare-DPContent</span> -Source <span style=color:#d14>&#34;dp1.contoso.com&#34;</span> -Target <span style=color:#d14>&#34;dp2.contoso.com&#34;</span>
+
+ObjectName        <span style=color:#a61717;background-color:#e3d2d2>:</span> 2020-03-1809
+Description       <span style=color:#a61717;background-color:#e3d2d2>:</span>
+ObjectType        <span style=color:#a61717;background-color:#e3d2d2>:</span> DeploymentPackage
+ObjectID          <span style=color:#a61717;background-color:#e3d2d2>:</span> ACC000F3
+SourceSize        <span style=color:#a61717;background-color:#e3d2d2>:</span> 324981
+DistributionPoint <span style=color:#a61717;background-color:#e3d2d2>:</span> dp1.contoso.com
+
+ObjectName        <span style=color:#a61717;background-color:#e3d2d2>:</span> 2020-02-1809
+Description       <span style=color:#a61717;background-color:#e3d2d2>:</span>
+ObjectType        <span style=color:#a61717;background-color:#e3d2d2>:</span> DeploymentPackage
+ObjectID          <span style=color:#a61717;background-color:#e3d2d2>:</span> ACC000F4
+SourceSize        <span style=color:#a61717;background-color:#e3d2d2>:</span> 292894
+DistributionPoint <span style=color:#a61717;background-color:#e3d2d2>:</span> dp1.contoso.com
+
+...
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                                    &lt;p&gt;
                                       Returns content objects which are on dp1.contoso.com but not dp2.contoso.com.
                                     &lt;/p&gt;
                                     
                                     &lt;p&gt;
                                       With this command, you can pipe it to other appropriate functions within PSCMContentMgmt, e.g. &lt;code&gt;Remove-DPContent&lt;/code&gt; or &lt;code&gt;Start-DPContentDistribution&lt;/code&gt;.
                                     &lt;/p&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;showPanel&quot;:false,&quot;fileName&quot;:&quot;shell.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Compare-DPContent -Source &quot;dp1.contoso.com&quot; -Target &quot;dp2.contoso.com&quot; | Start-DPContentDistribution -DistributionPoint &quot;dp2.contoso.com&quot;
 </code></pre>
-<p>Result ObjectId ObjectType Message</p>
-<hr>
-<p>Success ACC00001 Package
-Success ACC00004 BootImage
-Success ACC00005 BootImage
-Success ACC00007 Package
-Success 16999742 Application
-Success 16999646 Application
-Success 16999674 Application
-Success 16999752 Application
-Success 16999720 Application
-Success 17007034 Application</p>
-<p>&mldr;
-</p>
-<pre><code>                                    &lt;h4&gt;
-                                      &lt;strong&gt;Finding content objects in &quot;distribution failed&quot; state and initiating redistribution en masse&lt;/strong&gt;
-                                    &lt;/h4&gt;
-                                    
-                                    &lt;p&gt;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Compare-DPContent</span> -Source <span style=color:#d14>&#34;dp1.contoso.com&#34;</span> -Target <span style=color:#d14>&#34;dp2.contoso.com&#34;</span> | <span style=color:#0086b3>Start-DPContentDistribution</span> -DistributionPoint <span style=color:#d14>&#34;dp2.contoso.com&#34;</span>
+
+Result    ObjectId ObjectType               Message
+------    -------- ----------               -------
+Success   ACC00001 Package
+Success   ACC00004 BootImage
+Success   ACC00005 BootImage
+Success   ACC00007 Package
+Success   16999742 Application
+Success   16999646 Application
+Success   16999674 Application
+Success   16999752 Application
+Success   16999720 Application
+Success   17007034 Application
+
+...
+</code></pre></td></tr></table>
+</div>
+</div><h4 id=finding-content-objects-in-distribution-failed-state-and-initiating-redistribution-en-masse><strong>Finding content objects in &ldquo;distribution failed&rdquo; state and initiating redistribution en masse</strong></h4>
+<pre><code>                                    &lt;p&gt;
                                       This is the most practical function I like about PSCMContentMgmt. It is not uncommon for me to experience distribution failures in my environments and I wanted a way to quickly have a visual on those, and take action.
                                     &lt;/p&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;showPanel&quot;:false,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Get-DP | Get-DPDistributionStatus -DistributionFailed | Group-Object -Property DistributionPoint
 </code></pre>
-<p>Count Name Group</p>
-<hr>
-<p>42 dp1.contoso.com {@{ObjectID=17099179; ObjectType=Applicat&mldr;
-30 dp2.contoso.com {@{ObjectID=17099179; ObjectType=Applicat&mldr;
-</p>
-<pre><code>                                    &lt;p&gt;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-DP</span> | <span style=color:#0086b3>Get-DPDistributionStatus</span> -DistributionFailed | <span style=color:#0086b3>Group-Object</span> -Property DistributionPoint
+
+Count Name                      <span style=color:#0086b3>Group
+</span><span style=color:#0086b3></span>----- ----                      -----
+   42 dp1.contoso.com           {@{ObjectID=17099179; ObjectType=Applicat...
+   30 dp2.contoso.com	        {@{ObjectID=17099179; ObjectType=Applicat...
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                                    &lt;p&gt;
                                       Return all distribution points, their associated failed distribution tasks and group the results by distribution point name for an overview.
                                     &lt;/p&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;showPanel&quot;:false,&quot;fileName&quot;:&quot;shell.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Get-DPDistributionStatus -DistributionPoint &quot;dp1.contoso.com&quot; -DistributionFailed | Start-DPContentRedistribution&lt;/pre&gt;
-                                    &lt;/div&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-DPDistributionStatus</span> -DistributionPoint <span style=color:#d14>&#34;dp1.contoso.com&#34;</span> -DistributionFailed | <span style=color:#0086b3>Start-DPContentRedistribution</span>
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                                    &lt;p&gt;
                                       This is an example on taking action on those items. In this instance, I'm initiating redistribution for all of the objects on dp1.contoso.com in a &quot;distribution failed&quot; state.
                                     &lt;/p&gt;
                                     
                                     &lt;p&gt;
                                       If you didn't want to redistribute, you could pipe to &lt;code&gt;Remove-DPContent&lt;/code&gt; instead.
                                     &lt;/p&gt;
-                                    
-                                    &lt;h4&gt;
-                                      &lt;strong&gt;Finding objects in your environment with some arbitrary ID&lt;/strong&gt;
-                                    &lt;/h4&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<h4 id=finding-objects-in-your-environment-with-some-arbitrary-id><strong>Finding objects in your environment with some arbitrary ID</strong></h4>
+<pre><code>                                    &lt;p&gt;
                                       This is my favourite function. Do you ever look through log files, see some random ID that you know represents some object in console and just want to know what object that is?
                                     &lt;/p&gt;
                                     
@@ -391,24 +440,25 @@ Success 17007034 Application</p>
                                         (Software Update) Deployment Packages
                                       &lt;/li&gt;
                                     &lt;/ul&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;showPanel&quot;:false,&quot;fileName&quot;:&quot;shell.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Find-CMObject -ID &quot;ACC00048&quot;&lt;/pre&gt;
-                                    &lt;/div&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Find-CMObject</span> -ID <span style=color:#d14>&#34;ACC00048&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                                    &lt;p&gt;
                                       Finds any object which has the PackageID &quot;ACC00048&quot;, this includes Applications, collections, driver packages, boot images, OS images, OS upgrade images, task sequences and deployment packages.
                                     &lt;/p&gt;
                                     
                                     &lt;p&gt;
                                       It searches for Applications by PackageID as a last resort if no match has been found yet by loading every Application's PackageID property which is a lazy property in WMI. This can be time consuming, depending on how many Applications you have in your site, hence why it is last in the list.
                                     &lt;/p&gt;
-                                    
-                                    &lt;h4&gt;
-                                      &lt;strong&gt;Migrating a distribution point to another&lt;/strong&gt;
-                                    &lt;/h4&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<h4 id=migrating-a-distribution-point-to-another><strong>Migrating a distribution point to another</strong></h4>
+<pre><code>                                    &lt;p&gt;
                                       Do you need to stand up a new distribution point beside an existing one, but don't want to send content across the WAN?
                                     &lt;/p&gt;
                                     
@@ -423,56 +473,56 @@ Success 17007034 Application</p>
                                     &lt;p&gt;
                                       However if for whatever reason you can't or don't want to use the pull distribution point method, then this is for you.
                                     &lt;/p&gt;
-                                    
-                                    &lt;h6&gt;
-                                      1. Begin by exporting your old/source distribution point's content using &lt;code&gt;Export-DPContent&lt;/code&gt;.
-                                    &lt;/h6&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<h6 id=1-begin-by-exporting-your-oldsource-distribution-points-content-using-codeexport-dpcontentcode>1. Begin by exporting your old/source distribution point&rsquo;s content using Export-DPContent.</h6>
+<pre><code>                                    &lt;p&gt;
                                       Preferably this server will be on the same LAN as the distribution point you intend to import the .pkgx files to.
                                     &lt;/p&gt;
                                     
                                     &lt;p&gt;
                                       If the server is remote across a slow link, it is recommended you copy the .pkgx files generated by &lt;code&gt;Export-DPContent&lt;/code&gt; to your new/target distribution point.
                                     &lt;/p&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;showPanel&quot;:false,&quot;fileName&quot;:&quot;shell.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Get-DPContent -DistributionPoint &quot;OldDP.contoso.com&quot; | Export-DPContent -Folder &quot;E:\exported&quot;&lt;/pre&gt;
-                                    &lt;/div&gt;
-                                    
-                                    &lt;h6&gt;
-                                      2. Configure your new/target distribution point to allow prestaged content using &lt;code&gt;Set-DPAllowPrestagedContent&lt;/code&gt;.
-                                    &lt;/h6&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-DPContent</span> -DistributionPoint <span style=color:#d14>&#34;OldDP.contoso.com&#34;</span> | <span style=color:#0086b3>Export-DPContent</span> -Folder <span style=color:#d14>&#34;E:\exported&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id=2-configure-your-newtarget-distribution-point-to-allow-prestaged-content-using-codeset-dpallowprestagedcontentcode>2. Configure your new/target distribution point to allow prestaged content using Set-DPAllowPrestagedContent.</h6>
+<pre><code>                                    &lt;p&gt;
                                       This will ensure when we use &lt;code&gt;Start-DPContentDistribution&lt;/code&gt; in the next step that the content will not inadvertently transfer across an undesired route.
                                     &lt;/p&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;showPanel&quot;:false,&quot;fileName&quot;:&quot;shell.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Set-DPAllowPrestagedContent -DistributionPoint &quot;NewDP.contoso.com&quot;&lt;/pre&gt;
-                                    &lt;/div&gt;
-                                    
-                                    &lt;h6&gt;
-                                      3. Distribute the exported content from step 1 using &lt;code&gt;Start-DPContentDistribution&lt;/code&gt; using its &lt;code&gt;-Folder&lt;/code&gt; parameter.
-                                    &lt;/h6&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Set-DPAllowPrestagedContent</span> -DistributionPoint <span style=color:#d14>&#34;NewDP.contoso.com&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id=3-distribute-the-exported-content-from-step-1-using-codestart-dpcontentdistributioncode-using-its-code-foldercode-parameter>3. Distribute the exported content from step 1 using Start-DPContentDistribution using its -Folder parameter.</h6>
+<pre><code>                                    &lt;p&gt;
                                       This will walk through all .pkgx files in the given folder, identifying each object by the particular naming convention of the .pkgx files generated by &lt;code&gt;Export-DPContent&lt;/code&gt;, and distribute each of the objects they represent in console to your new/target distribution point.
                                     &lt;/p&gt;
                                     
                                     &lt;p&gt;
                                       This will put the content objects in console in a &quot;Pending&quot; state; waiting to be imported on your new/target distribution point.
                                     &lt;/p&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;showPanel&quot;:false,&quot;fileName&quot;:&quot;shell.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;Start-DPContentDistribution -Folder &quot;E:\exported&quot; -DistributionPoint &quot;NewDP.contoso.com&quot;&lt;/pre&gt;
-                                    &lt;/div&gt;
-                                    
-                                    &lt;h6&gt;
-                                      4. Log on locally or enter a PowerShell session to your new/target distribution point and import PSCMContentMgmt to run &lt;code&gt;Import-DPContent&lt;/code&gt;.
-                                    &lt;/h6&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Start-DPContentDistribution</span> -Folder <span style=color:#d14>&#34;E:\exported&#34;</span> -DistributionPoint <span style=color:#d14>&#34;NewDP.contoso.com&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id=4-log-on-locally-or-enter-a-powershell-session-to-your-newtarget-distribution-point-and-import-pscmcontentmgmt-to-run-codeimport-dpcontentcode>4. Log on locally or enter a PowerShell session to your new/target distribution point and import PSCMContentMgmt to run Import-DPContent.</h6>
+<pre><code>                                    &lt;p&gt;
                                       This step must be executed locally to your new/target distribution point. This is because &lt;code&gt;Import-DPContent&lt;/code&gt; simply invokes ExtractContent.exe.
                                     &lt;/p&gt;
                                     
@@ -483,24 +533,26 @@ Success 17007034 Application</p>
                                     &lt;p&gt;
                                       Similar to step 3, &lt;code&gt;Import-DPContent&lt;/code&gt; depends on the particular naming convention of .pkgx files generated by &lt;code&gt;Export-DPContent&lt;/code&gt; to successfully import the content.
                                     &lt;/p&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;showPanel&quot;:false,&quot;fileName&quot;:&quot;shell.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Import-DPContent -Folder &quot;\\OldDP.contoso.com\e$\exported&quot;&lt;/pre&gt;
-                                    &lt;/div&gt;
-                                    
-                                    &lt;h6&gt;
-                                      5. Unconfigure your new/target distribution point to only allow prestaged content.
-                                    &lt;/h6&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;showPanel&quot;:false,&quot;fileName&quot;:&quot;shell.ps1&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Set-DPAllowPrestagedContent -DistributionPoint &quot;NewDP.contoso.com&quot; -State $false&lt;/pre&gt;
-                                    &lt;/div&gt;
-                                    
-                                    &lt;h2&gt;
-                                      Getting help
-                                    &lt;/h2&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Import-DPContent</span> -Folder <span style=color:#d14>&#34;\\OldDP.contoso.com\e$\exported&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id=5-unconfigure-your-newtarget-distribution-point-to-only-allow-prestaged-content>5. Unconfigure your new/target distribution point to only allow prestaged content.</h6>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Set-DPAllowPrestagedContent</span> -DistributionPoint <span style=color:#d14>&#34;NewDP.contoso.com&#34;</span> -State <span style=color:teal>$false</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=getting-help>Getting help</h2>
+<pre><code>                                    &lt;p&gt;
                                       If you're seeing or hearing things, I recommend you drink more rum.
                                     &lt;/p&gt;
                                     
@@ -511,28 +563,40 @@ Success 17007034 Application</p>
                                     &lt;p&gt;
                                       To view the help material for a particular function:
                                     &lt;/p&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;showPanel&quot;:false,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Get-Help Compare-DPContent -Detailed&lt;/pre&gt;
-                                    &lt;/div&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-Help</span> <span style=color:#0086b3>Compare-DPContent</span> -Detailed
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                                    &lt;p&gt;
                                       To see all of the &quot;About&quot; help topics available for PSCMContentMgmt:
                                     &lt;/p&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;showPanel&quot;:false,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Get-Help about_PSCMContentMgmt*&lt;/pre&gt;
-                                    &lt;/div&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-Help</span> about_PSCMContentMgmt*
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                                    &lt;p&gt;
                                       To read one of the &quot;About&quot; help topics:
                                     &lt;/p&gt;
-                                    
-                                    &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                                      &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;showPanel&quot;:false,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; Get-Help about_PSCMContentMgmt_Query&lt;/pre&gt;
-                                    &lt;/div&gt;
-                                    
-                                    &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-Help</span> about_PSCMContentMgmt_Query
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                                    &lt;p&gt;
                                       Failing that:
                                     &lt;/p&gt;
                                     

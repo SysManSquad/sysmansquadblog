@@ -99,46 +99,104 @@ The issue I was facing was that regular users do not have modify permissions to 
 <p>Using Group Policies, this is a trivial task, but Intune has no proper built in substitute. So we have to improvise and that&rsquo;s where Proactive remediations comes into play..</p>
 <h2 id=discovery>Discovery</h2>
 <p>Relatively straight forward, the script checks if the relevant filesystem rights have been assigned, if not, it will error out and report non-compliance</p>
-<p>try {</p>
-<pre><code>if ( $aclEveryone.FileSystemRights -match &quot;Modify&quot;) {
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Discovery</span>
+<span style=color:teal>$acl</span> = <span style=color:#0086b3>Get-Acl</span> -Path <span style=color:#d14>&#39;C:\Users\Public\Desktop&#39;</span>
+<span style=color:teal>$aclEveryone</span> = <span style=color:teal>$acl</span>.Access | <span style=color:#0086b3>where </span>{ <span style=color:teal>$_</span>.IdentityReference <span style=color:#000;font-weight:700>-like</span> <span style=color:#d14>&#34;everyone&#34;</span> } 
 
-    Write-Host &quot;success, everyone has modify access&quot;
-    exit 0
+<span style=color:#000;font-weight:700>try</span> {
+
+    <span style=color:#000;font-weight:700>if</span> ( <span style=color:teal>$aclEveryone</span>.FileSystemRights <span style=color:#000;font-weight:700>-match</span> <span style=color:#d14>&#34;Modify&#34;</span>) {
+
+        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;success, everyone has modify access&#34;</span>
+        exit 0
+    }
+    <span style=color:#000;font-weight:700>else</span> {
+        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;ACL missing, or set incorrectly&#34;</span>
+        exit 1
+    }
+
 }
-else {
-    Write-Host &quot;ACL missing, or set incorrectly&quot;
+<span style=color:#000;font-weight:700>catch</span> {
+    <span style=color:teal>$errmeg</span> = <span style=color:teal>$_</span>.exception.message
+    <span style=color:#0086b3>Write-Error</span> <span style=color:teal>$errmeg</span>
     exit 1
 }
-</code></pre>
-<p>}
-catch {
-$errmeg = $_.exception.message
-Write-Error $errmeg
-exit 1
-}</p>
-<h2 id=remediation>Remediation</h2>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=remediation>Remediation</h2>
 <p>Should the discovery report non-compliance, the following will execute.</p>
-<p>try {
-$acl = Get-Acl -Path &lsquo;C:\Users\Public\Desktop&rsquo;
-$permission = &lsquo;Everyone&rsquo;, &lsquo;Read,Modify&rsquo;, &lsquo;ContainerInherit, ObjectInherit&rsquo;, &lsquo;None&rsquo;, &lsquo;Allow&rsquo;
-$rule = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permission
-$acl.SetAccessRule($rule)
-# adam gross&rsquo;s mascara game is on fleek
-# Save the access rule to disk:
-$acl | Set-Acl -Path &lsquo;C:\Users\Public\Desktop&rsquo;
-exit 0
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Remediation</span>
+
+<span style=color:#000;font-weight:700>try</span> {
+    <span style=color:teal>$acl</span> = <span style=color:#0086b3>Get-Acl</span> -Path <span style=color:#d14>&#39;C:\Users\Public\Desktop&#39;</span>
+    <span style=color:teal>$permission</span> = <span style=color:#d14>&#39;Everyone&#39;</span>, <span style=color:#d14>&#39;Read,Modify&#39;</span>, <span style=color:#d14>&#39;ContainerInherit, ObjectInherit&#39;</span>, <span style=color:#d14>&#39;None&#39;</span>, <span style=color:#d14>&#39;Allow&#39;</span> 
+    <span style=color:teal>$rule</span> = <span style=color:#0086b3>New-Object</span> -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList <span style=color:teal>$permission</span>
+    <span style=color:teal>$acl</span>.SetAccessRule(<span style=color:teal>$rule</span>)
+    <span style=color:#998;font-style:italic># adam gross&#39;s mascara game is on fleek</span>
+    <span style=color:#998;font-style:italic># Save the access rule to disk:</span>
+    <span style=color:teal>$acl</span> | <span style=color:#0086b3>Set-Acl</span> -Path <span style=color:#d14>&#39;C:\Users\Public\Desktop&#39;</span>
+    exit 0
 }
-catch {
-$errMsg = $_.Exception.Message
-Write-Error $errMsg
-exit 1
-}</p>
-<h2 id=deployment>Deployment</h2>
+<span style=color:#000;font-weight:700>catch</span> {
+    <span style=color:teal>$errMsg</span> = <span style=color:teal>$_</span>.Exception.Message
+    <span style=color:#0086b3>Write-Error</span> <span style=color:teal>$errMsg</span>
+    exit 1
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=deployment>Deployment</h2>
 <p>Set this to run in the system context and deploy to the relevant group using these steps <a href=https://docs.microsoft.com/en-us/mem/analytics/proactive-remediations#deploy-the-script-packages>https://docs.microsoft.com/en-us/mem/analytics/proactive-remediations#deploy-the-script-packages</a>. Given the nature of this code, you can safely set the daily interval to a fairly high value.</p>
 <h2 id=closing-words>Closing words</h2>
 <p>Obviously, this example are pretty simplistic, but it can give you an idea how Proactive remediations can be utilized to fill in the gaps if you are using Intune to manage your windows devices.</p>
 <h3 id=questionsissues>Questions/Issues?</h3>
-<p>If you run into any issues or have questions about anything Intune related head over to the <a href=https://aka.ms/winadmins>WinAdmins discord community</a> and go to the <code>#Intune</code> channel.</p>
+<p>If you run into any issues or have questions about anything Intune related head over to the<a href=https://aka.ms/winadmins>WinAdmins discord community</a>and go to the<code>#Intune</code>channel.</p>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>

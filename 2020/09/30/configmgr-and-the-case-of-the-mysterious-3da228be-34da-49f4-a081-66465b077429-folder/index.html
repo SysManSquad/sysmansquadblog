@@ -95,39 +95,168 @@ Once I started the upgrades I worked on other things while checking in on them p
 </div>
 <div class=post-entry>
 <p>Over the weekend I ran into a weird issue that I hadn&rsquo;t seen before. I was upgrading half of the Distribution Points for a client who&rsquo;s ConfigMgr was in need of some TLC. I&rsquo;ve been working on getting their overall infrastructure healthy and that includes upgrading their DPs from Windows Server 2012 to Windows Server 2016 (and eventually 2019).</p>
-<p>Once I started the upgrades I worked on other things while checking in on them periodically. After a few hours I discovered that they were all still offline and I could only access them via the <code>C$</code> admin share (C**-Money** as <a href=https://twitter.com/powers_hell>Ben Reader</a> calls it). I checked the <code>setupact.log</code> and found that each server was stuck doing the same thing - recursively migrating folders from the old OS <code>&lt;strong>C:\Windows.old\Windows\System32\{3DA228BE-34DA-49f4-A081-66465B077429}&lt;/strong></code> to the new OS <code>&lt;strong>C:\Windows\System32\{3DA228BE-34DA-49f4-A081-66465B077429}&lt;/strong></code>.</p>
+<p>Once I started the upgrades I worked on other things while checking in on them periodically. After a few hours I discovered that they were all still offline and I could only access them via the <code>C$</code> admin share (C**-Money** as <a href=https://twitter.com/powers_hell>Ben Reader</a> calls it). I checked the <code>setupact.log</code> and found that each server was stuck doing the same thing - recursively migrating folders from the old OS <code>**C:\Windows.old\Windows\System32\{3DA228BE-34DA-49f4-A081-66465B077429}**</code> to the new OS <code>**C:\Windows\System32\{3DA228BE-34DA-49f4-A081-66465B077429}**</code>.</p>
 <p>After over 12 hours of waiting for setup to complete, my contact at the client company rebooted the servers in VMWare and the servers rolled back to Server 2012. After deleting the folder contents, the upgrades all completed fine.</p>
-<p>During this process, I checked all of the hung servers and found that the each had 60,000-100,000+ <code>{GUID}</code> folders, each with a sub folder called <code>badmifs</code>. ConfigMgr uses <strong><code>mif</code></strong> files (I thought mif meant - <strong>Machine Inventory File</strong>, but <a href=https://www.enhansoft.com/what-is-a-management-information-format-mif-file/>according to Garth, it means Management Information File</a>. Garth knows everything.) so I at least had a starting point for finding the source of the folders. The issue here was that the migration process was crawling - copying 1 folder every 2 seconds with an expected completion of sometime next Tuesday! After remotely running <code>rmdir /q/s</code> for several hours on several of them, which was working, just slowly, I realized that I could just relocate the entire folder to the root of <code>c:\</code> in a few seconds and delete them after the upgrade was complete, which is what I did using the aptly named <code>move</code> command.</p>
+<p>During this process, I checked all of the hung servers and found that the each had 60,000-100,000+ <code>{GUID}</code> folders, each with a sub folder called <code>badmifs</code>. ConfigMgr uses <strong><code>mif</code></strong> files (I thought mif meant - <strong>Machine Inventory File</strong>, but <a href=https://www.enhansoft.com/what-is-a-management-information-format-mif-file/>according to Garth, it means <strong>Management Information File</strong></a>. Garth knows everything.) so I at least had a starting point for finding the source of the folders. The issue here was that the migration process was crawling - copying 1 folder every 2 seconds with an expected completion of sometime next Tuesday! After remotely running <code>rmdir /q/s</code> for several hours on several of them, which was working, just slowly, I realized that I could just relocate the entire folder to the root of <code>c:\</code> in a few seconds and delete them after the upgrade was complete, which is what I did using the aptly named <code>move</code> command.</p>
 <p>This morning, I reached out the the ConfigMgr team to file a bug and already heard back that they found the source and ultimately that this folder is linked to some legacy code and can safely be deleted (Thank you for the help on this!!).</p>
 <p>Even though this will likely be fixed in a future release, I was curious about the source still. After searching all through the registry, started checking the client install logs the log I was looking for. It confirmed that the root folder <code>C:\Windows\System32\{3DA228BE-34DA-49f4-A081-66465B077429}</code> is created as a backup folder by the ConfigMgr installer <code>client.msi</code> where it&rsquo;s backing up old settings/inventory data to a new <code>{GUID}</code> folder before upgrading the client, then it restores the data back, but seems to be leaving the backup folders behind. Check out this excerpt from <code>C:\Windows\ccmsetup\Logs</code>`client.msi.log` file from one of my production workstations.</p>
-<p>In my client&rsquo;s environment, the number of folders seemed to be quite excessive so I checked my production environment to compare by using Run Scripts to run a small PowerShell script to output the count of folders found (see below for code). I found that on average, my machines have about empty 24 folders in this location with the largest number hitting ~600 folders. When I checked the workstation with ~600 folders, I found that a majority of them were created on the same day and had the same timestamp which feels like it could be caused by a client install that is failing in some catastrophic way - just a guess though. I also did the same check in my client&rsquo;s environment and found that there may have been a client health service that was attempting a repair every 5 hours, ever day, FOREVER!</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>MSI (s) (CC:3C) [11:03:21:957]: Executing op: ActionStart(Name=SmsDeinstallDesktopClient,Description=This custom action uninstalls the desktop client with following steps-
+1. Makes sure there are no desktop client installations in progress and prevents any new instance of intallation.
+2. Checks the desktop client version and gets the installation directory.
+3. Stops remote control and other desktop components.
+4. Kills the following client processes - clisvc1.exe, pea32.exe, smsapm32.exe, smsmon32.exe and sms_reen.exe.
+5. Saves information needed for migration and uninstalls the desktop components followed by clean up.,Template=[1])
+...
+MSI (s) (CC!40) [11:03:22:299]: Creating MSIHANDLE (13311) of type 790531 for thread 39744
+[11:03:22] Backed up directory C:\Windows\CCM\Inventory\idmifs\badmifs to {3DA228BE-34DA-49f4-A081-66465B077429}\{F661685D-0D28-463B-A87C-70F5D1736700}\badmifs
+MSI (s) (CC!40) [11:03:22:300]: Closing MSIHANDLE (13311) of type 790531 for thread 39744
+MSI (s) (CC!40) [11:03:22:301]: Creating MSIHANDLE (13312) of type 790531 for thread 39744
+[11:03:22] Backed up directory C:\Windows\CCM\Inventory\idmifs to {3DA228BE-34DA-49f4-A081-66465B077429}\{F661685D-0D28-463B-A87C-70F5D1736700}
+MSI (s) (CC!40) [11:03:22:301]: Closing MSIHANDLE (13312) of type 790531 for thread 39744
+MSI (s) (CC!40) [11:03:22:301]: Creating MSIHANDLE (13313) of type 790531 for thread 39744
+[11:03:22] Backed up directory C:\Windows\CCM\Inventory\noidmifs\badmifs to {3DA228BE-34DA-49f4-A081-66465B077429}\{38F7D84E-8A58-480E-9B90-3A3CAA761D3D}\badmifs
+MSI (s) (CC!40) [11:03:22:302]: Closing MSIHANDLE (13313) of type 790531 for thread 39744
+MSI (s) (CC!40) [11:03:22:302]: Creating MSIHANDLE (13314) of type 790531 for thread 39744
+[11:03:22] Backed up directory C:\Windows\CCM\Inventory\noidmifs to {3DA228BE-34DA-49f4-A081-66465B077429}\{38F7D84E-8A58-480E-9B90-3A3CAA761D3D}
+... 
+MSI (s) (CC:3C) [11:03:55:701]: Executing op: ActionStart(Name=SmsMigrateInventory,Description=Migrating SMS Legacy Client inventory settings,)
+[11:03:55] Custom action complete.
+MSI (s) (CC:3C) [11:03:55:702]: Executing op: CustomActionSchedule(Action=SmsMigrateInventory,ActionType=3073,Source=BinaryData,Target=SmsMigrateInventory,CustomActionData=C:\Windows\CCM\Inventory\idmifs
+C:\Windows\CCM\Inventory\noidmifs)
+MSI (s) (CC:3C) [11:03:55:704]: Creating MSIHANDLE (20844) of type 790536 for thread 45372
+MSI (s) (CC:08) [11:03:55:705]: Invoking remote custom action. DLL: C:\WINDOWS\Installer\MSIA2A.tmp, Entrypoint: SmsMigrateInventory
+MSI (s) (CC!24) [11:03:55:710]: Creating MSIHANDLE (20845) of type 790531 for thread 52772
+MSI (s) (CC!24) [11:03:55:711]: Closing MSIHANDLE (20845) of type 790531 for thread 52772
+MSI (s) (CC!24) [11:03:55:711]: Creating MSIHANDLE (20846) of type 790531 for thread 52772
+[11:03:55] Backed up directory {3DA228BE-34DA-49f4-A081-66465B077429}\{F661685D-0D28-463B-A87C-70F5D1736700}\badmifs to C:\Windows\CCM\Inventory\idmifs\badmifs
+MSI (s) (CC!24) [11:03:55:711]: Closing MSIHANDLE (20846) of type 790531 for thread 52772
+MSI (s) (CC!24) [11:03:55:711]: Creating MSIHANDLE (20847) of type 790531 for thread 52772
+[11:03:55] Backed up directory {3DA228BE-34DA-49f4-A081-66465B077429}\{F661685D-0D28-463B-A87C-70F5D1736700} to C:\Windows\CCM\Inventory\idmifs
+MSI (s) (CC!24) [11:03:55:712]: Closing MSIHANDLE (20847) of type 790531 for thread 52772
+MSI (s) (CC!24) [11:03:55:712]: Creating MSIHANDLE (20848) of type 790531 for thread 52772
+[11:03:55] Backed up directory {3DA228BE-34DA-49f4-A081-66465B077429}\{38F7D84E-8A58-480E-9B90-3A3CAA761D3D}\badmifs to C:\Windows\CCM\Inventory\noidmifs\badmifs
+MSI (s) (CC!24) [11:03:55:712]: Closing MSIHANDLE (20848) of type 790531 for thread 52772
+MSI (s) (CC!24) [11:03:55:712]: Creating MSIHANDLE (20849) of type 790531 for thread 52772
+[11:03:55] Backed up directory {3DA228BE-34DA-49f4-A081-66465B077429}\{38F7D84E-8A58-480E-9B90-3A3CAA761D3D} to C:\Windows\CCM\Inventory\noidmifs
+MSI (s) (CC!24) [11:03:55:713]: Closing MSIHANDLE (20849) of type 790531 for thread 52772
+</code></pre></td></tr></table>
+</div>
+</div><p>In my client&rsquo;s environment, the number of folders seemed to be quite excessive so I checked my production environment to compare by using Run Scripts to run a small PowerShell script to output the count of folders found (see below for code). I found that on average, my machines have about empty 24 folders in this location with the largest number hitting ~600 folders. When I checked the workstation with ~600 folders, I found that a majority of them were created on the same day and had the same timestamp which feels like it could be caused by a client install that is failing in some catastrophic way - just a guess though. I also did the same check in my client&rsquo;s environment and found that there may have been a client health service that was attempting a repair every 5 hours, ever day, FOREVER!</p>
 <p>Ultimately, I was instructed that the folders weren&rsquo;t needed and could be safely deleted. So I updated my discovery script to check for the folders and delete them where necessary. Since the deletion of a large number of folders was taking hours, I tested out using <code>robocopy</code> with the <code>/mir</code> command to copy over a blank folder and overwrite the existing folder. This improved performance drastically! My lab is giving me issues tonight, but I will try to get the script added to the ConfigMgr Community Hub for easier downloading. In the meantime, I&rsquo;ve included a link to the script in my Github repo as well as included it below.</p>
 <p>I should mention, I am not concerned about a small number of folders, even a few thousand likely won&rsquo;t slow down an OS upgrade enough to worry about. This is about ensuring that we don&rsquo;t have other machines hang during upgrades as we roll out Windows 10 Feature Updates and other servers are upgraded.</p>
 <p><a href=https://github.com/AdamGrossTX/PowershellScripts/blob/master/ConfigMgr/Troubleshooting/CleanupFoldersWithRoboCopy.ps1>PowershellScripts/CleanupFoldersWithRoboCopy.ps1 at master · AdamGrossTX/PowershellScripts (github.com)</a></p>
-<p>try {
-$DestPath = Join-Path -Path $DestinationRoot -ChildPath $Folder
-$DestinationFolder = Get-Item -Path $DestPath -ErrorAction SilentlyContinue
-if ($DestinationFolder) {
-$TempFolder = New-Item -Path &ldquo;$($env:TEMP)$($Folder)&rdquo; -ItemType Directory -Force
-$StartCount = ($DestinationFolder | Get-ChildItem).Count
-if ($remediate.IsPresent -and $TempFolder) {
-& robocopy &ldquo;$($TempFolder.FullName)&rdquo; &ldquo;$($DestinationFolder.FullName.ToString())&rdquo; /mir /r:0 /w:0 /e | Out-Null
-$TempFolder | Remove-Item -Force #-ErrorAction SilentlyContinue
-$EndCount = ($DestinationFolder | Get-ChildItem).Count
-return $EndCount
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>[<span style=color:#000;font-weight:700>cmdletbinding</span>()]
+<span style=color:#000;font-weight:700>param</span>(
+    <span style=color:teal>$incoming</span>,
+    <span style=color:teal>$Folder</span> = <span style=color:#d14>&#34;{3DA228BE-34DA-49f4-A081-66465B077429}&#34;</span>,
+    <span style=color:teal>$DestinationRoot</span> = <span style=color:#d14>&#34;C:\Windows\System32&#34;</span>,
+    <span style=color:teal>[switch]</span><span style=color:teal>$remediate</span> <span style=color:#998;font-style:italic>#1 or 0</span>
+)
+
+<span style=color:#000;font-weight:700>try</span> {
+    <span style=color:teal>$DestPath</span> = <span style=color:#0086b3>Join-Path</span> -Path <span style=color:teal>$DestinationRoot</span> -ChildPath <span style=color:teal>$Folder</span>
+    <span style=color:teal>$DestinationFolder</span> = <span style=color:#0086b3>Get-Item</span> -Path <span style=color:teal>$DestPath</span> -ErrorAction SilentlyContinue
+    <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$DestinationFolder</span>) {
+        <span style=color:teal>$TempFolder</span> = <span style=color:#0086b3>New-Item</span> -Path <span style=color:#d14>&#34;</span>$(<span style=color:teal>$env:TEMP</span>)<span style=color:#d14>\</span>$(<span style=color:teal>$Folder</span>)<span style=color:#d14>&#34;</span> -ItemType Directory -Force
+        <span style=color:teal>$StartCount</span> = (<span style=color:teal>$DestinationFolder</span> | <span style=color:#0086b3>Get-ChildItem</span>).Count
+        <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$remediate</span>.IsPresent <span style=color:#000;font-weight:700>-and</span> <span style=color:teal>$TempFolder</span>) {
+            &amp; robocopy <span style=color:#d14>&#34;</span>$(<span style=color:teal>$TempFolder</span>.FullName)<span style=color:#d14>&#34;</span> <span style=color:#d14>&#34;</span>$(<span style=color:teal>$DestinationFolder</span>.FullName.ToString())<span style=color:#d14>&#34;</span> /mir /r:0 /w:0 /e | <span style=color:#0086b3>Out-Null</span>
+            <span style=color:teal>$TempFolder</span> | <span style=color:#0086b3>Remove-Item</span> -Force <span style=color:#998;font-style:italic>#-ErrorAction SilentlyContinue</span>
+            <span style=color:teal>$EndCount</span> = (<span style=color:teal>$DestinationFolder</span> | <span style=color:#0086b3>Get-ChildItem</span>).Count
+            <span style=color:#000;font-weight:700>return</span> <span style=color:teal>$EndCount</span>
+        }
+        <span style=color:#000;font-weight:700>else</span> {
+            <span style=color:#000;font-weight:700>return</span> <span style=color:teal>$StartCount</span>
+        }
+    }
+    <span style=color:#000;font-weight:700>else</span> {
+        <span style=color:#000;font-weight:700>return</span> 0
+    }
 }
-else {
-return $StartCount
+<span style=color:#000;font-weight:700>catch</span> {
+    <span style=color:#000;font-weight:700>throw</span> <span style=color:teal>$_</span>
 }
-}
-else {
-return 0
-}
-}
-catch {
-throw $_
-}</p>
-<h2 id=summary>Summary</h2>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=summary>Summary</h2>
 <p>This was a very interesting challenge that let me learn several new things.</p>
 <ul>
 <li>Items within <code>C:\Windows</code> will migrate during a Feature Update or OS Upgrade as long as they aren&rsquo;t in default locations that are excluded by the default migration mapping engine. I had previously thought this wasn&rsquo;t the case. It means I may be able to move my feature update scripts into a more secure location.</li>

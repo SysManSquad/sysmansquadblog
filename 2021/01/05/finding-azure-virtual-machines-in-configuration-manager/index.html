@@ -22,7 +22,7 @@
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Finding Azure Virtual Machines in Configuration Manager">
 <meta name=twitter:description content="A request came in from my System Admin group to push certain policies only to VMs hosted in Azure. Currently, they had a naming convention being used (well, supposed to be used) to simply prefix the hostname with AZ-, but they came across a couple Domain Controllers that hadn&rsquo;t installed Updates in 7+ months, and of course the names didn&rsquo;t follow the accepted standard.
- <p> Officially, the Azure Metadata Service is: </p> <pre class=&#34;wp-block-code&#34;><code>[.">
+Azure Metadata Service  <p> Officially, the Azure Metadata Service is: </p> `[.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -95,51 +95,67 @@
 </div>
 <div class=post-entry>
 <p>A request came in from my System Admin group to push certain policies only to VMs hosted in Azure. Currently, they had a naming convention being used (well, <em>supposed</em> to be used) to simply prefix the hostname with <code>AZ-</code>, but they came across a couple Domain Controllers that hadn&rsquo;t installed Updates in 7+ months, and of course the names didn&rsquo;t follow the accepted standard.</p>
+<h1 id=azure-metadata-service>Azure Metadata Service</h1>
 <pre><code>                &lt;p&gt;
                   Officially, the Azure Metadata Service is:
                 &lt;/p&gt;
                 
-                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;[...] a REST API that's available at a well-known, non-routable IP address (169.254.169.254). You can only access it from within the VM. Communication between the VM and IMDS never leaves the host. Have your HTTP clients bypass web proxies within the VM when querying IMDS, and treat 169.254.169.254 the same as 168.63.129.16.&lt;/code&gt;&lt;/pre&gt;
+                `[...] a REST API that's available at a well-known, non-routable IP address (169.254.169.254). You can only access it from within the VM. Communication between the VM and IMDS never leaves the host. Have your HTTP clients bypass web proxies within the VM when querying IMDS, and treat 169.254.169.254 the same as 168.63.129.16.`
                 
                 &lt;p&gt;
                   Basically, it's an internal API using APIPA addressing to ensure that it can only be accessed while logged into the OS (or using &lt;code&gt;Invoke-Command&lt;/code&gt;). It allows us to get information about the guest OS. For our purposes today, we only care if it exists and won't be utilizing the actual data, but you can use this as a starting point for whatever's useful for you.
                 &lt;/p&gt;
-                
-                &lt;h1&gt;
-                  Detection Script
-                &lt;/h1&gt;
-                
-                &lt;p&gt;
+</code></pre>
+<h1 id=detection-script>Detection Script</h1>
+<pre><code>                &lt;p&gt;
                   First, let's convert the Azure Metadata Service documentation Curl command from bash/shell:
                 &lt;/p&gt;
-                
-                &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;shell&quot;,&quot;mime&quot;:&quot;text/x-sh&quot;,&quot;theme&quot;:&quot;xq-light&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:false,&quot;readOnly&quot;:false,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;Shell&quot;,&quot;modeName&quot;:&quot;shell&quot;}&quot;&gt;curl -H Metadata:true --noproxy &quot;*&quot; &quot;http://169.254.169.254/metadata/instance?api-version=2020-09-01&quot;&lt;/pre&gt;
-                &lt;/div&gt;
-                
-                &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -H Metadata:true --noproxy <span style=color:#d14>&#34;*&#34;</span> <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance?api-version=2020-09-01&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                &lt;p&gt;
                   to PowerShell:
                 &lt;/p&gt;
-                
-                &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;pastel-on-dark&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:false,&quot;readOnly&quot;:false,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;Invoke-RestMethod -Headers @{&quot;Metadata&quot;=&quot;true&quot;} -Uri &quot;http://169.254.169.254/metadata/instance/compute?api-version=2018-10-01&quot;&lt;/pre&gt;
-                &lt;/div&gt;
-                
-                &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{<span style=color:#d14>&#34;Metadata&#34;</span>=<span style=color:#d14>&#34;true&#34;</span>} -Uri <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance/compute?api-version=2018-10-01&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                &lt;p&gt;
                   Next, we should turn it into a simple Function
                 &lt;/p&gt;
-                
-                &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;pastel-on-dark&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:false,&quot;readOnly&quot;:false,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;FUNCTION Test-IsAzureVM {
-IF(Invoke-RestMethod -Headers @{&quot;Metadata&quot;=&quot;true&quot;} -URI &quot;http://169.254.169.254/metadata/instance/compute?api-version=2017-08-01&quot;){
-  $true
-}ELSE{
-  $false
-}
 </code></pre>
-<p>}
-</p>
-<pre><code>                &lt;p&gt;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#000;font-weight:700>FUNCTION</span> <span style=color:#0086b3>Test-IsAzureVM</span> {
+    <span style=color:#000;font-weight:700>IF</span>(<span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{<span style=color:#d14>&#34;Metadata&#34;</span>=<span style=color:#d14>&#34;true&#34;</span>} -URI <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance/compute?api-version=2017-08-01&#34;</span>){
+      <span style=color:teal>$true</span>
+    }<span style=color:#000;font-weight:700>ELSE</span>{
+      <span style=color:teal>$false</span>
+    }
+}
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>                &lt;p&gt;
                   And test on an Azure VM to make sure it works
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
@@ -159,7 +175,7 @@ IF(Invoke-RestMethod -Headers @{&quot;Metadata&quot;=&quot;true&quot;} -URI &quo
                   &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
                     &lt;blockquote class=&quot;wp-block-quote&quot;&gt;
                       &lt;p&gt;
-                        When&amp;nbsp;&lt;code&gt;Invoke-WebRequest&lt;/code&gt;&amp;nbsp;encounters a non-success HTTP message (404, 500, etc.), it returns no output and throws a terminating error. To catch the error and view the&amp;nbsp;&lt;strong&gt;StatusCode&lt;/strong&gt;&amp;nbsp;you can enclose execution in a&amp;nbsp;&lt;code&gt;try/catch&lt;/code&gt;&amp;nbsp;block.
+                        When&lt;code&gt;Invoke-WebRequest&lt;/code&gt;encounters a non-success HTTP message (404, 500, etc.), it returns no output and throws a terminating error. To catch the error and view the**StatusCode**you can enclose execution in a&lt;code&gt;try/catch&lt;/code&gt;block.
                       &lt;/p&gt;
                     &lt;/blockquote&gt;
                   &lt;/div&gt;
@@ -176,28 +192,34 @@ IF(Invoke-RestMethod -Headers @{&quot;Metadata&quot;=&quot;true&quot;} -URI &quo
                 ![](Snag_234d2101-1024x262.png)&lt;/figure&gt; &lt;p&gt;
                   Great! Here's the finished function
                 &lt;/p&gt;
-                
-                &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-                  &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;pastel-on-dark&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:false,&quot;readOnly&quot;:false,&quot;fileName&quot;:&quot;Test-IsAzureVM&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;FUNCTION Test-IsAzureVM {
 </code></pre>
-<p>TRY{
-$Output = [bool](Invoke-RestMethod -Headers @{&ldquo;Metadata&rdquo;=&ldquo;true&rdquo;} -URI &ldquo;http://169.254.169.254/metadata/instance/compute?api-version=2017-08-01&rdquo;)
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>9</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#000;font-weight:700>FUNCTION</span> <span style=color:#0086b3>Test-IsAzureVM</span> {
+  <span style=color:#000;font-weight:700>TRY</span>{
+    <span style=color:teal>$Output</span> = <span style=color:teal>[bool]</span>(<span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{<span style=color:#d14>&#34;Metadata&#34;</span>=<span style=color:#d14>&#34;true&#34;</span>} -URI <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance/compute?api-version=2017-08-01&#34;</span>)
+  }
+  <span style=color:#000;font-weight:700>CATCH</span>{
+    <span style=color:teal>$Output</span> = <span style=color:teal>$false</span>
+  }
+  <span style=color:teal>$Output</span>
 }
-CATCH{
-$Output = $false
-}
-$Output
-}
-</p>
-<pre><code>                &lt;h1&gt;
-                  Create Configuration Baseline
-                &lt;/h1&gt;
-                
-                &lt;h2&gt;
-                  Configuration Item
-                &lt;/h2&gt;
-                
-                &lt;p&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h1 id=create-configuration-baseline>Create Configuration Baseline</h1>
+<h2 id=configuration-item>Configuration Item</h2>
+<pre><code>                &lt;p&gt;
                   In your ConfigMgr Admin Console, navigate to &lt;code&gt;\Assets and Compliance\Overview\Compliance Settings\Configuration Items&lt;/code&gt; and Create a new Configuration Item
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
@@ -209,7 +231,7 @@ $Output
                     Data Type: &lt;code&gt;Boolean&lt;/code&gt;
                   &lt;/li&gt;
                   &lt;li&gt;
-                    Script: Past the Function in the window and &lt;span style=&quot;color:Red&quot;&gt;&lt;strong&gt;&lt;em&gt;don't forget to call the function on the last line!&lt;/em&gt;&lt;/strong&gt;&lt;/span&gt;
+                    Script: Past the Function in the window and &lt;span style=&quot;color:Red&quot;&gt;***don't forget to call the function on the last line!***&lt;/span&gt;
                   &lt;/li&gt;
                 &lt;/ol&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
                 
@@ -225,33 +247,28 @@ $Output
                     &lt;/ul&gt;
                   &lt;/li&gt;
                 &lt;/ol&gt;
-                
-                &lt;h2&gt;
-                  Configuration Baseline
-                &lt;/h2&gt;
-                
-                &lt;p&gt;
+</code></pre>
+<h2 id=configuration-baseline>Configuration Baseline</h2>
+<pre><code>                &lt;p&gt;
                   In the console, move down to the Configuration Baseline section and create a new Baseline, adding the Configuration Item we previously created
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                ![](image-15.png)&lt;/figure&gt; &lt;h2&gt;
-                  Deploy Baseline
-                &lt;/h2&gt;
-                
-                &lt;p&gt;
-                  Now you can Deploy your newly created Baseline to whichever devices you wish. For this example, we're deploying to the &lt;em&gt;All Systems&lt;/em&gt; collection and we're only going to run the baseline evaluation once per device, but there's no real harm in having it run every month or so (the data we're looking at is static and shouldn't vary at all).
+                ![](image-15.png)&lt;/figure&gt; 
+</code></pre>
+<h2 id=deploy-baseline>Deploy Baseline</h2>
+<pre><code>                &lt;p&gt;
+                  Now you can Deploy your newly created Baseline to whichever devices you wish. For this example, we're deploying to the *All Systems* collection and we're only going to run the baseline evaluation once per device, but there's no real harm in having it run every month or so (the data we're looking at is static and shouldn't vary at all).
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
-                ![](image-17-1024x640.png)&lt;/figure&gt; &lt;h1&gt;
-                  Create Collections
-                &lt;/h1&gt;
-                
-                &lt;p&gt;
-                  The only real &quot;required&quot; collection to make is based on Compliant devices with the Baseline we deployed. To do that, click the Baseline, then the Deployments tab at the bottom, and right-click the &lt;strong&gt;Deployment&lt;/strong&gt; &gt; &lt;strong&gt;Create New Collection&lt;/strong&gt; &gt; &lt;strong&gt;Compliant&lt;/strong&gt;, and follow the on-screen prompts to finish the Collection
+                ![](image-17-1024x640.png)&lt;/figure&gt; 
+</code></pre>
+<h1 id=create-collections>Create Collections</h1>
+<pre><code>                &lt;p&gt;
+                  The only real &quot;required&quot; collection to make is based on Compliant devices with the Baseline we deployed. To do that, click the Baseline, then the Deployments tab at the bottom, and right-click the **Deployment** &gt; **Create New Collection** &gt; **Compliant**, and follow the on-screen prompts to finish the Collection
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
                 ![](image-18.png)&lt;/figure&gt; &lt;p&gt;
-                  I named my Collection &quot;&lt;em&gt;All Systems_Azure&lt;/em&gt;&quot;
+                  I named my Collection &quot;*All Systems_Azure*&quot;
                 &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large is-resized&quot;&gt;
                 
                 ![](image-19.png)&lt;/figure&gt; &lt;p&gt;
@@ -260,29 +277,29 @@ $Output
                 
                 &lt;ul&gt;
                   &lt;li&gt;
-                    &lt;strong&gt;Collection Name&lt;/strong&gt;: &lt;em&gt;All Windows Workstations in Azure&lt;/em&gt;&lt;ul&gt;
+                    **Collection Name**: *All Windows Workstations in Azure*&lt;ul&gt;
                       &lt;li&gt;
-                        &lt;strong&gt;Limiting Collection&lt;/strong&gt;: &lt;em&gt;All Systems_Azure&lt;/em&gt;
+                        **Limiting Collection**: *All Systems_Azure*
                       &lt;/li&gt;
                       &lt;li&gt;
-                        &lt;strong&gt;Include Collection&lt;/strong&gt;: &lt;em&gt;All Windows Workstations&lt;/em&gt;
+                        **Include Collection**: *All Windows Workstations*
                       &lt;/li&gt;
                       &lt;li&gt;
-                        &lt;strong&gt;Result&lt;/strong&gt;: Collection of Azure VMs running Windows client OS
+                        **Result**: Collection of Azure VMs running Windows client OS
                       &lt;/li&gt;
                     &lt;/ul&gt;
                   &lt;/li&gt;
                   
                   &lt;li&gt;
-                    &lt;strong&gt;Collection Name&lt;/strong&gt;: &lt;em&gt;All Windows Servers in Azure&lt;/em&gt;&lt;ul&gt;
+                    **Collection Name**: *All Windows Servers in Azure*&lt;ul&gt;
                       &lt;li&gt;
-                        &lt;strong&gt;Limiting Collection&lt;/strong&gt;: &lt;em&gt;All Systems_Azure&lt;/em&gt;
+                        **Limiting Collection**: *All Systems_Azure*
                       &lt;/li&gt;
                       &lt;li&gt;
-                        &lt;strong&gt;Include Collection&lt;/strong&gt;: &lt;em&gt;All Windows Servers&lt;/em&gt;
+                        **Include Collection**: *All Windows Servers*
                       &lt;/li&gt;
                       &lt;li&gt;
-                        &lt;strong&gt;Result&lt;/strong&gt;: Collection of Azure VMs running Windows server OS
+                        **Result**: Collection of Azure VMs running Windows server OS
                       &lt;/li&gt;
                     &lt;/ul&gt;
                   &lt;/li&gt;

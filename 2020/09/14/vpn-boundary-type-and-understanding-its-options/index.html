@@ -118,19 +118,19 @@ Create A New Boundary In the Admin Console, navigate to the Administration Node 
 <h4 id=types-defined>Types Defined</h4>
 <p>From the <a href=https://docs.microsoft.com/en-us/mem/configmgr/core/servers/deploy/configure/boundaries#vpn>Define boundaries - Configuration Manager | Microsoft Docs</a>, these are the type options:</p>
 <ul>
-<li><strong>Auto detect VPN</strong>: Configuration Manager detects any VPN solution that uses the point-to-point tunneling protocol (PPTP). If it doesn&rsquo;t detect your VPN, use one of the other options. The boundary value in the console list will be Auto:On.</li>
-<li><strong>Connection name</strong>: Specify the name of the VPN connection on the device. It&rsquo;s the name of the network adapter in Windows for the VPN connection. Configuration Manager matches the first 250 characters of the string, but doesn&rsquo;t support wildcard characters or partial strings. The boundary value in the console list will be Name:, where  is the connection name that you specify.<br>
-For example, you run the ipconfig command on the device, and one of the sections starts with: PPP adapter ContosoVPN:. Use the string ContosoVPN as the <strong>Connection name</strong>. It displays in the list as Name:CONTOSOVPN.</li>
-<li><strong>Connection description</strong>: Specify the description of the VPN connection. Configuration Manager matches the first 243 characters of the string, but doesn&rsquo;t support wildcard characters or partial strings. The boundary value in the console list will be Description:, where  is the connection description that you specify.<br>
-For example, you run the ipconfig /all command on the device, and one of the connections includes the following line: Description . . . . . . . . . . . : ContosoMainVPN. Use the string ContosoMainVPN as the <strong>Connection description</strong>. It displays in the list as Description:CONTOSOMAINVPN.</li>
+<li><strong>Auto detect VPN</strong>: Configuration Manager detects any VPN solution that uses the point-to-point tunneling protocol (PPTP). If it doesn&rsquo;t detect your VPN, use one of the other options. The boundary value in the console list will beAuto:On.</li>
+<li><strong>Connection name</strong>: Specify the name of the VPN connection on the device. It&rsquo;s the name of the network adapter in Windows for the VPN connection. Configuration Manager matches the first 250 characters of the string, but doesn&rsquo;t support wildcard characters or partial strings. The boundary value in the console list will beName:, whereis the connection name that you specify.<br>
+For example, you run theipconfigcommand on the device, and one of the sections starts with:PPP adapter ContosoVPN:. Use the stringContosoVPNas the<strong>Connection name</strong>. It displays in the list asName:CONTOSOVPN.</li>
+<li><strong>Connection description</strong>: Specify the description of the VPN connection. Configuration Manager matches the first 243 characters of the string, <strong>but doesn&rsquo;t support wildcard characters or partial strings</strong>. The boundary value in the console list will beDescription:, whereis the connection description that you specify.<br>
+For example, you run theipconfig /allcommand on the device, and one of the connections includes the following line:Description . . . . . . . . . . . : ContosoMainVPN. Use the stringContosoMainVPNas the<strong>Connection description</strong>. It displays in the list asDescription:CONTOSOMAINVPN.</li>
 </ul>
 <h4 id=finding-the-best-fitfigure-classwp-block-table>Finding the Best Fit</h4>
 <pre><code>&lt;td&gt;
-  &lt;strong&gt;Decision&lt;/strong&gt;
+  **Decision**
 &lt;/td&gt;
 
 &lt;td class=&quot;has-text-align-center&quot; data-align=&quot;center&quot;&gt;
-  &lt;strong&gt;Selected&lt;/strong&gt;
+  **Selected**
 &lt;/td&gt;
 </code></pre>
 <pre><code>&lt;td&gt;
@@ -175,7 +175,15 @@ For example, you run the ipconfig /all command on the device, and one of the c
 <p>Then I added the new Boundary to my VPN Boundary Group.</p>
 <h2 id=test-results>Test Results</h2>
 <p>What happened next confused me. After forcing a few clients to update their Machine Policy, I saw VPN-connected devices drop <em>out</em> of the VPN Boundary Group that I added my newly-created Boundary to. I double-checked my own machine:</p>
-<p>The output revealed that my machine was no longer in my VPN Boundary Group, and instead was merely in the fallback Default Boundary Group.<br>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Get-CimInstance</span> -Namespace <span style=color:#d14>&#34;rootccmLocationServices&#34;</span> -ClassName <span style=color:#d14>&#34;BoundaryGroupCache&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>The output revealed that my machine was no longer in my VPN Boundary Group, and instead was merely in the fallback Default Boundary Group.<br>
 But WHY?</p>
 <p>Taking to Twitter, I posted a message&mldr;</p>
 <pre><code>  [August 27, 2020](https://twitter.com/robdotyork/status/1298788226606329858?ref_src=twsrc%5Etfw)
@@ -199,10 +207,23 @@ But WHY?</p>
 </ol>
 </li>
 </ol>
-<p>FROM v_GS_NETWORK_ADAPTER
-WHERE Description0 LIKE &lsquo;PANGP Virtual Ethernet Adapter%&rsquo;
-ORDER BY Description0```</p>
-<p>I assumed that the <code>Description</code> field populated in <code>win32_networkadapter</code> matched the <code>Description</code> field from <code>ipconfig/all</code>, but you already know that wasn&rsquo;t the case.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>Distinct</span><span style=color:#bbb>
+</span><span style=color:#bbb></span>Description0<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>FROM</span><span style=color:#bbb> </span>v_GS_NETWORK_ADAPTER<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>WHERE</span><span style=color:#bbb> </span>Description0<span style=color:#bbb> </span><span style=color:#000;font-weight:700>LIKE</span><span style=color:#bbb> </span><span style=color:#d14>&#39;PANGP Virtual Ethernet Adapter%&#39;</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>ORDER</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>BY</span><span style=color:#bbb> </span>Description0<span style=color:#bbb>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>I assumed that the <code>Description</code> field populated in <code>win32_networkadapter</code> matched the <code>Description</code> field from <code>ipconfig/all</code>, but you already know that wasn&rsquo;t the case.</p>
 <p><div class=image>
 <figure>
 <a href=Snag_2984151.png target=_blank>
@@ -216,10 +237,27 @@ ORDER BY Description0```</p>
 <p><em>&ldquo;But what you saw is expected&rdquo;</em></p>
 <p>Rob york</p>
 </blockquote>
-<p>FROM v_GS_NETWORK_ADAPTER
-WHERE Name0 LIKE &lsquo;PANGP Virtual Ethernet Adapter%&rsquo;
-ORDER BY Description0```</p>
-<p>This gave me more results and made me realize I needed a Boundary for each of these adapter Descriptions. Er&mldr; <em>Name0</em></p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=color:#000;font-weight:700>select</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>Distinct</span><span style=color:#bbb>
+</span><span style=color:#bbb></span>Name0<span style=color:#bbb> </span><span style=color:#000;font-weight:700>AS</span><span style=color:#bbb> </span><span style=color:#d14>&#39;VPN Boundary Description&#39;</span><span style=color:#bbb>
+</span><span style=color:#bbb></span>,Description0<span style=color:#bbb> </span><span style=color:#000;font-weight:700>AS</span><span style=color:#bbb> </span><span style=color:#d14>&#39;win32_networkadapter description&#39;</span><span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>FROM</span><span style=color:#bbb> </span>v_GS_NETWORK_ADAPTER<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>WHERE</span><span style=color:#bbb> </span>Name0<span style=color:#bbb> </span><span style=color:#000;font-weight:700>LIKE</span><span style=color:#bbb> </span><span style=color:#d14>&#39;PANGP Virtual Ethernet Adapter%&#39;</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#000;font-weight:700>ORDER</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>BY</span><span style=color:#bbb> </span>Description0<span style=color:#bbb>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>This gave me more results and made me realize I needed a Boundary for each of these adapter Descriptions. Er&mldr; <em>Name0</em></p>
 <p><div class=image>
 <figure>
 <a href=Snag_29cce99.png target=_blank>

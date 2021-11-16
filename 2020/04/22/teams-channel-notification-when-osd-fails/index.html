@@ -148,88 +148,228 @@ Well, now you can!     Step 1 - Configure Teams  Open Teams. Select a channel, o
 </div> </p>
 <h2 id=step-2>Step 2 - PowerShell Script</h2>
 <p>I have modified the PowerShell script created by Terence Beggs from <a href=https://www.scconfigmgr.com/2017/10/06/configmgr-osd-notification-service-teams/>https://www.scconfigmgr.com/2017/10/06/configmgr-osd-notification-service-teams/</a></p>
-<h1 id=open-tsenv-for-use>Open TSEnv for use.</h1>
-<p>$TSenv = New-Object -COMObject Microsoft.SMS.TSEnvironment -ErrorAction SilentlyContinue</p>
-<h1 id=date-and-time>Date and Time</h1>
-<p>$DateTime = Get-Date -Format &ldquo;dddd dd/MM/yyyy HH:mm&rdquo;</p>
-<h1 id=computer-make>Computer Make</h1>
-<p>$Make = (Get-WmiObject -Class Win32_BIOS).Manufacturer</p>
-<h1 id=computer-model>Computer Model</h1>
-<p>$Model = (Get-WmiObject -Class Win32_ComputerSystem).Model</p>
-<h1 id=computer-name>Computer Name</h1>
-<p>#DEBUG# $Name = (Get-WmiObject -Class Win32_ComputerSystem).Name
-if ($TSenv.Value("_SMSTSPackageName") -ne &ldquo;") { $Name = $TSenv.value(&ldquo;OSDComputerName&rdquo;) } else { $Name = (Get-WmiObject -Class Win32_ComputerSystem).Name }</p>
-<h1 id=computer-serial-number>Computer Serial Number</h1>
-<p>[string]$SerialNumber = (Get-WmiObject win32_bios).SerialNumber</p>
-<h1 id=ip-address-of-the-computer>IP Address of the Computer</h1>
-<p>$IPAddress = (Get-WmiObject win32_Networkadapterconfiguration | Where-Object { $_.ipaddress -notlike $null }).IPaddress | Select-Object -First 1</p>
-<p>#$TS Name
-#DEBUG# $TSName = &ldquo;TSName&rdquo;
-if ($TSenv.Value("_SMSTSPackageName&rdquo;) -ne &ldquo;") { $TSName = $TSenv.value("_SMSTSPackageName&rdquo;) } else { $TSName = &ldquo;Unknown Task Sequence&rdquo; }</p>
-<p>#Error Code
-$TSLastError = ($TSenv.Value(&ldquo;ErrorReturnCode&rdquo;))
-If([string]::IsNullOrEmpty($TSLastError)){$TSLastError = &ldquo;Unknown Error. Check Logs."}</p>
-<h1 id=json-for-the-teams-messagecard-legacy>JSON for the Teams MessageCard (LEGACY)</h1>
-<p>$body = @&rdquo;
-{
-&ldquo;@type&rdquo;: &ldquo;MessageCard&rdquo;,
-&ldquo;@context&rdquo;: &ldquo;<a href=https://schema.org/extensions%22>https://schema.org/extensions"</a>,
-&ldquo;summary&rdquo;: &ldquo;OSD Failure Card&rdquo;,
-&ldquo;themeColor&rdquo;: &ldquo;0078D7&rdquo;,
-&ldquo;title&rdquo;: &ldquo;$Name Failed to build&rdquo;,
-&ldquo;text&rdquo;: &ldquo;&rdquo;,
-&ldquo;sections&rdquo;: [
-{
-&ldquo;activityTitle&rdquo;: &ldquo;Task Sequence&rdquo;,
-&ldquo;activitySubtitle&rdquo;: &ldquo;$TSName&rdquo;,
-&ldquo;activityImage&rdquo;: &ldquo;https://media.giphy.com/media/27EhcDHnlkw1O/giphy.gif&rdquo;
-},
-{
-&ldquo;title&rdquo;: &ldquo;## Deployment Details&rdquo;,
-&ldquo;facts&rdquo;: [
-{
-&ldquo;name&rdquo;: &ldquo;Name:&rdquo;,
-&ldquo;value&rdquo;: &ldquo;$Name&rdquo;
-},
-{
-&ldquo;name&rdquo;: &ldquo;Date Time:&rdquo;,
-&ldquo;value&rdquo;: &ldquo;$DateTime&rdquo;
-},
-{
-&ldquo;name&rdquo;: &ldquo;IP Number:&rdquo;,
-&ldquo;value&rdquo;: &ldquo;$IPAddress&rdquo;
-},
-{
-&ldquo;name&rdquo;: &ldquo;Make:&rdquo;,
-&ldquo;value&rdquo;: &ldquo;$Make&rdquo;
-},
-{
-&ldquo;name&rdquo;: &ldquo;Model:&rdquo;,
-&ldquo;value&rdquo;: &ldquo;$Model&rdquo;
-},
-{
-&ldquo;name&rdquo;: &ldquo;Serial:&rdquo;,
-&ldquo;value&rdquo;: &ldquo;$SerialNumber&rdquo;
-},
-{
-&ldquo;name&rdquo;: &ldquo;Last Error&rdquo;,
-&ldquo;value&rdquo;: &ldquo;$TSLastError&rdquo;
-}
-]
-},
-{
-&ldquo;title&rdquo;: &ldquo;## Log Location&rdquo;,
-&ldquo;text&rdquo;: &ldquo;\\\SERVER\Logs\OSD\&rdquo;
-}
-]
-}
-&ldquo;@</p>
-<p>Invoke-RestMethod -uri $uri -Method Post -body $body -ContentType &lsquo;application/json&rsquo;
-</p>
-<h3 id=customising-the-messagecard>Customising the MessageCard</h3>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>  1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>  2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>  3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>  4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>  5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>  6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>  7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>  8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>  9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10> 10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11> 11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12> 12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13> 13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14> 14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15> 15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16> 16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17> 17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18> 18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19> 19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20> 20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21> 21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22> 22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23> 23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24> 24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25> 25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26> 26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27> 27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28> 28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29> 29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30> 30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31> 31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32> 32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33> 33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34> 34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35> 35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36> 36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37> 37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38> 38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39> 39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40> 40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41> 41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42> 42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43> 43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44> 44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45> 45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46> 46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47> 47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48> 48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49> 49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50> 50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51> 51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52> 52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53> 53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54> 54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55> 55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56> 56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57> 57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58> 58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59> 59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60> 60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61> 61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62> 62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63> 63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64> 64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65> 65</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66> 66</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67> 67</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68> 68</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69> 69</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70> 70</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71><a style=outline:none;text-decoration:none;color:inherit href=#71> 71</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72><a style=outline:none;text-decoration:none;color:inherit href=#72> 72</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73><a style=outline:none;text-decoration:none;color:inherit href=#73> 73</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74><a style=outline:none;text-decoration:none;color:inherit href=#74> 74</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=75><a style=outline:none;text-decoration:none;color:inherit href=#75> 75</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=76><a style=outline:none;text-decoration:none;color:inherit href=#76> 76</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=77><a style=outline:none;text-decoration:none;color:inherit href=#77> 77</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=78><a style=outline:none;text-decoration:none;color:inherit href=#78> 78</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=79><a style=outline:none;text-decoration:none;color:inherit href=#79> 79</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=80><a style=outline:none;text-decoration:none;color:inherit href=#80> 80</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=81><a style=outline:none;text-decoration:none;color:inherit href=#81> 81</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=82><a style=outline:none;text-decoration:none;color:inherit href=#82> 82</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=83><a style=outline:none;text-decoration:none;color:inherit href=#83> 83</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=84><a style=outline:none;text-decoration:none;color:inherit href=#84> 84</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=85><a style=outline:none;text-decoration:none;color:inherit href=#85> 85</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=86><a style=outline:none;text-decoration:none;color:inherit href=#86> 86</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=87><a style=outline:none;text-decoration:none;color:inherit href=#87> 87</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=88><a style=outline:none;text-decoration:none;color:inherit href=#88> 88</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=89><a style=outline:none;text-decoration:none;color:inherit href=#89> 89</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=90><a style=outline:none;text-decoration:none;color:inherit href=#90> 90</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=91><a style=outline:none;text-decoration:none;color:inherit href=#91> 91</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=92><a style=outline:none;text-decoration:none;color:inherit href=#92> 92</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=93><a style=outline:none;text-decoration:none;color:inherit href=#93> 93</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=94><a style=outline:none;text-decoration:none;color:inherit href=#94> 94</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=95><a style=outline:none;text-decoration:none;color:inherit href=#95> 95</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=96><a style=outline:none;text-decoration:none;color:inherit href=#96> 96</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=97><a style=outline:none;text-decoration:none;color:inherit href=#97> 97</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=98><a style=outline:none;text-decoration:none;color:inherit href=#98> 98</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=99><a style=outline:none;text-decoration:none;color:inherit href=#99> 99</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=100><a style=outline:none;text-decoration:none;color:inherit href=#100>100</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=101><a style=outline:none;text-decoration:none;color:inherit href=#101>101</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=102><a style=outline:none;text-decoration:none;color:inherit href=#102>102</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=103><a style=outline:none;text-decoration:none;color:inherit href=#103>103</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=104><a style=outline:none;text-decoration:none;color:inherit href=#104>104</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=105><a style=outline:none;text-decoration:none;color:inherit href=#105>105</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=106><a style=outline:none;text-decoration:none;color:inherit href=#106>106</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic>#
+</span><span style=color:#998;font-style:italic>    </span><span style=color:#d14>.NOTES</span>
+    ==================================================================
+    Originally Created by<span style=color:#a61717;background-color:#e3d2d2>:</span>     Terence Beggs (https<span style=color:#a61717;background-color:#e3d2d2>:</span>//www.scconfigmgr.com)
+    Modified by<span style=color:#a61717;background-color:#e3d2d2>:</span>    Grant Dickins
+    ==================================================================
+    .DESCRIPTION
+    This script uses Microsoft Teams to notify when a OSD task sequence has failed.
+    .REFERENCE
+    https<span style=color:#a61717;background-color:#e3d2d2>:</span>//docs.microsoft.com/<span style=color:#0086b3>en-us</span>/outlook/<span style=color:#0086b3>actionable-messages</span>/<span style=color:#0086b3>message-card</span>-reference
+    https<span style=color:#a61717;background-color:#e3d2d2>:</span>//www.scconfigmgr.com/2017/10/06/<span style=color:#0086b3>configmgr-osd</span>-notification-service-teams/
+    https<span style=color:#a61717;background-color:#e3d2d2>:</span>//messagecardplayground.azurewebsites.net/
+    ==================================================================
+    .TODO
+    - Add Error codes to MessageCard
+<span style=color:#998;font-style:italic>#&gt;</span>
+<span style=color:teal>$uri</span> = <span style=color:#d14>&#39;INSERT URI HERE&#39;</span>
+
+<span style=color:#998;font-style:italic># Open TSEnv for use.</span>
+<span style=color:teal>$TSenv</span> = <span style=color:#0086b3>New-Object</span> -COMObject Microsoft.SMS.TSEnvironment -ErrorAction SilentlyContinue
+
+<span style=color:#998;font-style:italic># Date and Time</span>
+<span style=color:teal>$DateTime</span> = <span style=color:#0086b3>Get-Date</span> -Format <span style=color:#d14>&#34;dddd dd/MM/yyyy HH:mm&#34;</span>
+    
+<span style=color:#998;font-style:italic># Computer Make</span>
+<span style=color:teal>$Make</span> = (<span style=color:#0086b3>Get-WmiObject</span> -Class Win32_BIOS).Manufacturer
+    
+<span style=color:#998;font-style:italic># Computer Model</span>
+<span style=color:teal>$Model</span> = (<span style=color:#0086b3>Get-WmiObject</span> -Class Win32_ComputerSystem).Model
+    
+<span style=color:#998;font-style:italic># Computer Name</span>
+<span style=color:#998;font-style:italic>#DEBUG# $Name = (Get-WmiObject -Class Win32_ComputerSystem).Name</span>
+<span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$TSenv</span>.Value(<span style=color:#d14>&#34;_SMSTSPackageName&#34;</span>) <span style=color:#000;font-weight:700>-ne</span> <span style=color:#d14>&#34;&#34;</span>) { <span style=color:teal>$Name</span> = <span style=color:teal>$TSenv</span>.value(<span style=color:#d14>&#34;OSDComputerName&#34;</span>) } <span style=color:#000;font-weight:700>else</span> { <span style=color:teal>$Name</span> = (<span style=color:#0086b3>Get-WmiObject</span> -Class Win32_ComputerSystem).Name }
+
+<span style=color:#998;font-style:italic># Computer Serial Number</span>
+<span style=color:teal>[string]</span><span style=color:teal>$SerialNumber</span> = (<span style=color:#0086b3>Get-WmiObject</span> win32_bios).SerialNumber
+    
+<span style=color:#998;font-style:italic># IP Address of the Computer</span>
+<span style=color:teal>$IPAddress</span> = (<span style=color:#0086b3>Get-WmiObject</span> win32_Networkadapterconfiguration | <span style=color:#0086b3>Where-Object</span> { <span style=color:teal>$_</span>.ipaddress <span style=color:#000;font-weight:700>-notlike</span> <span style=color:teal>$null</span> }).IPaddress | <span style=color:#0086b3>Select-Object</span> -First 1
+    
+<span style=color:#998;font-style:italic>#$TS Name</span>
+<span style=color:#998;font-style:italic>#DEBUG# $TSName = &#34;TSName&#34;</span>
+<span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$TSenv</span>.Value(<span style=color:#d14>&#34;_SMSTSPackageName&#34;</span>) <span style=color:#000;font-weight:700>-ne</span> <span style=color:#d14>&#34;&#34;</span>) { <span style=color:teal>$TSName</span> = <span style=color:teal>$TSenv</span>.value(<span style=color:#d14>&#34;_SMSTSPackageName&#34;</span>) } <span style=color:#000;font-weight:700>else</span> { <span style=color:teal>$TSName</span> = <span style=color:#d14>&#34;Unknown Task Sequence&#34;</span> }
+
+<span style=color:#998;font-style:italic>#Error Code</span>
+<span style=color:teal>$TSLastError</span> = (<span style=color:teal>$TSenv</span>.Value(<span style=color:#d14>&#34;ErrorReturnCode&#34;</span>))
+<span style=color:#000;font-weight:700>If</span>(<span style=color:teal>[string]</span>::IsNullOrEmpty(<span style=color:teal>$TSLastError</span>)){<span style=color:teal>$TSLastError</span> = <span style=color:#d14>&#34;Unknown Error. Check Logs.&#34;</span>}
+    
+<span style=color:#998;font-style:italic># JSON for the Teams MessageCard (LEGACY)</span>
+<span style=color:teal>$body</span> = <span style=color:#d14>@&#34;
+</span><span style=color:#d14>    {
+</span><span style=color:#d14>        &#34;@type&#34;: &#34;MessageCard&#34;,
+</span><span style=color:#d14>        &#34;@context&#34;: &#34;https://schema.org/extensions&#34;,
+</span><span style=color:#d14>        &#34;summary&#34;: &#34;OSD Failure Card&#34;,
+</span><span style=color:#d14>        &#34;themeColor&#34;: &#34;0078D7&#34;,
+</span><span style=color:#d14>        &#34;title&#34;: &#34;$Name Failed to build&#34;,
+</span><span style=color:#d14>        &#34;text&#34;: &#34;&#34;,
+</span><span style=color:#d14>        &#34;sections&#34;: [
+</span><span style=color:#d14>            {
+</span><span style=color:#d14>                &#34;activityTitle&#34;: &#34;Task Sequence&#34;,
+</span><span style=color:#d14>                &#34;activitySubtitle&#34;: &#34;$TSName&#34;,
+</span><span style=color:#d14>                &#34;activityImage&#34;: &#34;https://media.giphy.com/media/27EhcDHnlkw1O/giphy.gif&#34;
+</span><span style=color:#d14>            },
+</span><span style=color:#d14>            {
+</span><span style=color:#d14>                &#34;title&#34;: &#34;## Deployment Details&#34;,
+</span><span style=color:#d14>                &#34;facts&#34;: [
+</span><span style=color:#d14>                    {
+</span><span style=color:#d14>                        &#34;name&#34;: &#34;Name:&#34;,
+</span><span style=color:#d14>                        &#34;value&#34;: &#34;$Name&#34;
+</span><span style=color:#d14>                    },
+</span><span style=color:#d14>                    {
+</span><span style=color:#d14>                        &#34;name&#34;: &#34;Date Time:&#34;,
+</span><span style=color:#d14>                        &#34;value&#34;: &#34;$DateTime&#34;
+</span><span style=color:#d14>                    },
+</span><span style=color:#d14>                    {
+</span><span style=color:#d14>                        &#34;name&#34;: &#34;IP Number:&#34;,
+</span><span style=color:#d14>                        &#34;value&#34;: &#34;$IPAddress&#34;
+</span><span style=color:#d14>                    },
+</span><span style=color:#d14>                    {
+</span><span style=color:#d14>                        &#34;name&#34;: &#34;Make:&#34;,
+</span><span style=color:#d14>                        &#34;value&#34;: &#34;$Make&#34;
+</span><span style=color:#d14>                    },
+</span><span style=color:#d14>                    {
+</span><span style=color:#d14>                        &#34;name&#34;: &#34;Model:&#34;,
+</span><span style=color:#d14>                        &#34;value&#34;: &#34;$Model&#34;
+</span><span style=color:#d14>                    },
+</span><span style=color:#d14>                    {
+</span><span style=color:#d14>                        &#34;name&#34;: &#34;Serial:&#34;,
+</span><span style=color:#d14>                        &#34;value&#34;: &#34;$SerialNumber&#34;
+</span><span style=color:#d14>                    },
+</span><span style=color:#d14>                    {
+</span><span style=color:#d14>                        &#34;name&#34;: &#34;Last Error&#34;,
+</span><span style=color:#d14>                        &#34;value&#34;: &#34;$TSLastError&#34;
+</span><span style=color:#d14>                    }
+</span><span style=color:#d14>                ]
+</span><span style=color:#d14>            },
+</span><span style=color:#d14>            {
+</span><span style=color:#d14>                &#34;title&#34;: &#34;## Log Location&#34;,
+</span><span style=color:#d14>                &#34;text&#34;: &#34;\\\\\\SERVER\\Logs\\OSD\\&#34;
+</span><span style=color:#d14>            }
+</span><span style=color:#d14>        ]
+</span><span style=color:#d14>    }
+</span><span style=color:#d14>&#34;@</span>
+
+<span style=color:#0086b3>Invoke-RestMethod</span> -uri <span style=color:teal>$uri</span> -Method Post -body <span style=color:teal>$body</span> -ContentType <span style=color:#d14>&#39;application/json&#39;</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=customising-the-messagecard>Customising the MessageCard</h3>
 <p>If you want to change the JSON, there is a reference guide here: <a href=https://docs.microsoft.com/en-us/outlook/actionable-messages/message-card-reference>https://docs.microsoft.com/en-us/outlook/actionable-messages/message-card-reference</a></p>
 <p>And a Playground site: <a href=https://messagecardplayground.azurewebsites.net/>https://messagecardplayground.azurewebsites.net/</a></p>
-<p>This modification of the PowerShell script means you can just copy/paste the JSON as long as it&rsquo;s wrapped inside $body = @&rdquo; &mldr; &ldquo;@</p>
+<p>This modification of the PowerShell script means you can just copy/paste the JSON as long as it&rsquo;s wrapped inside $body = @" &mldr; &ldquo;@</p>
 <p><strong>NB: Incoming Webconnectors only support the Legacy MessageCard format at this time.</strong></p>
 <h2 id=step-3>Step 3 - Create Package for Script</h2>
 <ul>

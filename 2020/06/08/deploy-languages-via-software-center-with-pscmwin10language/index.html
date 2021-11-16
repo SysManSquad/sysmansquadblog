@@ -105,30 +105,37 @@
             These Applications are not for OSD. It changes the language only for the user who installs the Application via the Software Center. They will not work for OSD via task sequence.
           &lt;/p&gt;
           
-          &lt;h2&gt;
-            Install the module
-          &lt;/h2&gt;
+          ## Install the module
+          
           
           &lt;p&gt;
             The module can be found on [GitHub](https://github.com/codaamok/PSCMWin10Language) or the [PowerShell Gallery](https://www.powershellgallery.com/packages/PSCMWin10Language/0.0.1). You can install it like so:
           &lt;/p&gt;
-          
-          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;Install-Module &quot;PSCMWin10Language&quot; -Scope CurrentUser&lt;/pre&gt;
-          &lt;/div&gt;
-          
-          &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Install-Module</span> <span style=color:#d14>&#34;PSCMWin10Language&#34;</span> -Scope CurrentUser
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>          &lt;p&gt;
             Check out what functions are given to you:
           &lt;/p&gt;
-          
-          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;Import-Module &quot;PSCMWin10Language&quot;
 </code></pre>
-<p>Get-Command -Module &ldquo;PSCMWin10Language&rdquo;
-</p>
-<pre><code>          &lt;h2&gt;
-            Create LP, LXP and FoD repositories
-          &lt;/h2&gt;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Import-Module</span> <span style=color:#d14>&#34;PSCMWin10Language&#34;</span>
+<span style=color:#0086b3>Get-Command</span> -Module <span style=color:#d14>&#34;PSCMWin10Language&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>          ## Create LP, LXP and FoD repositories
+          
           
           &lt;p&gt;
             We need to form the source folders for each of our Applications (in other words, for each language we want to support). The source folders will contain the needed LP, LXP and FoD files for each language - a mix of .cab and .appx files.
@@ -151,7 +158,7 @@
           &lt;/ul&gt;
           
           &lt;p&gt;
-            &lt;strong&gt;Note:&lt;/strong&gt; New-FoDLanguageFeaturesRepository only extracts &quot;LanguageFeature&quot; FoDs. If you want to include more FoDs than these, you'll have to arrange something yourself.
+            **Note:** New-FoDLanguageFeaturesRepository only extracts &quot;LanguageFeature&quot; FoDs. If you want to include more FoDs than these, you'll have to arrange something yourself.
           &lt;/p&gt;
           
           &lt;p&gt;
@@ -161,21 +168,34 @@
           &lt;p&gt;
             Let's assume I want to support languages French and German. Our end goal is to create a folder structure that looks something like this:
           &lt;/p&gt;
-          
-          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:false,&quot;styleActiveLine&quot;:false,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;PS C:\&amp;gt; tree &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot; | Select-Object -Skip 2
 </code></pre>
-<p>\SCCM.ACC.LOCAL\OSD\SOURCE\1909-LANGUAGES
-+&mdash;de-de
-¦ +&mdash;FoD
-¦ +&mdash;LP
-¦ +&mdash;LXP
-+&mdash;fr-fr
-+&mdash;FoD
-+&mdash;LP
-+&mdash;LXP
-</p>
-<pre><code>          &lt;p&gt;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; tree <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\1909-Languages&#34;</span> | <span style=color:#0086b3>Select-Object</span> -Skip 2
+\\SCCM.ACC.LOCAL\OSD\SOURCE\1909-LANGUAGES
++---de-de
+<span style=color:#a61717;background-color:#e3d2d2>¦</span>   +---FoD
+<span style=color:#a61717;background-color:#e3d2d2>¦</span>   +---LP
+<span style=color:#a61717;background-color:#e3d2d2>¦</span>   +---LXP
++---fr-fr
+    +---FoD
+    +---LP
+    +---LXP
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>          &lt;p&gt;
             Start off by going to VLSC or MSDN and downloading the following ISOs for your target Windows 10 version:
           &lt;/p&gt;
           
@@ -191,26 +211,35 @@
           &lt;p&gt;
             Once downloaded, mount them all and go back to the PowerShell prompt where we imported PSCMWin10Language, and execute the following (replace the appropriate drive letters):
           &lt;/p&gt;
-          
-          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;New-LPRepository -Language &quot;fr-FR&quot;, &quot;de-DE&quot; -SourcePath &quot;I:\x64\langpacks&quot; -TargetPath &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot;
 </code></pre>
-<p>New-LXPRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rdquo; -SourcePath &ldquo;I:\LocalExperiencePack" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\1909-Languages&rdquo;
-New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rdquo; -SourcePath &ldquo;J:" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\1909-Languages&rdquo;
-</p>
-<pre><code>          &lt;h2&gt;
-            Create the Applications
-          &lt;/h2&gt;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>New-LPRepository</span> -Language <span style=color:#d14>&#34;fr-FR&#34;</span>, <span style=color:#d14>&#34;de-DE&#34;</span> -SourcePath <span style=color:#d14>&#34;I:\x64\langpacks&#34;</span> -TargetPath <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\1909-Languages&#34;</span>
+<span style=color:#0086b3>New-LXPRepository</span> -Language <span style=color:#d14>&#34;fr-FR&#34;</span>, <span style=color:#d14>&#34;de-DE&#34;</span> -SourcePath <span style=color:#d14>&#34;I:\LocalExperiencePack\&#34;</span> -TargetPath <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\1909-Languages&#34;</span>
+<span style=color:#0086b3>New-FoDLanguageFeaturesRepository</span> -Language <span style=color:#d14>&#34;fr-FR&#34;</span>, <span style=color:#d14>&#34;de-DE&#34;</span> -SourcePath <span style=color:#d14>&#34;J:\&#34;</span> -TargetPath <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\1909-Languages&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>          ## Create the Applications
+          
           
           &lt;p&gt;
             With the LP, LXP and FoD repositories set up, we're now ready to create our ConfigMgr Application(s)
           &lt;/p&gt;
-          
-          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;New-CMLanguagePackApplication -SiteServer &quot;cm.contoso.com&quot; -SiteCode &quot;P01&quot; -SourcePath &quot;\\sccm.acc.local\OSD\Source\1909-Languages&quot; -Languages &quot;fr-fr&quot;, &quot;de-de&quot; -WindowsVersion @{ &quot;Version&quot; = &quot;1909&quot;; &quot;Build&quot; = &quot;18363&quot; } -GlobalConditionName &quot;Operating System build&quot; -CreateAppIfMissing -CreateGlobalConditionIfMissing&lt;/pre&gt;
-          &lt;/div&gt;
-          
-          &lt;p&gt;
+</code></pre>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>New-CMLanguagePackApplication</span> -SiteServer <span style=color:#d14>&#34;cm.contoso.com&#34;</span> -SiteCode <span style=color:#d14>&#34;P01&#34;</span> -SourcePath <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\1909-Languages&#34;</span> -Languages <span style=color:#d14>&#34;fr-fr&#34;</span>, <span style=color:#d14>&#34;de-de&#34;</span> -WindowsVersion @{ <span style=color:#d14>&#34;Version&#34;</span> = <span style=color:#d14>&#34;1909&#34;</span>; <span style=color:#d14>&#34;Build&#34;</span> = <span style=color:#d14>&#34;18363&#34;</span> } -GlobalConditionName <span style=color:#d14>&#34;Operating System build&#34;</span> -CreateAppIfMissing -CreateGlobalConditionIfMissing
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>          &lt;p&gt;
             There's quite a few parameters used here so let me explain them:
           &lt;/p&gt;
           
@@ -262,19 +291,27 @@ New-FoDLanguageFeaturesRepository -Language &ldquo;fr-FR&rdquo;, &ldquo;de-DE&rd
           &lt;p&gt;
             For example, I used the same process again to create deployment types on the existing Applications for Windows 10 2004:
           &lt;/p&gt;
-          
-          &lt;div class=&quot;wp-block-codemirror-blocks-code-block code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;powershell&quot;,&quot;mime&quot;:&quot;application/x-powershell&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:true,&quot;languageLabel&quot;:&quot;language&quot;,&quot;language&quot;:&quot;PowerShell&quot;,&quot;modeName&quot;:&quot;powershell&quot;}&quot;&gt;New-LXPRepository -Language &quot;fr-fr&quot;, &quot;de-de&quot; -SourcePath &quot;I:\LocalExperiencePack\&quot; -TargetPath &quot;\\sccm.acc.local\OSD\Source\2004-Languages&quot;
 </code></pre>
-<p>New-LPRepository -Language &ldquo;fr-fr&rdquo;, &ldquo;de-de&rdquo; -SourcePath &ldquo;I:\x64\langpacks" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\2004-Languages&rdquo;
-New-FoDLanguageFeaturesRepository -Language &ldquo;fr-fr&rdquo;, &ldquo;de-de&rdquo; -SourcePath &ldquo;I:" -TargetPath &ldquo;\sccm.acc.local\OSD\Source\2004-Languages&rdquo;
-New-CMLanguagePackApplication -SiteServer &ldquo;cm.contoso.com&rdquo; -SiteCode &ldquo;P01&rdquo; -SourcePath &ldquo;\sccm.acc.local\OSD\Source\2004-Languages&rdquo; -Languages &ldquo;fr-fr&rdquo;, &ldquo;de-de&rdquo; -WindowsVersion @{ &ldquo;Version&rdquo; = &ldquo;2004&rdquo;; &ldquo;Build&rdquo; = &ldquo;19041&rdquo; } -GlobalConditionName &ldquo;Operating System build&rdquo; -CreateAppIfMissing -CreateGlobalConditionIfMissing
-</p>
-<pre><code>          [![](LPSoftwareCenter-EndResult-3-new-1024x658.jpg)](LPSoftwareCenter-EndResult-3-new.jpg)&lt;/figure&gt; &lt;h2&gt;
-            Support
-          &lt;/h2&gt;
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>New-LXPRepository</span> -Language <span style=color:#d14>&#34;fr-fr&#34;</span>, <span style=color:#d14>&#34;de-de&#34;</span> -SourcePath <span style=color:#d14>&#34;I:\LocalExperiencePack\&#34;</span> -TargetPath <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\2004-Languages&#34;</span>
+<span style=color:#0086b3>New-LPRepository</span> -Language <span style=color:#d14>&#34;fr-fr&#34;</span>, <span style=color:#d14>&#34;de-de&#34;</span> -SourcePath <span style=color:#d14>&#34;I:\x64\langpacks\&#34;</span> -TargetPath <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\2004-Languages&#34;</span>
+<span style=color:#0086b3>New-FoDLanguageFeaturesRepository</span> -Language <span style=color:#d14>&#34;fr-fr&#34;</span>, <span style=color:#d14>&#34;de-de&#34;</span> -SourcePath <span style=color:#d14>&#34;I:\&#34;</span> -TargetPath <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\2004-Languages&#34;</span>
+<span style=color:#0086b3>New-CMLanguagePackApplication</span> -SiteServer <span style=color:#d14>&#34;cm.contoso.com&#34;</span> -SiteCode <span style=color:#d14>&#34;P01&#34;</span> -SourcePath <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\2004-Languages&#34;</span> -Languages <span style=color:#d14>&#34;fr-fr&#34;</span>, <span style=color:#d14>&#34;de-de&#34;</span> -WindowsVersion @{ <span style=color:#d14>&#34;Version&#34;</span> = <span style=color:#d14>&#34;2004&#34;</span>; <span style=color:#d14>&#34;Build&#34;</span> = <span style=color:#d14>&#34;19041&#34;</span> } -GlobalConditionName <span style=color:#d14>&#34;Operating System build&#34;</span> -CreateAppIfMissing -CreateGlobalConditionIfMissing
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>          &lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          &lt;p&gt;
+          [![](LPSoftwareCenter-EndResult-3-new-1024x658.jpg)](LPSoftwareCenter-EndResult-3-new.jpg)&lt;/figure&gt; 
+</code></pre>
+<h2 id=support>Support</h2>
+<pre><code>          &lt;p&gt;
             If you have any issues with the module, please do open an issue on the [PSCMWin10Language GitHub repository](https://github.com/codaamok/PSCMWin10Language)!
           &lt;/p&gt;
 </code></pre>

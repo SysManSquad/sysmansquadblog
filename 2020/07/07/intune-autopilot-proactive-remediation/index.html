@@ -112,16 +112,66 @@
 </ol>
 <p>You&rsquo;ll notice by default we have two Script Packages that Microsoft authored. After we create our detection and remediation script we will create a script package so let&rsquo;s get cracking on that!</p>
 <h3 id=first-we-need-to-create-a-detection-script>First we need to create a Detection script</h3>
-<p>}
-catch{
-$errMsg = $_.Exception.Message
-write-host $errMsg
-exit 1
-}</p>
-<p>The above detection script is the generic format you should use for detection logic. You&rsquo;ll notice it&rsquo;s a simple try-catch. In this script we are checking to see if a VPN connection exists. You can make these detection scripts as robust as you&rsquo;d like but for this scenario we are making it simplistic. You can copy the above and simply change Line 2 to whatever you&rsquo;d like to test. I would STRONGLY encourage you to include the <strong>-ErrorAction Stop</strong> section as not all PowerShell cmdlets exit without throwing the cmdlet error, and this will ensure that they exit with the proper exit codes you define. On a exit code of 0 it&rsquo;s reported as &ldquo;Without Issues&rdquo; in the portal. Nothing else will happen and the detection script will run again at the scheduled time. In the event an Exit code of 1 is thrown the remediation script will run. If no exit code is thrown the detection script will report as Failed and you&rsquo;ll need to adjust the script. As an example on the above script if you remove the <strong>-ErrorAction Stop</strong> section the detection fails because Get-VPNConnection doesn&rsquo;t throw the correct cmdlet error which results in the exit code not being defined.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#000;font-weight:700>try</span>{
+    <span style=color:#000;font-weight:700>if</span> (<span style=color:#0086b3>Get-VpnConnection</span> -AllUserConnection -Name <span style=color:#d14>&#34;VPN&#34;</span> -ErrorAction Stop)
+    {
+        <span style=color:#0086b3>write-host</span> <span style=color:#d14>&#34;Success&#34;</span>
+    	exit 0  
+    }
+  
+}
+<span style=color:#000;font-weight:700>catch</span>{
+    <span style=color:teal>$errMsg</span> = <span style=color:teal>$_</span>.Exception.Message
+    <span style=color:#0086b3>write-host</span> <span style=color:teal>$errMsg</span>
+    exit 1
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>The above detection script is the generic format you should use for detection logic. You&rsquo;ll notice it&rsquo;s a simple try-catch. In this script we are checking to see if a VPN connection exists. You can make these detection scripts as robust as you&rsquo;d like but for this scenario we are making it simplistic. You can copy the above and simply change Line 2 to whatever you&rsquo;d like to test. I would STRONGLY encourage you to include the <strong>-ErrorAction Stop</strong> section as not all PowerShell cmdlets exit without throwing the cmdlet error, and this will ensure that they exit with the proper exit codes you define. On a exit code of 0 it&rsquo;s reported as &ldquo;Without Issues&rdquo; in the portal. Nothing else will happen and the detection script will run again at the scheduled time. In the event an Exit code of 1 is thrown the remediation script will run. If no exit code is thrown the detection script will report as Failed and you&rsquo;ll need to adjust the script. As an example on the above script if you remove the <strong>-ErrorAction Stop</strong> section the detection fails because Get-VPNConnection doesn&rsquo;t throw the correct cmdlet error which results in the exit code not being defined.</p>
 <p>If you&rsquo;d like to read more on error handling and exceptions Kevin Marquette has a fantastic blog on it. <a href=https://powershellexplained.com/2017-04-10-Powershell-exceptions-everything-you-ever-wanted-to-know/#trycatch>https://powershellexplained.com/2017-04-10-Powershell-exceptions-everything-you-ever-wanted-to-know/#trycatch</a></p>
 <h3 id=next-lets-make-a-remediation-script>Next lets make a remediation script</h3>
-<p>The above remediation script, just like the detection script, is a try-catch. You&rsquo;ll see that I add The VPN connection and in the event of a failure it writes to the host what the error was. This is going to be important for diagnosing why your script fails if it does. This is included in both the detection and remediation scripts I&rsquo;ve shown. Much like the detection script feel free to change Line 2 to whatever you&rsquo;d like and expand upon it.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>9</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#000;font-weight:700>try</span>{
+    <span style=color:#0086b3>Add-VpnConnection</span> -Name <span style=color:#d14>&#34;VPN&#34;</span> -ServerAddress <span style=color:#d14>&#34;VPN.Contoso.loc&#34;</span> -TunnelType L2TP -L2tpPsk <span style=color:#d14>&#34;SecretPassword&#34;</span> -Force -AuthenticationMethod PAP -RememberCredential -AllUserConnection -ErrorAction Stop
+    exit 0
+}
+<span style=color:#000;font-weight:700>catch</span>{
+    <span style=color:teal>$errMsg</span> = <span style=color:teal>$_</span>.Exception.Message
+    <span style=color:#0086b3>Write-host</span> <span style=color:teal>$errMsg</span>
+    exit 1
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>The above remediation script, just like the detection script, is a try-catch. You&rsquo;ll see that I add The VPN connection and in the event of a failure it writes to the host what the error was. This is going to be important for diagnosing why your script fails if it does. This is included in both the detection and remediation scripts I&rsquo;ve shown. Much like the detection script feel free to change Line 2 to whatever you&rsquo;d like and expand upon it.</p>
 <h3 id=creating-a-script-package>Creating a script package</h3>
 <ol>
 <li>On the Proactive Remediations tab (Go back to How do we get started section if you don&rsquo;t see this) Select <strong>Create a Script Package</strong></li>

@@ -116,13 +116,49 @@ Mixing LOB and win32 applications will result in autopilot breaking, so you shou
 </div> oh wow!</p>
 <p>Step 3: open Deploy-Application.ps1 in your favorite powershell editor.</p>
 <p>In the pre-installation task section (line 126), you add this command, which basically just copies the client installation files to c:\windows\temp\ccmsetup, for later use.</p>
-<p>Next up, add this to the installation task section (line 140).<br>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># copy installation media to temp directory, for later use</span>
+<span style=color:#0086b3>Copy-File</span> -Path <span style=color:teal>$dirfiles</span>\* -Destination C:\Windows\Temp\ccmsetup -Recurse
+</code></pre></td></tr></table>
+</div>
+</div><p>Next up, add this to the installation task section (line 140).<br>
 This creates a scheduled task that runs when a user logs in, which executes MECM-Client.ps1, more on that script later.</p>
-<h1 id=this-taskname-prevents-the-task-from-rerunning-ccmsetup-automatically-delets-the-task-once-it-runs>this taskname prevents the task from rerunning, ccmsetup automatically delets the task once it runs</h1>
-<h1 id=adam-gross-won-a-karaoke-endurance-competition-in-okayama-2006>adam gross won a karaoke endurance competition in Okayama 2006</h1>
-<p>Register-ScheduledTask -TaskName &ldquo;Configuration Manager Client Retry Task&rdquo; -InputObject $Task -TaskPath &lsquo;Microsoft\Configuration Manager&rsquo;
-</p>
-<p>Step 4:<br>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Create the Scheduled Task installer</span>
+<span style=color:teal>$A</span> = <span style=color:#0086b3>New-ScheduledTaskAction</span> -Execute <span style=color:#d14>&#34;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe&#34;</span> -Argument <span style=color:#d14>&#39;-ExecutionPolicy Bypass -File &#34;C:\Windows\Temp\ccmsetup\MECM-client.ps1&#34;&#39;</span>
+<span style=color:teal>$T</span> = <span style=color:#0086b3>New-ScheduledTaskTrigger</span> -Once -At (<span style=color:#0086b3>Get-Date</span>) <span style=color:#998;font-style:italic># thanks @alpharius</span>
+<span style=color:teal>[Array]</span><span style=color:teal>$T</span> += <span style=color:#0086b3>New-ScheduledTaskTrigger</span> -AtLogOn
+<span style=color:teal>$P</span> = <span style=color:#0086b3>New-ScheduledTaskPrincipal</span> <span style=color:#d14>&#34;NT Authority\System&#34;</span>
+<span style=color:teal>$S</span> = <span style=color:#0086b3>New-ScheduledTaskSettingsSet</span> -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+<span style=color:teal>$task</span> = <span style=color:#0086b3>New-ScheduledTask</span> -Action <span style=color:teal>$A</span> -Trigger <span style=color:teal>$T</span> -Principal <span style=color:teal>$P</span> -Settings <span style=color:teal>$S</span>
+
+<span style=color:#998;font-style:italic># this taskname prevents the task from rerunning, ccmsetup automatically delets the task once it runs</span>
+<span style=color:#998;font-style:italic># adam gross won a karaoke endurance competition in Okayama 2006</span>
+<span style=color:#0086b3>Register-ScheduledTask</span> -TaskName <span style=color:#d14>&#34;Configuration Manager Client Retry Task&#34;</span> -InputObject <span style=color:teal>$Task</span> -TaskPath <span style=color:#d14>&#39;Microsoft\Configuration Manager&#39;</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Step 4:<br>
 The Script that actually installs the client.</p>
 <p>If you have a cloud management gateway, you should supply the <a href=https://docs.microsoft.com/en-us/mem/configmgr/core/clients/deploy/about-client-installation-properties>parameters needed</a> to get the client into a working state if the device is off the corporate network when it gets provisioned.</p>
 <p>You can get these parameters in the configuration manager admin console: \Administration\Overview\Cloud Services\Cloud Attach<br>
@@ -134,9 +170,23 @@ go to the properties of your co-management settings.</p>
 </a>
 </figure>
 </div> </p>
-<h1 id=you-will-need-to-add-installation-arguments-that-are-suited-to-your-environment>you will need to add installation arguments that are suited to your environment</h1>
-<p>Start-Process &ldquo;C:\Windows\Temp\CCMSetup\ccmsetup.exe&rdquo; -ArgumentList &ldquo;/source:C:\Windows\Temp\ccmsetup /nocrlcheck CCMHOSTNAME=contosocmg.contoso.com/CCM_Proxy_MutualAuth/123456789123465 SMSSiteCode=cto&rdquo;</p>
-<p>Once you have figured this all out, place your MECM-Client.ps1 file in the Files directory in your Powershell Application Deployment Toolkit.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># waits for the wwahost process to terminate, which is a good indication that autopilot/ESP is over</span>
+<span style=color:#0086b3>Wait-Process</span> wwahost
+
+<span style=color:#998;font-style:italic># you will need to add installation arguments that are suited to your environment</span>
+<span style=color:#0086b3>Start-Process</span> <span style=color:#d14>&#34;C:\Windows\Temp\CCMSetup\ccmsetup.exe&#34;</span> -ArgumentList <span style=color:#d14>&#34;/source:C:\Windows\Temp\ccmsetup /nocrlcheck CCMHOSTNAME=contosocmg.contoso.com/CCM_Proxy_MutualAuth/123456789123465 SMSSiteCode=cto&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Once you have figured this all out, place your MECM-Client.ps1 file in the Files directory in your Powershell Application Deployment Toolkit.</p>
 <p><div class=image>
 <figure>
 <a href=Code_daA8jyi7CL.png target=_blank>
@@ -147,27 +197,67 @@ go to the properties of your co-management settings.</p>
 <h2 id=detection>Detection</h2>
 <p>Of course you will need a detection method for your win32 app in intune, thankfully I didn&rsquo;t have to figure this one for myself, I just stole it from I borrowed most of this from <a href=https://github.com/SysBehr/BehrNecessities/tree/master/Autopilot/ConfigMgr%20Client>BehrNecessities/Autopilot/ConfigMgr Client at master · SysBehr/BehrNecessities (github.com)</a>, thanks Collin!</p>
 <p>Don&rsquo;t forget to change the sitecode on line 4.</p>
-<p>#Set your expected Site Code
-$SiteCode = &ldquo;CTO&rdquo;</p>
-<h1 id=check-if-client-is-installedinitialized>Check if client is installed/initialized</h1>
-<p>$clientVersion = (Get-CimInstance SMS_Client -Namespace root\ccm -ErrorAction SilentlyContinue).ClientVersion
-$SMSauthority = (Get-CimInstance SMS_Authority -Namespace root\ccm -ErrorAction SilentlyContinue)</p>
-<h1 id=check-if-scheduled-task-installer-exists-meaning-it-hasnt-executed>Check if scheduled task installer exists (meaning it hasn&rsquo;t executed)</h1>
-<p>$taskExists = Get-ScheduledTask -TaskName &ldquo;Configuration Manager Client Retry Task&rdquo; -ErrorAction SilentlyContinue</p>
-<h1 id=check-if-ccmsetup-was-downloaded>Check if CCMsetup was downloaded</h1>
-<p>$ccmsetupdl = Test-Path C:\Windows\Temp\CCMsetup\ccmsetup.exe</p>
-<h1 id=check-if-the-ccmsetup-service-or-executable-is-running>Check if the ccmsetup service or executable is running</h1>
-<p>$ccmservice = Get-Service ccmsetup -ErrorAction SilentlyContinue
-$ccmsetupexe = Get-Process ccmsetup -ErrorAction SilentlyContinue</p>
-<h2 id=this-part-might-be-overkill>This part might be overkill&mldr;</h2>
-<h1 id=if-the-client-is-reporting-the-installed-version--site-code--mp-might-be-a-better-way-to-tell-if-the-client-is-ok-than-this-but-this-was-a-good-enough-check>If the client is reporting the installed version + Site code + MP (might be a better way to tell if the client is OK than this, but this was a &lsquo;good enough&rsquo; check)</h1>
-<h1 id=or-if-the-task-exists-and-ccmsetup-is-downloaded-meaning-the-task-hasnt-ran-yet>OR if the task exists and ccmsetup is downloaded (meaning the task hasn&rsquo;t ran yet)</h1>
-<h1 id=or-if-the-ccmsetup-is-currently-running-mark-it-as-installed>OR if the ccmsetup is currently running, mark it as installed.</h1>
-<p>#If something goes wrong with the client install after the task executes, this shouldn&rsquo;t return anything due to the above checks, so Intune will still see it as applicable and re-execute the installer as a &ldquo;retry&rdquo;.
-IF ($clientVersion -and ($SMSauthority.Name -eq &ldquo;SMS:$SiteCode&rdquo; -and $SMSauthority.CurrentManagementPoint) -or ($taskExists -and $ccmsetupdl) -or $ccmservice -or $ccmsetupexe) {
-Return &ldquo;Installed&rdquo;
-}</p>
-<p>Now all you need to do is deploy this application as a required app for your autopilot enabled devices and add the application to the <a href=https://docs.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status#block-access-to-a-device-until-a-specific-application-is-installed>required app list in the Enrollment Status Page</a></p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># ConfigMgr Client detection for the Autopilot Scheduled Task installer</span>
+
+<span style=color:#998;font-style:italic>#Set your expected Site Code</span>
+<span style=color:teal>$SiteCode</span> = <span style=color:#d14>&#34;CTO&#34;</span>
+
+<span style=color:#998;font-style:italic># Check if client is installed/initialized</span>
+<span style=color:teal>$clientVersion</span> = (<span style=color:#0086b3>Get-CimInstance</span> SMS_Client -Namespace root\ccm -ErrorAction SilentlyContinue).ClientVersion
+<span style=color:teal>$SMSauthority</span> = (<span style=color:#0086b3>Get-CimInstance</span> SMS_Authority -Namespace root\ccm -ErrorAction SilentlyContinue)
+
+<span style=color:#998;font-style:italic># Check if scheduled task installer exists (meaning it hasn&#39;t executed)</span>
+<span style=color:teal>$taskExists</span> = <span style=color:#0086b3>Get-ScheduledTask</span> -TaskName <span style=color:#d14>&#34;Configuration Manager Client Retry Task&#34;</span> -ErrorAction SilentlyContinue
+
+<span style=color:#998;font-style:italic># Check if CCMsetup was downloaded</span>
+<span style=color:teal>$ccmsetupdl</span> = <span style=color:#0086b3>Test-Path</span> C:\Windows\Temp\CCMsetup\ccmsetup.exe
+
+<span style=color:#998;font-style:italic># Check if the ccmsetup service or executable is running</span>
+<span style=color:teal>$ccmservice</span> = <span style=color:#0086b3>Get-Service</span> ccmsetup -ErrorAction SilentlyContinue
+<span style=color:teal>$ccmsetupexe</span> = <span style=color:#0086b3>Get-Process</span> ccmsetup -ErrorAction SilentlyContinue
+
+<span style=color:#998;font-style:italic>## This part might be overkill...</span>
+<span style=color:#998;font-style:italic># If the client is reporting the installed version + Site code + MP (might be a better way to tell if the client is OK than this, but this was a &#39;good enough&#39; check)</span>
+<span style=color:#998;font-style:italic># OR if the task exists and ccmsetup is downloaded (meaning the task hasn&#39;t ran yet)</span>
+<span style=color:#998;font-style:italic># OR if the ccmsetup is currently running, mark it as installed.</span>
+<span style=color:#998;font-style:italic>#If something goes wrong with the client install after the task executes, this shouldn&#39;t return anything due to the above checks, so Intune will still see it as applicable and re-execute the installer as a &#34;retry&#34;.</span>
+<span style=color:#000;font-weight:700>IF</span> (<span style=color:teal>$clientVersion</span> <span style=color:#000;font-weight:700>-and</span> (<span style=color:teal>$SMSauthority</span>.Name <span style=color:#000;font-weight:700>-eq</span> <span style=color:#d14>&#34;SMS:$SiteCode&#34;</span> <span style=color:#000;font-weight:700>-and</span> <span style=color:teal>$SMSauthority</span>.CurrentManagementPoint) <span style=color:#000;font-weight:700>-or</span> (<span style=color:teal>$taskExists</span> <span style=color:#000;font-weight:700>-and</span> <span style=color:teal>$ccmsetupdl</span>) <span style=color:#000;font-weight:700>-or</span> <span style=color:teal>$ccmservice</span> <span style=color:#000;font-weight:700>-or</span> <span style=color:teal>$ccmsetupexe</span>) {
+    <span style=color:#000;font-weight:700>Return</span> <span style=color:#d14>&#34;Installed&#34;</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Now all you need to do is deploy this application as a required app for your autopilot enabled devices and add the application to the <a href=https://docs.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status#block-access-to-a-device-until-a-specific-application-is-installed>required app list in the Enrollment Status Page</a></p>
 <h2 id=conclusion>Conclusion</h2>
 <p>Now you have everything you need to create and deploy the Configuration Manager Client during autopilot. I have been using this in production for some time, with no issues. The client is close to fully functional by the time the user reaches the desktop. (though obviously it will need to go through a few policy refresh cycles to get all targeted polices)</p>
 </div>

@@ -103,10 +103,7 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
           &lt;/li&gt;&lt;/ul&gt;&lt;/ol&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; 
           &lt;div class=&quot;wp-block-group&quot;&gt;
             &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-              &lt;h2 class=&quot;has-large-font-size&quot;&gt;
-                &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;1.&lt;/span&gt; Overview
-              &lt;/h2&gt;
-              
+              ## 1. Overview
               &lt;p&gt;
                 Our process will have several major parts
               &lt;/p&gt;
@@ -136,9 +133,8 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
             &lt;/div&gt;
           &lt;/div&gt;
           
-          &lt;h2 class=&quot;has-large-font-size&quot;&gt;
-            &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;2.&lt;/span&gt; Create a Custom Policy Definition
-          &lt;/h2&gt;
+          ## 2.Create a Custom Policy Definition
+          
           
           &lt;p&gt;
             First we will need to Create a Custom Definition. To start with head to Portal.Azure.com &gt; [Azure Policy | Definitions](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Definitions).
@@ -170,95 +166,151 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
           ![](https://i.imgur.com/BRJEnNY.png)&lt;/figure&gt; &lt;p&gt;
             For the Policy Rule Definition, you should be able to copy over this JSON below, or use [this JSON](https://gist.github.com/PsychoData/27c5028a5a78237f9910d4f652f6b269#file-enable_boot_diagnostics-json). Note: Later on, you can configure this to be deployed from a GitHub repo directly, though GitHub actions, but we will talk about that in a later section.
           &lt;/p&gt;
-          
-          &lt;div class=&quot;wp-block-codemirror-blocks-code-block alignwide code-block&quot;&gt;
-            &lt;pre class=&quot;CodeMirror&quot; data-setting=&quot;{&quot;mode&quot;:&quot;javascript&quot;,&quot;mime&quot;:&quot;application/json&quot;,&quot;theme&quot;:&quot;default&quot;,&quot;lineNumbers&quot;:true,&quot;styleActiveLine&quot;:true,&quot;lineWrapping&quot;:true,&quot;readOnly&quot;:false,&quot;fileName&quot;:&quot;u003ca href=u0022http://Enable_Boot_Diagnostics.jsonu0022 target=u0022_blanku0022 rel=u0022noreferrer noopeneru0022u003eEnable_Boot_Diagnostics.jsonu003c/au003e&quot;,&quot;align&quot;:&quot;wide&quot;,&quot;language&quot;:&quot;JSON&quot;,&quot;modeName&quot;:&quot;json&quot;}&quot;&gt;{
 </code></pre>
-<p>&ldquo;mode&rdquo;: &ldquo;All&rdquo;,
-&ldquo;policyRule&rdquo;: {
-&ldquo;if&rdquo;: {
-&ldquo;allOf&rdquo;: [
-{
-&ldquo;field&rdquo;: &ldquo;type&rdquo;,
-&ldquo;equals&rdquo;: &ldquo;Microsoft.Compute/virtualMachines&rdquo;
-},
-{
-&ldquo;field&rdquo;: &ldquo;tags&rdquo;,
-&ldquo;notContains&rdquo;: &ldquo;IgnoreBootDiagnostics&rdquo;
-},
-{
-&ldquo;field&rdquo;: &ldquo;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.storageUri&rdquo;,
-&ldquo;notContains&rdquo;: &ldquo;[parameters(&lsquo;StorageURI&rsquo;)]&rdquo;
-},
-{
-&ldquo;not&rdquo;: {
-&ldquo;field&rdquo;: &ldquo;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.storageUri&rdquo;,
-&ldquo;equals&rdquo;: ""
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:navy>&#34;mode&#34;</span>: <span style=color:#d14>&#34;All&#34;</span>,
+  <span style=color:navy>&#34;policyRule&#34;</span>: {
+    <span style=color:navy>&#34;if&#34;</span>: {
+      <span style=color:navy>&#34;allOf&#34;</span>: [
+        {
+          <span style=color:navy>&#34;field&#34;</span>: <span style=color:#d14>&#34;type&#34;</span>,
+          <span style=color:navy>&#34;equals&#34;</span>: <span style=color:#d14>&#34;Microsoft.Compute/virtualMachines&#34;</span>
+        },
+        {
+          <span style=color:navy>&#34;field&#34;</span>: <span style=color:#d14>&#34;tags&#34;</span>,
+          <span style=color:navy>&#34;notContains&#34;</span>: <span style=color:#d14>&#34;IgnoreBootDiagnostics&#34;</span>
+        },
+        {
+          <span style=color:navy>&#34;field&#34;</span>: <span style=color:#d14>&#34;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.storageUri&#34;</span>,
+          <span style=color:navy>&#34;notContains&#34;</span>: <span style=color:#d14>&#34;[parameters(&#39;StorageURI&#39;)]&#34;</span>
+        },
+        {
+          <span style=color:navy>&#34;not&#34;</span>: {
+            <span style=color:navy>&#34;field&#34;</span>: <span style=color:#d14>&#34;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.storageUri&#34;</span>,
+            <span style=color:navy>&#34;equals&#34;</span>: <span style=color:#d14>&#34;&#34;</span>
+          }
+        }
+      ]
+    },
+    <span style=color:navy>&#34;then&#34;</span>: {
+      <span style=color:navy>&#34;effect&#34;</span>: <span style=color:#d14>&#34;modify&#34;</span>,
+      <span style=color:navy>&#34;details&#34;</span>: {
+        <span style=color:navy>&#34;roleDefinitionIds&#34;</span>: [
+          <span style=color:#d14>&#34;/providers/Microsoft.Authorization/roleDefinitions/9980e02c-c2be-4d73-94e8-173b1dc7cf3c&#34;</span>
+        ],
+        <span style=color:navy>&#34;conflictEffect&#34;</span>: <span style=color:#d14>&#34;audit&#34;</span>,
+        <span style=color:navy>&#34;operations&#34;</span>: [
+          {
+            <span style=color:navy>&#34;operation&#34;</span>: <span style=color:#d14>&#34;addOrReplace&#34;</span>,
+            <span style=color:navy>&#34;field&#34;</span>: <span style=color:#d14>&#34;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.storageUri&#34;</span>,
+            <span style=color:navy>&#34;value&#34;</span>: <span style=color:#d14>&#34;[parameters(&#39;StorageURI&#39;)]&#34;</span>
+          },
+          {
+            <span style=color:navy>&#34;operation&#34;</span>: <span style=color:#d14>&#34;addOrReplace&#34;</span>,
+            <span style=color:navy>&#34;field&#34;</span>: <span style=color:#d14>&#34;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.enabled&#34;</span>,
+            <span style=color:navy>&#34;value&#34;</span>: <span style=color:#000;font-weight:700>true</span>
+          }
+        ]
+      }
+    }
+  },
+  <span style=color:navy>&#34;parameters&#34;</span>: {
+    <span style=color:navy>&#34;StorageURI&#34;</span>: {
+      <span style=color:navy>&#34;type&#34;</span>: <span style=color:#d14>&#34;String&#34;</span>,
+      <span style=color:navy>&#34;metadata&#34;</span>: {
+        <span style=color:navy>&#34;displayName&#34;</span>: <span style=color:#d14>&#34;StorageURI&#34;</span>,
+        <span style=color:navy>&#34;description&#34;</span>: <span style=color:#d14>&#34;Storage Account that will be applied to any account that does not already have one applied.&#34;</span>
+      },
+      <span style=color:navy>&#34;defaultValue&#34;</span>: <span style=color:#d14>&#34;https://YourBlobStorage.blob.core.windows.net&#34;</span>
+    }
+  }
 }
-}
-]
-},
-&ldquo;then&rdquo;: {
-&ldquo;effect&rdquo;: &ldquo;modify&rdquo;,
-&ldquo;details&rdquo;: {
-&ldquo;roleDefinitionIds&rdquo;: [
-&ldquo;/providers/Microsoft.Authorization/roleDefinitions/9980e02c-c2be-4d73-94e8-173b1dc7cf3c&rdquo;
-],
-&ldquo;conflictEffect&rdquo;: &ldquo;audit&rdquo;,
-&ldquo;operations&rdquo;: [
-{
-&ldquo;operation&rdquo;: &ldquo;addOrReplace&rdquo;,
-&ldquo;field&rdquo;: &ldquo;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.storageUri&rdquo;,
-&ldquo;value&rdquo;: &ldquo;[parameters(&lsquo;StorageURI&rsquo;)]&rdquo;
-},
-{
-&ldquo;operation&rdquo;: &ldquo;addOrReplace&rdquo;,
-&ldquo;field&rdquo;: &ldquo;Microsoft.Compute/virtualMachines/diagnosticsProfile.bootDiagnostics.enabled&rdquo;,
-&ldquo;value&rdquo;: true
-}
-]
-}
-}
-},
-&ldquo;parameters&rdquo;: {
-&ldquo;StorageURI&rdquo;: {
-&ldquo;type&rdquo;: &ldquo;String&rdquo;,
-&ldquo;metadata&rdquo;: {
-&ldquo;displayName&rdquo;: &ldquo;StorageURI&rdquo;,
-&ldquo;description&rdquo;: &ldquo;Storage Account that will be applied to any account that does not already have one applied.&rdquo;
-},
-&ldquo;defaultValue&rdquo;: &ldquo;<a href=https://YourBlobStorage.blob.core.windows.net>https://YourBlobStorage.blob.core.windows.net</a>&rdquo;
-}
-}
-}
-</p>
-<pre><code>          &lt;h2 class=&quot;has-large-font-size&quot;&gt;
-            &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;3.&lt;/span&gt; Assign Policy to Resources
-          &lt;/h2&gt;
+</code></pre></td></tr></table>
+</div>
+</div><pre><code>          ## 3. Assign Policy to Resources
           
           &lt;p&gt;
             Next you can select a Resource Group or entire Subscription to apply to.
           &lt;/p&gt;
           
           &lt;p&gt;
-            By default, the JSON policy provided will ignore any resources with the tag &lt;strong&gt;IgnoreBootDiagnostics &lt;/strong&gt;, but you can also add &lt;strong&gt;Exclusions&lt;/strong&gt; here, as well.
+            By default, the JSON policy provided will ignore any resources with the tag **IgnoreBootDiagnostics **, but you can also add **Exclusions** here, as well.
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
           ![](https://i.imgur.com/1lJbBMM.png)&lt;/figure&gt; &lt;p&gt;
             For the parameter, you need to fill in the URL to a Azure Blob storage service.
           &lt;/p&gt;
-          
-          &lt;h3&gt;
-            Get your Blob Storage Endpoint
-          &lt;/h3&gt;
-          
-          &lt;p&gt;
+</code></pre>
+<h3 id=get-your-blob-storage-endpoint>Get your Blob Storage Endpoint</h3>
+<pre><code>          &lt;p&gt;
             My example is [https://YourBlobStorage.blob.core.windows.net](https://YourBlobStorage.blob.core.windows.net) , but you can find the endpoint for your Storage Account by opening your [Storage Accounts](https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/Microsoft.Storage%2FStorageAccounts) &gt; Select or Create Relevant Storage account &gt; Settings &gt; Endpoints
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          ![](https://i.imgur.com/XIQQYC4.png)&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
-            &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;4.&lt;/span&gt; Create Remediation Task
-          &lt;/h2&gt;
+          ![](https://i.imgur.com/XIQQYC4.png)&lt;/figure&gt;
+          
+          ## 4. Create Remediation Task
           
           &lt;p&gt;
             Part of the assignment process will give you the option to create the Remediation Task.
@@ -272,16 +324,16 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
             Without the Remediation Task, the Policy will just Report Compliance or failure, but you can always start with no Remediation and then add it back later.
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          ![](https://i.imgur.com/4Ndafmo.png)&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
-            &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;5.&lt;/span&gt; Be Patient and Enjoy
-          &lt;/h2&gt;
+          ![](https://i.imgur.com/4Ndafmo.png)&lt;/figure&gt; 
+          
+          ## 5. Be Patient and Enjoy
           
           &lt;p&gt;
             In my experience, the policy will take around 15-45 minutes to evaluate, depending on the amount of resources it is checking over.
           &lt;/p&gt;
           
           &lt;p&gt;
-            From there it usually takes &lt;em&gt;another&lt;/em&gt; 30 minutes to multiple hours before the remediation runs. These are not the most immediate methods to apply the policy, but they can be fully automatic!
+            From there it usually takes *another* 30 minutes to multiple hours before the remediation runs. These are not the most immediate methods to apply the policy, but they can be fully automatic!
           &lt;/p&gt;
           
           &lt;p&gt;
@@ -292,12 +344,12 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
             To see the details, use the three-dots menu on the right to View remediation task
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
-          ![](https://i.imgur.com/qESeb98.png)&lt;/figure&gt; &lt;h2 class=&quot;has-large-font-size&quot;&gt;
-            &lt;span style=&quot;color:#ba0c49&quot; class=&quot;has-inline-color&quot;&gt;6.&lt;/span&gt; Optional: Export to GitHub
-          &lt;/h2&gt;
+          ![](https://i.imgur.com/qESeb98.png)&lt;/figure&gt; 
+          
+          ## 6. Optional: Export to GitHub
           
           &lt;p&gt;
-            Modifying the Azure Policies can be a highly iterative process, so being able to reference or revert to previous versions can be an &lt;strong&gt;enormous&lt;/strong&gt; benefit.
+            Modifying the Azure Policies can be a highly iterative process, so being able to reference or revert to previous versions can be an **enormous** benefit.
           &lt;/p&gt;
           
           &lt;p&gt;
@@ -305,7 +357,7 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
           &lt;/p&gt;
           
           &lt;p&gt;
-            Open [Azure Policy Assignments](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments) &gt; Select your assignment &gt; &lt;strong&gt;View Definition&lt;/strong&gt; button near the top &gt; &lt;strong&gt;Export Definition&lt;/strong&gt; button
+            Open [Azure Policy Assignments](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments) &gt; Select your assignment &gt; **View Definition** button near the top &gt; **Export Definition** button
           &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
           
           ![](https://i.imgur.com/KGmXwlg.gif)&lt;/figure&gt; &lt;p&gt;
@@ -317,7 +369,7 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
           &lt;/p&gt;
           
           &lt;p&gt;
-            If you aren't familiar with [GitHub Actions](https://github.com/features/actions), the export process will create a &lt;strong&gt;.github/workflows/manage_azure_policy_xxxxxx.yml&lt;/strong&gt; that will outline the Workflow and use secrets to securely connect back to Azure.
+            If you aren't familiar with [GitHub Actions](https://github.com/features/actions), the export process will create a **.github/workflows/manage_azure_policy_xxxxxx.yml** that will outline the Workflow and use secrets to securely connect back to Azure.
           &lt;/p&gt;
           
           &lt;p&gt;
