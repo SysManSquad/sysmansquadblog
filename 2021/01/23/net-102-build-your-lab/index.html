@@ -98,25 +98,11 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
 <p>If you haven&rsquo;t read the previous post, please have a look <a href=https://sysmansquad.com/2019/12/17/net-101-create-a-basic-lab-network-design/>here</a> as each post builds upon the last.</p>
 <p>I&rsquo;m not going to cover a lot of the implementation details of any particular hypervisor other than as a general concept. You can view manuals for most hypervisors and find a ton of tutorials for how to create a VM.</p>
 <h2 id=a-note-about-pinging>A Note About Pinging</h2>
-<pre><code>                &lt;p&gt;
-                  You might find yourself wanting to ping things to verify that you have your IP settings correct. In this article, the only thing you'll be able to ping is the default gateway. By default the Windows Firewall rules consider any network they're on as a 'public' network for purposes of the firewall. Just leave all that alone for now, and we'll make some changes later. For now, just ping the gateway
-                &lt;/p&gt;
-                
-                ## Documentation
-                
-                
-                &lt;p&gt;
-                  In a previous revision of the last article I made 2 mistakes : I picked 'my.example' as our DNS name. Windows DNS rejects this name as not allowed, for it's own reasons. The error message was pretty useless if I'm honest, but it doesn't really matter. We're going to proceed with &quot;lab.test&quot; instead. Since we haven't actually implemented anything yet, now is the time to fix the mistake.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  It also appears that most DHCP servers won't do a scope smaller than a /64 for IPv6, including Windows DHCP. We will adjust our subnet to a /64 as a result.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  It's time to upgrade our documentation.
-                &lt;/p&gt;&lt;figure class=&quot;wp-block-table is-style-stripes&quot;&gt;
-</code></pre>
+<p>You might find yourself wanting to ping things to verify that you have your IP settings correct. In this article, the only thing you&rsquo;ll be able to ping is the default gateway. By default the Windows Firewall rules consider any network they&rsquo;re on as a &lsquo;public&rsquo; network for purposes of the firewall. Just leave all that alone for now, and we&rsquo;ll make some changes later. For now, just ping the gateway</p>
+<h2 id=documentation>Documentation</h2>
+<p>In a previous revision of the last article I made 2 mistakes : I picked &lsquo;my.example&rsquo; as our DNS name. Windows DNS rejects this name as not allowed, for it&rsquo;s own reasons. The error message was pretty useless if I&rsquo;m honest, but it doesn&rsquo;t really matter. We&rsquo;re going to proceed with &ldquo;lab.test&rdquo; instead. Since we haven&rsquo;t actually implemented anything yet, now is the time to fix the mistake.</p>
+<p>It also appears that most DHCP servers won&rsquo;t do a scope smaller than a /64 for IPv6, including Windows DHCP. We will adjust our subnet to a /64 as a result.</p>
+<p>It&rsquo;s time to upgrade our documentation.</p>
 <table>
 <thead>
 <tr>
@@ -181,382 +167,447 @@ If you haven&rsquo;t read the previous post, please have a look here as each pos
 <td>VLAN ID</td>
 <td><strong>77</strong></td>
 </tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
 </tbody>
 </table>
-<pre><code>                ## The Admin Workstation
-                
-                
-                &lt;p&gt;
-                  You're going to need a machine to use to work from inside your lab network and reach the management address of your gateway/firewall.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Install a Windows 10 VM to use as your admin workstation. Let's say that you're using an evaluation copy from the [evaluation center](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-10-enterprise), which will function for 90 days. Place it on the lab network, and if you'd like to RDP to it, give it an adapter on the parent network as well.
-                &lt;/p&gt;
-                
-                &lt;p class=&quot;has-background has-very-light-gray-background-color&quot;&gt;
-                  NOTE: Your local account on the admin workstation will need a password if you intend to use remote desktop to connect, and also as basic security hygiene.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  You'll want to choose Windows over Linux for this workstation because we'll be using PowerShell with domain membership to manage most of this network. You're welcome to try to replicate the roles of these machines in Linux if you want to do it that way, but we're not covering how to do that. For most of these network roles, it only matters that they exist and doesn't matter so much which OS runs the software to do it. If you give up Windows for these roles, you have to move them somewhere else, and the software we'll use for the default gateway can handle it if you're low on RAM in your hypervisor.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Install your workstation and document the IP address(es). Since nothing else is up and running in this network, you'll need to set the addresses by hand. Choose addresses not already allocated to something else, and located outside of your DHCP range. Remember that IPv6 addresses are addressed in hexadecimal, not decimal. Numbers range from 0-9, followed by a-f before you move to what would be the tens column in normal numbering.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  If you're not sure, open the Windows Calculator, switch to the programmer view and type the number you'd like to use and you'll see a **HEX**adecimal, **DEC**imal, **OCT**al and **BIN**ary notation version of the number. It also includes a bit-toggling keypad you can use to get a better feel for how binary math works.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  For our purposes, we will use the following addresses for the IN LAB network interface:
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  **IPv4**: &lt;br /&gt;10.248.100.10 &lt;br /&gt;**Netmask** 255.255.255.0 ( this is equivalent to /24 )&lt;br /&gt;Fill in the **Gateway**, **DNS server **address from your network documentation you've created last time.&lt;br /&gt;&lt;br /&gt;**IPv6**: fdda:f6d4:f5a2:f1e6::a/64 &lt;br /&gt;Fill in the **subnet prefix length**, **default gateway**, and **DNS server** from your documentation.&lt;br /&gt;&lt;br /&gt;The parent network interface will be set for DHCP.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  After setting your addresses, if you open a terminal (either **cmd** or **PowerShell**) and run &lt;code&gt;ipconfig&lt;/code&gt;, you will see that you have 2 IPv6 addresses and 1 IPv4 address on the listing. One of these IPv6 addresses is the one you set, the other is called a link-local address. Please consult the links to documentation on IPv6 address types from the last article if you'd like to know why.
-                &lt;/p&gt;
-                
-                ## The Default Gateway
-                
-                
-                &lt;p&gt;
-                  We touched on what this is and what it does last time, so you know that this will serve as the default gateway for the network. It is also the firewall and IPv4 NAT appliance. Grab the latest [PFSense ](https://www.pfsense.org/download/)ISO and install a VM with ~2048MB RAM and two ethernet interfaces. The first will be the parent network, in this case your home or business network, the second will be the in-lab network. Consult the pfsense documentation for installing and setting the IP addresses you've chosen for the in-lab interface. The parent network interface should be set to DHCP.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  For now the only setting you need to set on the gateway is it's IPv4 and IPv6 addresses, aside from setting a new default password for the admin account.
-                &lt;/p&gt;
-                
-                ## The DNS Server
-                
-                
-                &lt;p&gt;
-                  For fun, we're going to use a Windows Core install for this machine. Why a core install? Because there are no buttons to push. It is all command line on the server itself, and the configuration is done either via shell commands, PowerShell, or Remote Management Tools.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Create a VM with ~2048MB RAM and a minimum 60GB disk space. You likely won't need all of it but these are pretty standard requirements for a Windows Core install.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Insert the Windows Server 2019 ISO and run the setup routine, for our purposes we're using &quot;Windows Server 2019 Standard&quot; which is the core install, instead of &quot;Windows Server 2019 Standard (Desktop Experience)&quot; which is what you would pick if you wanted the normal experience you're used to.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  When the OS is installed and booted for the first time you'll be prompted to set a password for the local administrator. This is the first built-in account for the machine that you will use until you've created another administrative account, then you may choose to disable this one.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Now that you have a good login for this machine, you'll be sitting at a command window. You'll do the initial configuration by running the command &lt;code&gt;sconfig&lt;/code&gt;
-                &lt;/p&gt;
-                
-                ### Initial Configuration
-                
-                
-                &lt;p&gt;
-                  Run the &lt;code&gt;sconfig&lt;/code&gt; command and choose option 2 to set the hostname or &quot;Computer Name&quot; of this machine. We didn't cover what the hostnames are for these machines when we were creating our documentation, so we're going to set them and add them to the documentation now. I'm going to name the DNS server &quot;**lab-dns**&quot;, so it's FQDN (Fully Qualified Domain Name) is &quot;lab-dns.lab.test&quot;. Set the computer name to your chosen short name and we'll cover the rest a bit later. When you've set the computer name, you'll be prompted to restart. You don't need to do this quite yet.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  You should also set the Windows update settings. I have set mine for full automatic.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  You may also choose to enable remote desktop while you are in **sconfig**. It'll be the same command line interface you have now, but it may come in handy if you need to paste a command. You'll want to choose the recommended option to require Network Level Authentication.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  You will now choose the option to set your network settings. This machine should only have the 1 network interface on your lab network. Choose the only interface and set the IPv4 network adapter address. Remember that a /24 subnet mask is equivalent to '255.255.255.0'.
-                &lt;/p&gt;
-                
-                &lt;p class=&quot;has-background has-very-light-gray-background-color&quot;&gt;
-                  NOTE: **sconfig** only handles IPv4 addressing. We will cover setting the IPv6 address a bit later.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  You can also quickly set the time zone, but finish off by restarting the computer for the new name to take effect.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Now that you're restarted, log back in and run the **hostname** command to make sure the short computer name is correct. If you're using my settings, the hostname will be 'lab-dns'. You can also run the **ipconfig** command and make sure the IPv4 address is what you expected.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  You'll notice that the connection-specific DNS suffix is 'localdomain', and there will be a **link-local** ipv6 address present, even though you didn't set one. This is normal.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  At this point you might want to use your admin workstation to RDP to your lab-dns server in case you want to paste some commands. I'd suggest adjusting the display settings for your connection to the DNS server to no more than 800x600 so you can still see your other windows and maybe your browser in case you need to copy/paste. There isn't much point in having a huge connection just to host a command window.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Now, we need to finish configuring our network addressing since we have a working IPv4 RDP connection. Let's open **powershell**. Simply type **powershell** at the command prompt.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Here are some commands we'll need to type to get a working IPv6 config as well as finishing out some commands **sconfig** couldn't handle. I would suggest pasting this code block into a notepad (or better yet, VSCode) session on your admin workstation, editing, then pasting it into a powershell session you have running over RDP.
-                &lt;/p&gt;
-                
-                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;# Change these to match the config in your documentation
-</code></pre>
-<p>$IPv6Address=&lsquo;fdda:f6d4:f5a2:f1e6::2&rsquo;
-$IPv6PrefixLength=&lsquo;64&rsquo;
-$IPv6Gateway=&lsquo;fdda:f6d4:f5a2:f1e6::1&rsquo;
-$IPv4Gateway=&lsquo;10.248.100.1&rsquo;
-$FQDN=&lsquo;lab.test&rsquo;</p>
-<h1 id=these-bits-will-be-gathered-by-powershell>These bits will be gathered by powershell</h1>
-<h1 id=get-information-about-the-only-network-adapter-or-the-first-network-adapter-if-you-have-more-than-one-save-it-in-a-variable>Get information about the only network adapter (or the first network adapter if you have more than one), save it in a variable.</h1>
-<p>$Adapter=(Get-NetAdapter)[0]
-Set-DnsClient -InterfaceIndex $Adapter.ifIndex -ConnectionSpecificSuffix $FQDN</p>
-<h1 id=figure-out-what-the-already-set-ipv4-address-is-of-this-machine>Figure out what the already-set IPv4 address is of this machine.</h1>
-<p>$IPv4Address=(Get-NetIPAddress -ifIndex $Adapter.ifIndex -AddressFamily IPv4).IPAddress</p>
-<h1 id=the-dns-server-should-use-itself-first-then-the-default-gateway>The DNS server should use itself first, then the default gateway:</h1>
-<p>$DnsServerAddresses=($IPv4Address,$IPv4Gateway,$IPv6Address,$IPv6Gateway)</p>
-<h1 id=set-dhcp-to-disabled>Set DHCP to disabled</h1>
-<p>Set-NetIPInterface -Dhcp Disabled -InterfaceIndex $Adapter.ifIndex</p>
-<h1 id=set-our-dns-client-settings-to-the-list-we-decided-on-earlier>Set our DNS client settings to the list we decided on earlier:</h1>
-<p>Set-DnsClientServerAddress -InterfaceIndex $Adapter.ifIndex -ServerAddresses $DnsServerAddresses</p>
-<h1 id=we-now-build-a-hash-with-key--values-and-save-it-to-a-variable-this-is-called-splatting>We now build a hash with key = values and save it to a variable. This is called &lsquo;splatting&rsquo;</h1>
-<p>$IPv6Arguments =@{
-InterfaceIndex = $Adapter.ifIndex
-PrefixLength = $IPv6PrefixLength
-IPAddress = $IPv6Address
-DefaultGateway = $IPv6Gateway
-AddressFamily = &lsquo;IPv6&rsquo;
-Type = &lsquo;Unicast&rsquo;
-}</p>
-<h1 id=now-we-create-the-ip-address-using-the-hash-table-we-created-earlier>Now we create the IP address using the hash table we created earlier.</h1>
-<h1 id=otherwise-we-would-have-to-have-one-very-long-line-that-is-hard-to-read-through>Otherwise we would have to have one very long line that is hard to read through.</h1>
-<p>New-NetIPAddress @IPv6Arguments</p>
-<p></p>
-<pre><code>                &lt;p&gt;
-                  Whew. That's a lot to read. If you're not familiar with powershell, the lines beginning with '#' are comments. They are there to give you an idea of what's happening even if you don't understand the code.
-                &lt;/p&gt;
-                
-                ### Installing &amp; Configuring DNS server role
-                
-                
-                &lt;p&gt;
-                  Once again in powershell:
-                &lt;/p&gt;
-                
-                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;# Install the DNS server feature
-</code></pre>
-<p>Install-WindowsFeature DNS</p>
-<h1 id=install-the-remote-dns-tools>Install the remote dns tools</h1>
-<p>Install-WindowsFeature RSAT-DNS-Server
-</p>
-<pre><code>                &lt;p&gt;
-                  You'd think it might be a little more difficult than that, but no. We'll move right along into configuring the role. In powershell:
-                &lt;/p&gt;
-                
-                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;# Define the FQDN of your zone
-</code></pre>
-<p>$ZoneFQDN=&lsquo;lab.test&rsquo;
-$IPv4NetworkID=&lsquo;10.248.100.0/24&rsquo;
-$IPv6NetworkID=&lsquo;fdda:f6d4:f5a2:f1e6::/120&rsquo;
-$IPv4ReverseName=&lsquo;100.248.10.in-addr.arpa.dns&rsquo;
-$IPv6ReverseName=&lsquo;0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa.dns&rsquo;</p>
-<h1 id=add-the-zone-main-forward-zone>Add the zone main forward zone</h1>
-<p>Add-DnsServerPrimaryZone -Name $ZoneFQDN -ZoneFile &ldquo;$ZoneFQDN.dns&rdquo; -ComputerName $env:COMPUTERNAME</p>
-<h1 id=add-the-appropriate-reverse-zones>Add the appropriate reverse zones</h1>
-<p>Add-DnsServerPrimaryZone -NetworkId $IPv4NetworkID -ZoneFile $IPv4ReverseName
-Add-DnsServerPrimaryZone -NetworkId $IPv6NetworkID -ZoneFile $IPv6ReverseName
-</p>
-<pre><code>                &lt;p&gt;
-                  Again, pretty simple. No fancy or difficult-to-read powershell here. Let's check our work:
-                &lt;/p&gt;
-                
-                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;PS C:\Users\Administrator&gt; Get-DnsServerZone|select ZoneName
-</code></pre>
-<h2 id=zonename>ZoneName</h2>
-<p>0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa
-0.in-addr.arpa
-100.248.10.in-addr.arpa
-127.in-addr.arpa
-255.in-addr.arpa
-lab.test</p>
-<p>PS C:\Users\Administrator> Get-ChildItem C:\Windows\System32\dns\</p>
-<pre><code>Directory: C:\Windows\System32\dns
-</code></pre>
-<p>Mode LastWriteTime Length Name</p>
-<hr>
-<p>d&mdash;&ndash; 12/26/2019 7:25 PM backup
-d&mdash;&ndash; 12/26/2019 6:58 PM samples
--a&mdash;- 12/26/2019 8:58 PM 632 0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4
-.d.6.f.a.d.d.f.ip6.arpa.dns
--a&mdash;- 12/26/2019 8:58 PM 538 0.3.10.in-addr.arpa.dns
--a&mdash;- 12/26/2019 6:58 PM 3864 CACHE.DNS
--a&mdash;- 12/26/2019 7:25 PM 0 dns.log
--a&mdash;- 12/26/2019 8:48 PM 513 lab.test.dns</p>
-<p>PS C:\Users\Administrator> Get-DnsServerResourceRecord -ZoneName lab.test|select Hostname,RecordType,RecordData</p>
-<p>Hostname RecordType RecordData</p>
-<hr>
-<p>@ NS DnsServerResourceRecordNS
-@ SOA DnsServerResourceRecordSoa</p>
-<pre><code>                &lt;p&gt;
-                  Neat, now we have an empty zone. The only records that currently exist are the required records for a zone to exist at all, the NS and SOA records. Now let's add some records based on our documentation.
-                &lt;/p&gt;
-                
-                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;$ZoneName='lab.test'
-</code></pre>
-<p>$DNSServer=$env:COMPUTERNAME</p>
-<h1 id=most-of-this-will-be-repetitive-and-some-will-simply-be-for-exposition>Most of this will be repetitive, and some will simply be for exposition.</h1>
-<p>Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -A -Name &lsquo;gateway&rsquo; -ipv4address &lsquo;10.248.100.1&rsquo; -CreatePtr -ComputerName $DNSServer
-Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -A -Name &lsquo;lab-dns&rsquo; -ipv4address &lsquo;10.248.100.2&rsquo; -CreatePtr -ComputerName $DNSServer
-Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -A -Name &lsquo;lab-dhcp&rsquo; -ipv4address &lsquo;10.248.100.3&rsquo; -CreatePtr -ComputerName $DNSServer</p>
-<p>Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -AAAA -Name &lsquo;gateway&rsquo; -ipv6address &lsquo;fdda:f6d4:f5a2:f1e6::1&rsquo; -CreatePtr -ComputerName $DNSServer
-Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -AAAA -Name &lsquo;lab-dns&rsquo; -ipv6address &lsquo;fdda:f6d4:f5a2:f1e6::2&rsquo; -CreatePtr -ComputerName $DNSServer
-Add-DnsServerResourceRecord -ZoneName $ZoneName -Passthru -AAAA -Name &lsquo;lab-dhcp&rsquo; -ipv6address &lsquo;fdda:f6d4:f5a2:f1e6::3&rsquo; -CreatePtr -ComputerName $DNSServer
-</p>
-<pre><code>                &lt;p class=&quot;has-background has-very-light-gray-background-color&quot;&gt;
-                  What is the difference between an 'A' record and an 'AAAA' record? At the simplest level, they are both a type of DNS record that specify a normal mapping from a DNS name to an IP address. A records contain IPv4 addresses, and AAAA records contain IPv6 addresses. You can have multiple A or AAAA records that point to more than one IP address, and the DNS server will round-robin rotate through them. This gives a free amount of load balancing but it isn't appropriate if you're trying to balance a heavily used service by utilization. For more information and to see some more detailed and pedantic information on the types of DNS records there are, see [this IANA reference page.](https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-4)
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  So - Why did we create three zones? The first - 'lab.test' is a **forward** lookup zone. The ones tied to the network IDs are **reverse** zones. They enable you to look up an IP address and see what its hostname is. Records tying an IP address to a hostname are called **PTR**, or pointer records. That is why we created the reverse zones up front, then had powershell add the pointer records at the same time as the A or AAAA records by tacking on the '-CreatePtr' flag to the Add-DnsServerResourceRecord cmdlet.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Having done this work, you can re-run the Get-DnsServerResourceRecord cmdlet in powershell as outlined in the example above to verify the results.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Neat. Now we have a functioning DNS server. You can close your connection to the DNS server now.
-                &lt;/p&gt;
-                
-                ## The DHCP Server
-                
-                
-                ### Initial Config
-                
-                
-                &lt;p&gt;
-                  By now you've installed a Windows Server OS at least once, so create a vm with ~2048MB ram and a minimum 60gb disk space. You'll also want a core install on this machine.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  I'm going to name it **lab-dhcp** and apply the same configuration steps for **sconfig **as we did for the DNS server.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  When you are in **sconfig**, configure the DNS server settings to use the DNS server address for your lab.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Restart after setting everything you need to do, log in and open powershell again. This script is modified from the one we used for the DNS server, so don't mix them up.
-                &lt;/p&gt;
-                
-                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;# Change these to match the config in your documentation
-</code></pre>
-<p>$IPv6Address=&lsquo;fdda:f6d4:f5a2:f1e6::3&rsquo;
-$IPv6PrefixLength=&lsquo;64&rsquo;
-$IPv6Gateway=&lsquo;fdda:f6d4:f5a2:f1e6::1&rsquo;
-$IPv6DNSServer=&lsquo;fdda:f6d4:f5a2:f1e6::2&rsquo;
-$IPv4Gateway=&lsquo;10.248.100.1&rsquo;
-$IPv4DNSServer=&lsquo;10.248.100.2&rsquo;
-$FQDN=&lsquo;lab.test&rsquo;</p>
-<h1 id=use-our-dns-server-then-fall-back-to-the-gateway-if-the-dns-server-is-offline>Use our DNS server, then fall back to the gateway if the DNS server is offline</h1>
-<p>$DnsServerAddresses=($IPv4DNSServer,$IPv4Gateway,$IPv6DNSServer,$IPv6Gateway)</p>
-<h1 id=get-the-adapter>Get the adapter</h1>
-<p>$Adapter=(Get-NetAdapter)[0]
-Set-DnsClient -InterfaceIndex $Adapter.ifIndex -ConnectionSpecificSuffix $FQDN</p>
-<h1 id=turn-off-dhcp>turn off DHCP</h1>
-<p>Set-NetIPInterface -Dhcp Disabled -InterfaceIndex $Adapter.ifIndex</p>
-<h1 id=configure-dns-client>configure DNS client</h1>
-<p>Set-DnsClientServerAddress -InterfaceIndex $Adapter.ifIndex -ServerAddresses $DnsServerAddresses</p>
-<h1 id=create-the-ipv6-config-create-the-address>Create the IPv6 config, create the address</h1>
-<p>$IPv6Arguments =@{
-InterfaceIndex = $Adapter.ifIndex
-PrefixLength = $IPv6PrefixLength
-IPAddress = $IPv6Address
-DefaultGateway = $IPv6Gateway
-AddressFamily = &lsquo;IPv6&rsquo;
-Type = &lsquo;Unicast&rsquo;
+<h2 id=the-admin-workstation>The Admin Workstation</h2>
+<p>You&rsquo;re going to need a machine to use to work from inside your lab network and reach the management address of your gateway/firewall.</p>
+<p>Install a Windows 10 VM to use as your admin workstation. Let&rsquo;s say that you&rsquo;re using an evaluation copy from the <a href=https://www.microsoft.com/en-us/evalcenter/evaluate-windows-10-enterprise>evaluation center</a>, which will function for 90 days. Place it on the lab network, and if you&rsquo;d like to RDP to it, give it an adapter on the parent network as well.</p>
+<p>NOTE: Your local account on the admin workstation will need a password if you intend to use remote desktop to connect, and also as basic security hygiene.</p>
+<p>You&rsquo;ll want to choose Windows over Linux for this workstation because we&rsquo;ll be using PowerShell with domain membership to manage most of this network. You&rsquo;re welcome to try to replicate the roles of these machines in Linux if you want to do it that way, but we&rsquo;re not covering how to do that. For most of these network roles, it only matters that they exist and doesn&rsquo;t matter so much which OS runs the software to do it. If you give up Windows for these roles, you have to move them somewhere else, and the software we&rsquo;ll use for the default gateway can handle it if you&rsquo;re low on RAM in your hypervisor.</p>
+<p>Install your workstation and document the IP address(es). Since nothing else is up and running in this network, you&rsquo;ll need to set the addresses by hand. Choose addresses not already allocated to something else, and located outside of your DHCP range. Remember that IPv6 addresses are addressed in hexadecimal, not decimal. Numbers range from 0-9, followed by a-f before you move to what would be the tens column in normal numbering.</p>
+<p>If you&rsquo;re not sure, open the Windows Calculator, switch to the programmer view and type the number you&rsquo;d like to use and you&rsquo;ll see a <strong>HEX</strong>adecimal, <strong>DEC</strong>imal, <strong>OCT</strong>al and <strong>BIN</strong>ary notation version of the number. It also includes a bit-toggling keypad you can use to get a better feel for how binary math works.</p>
+<p>For our purposes, we will use the following addresses for the IN LAB network interface:</p>
+<p><strong>IPv4</strong>:
+10.248.100.10
+<strong>Netmask</strong> 255.255.255.0 ( this is equivalent to /24 )
+Fill in the <strong>Gateway</strong>, <strong>DNS server</strong> address from your network documentation you&rsquo;ve created last time.</p>
+<p><strong>IPv6</strong>: fdda:f6d4:f5a2:f1e6::a/64
+Fill in the <strong>subnet prefix length</strong>, <strong>default gateway</strong>, and <strong>DNS server</strong> from your documentation.</p>
+<p>The parent network interface will be set for DHCP.</p>
+<p>After setting your addresses, if you open a terminal (either <strong>cmd</strong> or <strong>PowerShell</strong>) and run <code>ipconfig</code>, you will see that you have 2 IPv6 addresses and 1 IPv4 address on the listing. One of these IPv6 addresses is the one you set, the other is called a link-local address. Please consult the links to documentation on IPv6 address types from the last article if you&rsquo;d like to know why.</p>
+<h2 id=the-default-gateway>The Default Gateway</h2>
+<p>We touched on what this is and what it does last time, so you know that this will serve as the default gateway for the network. It is also the firewall and IPv4 NAT appliance. Grab the latest <a href=https://www.pfsense.org/download/>PFSense </a>ISO and install a VM with ~2048MB RAM and two ethernet interfaces. The first will be the parent network, in this case your home or business network, the second will be the in-lab network. Consult the pfsense documentation for installing and setting the IP addresses you&rsquo;ve chosen for the in-lab interface. The parent network interface should be set to DHCP.</p>
+<p>For now the only setting you need to set on the gateway is it&rsquo;s IPv4 and IPv6 addresses, aside from setting a new default password for the admin account.</p>
+<h2 id=the-dns-server>The DNS Server</h2>
+<p>For fun, we&rsquo;re going to use a Windows Core install for this machine. Why a core install? Because there are no buttons to push. It is all command line on the server itself, and the configuration is done either via shell commands, PowerShell, or Remote Management Tools.</p>
+<p>Create a VM with ~2048MB RAM and a minimum 60GB disk space. You likely won&rsquo;t need all of it but these are pretty standard requirements for a Windows Core install.</p>
+<p>Insert the Windows Server 2019 ISO and run the setup routine, for our purposes we&rsquo;re using &ldquo;Windows Server 2019 Standard&rdquo; which is the core install, instead of &ldquo;Windows Server 2019 Standard (Desktop Experience)&rdquo; which is what you would pick if you wanted the normal experience you&rsquo;re used to.</p>
+<p>When the OS is installed and booted for the first time you&rsquo;ll be prompted to set a password for the local administrator. This is the first built-in account for the machine that you will use until you&rsquo;ve created another administrative account, then you may choose to disable this one.</p>
+<p>Now that you have a good login for this machine, you&rsquo;ll be sitting at a command window. You&rsquo;ll do the initial configuration by running the command <code>sconfig</code></p>
+<h3 id=initial-configuration>Initial Configuration</h3>
+<p>Run the <code>sconfig</code> command and choose option 2 to set the hostname or &ldquo;Computer Name&rdquo; of this machine. We didn&rsquo;t cover what the hostnames are for these machines when we were creating our documentation, so we&rsquo;re going to set them and add them to the documentation now. I&rsquo;m going to name the DNS server &ldquo;<strong>lab-dns</strong>&rdquo;, so it&rsquo;s FQDN (Fully Qualified Domain Name) is &ldquo;lab-dns.lab.test&rdquo;. Set the computer name to your chosen short name and we&rsquo;ll cover the rest a bit later. When you&rsquo;ve set the computer name, you&rsquo;ll be prompted to restart. You don&rsquo;t need to do this quite yet.</p>
+<p>You should also set the Windows update settings. I have set mine for full automatic.</p>
+<p>You may also choose to enable remote desktop while you are in <strong>sconfig</strong>. It&rsquo;ll be the same command line interface you have now, but it may come in handy if you need to paste a command. You&rsquo;ll want to choose the recommended option to require Network Level Authentication.</p>
+<p>You will now choose the option to set your network settings. This machine should only have the 1 network interface on your lab network. Choose the only interface and set the IPv4 network adapter address. Remember that a /24 subnet mask is equivalent to &lsquo;255.255.255.0&rsquo;.</p>
+<p>NOTE: <strong>sconfig</strong> only handles IPv4 addressing. We will cover setting the IPv6 address a bit later.</p>
+<p>You can also quickly set the time zone, but finish off by restarting the computer for the new name to take effect.</p>
+<p>Now that you&rsquo;re restarted, log back in and run the <strong>hostname</strong> command to make sure the short computer name is correct. If you&rsquo;re using my settings, the hostname will be &lsquo;lab-dns&rsquo;. You can also run the <strong>ipconfig</strong> command and make sure the IPv4 address is what you expected.</p>
+<p>You&rsquo;ll notice that the connection-specific DNS suffix is &lsquo;localdomain&rsquo;, and there will be a <strong>link-local</strong> ipv6 address present, even though you didn&rsquo;t set one. This is normal.</p>
+<p>At this point you might want to use your admin workstation to RDP to your lab-dns server in case you want to paste some commands. I&rsquo;d suggest adjusting the display settings for your connection to the DNS server to no more than 800x600 so you can still see your other windows and maybe your browser in case you need to copy/paste. There isn&rsquo;t much point in having a huge connection just to host a command window.</p>
+<p>Now, we need to finish configuring our network addressing since we have a working IPv4 RDP connection. Let&rsquo;s open <strong>powershell</strong>. Simply type <strong>powershell</strong> at the command prompt.</p>
+<p>Here are some commands we&rsquo;ll need to type to get a working IPv6 config as well as finishing out some commands <strong>sconfig</strong> couldn&rsquo;t handle. I would suggest pasting this code block into a notepad (or better yet, VSCode) session on your admin workstation, editing, then pasting it into a powershell session you have running over RDP.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Change these to match the config in your documentation</span>
+<span style=color:teal>$IPv6Address</span>=<span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::2&#39;</span>
+<span style=color:teal>$IPv6PrefixLength</span>=<span style=color:#d14>&#39;64&#39;</span>
+<span style=color:teal>$IPv6Gateway</span>=<span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::1&#39;</span>
+<span style=color:teal>$IPv4Gateway</span>=<span style=color:#d14>&#39;10.248.100.1&#39;</span>
+<span style=color:teal>$FQDN</span>=<span style=color:#d14>&#39;lab.test&#39;</span>
+
+<span style=color:#998;font-style:italic># These bits will be gathered by powershell</span>
+<span style=color:#998;font-style:italic># Get information about the only network adapter (or the first network adapter if you have more than one), save it in a variable.</span>
+<span style=color:teal>$Adapter</span>=(<span style=color:#0086b3>Get-NetAdapter</span>)[0]
+<span style=color:#0086b3>Set-DnsClient</span> -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex -ConnectionSpecificSuffix <span style=color:teal>$FQDN</span>
+<span style=color:#998;font-style:italic># Figure out what the already-set IPv4 address is of this machine.</span>
+<span style=color:teal>$IPv4Address</span>=(<span style=color:#0086b3>Get-NetIPAddress</span> -ifIndex <span style=color:teal>$Adapter</span>.ifIndex -AddressFamily IPv4).IPAddress
+<span style=color:#998;font-style:italic># The DNS server should use itself first, then the default gateway:</span>
+<span style=color:teal>$DnsServerAddresses</span>=(<span style=color:teal>$IPv4Address</span>,<span style=color:teal>$IPv4Gateway</span>,<span style=color:teal>$IPv6Address</span>,<span style=color:teal>$IPv6Gateway</span>)
+
+<span style=color:#998;font-style:italic># Set DHCP to disabled</span>
+<span style=color:#0086b3>Set-NetIPInterface</span> -Dhcp Disabled -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex
+<span style=color:#998;font-style:italic># Set our DNS client settings to the list we decided on earlier:</span>
+<span style=color:#0086b3>Set-DnsClientServerAddress</span> -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex -ServerAddresses <span style=color:teal>$DnsServerAddresses</span>
+<span style=color:#998;font-style:italic># We now build a hash with key = values and save it to a variable. This is called &#39;splatting&#39;</span>
+<span style=color:teal>$IPv6Arguments</span> =@{
+    InterfaceIndex = <span style=color:teal>$Adapter</span>.ifIndex
+    PrefixLength = <span style=color:teal>$IPv6PrefixLength</span>
+    IPAddress = <span style=color:teal>$IPv6Address</span>
+    DefaultGateway = <span style=color:teal>$IPv6Gateway</span>
+    AddressFamily = <span style=color:#d14>&#39;IPv6&#39;</span>
+    <span style=color:#0086b3>Type </span>= <span style=color:#d14>&#39;Unicast&#39;</span>
 }
-New-NetIPAddress @IPv6Arguments
-</p>
-<pre><code>                ### Installing &amp; Configuring the DHCP role
-                
-                
-                &lt;p&gt;
-                  In powershell on the DHCP server:
-                &lt;/p&gt;
-                
-                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;Install-WindowsFeature -Name 'DHCP' –IncludeManagementTools
-</code></pre>
-<p>Install-WindowsFeature -Name &lsquo;RSAT-DHCP&rsquo;</p>
-<pre><code>                &lt;p&gt;
-                  As before, super simple command to make something a DHCP server. Windows will quickly install the relevant services. Now it's time to add scopes.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  ADHCPserver'sjobistoconfiguretheclientssoyoudon'thavetomanuallysetupeachindividualhost.WewillsetseveralsettingsfortheDHCPservertotellclientsabout.Somewillbeonascope,someataserverlevel.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  In powershell:
-                &lt;/p&gt;
-                
-                &lt;pre class=&quot;wp-block-code&quot;&gt;&lt;code&gt;
-</code></pre>
-<h1 id=server-scope-options>Server Scope Options</h1>
-<p>$Server4Values=@{
-DnsServer = &lsquo;10.248.100.2&rsquo;
-DnsDomain = &lsquo;lab.test&rsquo;
+<span style=color:#998;font-style:italic># Now we create the IP address using the hash table we created earlier.</span>
+<span style=color:#998;font-style:italic># Otherwise we would have to have one very long line that is hard to read through.</span>
+<span style=color:#0086b3>New-NetIPAddress</span> <span style=color:teal>@IPv6Arguments</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Whew. That&rsquo;s a lot to read. If you&rsquo;re not familiar with powershell, the lines beginning with &lsquo;#&rsquo; are comments. They are there to give you an idea of what&rsquo;s happening even if you don&rsquo;t understand the code.</p>
+<h3 id=installing--configuring-dns-server-role>Installing & Configuring DNS server role</h3>
+<p>Once again in powershell:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Install the DNS server feature</span>
+<span style=color:#0086b3>Install-WindowsFeature</span> DNS
+<span style=color:#998;font-style:italic># Install the remote dns tools</span>
+<span style=color:#0086b3>Install-WindowsFeature</span> <span style=color:#0086b3>RSAT-DNS</span>-Server
+</code></pre></td></tr></table>
+</div>
+</div><p>You&rsquo;d think it might be a little more difficult than that, but no. We&rsquo;ll move right along into configuring the role. In powershell:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Define the FQDN of your zone</span>
+<span style=color:teal>$ZoneFQDN</span>=<span style=color:#d14>&#39;lab.test&#39;</span>
+<span style=color:teal>$IPv4NetworkID</span>=<span style=color:#d14>&#39;10.248.100.0/24&#39;</span>
+<span style=color:teal>$IPv6NetworkID</span>=<span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::/120&#39;</span>
+<span style=color:teal>$IPv4ReverseName</span>=<span style=color:#d14>&#39;100.248.10.in-addr.arpa.dns&#39;</span>
+<span style=color:teal>$IPv6ReverseName</span>=<span style=color:#d14>&#39;0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa.dns&#39;</span>
+
+<span style=color:#998;font-style:italic># Add the zone main forward zone</span>
+<span style=color:#0086b3>Add-DnsServerPrimaryZone</span> -Name <span style=color:teal>$ZoneFQDN</span> -ZoneFile <span style=color:#d14>&#34;$ZoneFQDN.dns&#34;</span> -ComputerName <span style=color:teal>$env:COMPUTERNAME</span>
+<span style=color:#998;font-style:italic># Add the appropriate reverse zones</span>
+<span style=color:#0086b3>Add-DnsServerPrimaryZone</span> -NetworkId <span style=color:teal>$IPv4NetworkID</span> -ZoneFile <span style=color:teal>$IPv4ReverseName</span>
+<span style=color:#0086b3>Add-DnsServerPrimaryZone</span> -NetworkId <span style=color:teal>$IPv6NetworkID</span> -ZoneFile <span style=color:teal>$IPv6ReverseName</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Again, pretty simple. No fancy or difficult-to-read powershell here. Let&rsquo;s check our work:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\Users\Administrator&gt; <span style=color:#0086b3>Get-DnsServerZone</span>|<span style=color:#0086b3>select </span>ZoneName
+ZoneName
+--------
+0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa
+0.<span style=color:#0086b3>in-addr</span>.arpa
+100.248.10.<span style=color:#0086b3>in-addr</span>.arpa
+127.<span style=color:#0086b3>in-addr</span>.arpa
+255.<span style=color:#0086b3>in-addr</span>.arpa
+lab.test
+
+<span style=color:#0086b3>PS </span>C:\Users\Administrator&gt; <span style=color:#0086b3>Get-ChildItem</span> C:\Windows\System32\dns\
+
+    Directory<span style=color:#a61717;background-color:#e3d2d2>:</span> C:\Windows\System32\dns
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----       12/26/2019   7<span style=color:#a61717;background-color:#e3d2d2>:</span>25 PM                backup
+d-----       12/26/2019   6<span style=color:#a61717;background-color:#e3d2d2>:</span>58 PM                samples
+-a----       12/26/2019   8<span style=color:#a61717;background-color:#e3d2d2>:</span>58 PM            632 0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa.dns
+-a----       12/26/2019   8<span style=color:#a61717;background-color:#e3d2d2>:</span>58 PM            538 0.3.10.<span style=color:#0086b3>in-addr</span>.arpa.dns
+-a----       12/26/2019   6<span style=color:#a61717;background-color:#e3d2d2>:</span>58 PM           3864 CACHE.DNS
+-a----       12/26/2019   7<span style=color:#a61717;background-color:#e3d2d2>:</span>25 PM              0 dns.log
+-a----       12/26/2019   8<span style=color:#a61717;background-color:#e3d2d2>:</span>48 PM            513 lab.test.dns
+
+
+<span style=color:#0086b3>PS </span>C:\Users\Administrator&gt; <span style=color:#0086b3>Get-DnsServerResourceRecord</span> -ZoneName lab.test|<span style=color:#0086b3>select </span>Hostname,RecordType,RecordData
+
+Hostname RecordType RecordData
+-------- ---------- ----------
+@        NS         DnsServerResourceRecordNS
+@        SOA        DnsServerResourceRecordSoa
+</code></pre></td></tr></table>
+</div>
+</div><p>Neat, now we have an empty zone. The only records that currently exist are the required records for a zone to exist at all, the NS and SOA records. Now let&rsquo;s add some records based on our documentation.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:teal>$ZoneName</span>=<span style=color:#d14>&#39;lab.test&#39;</span>
+<span style=color:teal>$DNSServer</span>=<span style=color:teal>$env:COMPUTERNAME</span>
+
+<span style=color:#998;font-style:italic># Most of this will be repetitive, and some will simply be for exposition.</span>
+<span style=color:#0086b3>Add-DnsServerResourceRecord</span> -ZoneName <span style=color:teal>$ZoneName</span> -Passthru -A -Name <span style=color:#d14>&#39;gateway&#39;</span> -ipv4address <span style=color:#d14>&#39;10.248.100.1&#39;</span> -CreatePtr -ComputerName <span style=color:teal>$DNSServer</span>
+<span style=color:#0086b3>Add-DnsServerResourceRecord</span> -ZoneName <span style=color:teal>$ZoneName</span> -Passthru -A -Name <span style=color:#d14>&#39;lab-dns&#39;</span> -ipv4address <span style=color:#d14>&#39;10.248.100.2&#39;</span> -CreatePtr -ComputerName <span style=color:teal>$DNSServer</span>
+<span style=color:#0086b3>Add-DnsServerResourceRecord</span> -ZoneName <span style=color:teal>$ZoneName</span> -Passthru -A -Name <span style=color:#d14>&#39;lab-dhcp&#39;</span> -ipv4address <span style=color:#d14>&#39;10.248.100.3&#39;</span> -CreatePtr -ComputerName <span style=color:teal>$DNSServer</span>
+
+<span style=color:#0086b3>Add-DnsServerResourceRecord</span> -ZoneName <span style=color:teal>$ZoneName</span> -Passthru -AAAA -Name <span style=color:#d14>&#39;gateway&#39;</span> -ipv6address <span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::1&#39;</span> -CreatePtr -ComputerName <span style=color:teal>$DNSServer</span>
+<span style=color:#0086b3>Add-DnsServerResourceRecord</span> -ZoneName <span style=color:teal>$ZoneName</span> -Passthru -AAAA -Name <span style=color:#d14>&#39;lab-dns&#39;</span> -ipv6address <span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::2&#39;</span> -CreatePtr -ComputerName <span style=color:teal>$DNSServer</span>
+<span style=color:#0086b3>Add-DnsServerResourceRecord</span> -ZoneName <span style=color:teal>$ZoneName</span> -Passthru -AAAA -Name <span style=color:#d14>&#39;lab-dhcp&#39;</span> -ipv6address <span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::3&#39;</span> -CreatePtr -ComputerName <span style=color:teal>$DNSServer</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>What is the difference between an &lsquo;A&rsquo; record and an &lsquo;AAAA&rsquo; record? At the simplest level, they are both a type of DNS record that specify a normal mapping from a DNS name to an IP address. A records contain IPv4 addresses, and AAAA records contain IPv6 addresses. You can have multiple A or AAAA records that point to more than one IP address, and the DNS server will round-robin rotate through them. This gives a free amount of load balancing but it isn&rsquo;t appropriate if you&rsquo;re trying to balance a heavily used service by utilization. For more information and to see some more detailed and pedantic information on the types of DNS records there are, see <a href=https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-4>this IANA reference page.</a></p>
+<p>So - Why did we create three zones? The first - &lsquo;lab.test&rsquo; is a <strong>forward</strong> lookup zone. The ones tied to the network IDs are <strong>reverse</strong> zones. They enable you to look up an IP address and see what its hostname is. Records tying an IP address to a hostname are called <strong>PTR</strong>, or pointer records. That is why we created the reverse zones up front, then had powershell add the pointer records at the same time as the A or AAAA records by tacking on the &lsquo;-CreatePtr&rsquo; flag to the Add-DnsServerResourceRecord cmdlet.</p>
+<p>Having done this work, you can re-run the Get-DnsServerResourceRecord cmdlet in powershell as outlined in the example above to verify the results.</p>
+<p>Neat. Now we have a functioning DNS server. You can close your connection to the DNS server now.</p>
+<h2 id=the-dhcp-server>The DHCP Server</h2>
+<h3 id=initial-config>Initial Config</h3>
+<p>By now you&rsquo;ve installed a Windows Server OS at least once, so create a vm with ~2048MB ram and a minimum 60gb disk space. You&rsquo;ll also want a core install on this machine.</p>
+<p>I&rsquo;m going to name it <strong>lab-dhcp</strong> and apply the same configuration steps for <strong>sconfig</strong> as we did for the DNS server.</p>
+<p>When you are in <strong>sconfig</strong>, configure the DNS server settings to use the DNS server address for your lab.</p>
+<p>Restart after setting everything you need to do, log in and open powershell again. This script is modified from the one we used for the DNS server, so don&rsquo;t mix them up.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Change these to match the config in your documentation</span>
+<span style=color:teal>$IPv6Address</span>=<span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::3&#39;</span>
+<span style=color:teal>$IPv6PrefixLength</span>=<span style=color:#d14>&#39;64&#39;</span>
+<span style=color:teal>$IPv6Gateway</span>=<span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::1&#39;</span>
+<span style=color:teal>$IPv6DNSServer</span>=<span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::2&#39;</span>
+<span style=color:teal>$IPv4Gateway</span>=<span style=color:#d14>&#39;10.248.100.1&#39;</span>
+<span style=color:teal>$IPv4DNSServer</span>=<span style=color:#d14>&#39;10.248.100.2&#39;</span>
+<span style=color:teal>$FQDN</span>=<span style=color:#d14>&#39;lab.test&#39;</span>
+
+<span style=color:#998;font-style:italic># Use our DNS server, then fall back to the gateway if the DNS server is offline</span>
+<span style=color:teal>$DnsServerAddresses</span>=(<span style=color:teal>$IPv4DNSServer</span>,<span style=color:teal>$IPv4Gateway</span>,<span style=color:teal>$IPv6DNSServer</span>,<span style=color:teal>$IPv6Gateway</span>)
+
+<span style=color:#998;font-style:italic># Get the adapter</span>
+<span style=color:teal>$Adapter</span>=(<span style=color:#0086b3>Get-NetAdapter</span>)[0]
+<span style=color:#0086b3>Set-DnsClient</span> -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex -ConnectionSpecificSuffix <span style=color:teal>$FQDN</span>
+<span style=color:#998;font-style:italic># turn off DHCP</span>
+<span style=color:#0086b3>Set-NetIPInterface</span> -Dhcp Disabled -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex
+<span style=color:#998;font-style:italic># configure DNS client</span>
+<span style=color:#0086b3>Set-DnsClientServerAddress</span> -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex -ServerAddresses <span style=color:teal>$DnsServerAddresses</span>
+
+<span style=color:#998;font-style:italic># Create the IPv6 config, create the address</span>
+<span style=color:teal>$IPv6Arguments</span> =@{
+    InterfaceIndex = <span style=color:teal>$Adapter</span>.ifIndex
+    PrefixLength = <span style=color:teal>$IPv6PrefixLength</span>
+    IPAddress = <span style=color:teal>$IPv6Address</span>
+    DefaultGateway = <span style=color:teal>$IPv6Gateway</span>
+    AddressFamily = <span style=color:#d14>&#39;IPv6&#39;</span>
+    <span style=color:#0086b3>Type </span>= <span style=color:#d14>&#39;Unicast&#39;</span>
 }
-Set-DhcpServerv4OptionValue @Server4Values</p>
-<p>$Server6Values=@{
-DnsServer = &lsquo;fdda:f6d4:f5a2:f1e6::2&rsquo;
-DomainSearchList = &lsquo;lab.test&rsquo;
+<span style=color:#0086b3>New-NetIPAddress</span> <span style=color:teal>@IPv6Arguments</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=installing--configuring-the-dhcp-role>Installing & Configuring the DHCP role</h3>
+<p>In powershell on the DHCP server:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Install-WindowsFeature</span> -Name <span style=color:#d14>&#39;DHCP&#39;</span> <span style=color:#a61717;background-color:#e3d2d2>–</span>IncludeManagementTools
+<span style=color:#0086b3>Install-WindowsFeature</span> -Name <span style=color:#d14>&#39;RSAT-DHCP&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>As before, super simple command to make something a DHCP server. Windows will quickly install the relevant services. Now it&rsquo;s time to add scopes.</p>
+<p>A DHCP server’s job is to configure the clients so you don’t have to manually set up each individual host. We will set several settings for the DHCP server to tell clients about. Some will be on a scope, some at a server level.</p>
+<p>In powershell:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Server Scope Options</span>
+<span style=color:teal>$Server4Values</span>=@{
+    DnsServer = <span style=color:#d14>&#39;10.248.100.2&#39;</span>
+    DnsDomain = <span style=color:#d14>&#39;lab.test&#39;</span>
 }
-Set-DhcpServerv6OptionValue @Server6Values</p>
-<h1 id=dhcp-v4-has-the-concept-of-a-start-and-end-range-inside-a-subnet>DHCP v4 has the concept of a start and end range inside a subnet.</h1>
-<p>$V4ScopeID=&lsquo;10.248.100.0&rsquo;
-$IPv4Router=&lsquo;10.248.100.1&rsquo;</p>
-<p>$V4Scope=@{
-Name = &lsquo;Lab Subnet&rsquo;
-StartRange = &lsquo;10.248.100.50&rsquo;
-EndRange = &lsquo;10.248.100.99&rsquo;
-SubnetMask = &lsquo;255.255.255.0&rsquo;
+<span style=color:#0086b3>Set-DhcpServerv4OptionValue</span> <span style=color:teal>@Server4Values</span>
+
+<span style=color:teal>$Server6Values</span>=@{
+    DnsServer = <span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::2&#39;</span>
+    DomainSearchList = <span style=color:#d14>&#39;lab.test&#39;</span>
 }
-Add-DhcpServerv4Scope @V4Scope</p>
-<p>Set-DhcpServerv4OptionValue -ScopeId $V4ScopeID -Router $IPv4Router</p>
-<h1 id=dhcpv6-expects-you-to-exclude-any-addresses-you-intend-to-use-statically-instead-of-specifying-the-range>DHCPv6 expects you to exclude any addresses you intend to use statically, instead of specifying the range.</h1>
-<p>#$V6ScopeID=&lsquo;10.248.100.0&rsquo;
-$V6Scope=@{
-Name = &lsquo;Lab V6 Subnet&rsquo;
-Prefix = &lsquo;fdda:f6d4:f5a2:f1e6::&rsquo;
+<span style=color:#0086b3>Set-DhcpServerv6OptionValue</span> <span style=color:teal>@Server6Values</span>
+
+<span style=color:#998;font-style:italic># DHCP v4 has the concept of a start and end range inside a subnet.</span>
+<span style=color:teal>$V4ScopeID</span>=<span style=color:#d14>&#39;10.248.100.0&#39;</span>
+<span style=color:teal>$IPv4Router</span>=<span style=color:#d14>&#39;10.248.100.1&#39;</span>
+
+<span style=color:teal>$V4Scope</span>=@{
+    Name = <span style=color:#d14>&#39;Lab Subnet&#39;</span>
+    StartRange = <span style=color:#d14>&#39;10.248.100.50&#39;</span>
+    EndRange = <span style=color:#d14>&#39;10.248.100.99&#39;</span>
+    SubnetMask = <span style=color:#d14>&#39;255.255.255.0&#39;</span>
 }
-Add-DhcpServerv6Scope @V6Scope</p>
-<p>$V6ExclusionRange=@{
-StartRange = &lsquo;fdda:f6d4:f5a2:f1e6::1&rsquo;
-EndRange = &lsquo;fdda:f6d4:f5a2:f1e6::31&rsquo;
-Prefix = &lsquo;fdda:f6d4:f5a2:f1e6::&rsquo;
+<span style=color:#0086b3>Add-DhcpServerv4Scope</span> <span style=color:teal>@V4Scope</span>
+
+<span style=color:#0086b3>Set-DhcpServerv4OptionValue</span> -ScopeId <span style=color:teal>$V4ScopeID</span> -Router <span style=color:teal>$IPv4Router</span>
+
+<span style=color:#998;font-style:italic># DHCPv6 expects you to exclude any addresses you intend to use statically, instead of specifying the range.</span>
+<span style=color:#998;font-style:italic>#$V6ScopeID=&#39;10.248.100.0&#39;</span>
+<span style=color:teal>$V6Scope</span>=@{
+    Name = <span style=color:#d14>&#39;Lab V6 Subnet&#39;</span>
+    Prefix = <span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::&#39;</span>
 }
-Add-DhcpServerv6ExclusionRange @V6ExclusionRange</p>
-<h1 id=were-not-setting-a-router-address---ipv6-includes-an-automatic-address-all-routers-listen-on-also-router-advertisements-are-a-thingcodepre>We&rsquo;re not setting a router address - IPv6 includes an automatic address all routers listen on. Also router advertisements are a thing.</h1>
-<pre><code>                ## Conclusion &amp; Testing
-                
-                
-                &lt;p&gt;
-                  At this point, install some workstation class OS on a new vm and see whether you get a usable workstation out of the box without configuring any IP addressing. Try resolving some DNS names and see if they resolve properly. Be sure and check both A and AAAA records, as well as browsing the internet. At this point your workstation should be fully functional.
-                &lt;/p&gt;
-                
-                &lt;p&gt;
-                  Next article we'll cover layering in identity management in the form of Active Directory.
-                &lt;/p&gt;
-</code></pre>
+<span style=color:#0086b3>Add-DhcpServerv6Scope</span> <span style=color:teal>@V6Scope</span>
+
+<span style=color:teal>$V6ExclusionRange</span>=@{
+    StartRange = <span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::1&#39;</span>
+    EndRange = <span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::31&#39;</span>
+    Prefix = <span style=color:#d14>&#39;fdda:f6d4:f5a2:f1e6::&#39;</span>
+}
+<span style=color:#0086b3>Add-DhcpServerv6ExclusionRange</span> <span style=color:teal>@V6ExclusionRange</span>
+
+<span style=color:#998;font-style:italic># We&#39;re not setting a router address - IPv6 includes an automatic address all routers listen on. Also router advertisements are a thing.</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=conclusion--testing>Conclusion & Testing</h2>
+<p>At this point, install some workstation class OS on a new vm and see whether you get a usable workstation out of the box without configuring any IP addressing. Try resolving some DNS names and see if they resolve properly. Be sure and check both A and AAAA records, as well as browsing the internet. At this point your workstation should be fully functional.</p>
+<p>Next article we&rsquo;ll cover layering in identity management in the form of Active Directory.</p>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>

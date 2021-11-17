@@ -21,7 +21,7 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Intune/Autopilot Setup Companion Guide Part 1">
-<meta name=twitter:description content="Purpose The following blog posts will be a companion guide to Steve and Adam&rsquo;s Intune training videos found at intune.training (this covers Episode 1 and 2) and will help you get Autopilot going in your environment. This guide assumes that you already have office 365 and azure configured. By the end of this guide you will have a working bare bones Autopilot configuration. This has been a major request from several people in the WinAdmins community.">
+<meta name=twitter:description content="Purpose The following blog posts will be a companion guide to Steve and Adam&rsquo;s Intune training videos found at Intune.Training (this covers Episode 1 and 2) and will help you get Autopilot going in your environment. This guide assumes that you already have office 365 and azure configured. By the end of this guide you will have a working bare bones Autopilot configuration. This has been a major request from several people in the WinAdmins community.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -94,7 +94,7 @@
 </div>
 <div class=post-entry>
 <h2 id=purpose>Purpose</h2>
-<p>The following blog posts will be a companion guide to Steve and Adam&rsquo;s Intune training videos found at <a href=https://intune.training>intune.training</a> (this covers Episode 1 and 2) and will help you get Autopilot going in your environment. This guide assumes that you already have office 365 and azure configured. By the end of this guide you will have a working bare bones Autopilot configuration. This has been a major request from several people in the <a href=https://aka.ms/winadmins>WinAdmins</a> community. I strongly recommend joining if you are not already a member!</p>
+<p>The following blog posts will be a companion guide to Steve and Adam&rsquo;s Intune training videos found at <a href=https://intune.training>Intune.Training</a> (this covers Episode 1 and 2) and will help you get Autopilot going in your environment. This guide assumes that you already have office 365 and azure configured. By the end of this guide you will have a working bare bones Autopilot configuration. This has been a major request from several people in the <a href=https://aka.ms/winadmins>WinAdmins</a> community. I strongly recommend joining if you are not already a member!</p>
 <h2 id=why>Why?</h2>
 <p>Why would you want to setup Intune? The benefit of setting up and deploying machines via Intune are quiet simple. You get a true zero touch deployment where your IT staff will no longer need to ever touch a device in order to get it configured. You can manage those devices from anywhere using the M365 Device Management Portal. Wipe, reset, and fresh start options are also available. You&rsquo;ll find a common theme throughout Intune is that if a device is having an issue simply reset it and be on your marry way.</p>
 <h2 id=requirements>Requirements</h2>
@@ -118,6 +118,7 @@
 </figure>
 </div> </p>
 <h2 id=configuration>Configuration</h2>
+<p>Now before you go moving sliders and configuring things I want to stress that <strong>you should do this in a dev environment</strong> to begin with. I am not responsible for you messing your production environment up!</p>
 <h3 id=company-branding>Company Branding</h3>
 <p>The first thing we are going to tackle is is branding.<br>
 Navigate to <a href=http://portal.azure.com>portal.azure.com</a> and open up your Azure Active Directory resource. Company branding can be found under the Manage section on the left hand side. If you have never configured Company branding you will see a Configure option, select it. Fill in the desired fields. In our case we filled in Banner Logo, Username hint, Square logo image, and Square logo image dark theme. You will notice almost every option has a tooltip if you are curious what each option does. The below is our current configuration:</p>

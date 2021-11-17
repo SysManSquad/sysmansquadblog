@@ -21,9 +21,10 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="NET-103 : Layering in Active Directory">
-<meta name=twitter:description content="In previous articles, we&rsquo;ve built the basic services you need without getting too far in the weeds. Now we&rsquo;re going to layer in a central identity service.
+<meta name=twitter:description content="Joe Ravi / CC BY-SA https://creativecommons.org/licenses/by-sa/3.0  
+In previous articles, we&rsquo;ve built the basic services you need without getting too far in the weeds. Now we&rsquo;re going to layer in a central identity service.
 It&rsquo;s also hopefully going to be a lot shorter than previous articles, though I can&rsquo;t make any promises - these things tend to all start small, then balloon rapidly.
-If you&rsquo;re continuing from NET-102 you&rsquo;ll already have the following machines:   Machine Description     gateway pfsense gateway functioning as a firewall & router   lab-dns dns server   lab-dhcp dhcp server   workstation windows 10 workstation with all of the RSAT tools installed    Pretty simple so far, we just have the bare bones of a network.">
+If you&rsquo;re continuing from NET-102 you&rsquo;ll already have the following machines:">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -95,6 +96,14 @@ If you&rsquo;re continuing from NET-102 you&rsquo;ll already have the following 
 <span class=post-date>May 19, 2020</span>
 </div>
 <div class=post-entry>
+<p><div class=image>
+<figure>
+<a href=Canada_Goose_Branta_Canadensis.jpg target=_blank>
+<img src=Canada_Goose_Branta_Canadensis.jpg alt=Canada_Goose_Branta_Canadensis.jpg>
+</a>
+<figcaption>Joe Ravi / CC BY-SA https://creativecommons.org/licenses/by-sa/3.0</figcaption>
+</figure>
+</div></p>
 <p>In <a href=https://www.sysmansquad.com/2020/01/23/net-102-build-your-lab/>previous articles</a>, we&rsquo;ve built the basic services you need without getting too far in the weeds. Now we&rsquo;re going to layer in a central identity service.</p>
 <p>It&rsquo;s also hopefully going to be a lot shorter than previous articles, though I can&rsquo;t make any promises - these things tend to all start small, then balloon rapidly.</p>
 <p>If you&rsquo;re continuing from NET-102 you&rsquo;ll already have the following machines:</p>
@@ -126,28 +135,64 @@ If you&rsquo;re continuing from NET-102 you&rsquo;ll already have the following 
 </table>
 <p>Pretty simple so far, we just have the bare bones of a network. New devices placed on the network will get an address and be able to resolve hostnames. Now we&rsquo;ll want to expand on this to allow you to have a centralized set of credentials. This enables you to use the same user name and password across many machines without needing to create them on each machine.</p>
 <p>At the moment, you don&rsquo;t really have a good way to just look at your configuration other than powershell commands if you followed instructions from NET-102. This obviously isn&rsquo;t optimal when you just need a quick look around, or need to get something done quickly. Some things like the DNS server console might connect OK from your admin workstation, but it&rsquo;s likely that nothing works quite right. If anything does work at all it may be because you&rsquo;ve got the same username and password configured across all machines in your lab.</p>
-<h2 id=planning-your-ad-environment>Planning your AD environment</h2>
-<p>For an environment this small, it&rsquo;s going to be pretty simple. You merely need to decide on the AD domain name and set the IP addressing of the controller. In a larger network and environment you&rsquo;d have to plan things like AD Sites & Services topology, scaling the number of controllers to the number of clients, redundancy, etc. </p>
-<pre><code>&lt;td&gt;
-  Value
-&lt;/td&gt;
-</code></pre>
-<pre><code>&lt;td&gt;
-  **ad**
-&lt;/td&gt;
-</code></pre>
-<pre><code>&lt;td&gt;
-  **ad.lab.test**
-&lt;/td&gt;
-</code></pre>
-<pre><code>&lt;td&gt;
-  **10.248.100.4**
-&lt;/td&gt;
-</code></pre>
-<pre><code>&lt;td&gt;
-  **fdda:f6d4:f5a2:f1e6::4/64**
-&lt;/td&gt;
-</code></pre>
+<p>Warning: Before you continue, if you have given your admin workstation vm a network adapter on your real network, <strong>make sure that it has NO default gateway and NO dns servers specified</strong>. It should have a static address configuration, and look similar to the following:</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>C:\Users\User1&gt;ipconfig /all
+Ethernet adapter Ethernet0:
+   Connection-specific DNS Suffix  . :
+   Description . . . . . . . . . . . : hardware description&gt;
+   Physical Address. . . . . . . . . : 00-00-00-00-00-00
+   DHCP Enabled. . . . . . . . . . . : No
+   Autoconfiguration Enabled . . . . : Yes
+   IPv4 Address. . . . . . . . . . . : 192.168.0.40(Preferred)
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : this should be blank&gt;
+   NetBIOS over Tcpip. . . . . . . . : Enabled&lt;/code&gt;&lt;/pre&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=planning-your-ad-environment>Planning your AD environment</h2>
+<p>For an environment this small, it&rsquo;s going to be pretty simple. You merely need to decide on the AD domain name and set the IP addressing of the controller. In a larger network and environment you&rsquo;d have to plan things like AD Sites & Services topology, scaling the number of controllers to the number of clients, redundancy, etc.</p>
+<p><strong>AD Information</strong></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AD Domain Name</td>
+<td>ad</td>
+</tr>
+<tr>
+<td>AD FQDN</td>
+<td>ad.lab.test</td>
+</tr>
+<tr>
+<td>ADC IPv4</td>
+<td>10.248.100.4</td>
+</tr>
+<tr>
+<td>ADC IPv6</td>
+<td>fdda:f6d4:f5a2:f1e6::4/64</td>
+</tr>
+</tbody>
+</table>
 <p>Keep in mind that the AD domain name isn&rsquo;t changeable later without causing a large amount of headache for yourself. Keep it reasonably generic. You can certainly name it CONTOSOAD or whatever your company is named but keep in mind - company names change on occasion. Your company could rebrand, be acquired or acquire another company. This name will stick with you a long time, and is <strong>always visible to all staff</strong>, so don&rsquo;t try to be cute with it. You&rsquo;ll also probably find yourself typing it many times, so shorter is better.</p>
 <p>It is also VERY important to make sure the fully qualified domain name is something your company OWNS. Even if you&rsquo;ve set up your internal services to properly resolve that domain name, your machines will sometimes leave your network and spray authentication traffic toward whatever servers that name resolves to on the Internet. Obviously we&rsquo;re not following this good practice here, but it&rsquo;s a lab. Do better for production.</p>
 <h2 id=installing-your-first-ad-controller>Installing your first AD controller</h2>
@@ -281,7 +326,23 @@ If you&rsquo;re continuing from NET-102 you&rsquo;ll already have the following 
 </div><p>After joining, you will be able to use your <code>ad\administrator</code> credentials to sign into any of your machines. If you don&rsquo;t already have the RSAT tools installed on your windows 10 workstation, you&rsquo;ll want to get that done before proceeding.</p>
 <h2 id=administrating-a-domain-joined-dhcp-server>Administrating a domain-joined DHCP server</h2>
 <p>Now, log into your windows 10 workstation using the <code>ad\administrator</code> credentials. You&rsquo;ll be able to use the dns console to connect over to the DNS servers and look through your zones. Next, open the dhcp console and let&rsquo;s take a quick look at the state of the DHCP service.</p>
+<p><div class=image>
+<figure>
+<a href=image-6.png target=_blank>
+<img src=image-6.png alt="The DHCP console showing the IPv4 and IPv6 in a disabled state">
+</a>
+<figcaption>Oh dear. That doesn't look happy.</figcaption>
+</figure>
+</div></p>
 <p>Windows DHCP servers that are NOT in a domain operate normally. Windows DHCP servers that are or have become joined to a domain do not operate until they have been <strong>authorized</strong>. Right click on the server name and authorize the server to allow it to continue to provide DHCP service.</p>
+<p><div class=image>
+<figure>
+<a href=image-7.png target=_blank>
+<img src=image-7.png alt="Authorizing a DHCP server">
+</a>
+<figcaption>Authorizing a DHCP server</figcaption>
+</figure>
+</div></p>
 <p>After you have authorized the DHCP server to continue, refreshing will show that the DHCP server is now returned to service. If you expand the IPv4 and IPv6 nodes, you&rsquo;ll see the scopes we created earlier through powershell. given that everything in your lab so far should have a static address at the moment, you aren&rsquo;t likely to see any leases.</p>
 <h2 id=user-management>User Management</h2>
 <p>You can use the &ldquo;Active Directory Users and Computers&rdquo; or &ldquo;Active Directory Administrative Center&rdquo; to create users inside your domain. Once the accounts are created, you&rsquo;ll be able to use any account you create to sign into your workstation and try out what you can do with a regular domain account vs. your <code>ad\administrator</code> account.</p>
