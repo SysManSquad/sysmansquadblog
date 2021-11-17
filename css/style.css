@@ -11,19 +11,25 @@ strong { font-weight: bold }
 em { font-style: italic }
 a img { border:none }
 
+html {
+	font-size: 1.2em;
+}
+
 body {
-	font-family: 'Source Sans Pro', sans-serif;
-	font-size:14px;
+	font-family: "Lato",sans-serif;
+	font-style: normal;
+	font-weight: 400;
 	color:#242424;
 	background:#f3f3f3;
 }
 
 h1,h2,h3,h4,h5,h6 {
-	font-family:"Montserrat", sans-serif;
+	font-family:"Lato",sans-serif;
+	font-weight: 700;
 }
 
 p {
-	line-height:24px;
+	line-height: 1.8em;
 }
 
 a {
@@ -305,6 +311,7 @@ figcaption {
 	text-align:center;
 	border-bottom:1px dashed #eee;
 	margin-bottom:60px;
+	background-color: #2c3e50;
 }
 #logo {
 }
@@ -531,6 +538,9 @@ figcaption {
 .post-header {
 	text-align:center;
 	margin-bottom:25px;
+	position: relative;
+    margin: 0;
+    line-height: 1.1;
 }
 .post-header .cat {
 	display:block;
@@ -553,11 +563,11 @@ figcaption {
     margin-bottom: 10px;
     display: block;
     max-width: 80%;
-	font-family: "Montserrat",sans-serif;
+	font-size: 1.2em;
 }
 
 .post-header h2 a, .post-header h1 {
-	font-size:20px;
+	font-size: 1.2em;
 	letter-spacing:2.75px;
 	color:#131313;
 	font-weight:600;
@@ -568,7 +578,6 @@ figcaption {
 	-webkit-transition:.25s;
 	transition:.25s;
 	text-transform:none;
-	font-size: 25px;
 }
 .post-header h2 a:hover {
 	opacity:.6;
@@ -580,18 +589,7 @@ figcaption {
   margin: 0 auto 15px;
   color: #161616;
 }
-.post-date {
-	color: #a5a5a5;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.25px;
-}
-.post-header .post-date {
-    text-transform: uppercase;
-    font-size: 11px;
-    font-style: normal;
-    font-weight: 600;
-}
+
 .post-img {
 	margin-bottom:25px;
 	text-align: center;
@@ -609,6 +607,7 @@ figcaption {
 /* Post Entry **********/
 .post-entry p, .post-entry hr {
     margin-bottom:20px;
+	font-size: 1rem;
 }
 .post-entry h1, .post-entry h2, .post-entry h3, .post-entry h4, .post-entry h5, .post-entry h6 {
 	color:#000;
@@ -616,7 +615,7 @@ figcaption {
 	margin-bottom:14px;
 }
 .post-entry h1 {
-	font-size:24px;
+	font-size:1rem
 }
 .post-entry h2 {
 	font-size:21px;
@@ -668,7 +667,10 @@ figcaption {
 	list-style:decimal;
 }
 
-.sticky.post .post-header { border:1px dashed #eee; padding:20px 0; }
+.sticky.post .post-header { 
+	border:1px dashed #eee; 
+	padding:20px 0; 
+}
 .bypostauthor  {}
 .post-entry pre {
 	overflow:auto;
@@ -2088,8 +2090,11 @@ div.wpcf7 {
 	
 	/* Post header */
 	.post-header h2 a, .post-header h1 {
-		font-size:19px;
 		letter-spacing:2px;
+		position: relative;
+		margin: 0;
+		font-size: 170%;
+		line-height: 1.1;
 	}
 	
 	.post-header h2, .post-header h1 {
