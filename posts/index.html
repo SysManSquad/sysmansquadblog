@@ -108,6 +108,11 @@ Well, Teams is an interesting app when it comes to its cache. It relies heavily 
 </div>
 </article>
 <article class=list-item>
+<div class=post-img>
+<a href=https://blog.sysmansquad.com/2021/10/18/get-rid-of-the-continue-connecting-prompt-for-your-policy-configured-wifi-networks/>
+<img width=520 height=400 src=https://blog.sysmansquad.com/2021/10/18/get-rid-of-the-continue-connecting-prompt-for-your-policy-configured-wifi-networks/image.png>
+</a>
+</div>
 <div class=list-content>
 <div class=post-header>
 <h2 class=post-title>
@@ -116,7 +121,9 @@ Well, Teams is an interesting app when it comes to its cache. It relies heavily 
 </div>
 <div class=post-entry>
 <p>
-As of Windows 11, we noticed that we were getting prompted to continue connecting to a network that we&rsquo;d never had a problem with before. It&rsquo;s already defined in group policy, so this new behavior is puzzling and annoying. The certificate in question is for the NPS/Radius server our network uses to validate credentials for the wifi. I really had no idea how to even begin googling for this problem, but while talking to some of my fellow nerds on the Winadmins Discord server, tossing around some ideas on what could be causing this, looking to see whether there was a problem with the certificate, etc.
+As of Windows 11, we noticed that we were getting prompted to continue connecting to a network that we&rsquo;d never had a problem with before. It&rsquo;s already defined in group policy, so this new behavior is puzzling and annoying. The certificate in question is for the NPS/Radius server our network uses to validate credentials for the wifi.
+Continue Connecting
+I really had no idea how to even begin googling for this problem, but while talking to some of my fellow nerds on the Winadmins Discord server, tossing around some ideas on what could be causing this, looking to see whether there was a problem with the certificate, etc.
 </p>
 </div>
 <div class=list-meta>
@@ -134,9 +141,12 @@ As of Windows 11, we noticed that we were getting prompted to continue connectin
 </div>
 <div class=post-entry>
 <p>
-Intro So you&rsquo;ve started rolling out Windows 11 to your endpoints, and your users got confused and upset over the consumer teams apps that is installed? Understandably you wish to do something about this. (╯°□°）╯︵ ┻━┻No worries mate, Intune Proactive Remediations to the rescue!
+Intro So you&rsquo;ve started rolling out Windows 11 to your endpoints, and your users got confused and upset over the consumer teams apps that is installed? Understandably you wish to do something about this.
+(╯°□°）╯︵ ┻━┻
+No worries mate, Intune Proactive Remediations to the rescue!
 The Solution The code below fixes two things.
-It removes the chat by writing the registry key that disables it the TaskbarMn DWORD controls thisThen it simply uninstalls the appx package for the consumer teams app, note that this has no effect on the regular teams app.
+It removes the chat by writing the registry key that disables it
+the TaskbarMn DWORD controls this
 </p>
 </div>
 <div class=list-meta>
@@ -154,7 +164,7 @@ It removes the chat by writing the registry key that disables it the TaskbarMn D
 </div>
 <div class=post-entry>
 <p>
-Hey siri, write a blog post for me. Deploying the Configuration manager client is usually pretty simple. the procedure is well documented.
+Hey Siri, Write A Blog Post For Me Deploying the Configuration manager client is usually pretty simple. the procedure is well documented.
 However there are issues if you plan on installing the CM client during Autopilot using the officially suggested methods
 Mixing LOB and win32 applications will result in autopilot breaking, so you should use win32 apps exclusively, which somewhat contradicts the official way of installing the CM client with intune.
 </p>
@@ -304,13 +314,8 @@ Introduction &lt;p> In this post, I'll show you a workaround to get device based
 </form>
 </div>
 <div>
-<div class="widget widget_MVP">
-<a href="https://mvp.microsoft.com/en-us/PublicProfile/5003519?fullName=Adam%20Gross" target=_blank>
-<img src=/img/MVP_Logo_Horizontal_Secondary_Black_RGB_300ppi.png>
-</a>
-</div>
 <div class="widget widget_recent_entries">
-<h4 class=widget-title>Recent Posts</h4>
+<h4 class=widget-title>Squad Posts</h4>
 <ul>
 <li><a href=/2021/11/11/microsoft-teams-cache-a-burden-to-us-all/ target=_blank>Microsoft Teams Cache, a burden to us all</a></li>
 <li><a href=/2021/10/18/get-rid-of-the-continue-connecting-prompt-for-your-policy-configured-wifi-networks/ target=_blank>Get rid of the “Continue connecting?” prompt for your policy-configured wifi networks</a></li>
@@ -319,25 +324,13 @@ Introduction &lt;p> In this post, I'll show you a workaround to get device based
 <li><a href=/2021/07/12/use-azure-policy-to-configure-boot-diagnostics-settings/ target=_blank>Use Azure Policy to configure Boot Diagnostics Settings</a></li>
 </ul>
 </div>
-<div class="widget widget_SCD">
-<h4 class=widget-title>Consulting</h4>
-<a href="https://systemcenterdudes.com/sccm-consulting-services/?ref=5&campaign=Consulting" target=_blank>
-<img src=/img/SCDLogo.png>
-</a>
-</div>
-<div class="widget widget_SCD">
-<h4 class=widget-title>Intune.Training</h4>
-<a href=http://intune.training target=_blank>
-<img src=/img/ITLogo.png>
-</a>
-</div>
 </aside>
 </div>
 </div>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

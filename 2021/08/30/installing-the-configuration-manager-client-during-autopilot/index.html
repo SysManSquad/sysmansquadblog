@@ -21,7 +21,7 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Installing The Configuration Manager Client During Autopilot">
-<meta name=twitter:description content="Hey siri, write a blog post for me. Deploying the Configuration manager client is usually pretty simple. the procedure is well documented.
+<meta name=twitter:description content="Hey Siri, Write A Blog Post For Me Deploying the Configuration manager client is usually pretty simple. the procedure is well documented.
 However there are issues if you plan on installing the CM client during Autopilot using the officially suggested methods
 Mixing LOB and win32 applications will result in autopilot breaking, so you should use win32 apps exclusively, which somewhat contradicts the official way of installing the CM client with intune.">
 </head>
@@ -98,27 +98,28 @@ Mixing LOB and win32 applications will result in autopilot breaking, so you shou
 </p>
 </div>
 <div class=post-entry>
-<h2 id=hey-siri-write-a-blog-post-for-me>Hey siri, write a blog post for me.</h2>
-<p>Deploying the Configuration manager client is usually pretty simple. the procedure is <a href=https://docs.microsoft.com/en-us/mem/configmgr/core/clients/deploy/plan/client-installation-methods>well documented</a>.</p>
+<h2 id=hey-siri-write-a-blog-post-for-me>Hey Siri, Write A Blog Post For Me</h2>
+<p>Deploying the Configuration manager client is usually pretty simple. the procedure is <a href=https://docs.microsoft.com/mem/configmgr/core/clients/deploy/plan/client-installation-methods>well documented</a>.</p>
 <p>However there are issues if you plan on installing the CM client during Autopilot using the officially suggested methods</p>
-<p>Mixing LOB and win32 applications <a href=https://docs.microsoft.com/en-us/mem/intune/apps/lob-apps-windows>will result in autopilot breaking</a>, so you should use win32 apps exclusively, which somewhat contradicts the official way of installing the CM client with intune.</p>
-<p>Installing the Configuration manager client during the middle of autopilot will break autopilot, as the Configuration manager client essentially becomes the management authority the moment it becomes active, causing intune to have no idea how to proceeed.</p>
+<p>Mixing LOB and win32 applications <a href=https://docs.microsoft.com/mem/intune/apps/lob-apps-windows>will result in autopilot breaking</a>, so you should use win32 apps exclusively, which somewhat contradicts the official way of installing the CM client with intune.</p>
+<p>Installing the Configuration manager client during the middle of autopilot will break autopilot, as the Configuration manager client essentially becomes the management authority the moment it becomes active, causing intune to have no idea how to proceed.</p>
 <p>Of course you could install the CM client completely outside of autopilot but that can take a while to happen.</p>
 <p>So lets review a method i use to deploy the Configuration manager client during autopilot, but without causing a mess.</p>
-<h2 id=how-i-do-it>How i do it</h2>
+<h2 id=how-i-do-it>How I Do It</h2>
 <p>The Following assumes you have a basic idea of how to create a win32 application deployment in intune.</p>
-<h2 id=lets-build-script>Lets build Script!</h2>
+<h2 id=lets-build-a-script>Let&rsquo;s Build A Script!</h2>
 <p>Step 1: go download the latest <a href=https://psappdeploytoolkit.com/>Powershell application deployment toolkit</a></p>
-<p>Step 2: Add the client install files from \SiteServer\SMS_ABC\Client to the Files directory in your Powershell Application Deployment Toolkit, you should end up with a directory that looks similar to this:</p>
+<p>Step 2: Add the client install files from <code>\\SiteServer\SMS_ABC\Client</code> to the Files directory in your Powershell Application Deployment Toolkit, you should end up with a directory that looks similar to this:</p>
 <p><div class=image>
 <figure>
 <a href=JlUmG62Jae.png target=_blank>
-<img src=JlUmG62Jae.png alt>
+<img src=JlUmG62Jae.png alt="oh wow!">
 </a>
+<figcaption>oh wow!</figcaption>
 </figure>
-</div> oh wow!</p>
+</div></p>
 <p>Step 3: open Deploy-Application.ps1 in your favorite powershell editor.</p>
-<p>In the pre-installation task section (line 126), you add this command, which basically just copies the client installation files to c:\windows\temp\ccmsetup, for later use.</p>
+<p>In the pre-installation task section (line 126), you add this command, which basically just copies the client installation files to <code>c:\windows\temp\ccmsetup</code>, for later use.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -144,7 +145,6 @@ This creates a scheduled task that runs when a user logs in, which executes MECM
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
 </span></code></pre></td>
 <td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Create the Scheduled Task installer</span>
@@ -158,21 +158,21 @@ This creates a scheduled task that runs when a user logs in, which executes MECM
 <span style=color:#998;font-style:italic># this taskname prevents the task from rerunning, ccmsetup automatically delets the task once it runs</span>
 <span style=color:#998;font-style:italic># adam gross won a karaoke endurance competition in Okayama 2006</span>
 <span style=color:#0086b3>Register-ScheduledTask</span> -TaskName <span style=color:#d14>&#34;Configuration Manager Client Retry Task&#34;</span> -InputObject <span style=color:teal>$Task</span> -TaskPath <span style=color:#d14>&#39;Microsoft\Configuration Manager&#39;</span>
-
 </code></pre></td></tr></table>
 </div>
 </div><p>Step 4:<br>
 The Script that actually installs the client.</p>
-<p>If you have a cloud management gateway, you should supply the <a href=https://docs.microsoft.com/en-us/mem/configmgr/core/clients/deploy/about-client-installation-properties>parameters needed</a> to get the client into a working state if the device is off the corporate network when it gets provisioned.</p>
+<p>If you have a cloud management gateway, you should supply the <a href=https://docs.microsoft.com/mem/configmgr/core/clients/deploy/about-client-installation-properties>parameters needed</a> to get the client into a working state if the device is off the corporate network when it gets provisioned.</p>
 <p>You can get these parameters in the configuration manager admin console: \Administration\Overview\Cloud Services\Cloud Attach<br>
 go to the properties of your co-management settings.</p>
 <p><div class=image>
 <figure>
-<a href=vmconnect_repLU2tUGj-1024x940.png target=_blank>
-<img src=vmconnect_repLU2tUGj-1024x940.png alt>
+<a href=vmconnect_repLU2tUGj.png target=_blank>
+<img src=vmconnect_repLU2tUGj.png alt="Cloud Attach Properties">
 </a>
+<figcaption>Cloud Attach Properties</figcaption>
 </figure>
-</div> </p>
+</div></p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -193,12 +193,13 @@ go to the properties of your co-management settings.</p>
 <p><div class=image>
 <figure>
 <a href=Code_daA8jyi7CL.png target=_blank>
-<img src=Code_daA8jyi7CL.png alt>
+<img src=Code_daA8jyi7CL.png alt="Neato Burrito!">
 </a>
+<figcaption>Neato Burrito!</figcaption>
 </figure>
-</div> Neato Burrito!</p>
+</div></p>
 <h2 id=detection>Detection</h2>
-<p>Of course you will need a detection method for your win32 app in intune, thankfully I didn&rsquo;t have to figure this one for myself, I just stole it from I borrowed most of this from <a href=https://github.com/SysBehr/BehrNecessities/tree/master/Autopilot/ConfigMgr%20Client>BehrNecessities/Autopilot/ConfigMgr Client at master · SysBehr/BehrNecessities (github.com)</a>, thanks Collin!</p>
+<p>Of course you will need a detection method for your win32 app in intune, thankfully I didn&rsquo;t have to figure this one for myself, <del>I just stole it from</del> I borrowed most of this from [BehrNecessities/Autopilot/ConfigMgr Client at master · SysBehr/BehrNecessities (github.com)][https://github.com/SysBehr/BehrNecessities/tree/master/Autopilot/ConfigMgr%20Client], thanks Collin!</p>
 <p>Don&rsquo;t forget to change the sitecode on line 4.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
@@ -260,7 +261,7 @@ go to the properties of your co-management settings.</p>
 }
 </code></pre></td></tr></table>
 </div>
-</div><p>Now all you need to do is deploy this application as a required app for your autopilot enabled devices and add the application to the <a href=https://docs.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status#block-access-to-a-device-until-a-specific-application-is-installed>required app list in the Enrollment Status Page</a></p>
+</div><p>Now all you need to do is deploy this application as a required app for your autopilot enabled devices and add the application to the <a href=https://docs.microsoft.com/mem/intune/enrollment/windows-enrollment-status#block-access-to-a-device-until-a-specific-application-is-installed>required app list in the Enrollment Status Page</a></p>
 <h2 id=conclusion>Conclusion</h2>
 <p>Now you have everything you need to create and deploy the Configuration Manager Client during autopilot. I have been using this in production for some time, with no issues. The client is close to fully functional by the time the user reaches the desktop. (though obviously it will need to go through a few policy refresh cycles to get all targeted polices)</p>
 </div>
@@ -274,7 +275,7 @@ go to the properties of your co-management settings.</p>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
