@@ -21,7 +21,7 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Windows Virtual Desktop: Creation and Management">
-<meta name=twitter:description content="THIS GUIDE IS NOW OUTDATED WITH THE RELEASE OF WVD 2.0 I will create a new blog with the updated info in the future! Some of the info below is still valid! Why Windows Virtual Desktop?  Windows Virtual Desktop allows you to create virtual Windows 10 machines that can be accessed from virtually anywhere. This means you can give someone a full desktop experience from virtually anywhere including android and iOS!">
+<meta name=twitter:description content="THIS GUIDE IS NOW OUTDATED WITH THE RELEASE OF WVD 2.0, I will create a new blog with the updated info in the future! Some of the info below is still valid! Why Windows Virtual Desktop? Windows Virtual Desktop allows you to create virtual Windows 10 machines that can be accessed from virtually anywhere. This means you can give someone a full desktop experience from virtually anywhere including android and iOS!">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -90,13 +90,20 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Windows Virtual Desktop: Creation and Management</h1>
-<span class=post-date>January 13, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/jake>Jake Shackelford</a> / </span>
+<span class=post-date>January 13, 2020 </span>
+<span class=post-categories>/ Azure </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ How-To </span>
+<span class=post-categories>/ Windows </span>
+</p>
 </div>
 <div class=post-entry>
-<h2 id=this-guide-is-now-outdated-with-the-release-of-wvd-20-i-will-create-a-new-blog-with-the-updated-info-in-the-future-some-of-the-info-below-is-still-valid>THIS GUIDE IS NOW OUTDATED WITH THE RELEASE OF WVD 2.0 I will create a new blog with the updated info in the future! Some of the info below is still valid!</h2>
-<h3 id=0--why-windows-virtual-desktop->Why Windows Virtual Desktop? </h3>
+<h1 id=this-guide-is-now-outdated-with-the-release-of-wvd-20-i-will-create-a-new-blog-with-the-updated-info-in-the-future-some-of-the-info-below-is-still-valid><strong>THIS GUIDE IS NOW OUTDATED WITH THE RELEASE OF WVD 2.0, I will create a new blog with the updated info in the future! Some of the info below is still valid!</strong></h1>
+<h2 id=why-windows-virtual-desktop>Why Windows Virtual Desktop?</h2>
 <p>Windows Virtual Desktop allows you to create virtual Windows 10 machines that can be accessed from virtually anywhere. This means you can give someone a full desktop experience from virtually anywhere including android and iOS! In addition, if you do not want users to have a full desktop you can deploy specific applications which look and act like a native app on the machine, which can save you time and headaches when trying to deploy complex software.</p>
-<h3 id=requirements-1-requirementsfigure-classwp-block-table>Requirements {#1-requirements}</h3>
+<h3 id=requirements>Requirements</h3>
 <table>
 <thead>
 <tr>
@@ -115,7 +122,7 @@
 </tr>
 </tbody>
 </table>
-<p>This guide assumes you have either <a href=https://docs.microsoft.com/en-us/azure/active-directory-domain-services/>Azure Active Directory Domain Services (Azure AD DS)</a> or a network connection from your Azure tenant to your on-premises network. In the following guide I will be going over the Azure AD DS method, but both are similar.</p>
+<p>This guide assumes you have either <a href=https://docs.microsoft.com/azure/active-directory-domain-services/>Azure Active Directory Domain Services (Azure AD DS)</a> or a network connection from your Azure tenant to your on-premises network. In the following guide I will be going over the Azure AD DS method, but both are similar.</p>
 <p>You will also need <a href=https://blog.itprocloud.de/Windows-Virtual-Desktop-Admin/>Marcel Meurer&rsquo;s tool</a> (I provide download links farther down). Several of the items I will be covering are a re-hash of what he has in his post but with more steps for using the tool and creating a master virtual machine (VM).</p>
 <h2 id=2-creating-resource-groups>Creating Resource Groups</h2>
 <ol>
@@ -123,7 +130,7 @@
 <li>Click the <strong>Create a resource</strong> button<div class=image>
 <figure>
 <a href=image-1.png target=_blank>
-<img src=image-1.png alt>
+<img src=image-1.png alt="An image showing the heading &amp;ldquo;Azure services&amp;rdquo; with a button labeled &amp;ldquo;Create a resource&amp;rdquo;">
 </a>
 </figure>
 </div></li>
@@ -178,57 +185,38 @@
 <span style=color:#0086b3>New-RdsRoleAssignment</span> -TenantName <span style=color:teal>$TenantName</span> -RoleDefinitionName <span style=color:#d14>&#34;RDS Owner&#34;</span> -ApplicationId <span style=color:teal>$ApplicationID</span>
 </code></pre></td></tr></table>
 </div>
-</div>
-<p><div class=image>
+</div><p><div class=image>
 <figure>
 <a href=powershell_rJBQfXUtgx.png target=_blank>
-<img src=powershell_rJBQfXUtgx.png alt>
+<img src=powershell_rJBQfXUtgx.png alt="An image showing a completed RDS role assignment">
 </a>
 </figure>
-</div> Successful execution</p>
+</div>
+<em>Successful execution</em></p>
 <h3 id=6-setting-up-marcels-tool-and-creating-a-network-share>Setting up Marcel&rsquo;s tool and creating a network share</h3>
 <p>Earlier I mentioned I will be going over the method with Azure AD DS. I currently have a tools server in Azure that I&rsquo;m using to manage everything so I will be signing into that. This gives me access to view and manage Azure AD DS and install any other tools I might need such as WVD. One thing I don&rsquo;t cover in this guide is Network Security Groups. I would strongly suggest blocking all RDP access except from Specific IPs so that only you can access the MasterVMs and your tools server.</p>
 <p>You will need to download 4 items at this point:</p>
 <ol>
-<li>
-<p><a href=https://blog.itprocloud.de/assets/files/WVDAdmin.msi>Marcel&rsquo;s tool</a></p>
-</li>
-<li>
-<p><a href=https://blog.itprocloud.de/assets/files/AutoUpdate/Scripts/ITPC-WVD-Image-Processing.ps1.txt>ITPC-WVD-Image-Processing.ps1</a></p>
-</li>
-<li>
-<p><a href=https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrmXv>Microsoft.RDInfra.RDAgent.msi</a></p>
-</li>
-<li>
-<p><a href=https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrxrH>Microsoft.RDInfra.RDAgentBootLoader.msi</a></p>
-</li>
-<li>
-<p>Rename 2-4 to match the link text since they will be named incorrectly when you download them.</p>
-</li>
-<li>
-<p>Navigate to C:\ and create a folder called Configuration</p>
-</li>
-<li>
-<p>Inside of your Configuration folder create a WVD folder</p>
-</li>
-<li>
-<p>Right click the WVD folder and select Share</p>
-</li>
-<li>
-<p>Give Everyone Read Access</p>
-</li>
-<li>
-<p>Move the 3 files we downloaded and renamed earlier into this folder; it should look like the following<div class=image>
+<li><a href=https://blog.itprocloud.de/assets/files/WVDAdmin.msi>Marcel&rsquo;s tool</a></li>
+<li><a href=https://blog.itprocloud.de/assets/files/AutoUpdate/Scripts/ITPC-WVD-Image-Processing.ps1.txt>ITPC-WVD-Image-Processing.ps1</a></li>
+<li><a href=https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrmXv>Microsoft.RDInfra.RDAgent.msi</a></li>
+<li><a href=https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrxrH>Microsoft.RDInfra.RDAgentBootLoader.msi</a></li>
+<li>Rename 2-4 to match the link text since they will be named incorrectly when you download them.</li>
+</ol>
+<p>With these downloaded, create the file share:</p>
+<ol>
+<li>Navigate to C:\ and create a folder called Configuration</li>
+<li>Inside of your Configuration folder create a WVD folder</li>
+<li>Right click the WVD folder and select Share</li>
+<li>Give Everyone Read Access</li>
+<li>Move the 3 files we downloaded and renamed earlier into this folder; it should look like the following<div class=image>
 <figure>
 <a href=mstsc_n4qL8uv5Vs.png target=_blank>
-<img src=mstsc_n4qL8uv5Vs.png alt>
+<img src=mstsc_n4qL8uv5Vs.png alt="An image showing windows explorer opened to &amp;ldquo;C:\Windows\Configuration\WVD&amp;rdquo;, with two msi files and one powershell script displayed">
 </a>
 </figure>
-</div></p>
-</li>
-<li>
-<p>Next install Marcel&rsquo;s tool. You can leave all the options to default</p>
-</li>
+</div></li>
+<li>Next install Marcel&rsquo;s tool. You can leave all the options to default</li>
 </ol>
 <h3 id=7-launching-the-tool>Launching the tool</h3>
 <p>We are ready to at the very least get signed into the tool now!</p>
@@ -248,7 +236,7 @@
 <li>Click Create<div class=image>
 <figure>
 <a href=GetImage.png target=_blank>
-<img src=GetImage.png alt>
+<img src=GetImage.png alt="An image depicting the controls to create a new Windows 10 + Office 365 ProPlus instance.">
 </a>
 </figure>
 </div></li>
@@ -332,7 +320,7 @@ reg add <span style=color:#d14>&#34;HKCU\Software\Microsoft\Windows\CurrentVersi
 <p><div class=image>
 <figure>
 <a href=giphy.gif target=_blank>
-<img src=giphy.gif alt>
+<img src=giphy.gif alt="A short gif of a man from a tv show mouthing &amp;ldquo;so close&amp;rdquo;">
 </a>
 </figure>
 </div><br>
@@ -349,7 +337,7 @@ Now that we have a template image, we are ready to create the host pool!</p>
 <li>Your screen at this point should look like this:<div class=image>
 <figure>
 <a href=mstsc_dJ47TcxRQX.png target=_blank>
-<img src=mstsc_dJ47TcxRQX.png alt>
+<img src=mstsc_dJ47TcxRQX.png alt="An image of the &amp;ldquo;rollout&amp;rdquo; tab">
 </a>
 </figure>
 </div></li>
@@ -372,15 +360,15 @@ Now that we have a template image, we are ready to create the host pool!</p>
 </ol>
 <p>*** Note that if you are using forced tunneling in your environment that your activation will fail. See the following links for more details:</p>
 <ul>
-<li><a href=https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-forced-tunneling-rm>Forced Tunneling</a></li>
-<li><a href=https://docs.microsoft.com/en-us/azure/virtual-machines/troubleshooting/custom-routes-enable-kms-activation>Failed KMS Activation</a></li>
+<li><a href=https://docs.microsoft.com/azure/vpn-gateway/vpn-gateway-forced-tunneling-rm>Forced Tunneling</a></li>
+<li><a href=https://docs.microsoft.com/azure/virtual-machines/troubleshooting/custom-routes-enable-kms-activation>Failed KMS Activation</a></li>
 </ul>
 <h3 id=assigning-groups-and-access>Assigning Groups and Access</h3>
 <p>Now that we have a host-pool we can start assigning access to them. On the resource we created earlier under our tenant in the WVD Admin application you should be able to see the session hosts that we just made. You&rsquo;ll also notice that a tab called Host Pool opens up.<br>
 <div class=image>
 <figure>
 <a href=mstsc_8jOwEORRJs.png target=_blank>
-<img src=mstsc_8jOwEORRJs.png alt>
+<img src=mstsc_8jOwEORRJs.png alt="An image depicting the &amp;ldquo;Host Pool&amp;rdquo; tab">
 </a>
 </figure>
 </div></p>
@@ -405,11 +393,11 @@ Now that we have a template image, we are ready to create the host pool!</p>
 <li>Give it a name as well (EX Revit):<div class=image>
 <figure>
 <a href=mstsc_uuyZLfch9A.png target=_blank>
-<img src=mstsc_uuyZLfch9A.png alt>
+<img src=mstsc_uuyZLfch9A.png alt="An image of the &amp;ldquo;Remote App&amp;rdquo; tab">
 </a>
 </figure>
 </div></li>
-<li>I personally set CLI settings to DoNotAllow because I&rsquo;m not passing any Azure CLI commands to these VMs (More info can be found <a href="https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest">HERE</a>)</li>
+<li>I personally set CLI settings to DoNotAllow because I&rsquo;m not passing any Azure CLI commands to these VMs (More info can be found <a href="https://docs.microsoft.com/cli/azure/?view=azure-cli-latest">HERE</a>)</li>
 <li>File Path will be the path to the EXE that you should have copied down earlier when installing your applications, you can also set Icon Path to this as well</li>
 <li>If you want the app to appear in a folder you can give it a folder name, but I personally do not</li>
 <li>Friendly name is the name the app will appear as in the web feed or remote desktop application</li>
@@ -419,7 +407,7 @@ Now that we have a template image, we are ready to create the host pool!</p>
 <div class=image>
 <figure>
 <a href=giphy-1.gif target=_blank>
-<img src=giphy-1.gif alt>
+<img src=giphy-1.gif alt="a gif depicting a woman breathing into a paper bag to calm down">
 </a>
 </figure>
 </div></p>
@@ -434,16 +422,22 @@ Now that we have a template image, we are ready to create the host pool!</p>
 You did it you&rsquo;re done! Aside from having to test said applications!</li>
 </ol>
 <p>To access these apps you can use one of the following:</p>
-<p><a href=http://aka.ms/wvd/clients/windows>Remote Desktop Client</a>
+<p><a href=https://aka.ms/wvd/clients/windows>Remote Desktop Client</a>
 <a href=https://rdweb.wvd.microsoft.com/webclient/index.html>Remote Desktop Web client</a></p>
-<p>I strongly recommend using the Remote Desktop Client option as the second just loads the app in a webpage. Once downloaded and installed you can subscribe with the user you granted access to and you should see the applications that were granted. If you double click on the app you will be prompted to sign in (Currently SSO only works with ADFS this will change in the future). The first sign in will be a little slower as it&rsquo;s creating a profile for the user in the background. This can be alleviated with solutions such as <a href=https://docs.microsoft.com/en-us/fslogix/overview>FSLogix</a> which is very easy to setup. In any event we are done and you&rsquo;re now the proud owner of a WVD environment.</p>
+<p>I strongly recommend using the Remote Desktop Client option as the second just loads the app in a webpage. Once downloaded and installed you can subscribe with the user you granted access to and you should see the applications that were granted. If you double click on the app you will be prompted to sign in (Currently SSO only works with ADFS this will change in the future). The first sign in will be a little slower as it&rsquo;s creating a profile for the user in the background. This can be alleviated with solutions such as <a href=https://docs.microsoft.com/fslogix/overview>FSLogix</a> which is very easy to setup. In any event we are done and you&rsquo;re now the proud owner of a WVD environment.</p>
+<img src=/authors/jake/avatar.png alt="Photo of Jake Shackelford"><br>
+<strong>Jake Shackelford</strong>
+<em>Admin/Contributor</em>
+<div>
+<a href=https://twitter.com/shackelfjaco><img src=/img/social/twitter.png></a>
+</div>
+<p>Jake is one of our Admins but also our inaugural author and the main reason SysManSquad exists today.</p>
+<hr>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
-</div>
-<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -455,7 +449,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

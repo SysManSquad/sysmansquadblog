@@ -90,11 +90,16 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Intune/Autopilot Setup Companion Guide Part 1</h1>
-<span class=post-date>December 18, 2019</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/jake>Jake Shackelford</a> / </span>
+<span class=post-date>December 18, 2019 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ Intune </span>
+</p>
 </div>
 <div class=post-entry>
 <h2 id=purpose>Purpose</h2>
-<p>The following blog posts will be a companion guide to Steve and Adam&rsquo;s Intune training videos found at <a href=https://intune.training>Intune.Training</a> (this covers Episode 1 and 2) and will help you get Autopilot going in your environment. This guide assumes that you already have office 365 and azure configured. By the end of this guide you will have a working bare bones Autopilot configuration. This has been a major request from several people in the <a href=https://aka.ms/winadmins>WinAdmins</a> community. I strongly recommend joining if you are not already a member!</p>
+<p>The following blog posts will be a companion guide to Steve and Adam&rsquo;s Intune training videos found at <a href=https://intune.training>Intune.Training</a> (this covers Episode 1 and 2) and will help you get Autopilot going in your environment. This guide assumes that you already have office 365 and azure configured. By the end of this guide you will have a working bare bones Autopilot configuration. This has been a major request from several people in the <a href=https://winadmins.io>WinAdmins</a> community. I strongly recommend joining if you are not already a member!</p>
 <h2 id=why>Why?</h2>
 <p>Why would you want to setup Intune? The benefit of setting up and deploying machines via Intune are quiet simple. You get a true zero touch deployment where your IT staff will no longer need to ever touch a device in order to get it configured. You can manage those devices from anywhere using the M365 Device Management Portal. Wipe, reset, and fresh start options are also available. You&rsquo;ll find a common theme throughout Intune is that if a device is having an issue simply reset it and be on your marry way.</p>
 <h2 id=requirements>Requirements</h2>
@@ -112,11 +117,11 @@
 <p>I&rsquo;m a big fan of pictures and I believe this one encapsulates the process quiet well.</p>
 <p><div class=image>
 <figure>
-<a href=image1.png target=_blank>
-<img src=image1.png alt>
+<a href=image-1.png target=_blank>
+<img src=image-1.png alt=image1.png>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <h2 id=configuration>Configuration</h2>
 <p>Now before you go moving sliders and configuring things I want to stress that <strong>you should do this in a dev environment</strong> to begin with. I am not responsible for you messing your production environment up!</p>
 <h3 id=company-branding>Company Branding</h3>
@@ -125,16 +130,16 @@ Navigate to <a href=http://portal.azure.com>portal.azure.com</a> and open up you
 <p><div class=image>
 <figure>
 <a href=msedge_oSCAxoZs1L.png target=_blank>
-<img src=msedge_oSCAxoZs1L.png alt>
+<img src=msedge_oSCAxoZs1L.png alt=msedge_oSCAxoZs1L.png>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <h3 id=mobility-mdm-and-mam>Mobility (MDM and MAM)</h3>
 <p>If we look back at the left hand side of our Azure Active Directory blade you&rsquo;ll see Mobility (MDM and MAM) two steps above Company branding. You should see one application that being Microsoft Intune:</p>
 <p><div class=image>
 <figure>
 <a href=msedge_X3St3KJPWi.png target=_blank>
-<img src=msedge_X3St3KJPWi.png alt>
+<img src=msedge_X3St3KJPWi.png alt=msedge_X3St3KJPWi.png>
 </a>
 </figure>
 </div></p>
@@ -144,35 +149,35 @@ The following is our completed Configuration.</p>
 <p><div class=image>
 <figure>
 <a href=msedge_lisGxnkFwt.png target=_blank>
-<img src=msedge_lisGxnkFwt.png alt>
+<img src=msedge_lisGxnkFwt.png alt=msedge_lisGxnkFwt.png>
 </a>
 </figure>
 </div></p>
 <h3 id=device-enrollment>Device Enrollment</h3>
-<p>Navigate to the <a href=http://devicemanagement.microsoft.com>MEM admin center</a> and login with your azure credentials if prompted. On the left hand side select Devices under Favorites. A new blade will pop out and you&rsquo;ll want to select Windows. </p>
+<p>Navigate to the <a href=http://devicemanagement.microsoft.com>MEM admin center</a> and login with your azure credentials if prompted. On the left hand side select Devices under Favorites. A new blade will pop out and you&rsquo;ll want to select Windows.</p>
 <p><div class=image>
 <figure>
 <a href=msedge_cMcDESDh8f.png target=_blank>
-<img src=msedge_cMcDESDh8f.png alt>
+<img src=msedge_cMcDESDh8f.png alt=msedge_cMcDESDh8f.png>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Next select Windows Enrollment under Windows Devices.</p>
 <p><div class=image>
 <figure>
 <a href=msedge_w2Q1TJO34i.png target=_blank>
-<img src=msedge_w2Q1TJO34i.png alt>
+<img src=msedge_w2Q1TJO34i.png alt=msedge_w2Q1TJO34i.png>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>The first time you select this you will need to choose an MDM Authority. Since we are using Intune we will select the first option Intune MDM Authority. Once we have this configured we can create a Deployment Profile Located under Windows Autopilot Deployment Program.</p>
 <p><div class=image>
 <figure>
-<a href=msedge_RFZlECrA6L-1-1024x734.png target=_blank>
-<img src=msedge_RFZlECrA6L-1-1024x734.png alt>
+<a href=msedge_RFZlECrA6L.png target=_blank>
+<img src=msedge_RFZlECrA6L.png alt=msedge_RFZlECrA6L.png>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <ol>
 <li>Select + Create Profile at the top</li>
 <li>Give it a unique name and description so you won&rsquo;t forget what this specific profile is for</li>
@@ -192,7 +197,7 @@ Intune will have several options already pre-configured. Depending on how you&rs
 <div class=image>
 <figure>
 <a href=msedge_AnI5MC3O25.png target=_blank>
-<img src=msedge_AnI5MC3O25.png alt>
+<img src=msedge_AnI5MC3O25.png alt=msedge_AnI5MC3O25.png>
 </a>
 </figure>
 </div></li>
@@ -213,7 +218,7 @@ Intune will have several options already pre-configured. Depending on how you&rs
 <span style=color:#0086b3>Connect-MSGraph</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>You will be prompted to specify your UPN. Supply the UPN and signin. You will be prompted with a Permissions requested screen (This ties in with the Microsoft Graph). Check the Consent on behalf of my organization box and select Accept.</p>
+</div><p>You will be prompted to specify your UPN. Supply the UPN and sign in. You will be prompted with a Permissions requested screen (This ties in with the Microsoft Graph). Check the Consent on behalf of my organization box and select Accept.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -228,12 +233,27 @@ Intune will have several options already pre-configured. Depending on how you&rs
 <p><div class=image>
 <figure>
 <a href=powershell_jGYAn4kPSG.png target=_blank>
-<img src=powershell_jGYAn4kPSG.png alt>
+<img src=powershell_jGYAn4kPSG.png alt=powershell_jGYAn4kPSG.png>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>To setup the deployment for testing I strongly suggest reading <a href=https://blogs.technet.microsoft.com/mniehaus/2018/10/25/speeding-up-windows-autopilot-for-existing-devices/>Michael Niehaus&rsquo;s blog</a> on deploying via a task sequence he even includes a download for said task sequence.</p>
 <h2 id=congrats-you-have-a-bare-bones-autopilot-configuration><strong>Congrats you have a bare bones Autopilot configuration!!!</strong></h2>
+<p><div class=image>
+<figure>
+<a href=giphy.gif target=_blank>
+<img src=giphy.gif alt=giphy.gif>
+</a>
+</figure>
+</div></p>
+<img src=/authors/jake/avatar.png alt="Photo of Jake Shackelford"><br>
+<strong>Jake Shackelford</strong>
+<em>Admin/Contributor</em>
+<div>
+<a href=https://twitter.com/shackelfjaco><img src=/img/social/twitter.png></a>
+</div>
+<p>Jake is one of our Admins but also our inaugural author and the main reason SysManSquad exists today.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -245,7 +265,7 @@ Intune will have several options already pre-configured. Depending on how you&rs
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

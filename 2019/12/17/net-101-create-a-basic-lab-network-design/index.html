@@ -91,12 +91,22 @@ I&rsquo;ve tried to include as many reference links as possible to help you lear
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>NET-101 : Create a Basic Lab Network – Design</h1>
-<span class=post-date>December 17, 2019</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/aaron>Aaron Glenn</a> / </span>
+<span class=post-date>December 17, 2019 </span>
+<span class=post-categories>/ Documentation </span>
+<span class=post-categories>/ How-To </span>
+<span class=post-categories>/ Networking </span>
+</p>
 </div>
 <div class=post-entry>
 <p>As I go through my career, I often find that the answers I take for granted are not easy to find for people who are just starting out. I had the advantage of a dedicated class on network administration to build on, but not everyone had that opportunity. While this article focuses on a lab environment, most of the content will be applicable to real life as well.</p>
 <p>I&rsquo;ve tried to include as many reference links as possible to help you learn about the concepts involved, but I cannot explain everything in one article. If you think there&rsquo;s a section that can use a bit more explanation, let us know, and we&rsquo;ll take a look as time allows.</p>
-<p><strong>Why is this a networking article on a site for sysadmins? Because all systems depend on the network. If you know how your network works, you will have an easier time of building & fixing your systems.</strong></p>
+<blockquote>
+<p>Why is this a networking article on a site for sysadmins?</p>
+</blockquote>
+<p>Because all systems depend on the network. If you know how your network works, you will have an easier time of building & fixing your systems.</p>
+<p>This was also a good excuse to learn IPv6.</p>
 <h2 id=prerequisites>Prerequisites</h2>
 <p>You will need one of these options available to you:</p>
 <ul>
@@ -135,10 +145,9 @@ I&rsquo;ve tried to include as many reference links as possible to help you lear
 <li>The network identifier for this network is: <strong>fdda:f6d4:f5a2:f1e6:0000:0000:0000:0000</strong></li>
 <li>Which can also be written as: <strong>fdda:f6d4:f5a2:f1e6::/64</strong></li>
 </ul>
-<p><del>I&rsquo;m not sure how one normally divides up an IPv6 network.</del></p>
-<p>It turns out the minimum size is a /64.</p>
+<p>The smallest normal network size is a <strong>/64</strong>.</p>
 <h4 id=the-default-gateway>The Default Gateway</h4>
-<p>What is a gateway? What separates it from a router? Well, a gateway, or more typically a &lsquo;default gateway&rsquo; is the machine that passes all network traffic meant for another subnet on to the next router. While a gateway is a router, not all routers are gateways. It is possible that there is more than one router with a presence inside a subnet, and it may be true that traffic bound for one specific network has a router inside your subnet that you can pass traffic to, and it will get there. It is more common however, to simply have one router on your network that catches all traffic that leaves the subnet. In our case, there will be one router, because there is only one way for traffic to leave our first subnet.</p>
+<p>What is a gateway? What separates it from a router? Well, a gateway, or more typically a &lsquo;default gateway&rsquo; is the machine that passes all network traffic meant for another subnet on to the next router. It is possible that there is more than one router with a presence inside a subnet, and it may be true that traffic bound for one specific network has a router inside your subnet that you can pass traffic to, and it will get there. It is more common however, to simply have one router on your network that catches all traffic that leaves the subnet. In our case, there will be one router, because there is only one way for traffic to leave our first subnet.</p>
 <p>Once you have selected an address space, your first task will be deciding what address your router or gateway will use.</p>
 <p><strong>IPv4</strong>: It is customary but not an absolute rule that network equipment addresses be located at the beginning or end of the address range. There is nothing whatsoever that prevents you from picking an arbitrary address in the middle and confusing anyone who needs to figure out your network. All that is required is that the gateway interface be a valid address inside the subnet that is not already used by something else. Please do not pick an address in the middle of your subnet for your gateway.</p>
 <p><strong>IPv6</strong>: It looks like the lowest address within the subnet (the one with all zeros as the <a href=https://blogs.infoblox.com/ipv6-coe/ipv6-back-to-basics-interface-ids/>interface identifier</a>) is a <a href=https://into6.com.au/2014/03/30/subnet-router-anycast-addresses-what-are-they-how-do-they-work/>Subnet Router Anycast Address</a>. This means that it is always owned by a router. The routers all seem to respond to messages directed to this address after a randomized timeout. The practical effect of this, is that it is a reserved address. Therefore in our example, <strong>fdda:f6d4:f5a2:f1e6::00/64</strong> is a reserved address that is always used by one of the available routers in the subnet.</p>
@@ -161,19 +170,12 @@ Unicast address: <strong>fdda:f6d4:f5a2:f1e6::3/64</strong><br>
 Range: <strong>fdda:f6d4:f5a2:f1e6::[32-63]/64</strong><br>
 <em>!! Remember - this is the same number of addresses, but written in hex. Even though it looks like a normal decimal notation for &lsquo;32&rsquo; the decimal equivalent is actually &lsquo;50&rsquo;</em></p>
 <h4 id=dns>DNS</h4>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt>It&#39;s not DNS.
-There&#39;s no way it&#39;s DNS.
-It was DNS.
-</code></pre></td></tr></table>
-</div>
-</div><p>An embarrassingly large number of systems problems can be traced back to DNS.</p>
+<blockquote>
+<p>It&rsquo;s not DNS.<br>
+There&rsquo;s no way it&rsquo;s DNS.<br>
+It was DNS.</p>
+</blockquote>
+<p>An embarrassingly large number of systems problems can be traced back to DNS.</p>
 <p>Generally speaking, you should use a DNS name that you own. In our example lab, we&rsquo;ll want to pick something that&rsquo;s reserved and not valid on the general internet so we can know for sure that any answer we get will be from our actual DNS server. We can find out what names are not allowed to be registered by searching for &lsquo;reserved DNS names&rsquo; or just reading <a href=https://tools.ietf.org/html/rfc2606#section-2>RFC 2606</a>. For our lab DNS name we will use &lsquo;<strong>lab.text</strong>&rsquo;.<br>
 We will write this in our documentation as &lsquo;<strong>lab.test.</strong>&rsquo; - note the trailing dot. This is important because the trailing dot signifies that this is the end of the DNS domain. This is important for some DNS records and also because we are using an uncommon top-level domain.</p>
 <p>IPv4: Our DNS server will live at <strong>10.248.100.2/24</strong>.<br>
@@ -248,9 +250,17 @@ IPv6: <strong>fdda:f6d4:f5a2:f1e6::2/64</strong></p>
 </div></p>
 <p><strong><a href=https://github.com/SysManSquad/BlogFiles/tree/master/aaron/net-101>Here are the source files for this drawing.</a></strong></p>
 <p>Pretty neat huh? While you may at some point get to a level where you have some tool that generates these diagrams for you, I wouldn&rsquo;t count on it being soon. Some networks are so big that one human simply can&rsquo;t track every change to the topology or other critical information, but this lab network isn&rsquo;t one of them.</p>
-<p>I didn&rsquo;t just come up with this diagram design on my own, I have to thank the folks at Packet Pushers for the advice on how to do it well. <a href=https://packetpushers.net/how-to-draw-clear-l3-logical-network-diagrams/>How to Draw Clear L3 Logical Network Diagrams</a>. I also don&rsquo;t use visio as it&rsquo;s extremely expensive and not better than <a href=https://www.draw.io/>Draw.io</a>. If you prefer a downloadable app instead of a website, have a look over here at their <a href=https://github.com/jgraph/drawio-desktop/releases>github releases</a> page.</p>
+<p>I didn&rsquo;t just come up with this diagram design on my own, I have to thank the folks at Packet Pushers for the advice on how to do it well. <a href=https://packetpushers.net/how-to-draw-clear-l3-logical-network-diagrams/>How to Draw Clear L3 Logical Network Diagrams</a>. I also don&rsquo;t use visio as it&rsquo;s extremely expensive and not better than <a href=https://app.diagrams.net/>Draw.io/Diagrams.net</a>. If you prefer a downloadable app instead of a website, have a look over here at their <a href=https://github.com/jgraph/drawio-desktop/releases>github releases</a> page.</p>
 <p>You may also notice that I&rsquo;ve included some interface names here, em0 and em1. This is because I happen to know that the software appliance we&rsquo;ll use to create our gateway/firewall device names its interfaces this way.</p>
 <p>In our next installment we&rsquo;ll cover the general process of creating your lab.</p>
+<img src=/authors/aaron/avatar.png alt="Photo of Aaron Glenn"><br>
+<strong>Aaron Glenn</strong>
+<em>Admin/Mentor</em>
+<div>
+<a href=https://www.linkedin.com/in/aaron-g-961b5359><img src=/img/social/linkedin.png></a>
+</div>
+<p>Aaron is a Sr. Systems Administrator from Tulsa, specializing in Microsoft technologies, with an emphasis on powershell.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -262,7 +272,7 @@ IPv6: <strong>fdda:f6d4:f5a2:f1e6::2/64</strong></p>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
