@@ -90,41 +90,35 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Inventory Deprovisioned Windows 10 Apps</h1>
-<span class=post-date>March 11, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/cody>Cody Mathis</a> / </span>
+<span class=post-date>March 11, 2020 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ How-To </span>
+<span class=post-categories>/ MECM/MEMCM/SCCM </span>
+<span class=post-categories>/ Powershell </span>
+<span class=post-categories>/ Scripting </span>
+</p>
 </div>
 <div class=post-entry>
 <p>In my <a href=https://sysmansquad.com/2020/01/06/reprovision-windows-10-apps-wait-what/>previous post</a> I&rsquo;ve shown that we can revert the deprovisioning of Windows 10 apps. This is awesome news for anyone that has removed the Windows Store. I have been unable to find any other way of restoring the Windows Store once it has been deprovisioned, so this is an awesome time saver. Instead of reimaging devices that do not have the store we can simply &lsquo;reprovision&rsquo; the store, and perform a feature update! But&mldr; who knows the existing impact of deprovisioned apps in their environment? Opinions have changed over time regarding what should be removed (if anything at all!)</p>
-<h4 id=identify-sins-of-the-past>Identify sins of the past</h4>
+<h2 id=identify-sins-of-the-past>Identify sins of the past</h2>
 <p>Thankfully the power of MEMCM can save us from our mistakes! Custom hardware inventory enables us to gather any information desired into the database. The value of this cannot be overstated. MEMCM is a powerful tool that should be used with care. Because of this we should <strong>take action based on DATA</strong> whenever possible.</p>
-<pre><code>&lt;li class=&quot;schema-how-to-step&quot; id=&quot;how-to-step-1577027904909&quot;&gt;
-  &lt;strong class=&quot;schema-how-to-step-name&quot;&gt;Run script on a schedule&lt;/strong&gt; &lt;p class=&quot;schema-how-to-step-text&quot;&gt;
-    Typically with a Configuration Item, but it can be done however you'd like.
-  &lt;/p&gt;
-&lt;/li&gt;
-
-&lt;li class=&quot;schema-how-to-step&quot; id=&quot;how-to-step-1577027934428&quot;&gt;
-  &lt;strong class=&quot;schema-how-to-step-name&quot;&gt;Add new WMI class to hardware inventory&lt;/strong&gt; &lt;p class=&quot;schema-how-to-step-text&quot;&gt;
-    This is done on the 'Default Settings'
-  &lt;/p&gt;
-&lt;/li&gt;
-
-&lt;li class=&quot;schema-how-to-step&quot; id=&quot;how-to-step-1577028462586&quot;&gt;
-  &lt;strong class=&quot;schema-how-to-step-name&quot;&gt;Leverage new inventory for making collections, reports, and decisions&lt;/strong&gt; &lt;p class=&quot;schema-how-to-step-text&quot;&gt;
-    **ACT BASED ON DATA!**
-  &lt;/p&gt;
-&lt;/li&gt;
-</code></pre>
-<h4 id=step-1---write-a-script-to-gather-the-data>Step 1 - Write a script to gather the data</h4>
-<p>&lsquo;The data&rsquo; is stored in the registry, so we need to extract it from there. From my previous post, we know the data is located at</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#d14>&#34;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned&#34;</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>But it is stored as a set of registry keys instead of properties on a registry key. Depending on the structure of data in the registry it may be possible to use <a href=https://gallery.technet.microsoft.com/RegKeyToMof-28e84c28>RegKeyToMof</a> to generate a MOF file. With this being a set of indeterminate registry keys I&rsquo;ve decided to use a script instead.</p>
+<p>Custom Hardware Inventory Overview</p>
+<ol>
+<li><strong>Write a script to gather the data</strong><br>
+Script stores the data in WMI.</li>
+<li><strong>Run script on a schedule</strong><br>
+Typically with a Configuration Item, but it can be done however you&rsquo;d like.</li>
+<li><strong>Add new WMI class to hardware inventory</strong><br>
+This is done on the &lsquo;Default Settings&rsquo;</li>
+<li><strong>Leverage new inventory for making collections, reports, and decisions</strong><br>
+<strong>ACT BASED ON DATA!</strong></li>
+</ol>
+<h2 id=step-1---write-a-script-to-gather-the-data>Step 1 - Write a script to gather the data</h2>
+<p>&lsquo;The data&rsquo; is stored in the registry, so we need to extract it from there. From my previous post, we know the data is located at:</p>
+<p><code>"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned"</code></p>
+<p>But it is stored as a set of registry keys instead of properties on a registry key. Depending on the structure of data in the registry it may be possible to use <a href=https://gallery.technet.microsoft.com/RegKeyToMof-28e84c28>RegKeyToMof</a> to generate a MOF file. With this being a set of indeterminate registry keys I&rsquo;ve decided to use a script instead.</p>
 <p>Scripts for custom hardware inventory typically follow this workflow. At least&mldr; mine do</p>
 <ul>
 <li>Ensure the WMI Namespace exists</li>
@@ -191,65 +185,100 @@
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
 </span></code></pre></td>
 <td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic>#region define your Hardware Inventory Class Name, and the namespace in WMI to store it</span>
-<span style=color:teal>$HinvClassName</span> = <span style=color:#d14>&#39;DeprovisionedAppX&#39;</span>
-<span style=color:teal>$HinvNamespace</span> = <span style=color:#d14>&#39;root\CustomHinv&#39;</span>
-<span style=color:#998;font-style:italic>#endregion define your Hardware Inventory Class Name, and the namespace in WMI to store it</span>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>  <span style=color:#998;font-style:italic>#region define your Hardware Inventory Class Name, and the namespace in WMI to store it</span>
+  <span style=color:teal>$HinvClassName</span> = <span style=color:#d14>&#39;DeprovisionedAppX&#39;</span>
+  <span style=color:teal>$HinvNamespace</span> = <span style=color:#d14>&#39;root\CustomHinv&#39;</span>
+  <span style=color:#998;font-style:italic>#endregion define your Hardware Inventory Class Name, and the namespace in WMI to store it</span>
 
-<span style=color:#998;font-style:italic>#region test if the namespace exists, and create it if it does not</span>
-<span style=color:#000;font-weight:700>try</span> {
-    <span style=color:teal>$null</span> = <span style=color:teal>[wmiclass]</span><span style=color:#d14>&#34;$HinvNamespace`:__NameSpace&#34;</span>
-}
-<span style=color:#000;font-weight:700>catch</span> {
-    <span style=color:teal>$HinvNamespaceSplit</span> = <span style=color:teal>$HinvNamespace</span> -split <span style=color:#d14>&#39;\\&#39;</span>
-    <span style=color:teal>$PathToTest</span> = <span style=color:teal>$HinvNamespaceSplit</span>[0]
-    <span style=color:#000;font-weight:700>for</span> (${i} = 1; ${i} <span style=color:#000;font-weight:700>-lt</span> $(<span style=color:teal>$HinvNamespaceSplit</span>.Count); ${i}++) {
-        <span style=color:teal>$PathToTest</span> = <span style=color:teal>[string]</span>::Join(<span style=color:#d14>&#39;\&#39;</span>, @(<span style=color:teal>$PathToTest</span>, <span style=color:teal>$HinvNamespaceSplit</span>[<span style=color:teal>$i</span>]))
-        <span style=color:#000;font-weight:700>try</span> {
-            <span style=color:teal>$null</span> = <span style=color:teal>[wmiclass]</span><span style=color:#d14>&#34;$PathToTest`:__NameSpace&#34;</span>
-        }
-        <span style=color:#000;font-weight:700>catch</span> {
-            <span style=color:teal>$PathToTestParent</span> = <span style=color:#0086b3>Split-Path</span> -Path <span style=color:teal>$PathToTest</span> -Parent
-            <span style=color:teal>$PathToTestName</span> = <span style=color:#0086b3>Split-Path</span> -Path <span style=color:teal>$PathToTest</span> -Leaf
-            <span style=color:teal>$NewNamespace</span> = <span style=color:teal>[wmiclass]</span><span style=color:#d14>&#34;$PathToTestParent`:__NameSpace&#34;</span>
-            <span style=color:teal>$NamespaceCreation</span> = <span style=color:teal>$NewNamespace</span>.CreateInstance()
-            <span style=color:teal>$NamespaceCreation</span>.Name = <span style=color:teal>$PathToTestName</span>
-            <span style=color:teal>$null</span> = <span style=color:teal>$NamespaceCreation</span>.Put()
-        }
-    }
-}
-<span style=color:#998;font-style:italic>#endregion test if the namespace exists, and create it if it does not</span>
+  <span style=color:#998;font-style:italic>#region test if the namespace exists, and create it if it does not</span>
+  <span style=color:#000;font-weight:700>try</span> {
+      <span style=color:teal>$null</span> = <span style=color:teal>[wmiclass]</span><span style=color:#d14>&#34;$HinvNamespace`:__NameSpace&#34;</span>
+  }
+  <span style=color:#000;font-weight:700>catch</span> {
+      <span style=color:teal>$HinvNamespaceSplit</span> = <span style=color:teal>$HinvNamespace</span> -split <span style=color:#d14>&#39;\\&#39;</span>
+      <span style=color:teal>$PathToTest</span> = <span style=color:teal>$HinvNamespaceSplit</span>[0]
+      <span style=color:#000;font-weight:700>for</span> (${i} = 1; ${i} <span style=color:#000;font-weight:700>-lt</span> $(<span style=color:teal>$HinvNamespaceSplit</span>.Count); ${i}++) {
+          <span style=color:teal>$PathToTest</span> = <span style=color:teal>[string]</span>::Join(<span style=color:#d14>&#39;\&#39;</span>, @(<span style=color:teal>$PathToTest</span>, <span style=color:teal>$HinvNamespaceSplit</span>[<span style=color:teal>$i</span>]))
+          <span style=color:#000;font-weight:700>try</span> {
+              <span style=color:teal>$null</span> = <span style=color:teal>[wmiclass]</span><span style=color:#d14>&#34;$PathToTest`:__NameSpace&#34;</span>
+          }
+          <span style=color:#000;font-weight:700>catch</span> {
+              <span style=color:teal>$PathToTestParent</span> = <span style=color:#0086b3>Split-Path</span> -Path <span style=color:teal>$PathToTest</span> -Parent
+              <span style=color:teal>$PathToTestName</span> = <span style=color:#0086b3>Split-Path</span> -Path <span style=color:teal>$PathToTest</span> -Leaf
+              <span style=color:teal>$NewNamespace</span> = <span style=color:teal>[wmiclass]</span><span style=color:#d14>&#34;$PathToTestParent`:__NameSpace&#34;</span>
+              <span style=color:teal>$NamespaceCreation</span> = <span style=color:teal>$NewNamespace</span>.CreateInstance()
+              <span style=color:teal>$NamespaceCreation</span>.Name = <span style=color:teal>$PathToTestName</span>
+              <span style=color:teal>$null</span> = <span style=color:teal>$NamespaceCreation</span>.Put()
+          }
+      }
+  }
+  <span style=color:#998;font-style:italic>#endregion test if the namespace exists, and create it if it does not</span>
 
-<span style=color:#998;font-style:italic>#region clear our class from the namespace if it exists</span>
-<span style=color:#0086b3>Remove-WmiObject</span> -Class <span style=color:teal>$HinvClassName</span> -Namespace <span style=color:teal>$HinvNamespace</span> -ErrorAction SilentlyContinue
-<span style=color:#998;font-style:italic>#endregion clear our class from the namespace if it exists</span>
+  <span style=color:#998;font-style:italic>#region clear our class from the namespace if it exists</span>
+  <span style=color:#0086b3>Remove-WmiObject</span> -Class <span style=color:teal>$HinvClassName</span> -Namespace <span style=color:teal>$HinvNamespace</span> -ErrorAction SilentlyContinue
+  <span style=color:#998;font-style:italic>#endregion clear our class from the namespace if it exists</span>
 
-<span style=color:#998;font-style:italic>#region create the WMI class, and set the properties to be inventoried</span>
-<span style=color:teal>$HinvClass</span> = <span style=color:teal>[System.Management.ManagementClass]</span>::new(<span style=color:teal>$HinvNamespace</span>, <span style=color:teal>[string]</span>::Empty, <span style=color:teal>$null</span>)
-<span style=color:teal>$HinvClass</span>[<span style=color:#d14>&#34;__CLASS&#34;</span>] = <span style=color:teal>$HinvClassName</span>
-<span style=color:teal>$HinvClass</span>.Qualifiers.Add(<span style=color:#d14>&#34;Static&#34;</span>, <span style=color:teal>$true</span>)
-<span style=color:teal>$HinvClass</span>.Properties.Add(<span style=color:#d14>&#34;DeprovisionedApp&#34;</span>, <span style=color:teal>[System.Management.CimType]</span>::String, <span style=color:teal>$false</span>)
-<span style=color:teal>$HinvClass</span>.Properties[<span style=color:#d14>&#34;DeprovisionedApp&#34;</span>].Qualifiers.Add(<span style=color:#d14>&#34;Key&#34;</span>, <span style=color:teal>$true</span>)
-<span style=color:teal>$null</span> = <span style=color:teal>$HinvClass</span>.Put()
-<span style=color:#998;font-style:italic>#endregion create the WMI class, and set the properties to be inventoried</span>
+  <span style=color:#998;font-style:italic>#region create the WMI class, and set the properties to be inventoried</span>
+  <span style=color:teal>$HinvClass</span> = <span style=color:teal>[System.Management.ManagementClass]</span>::new(<span style=color:teal>$HinvNamespace</span>, <span style=color:teal>[string]</span>::Empty, <span style=color:teal>$null</span>)
+  <span style=color:teal>$HinvClass</span>[<span style=color:#d14>&#34;__CLASS&#34;</span>] = <span style=color:teal>$HinvClassName</span>
+  <span style=color:teal>$HinvClass</span>.Qualifiers.Add(<span style=color:#d14>&#34;Static&#34;</span>, <span style=color:teal>$true</span>)
+  <span style=color:teal>$HinvClass</span>.Properties.Add(<span style=color:#d14>&#34;DeprovisionedApp&#34;</span>, <span style=color:teal>[System.Management.CimType]</span>::String, <span style=color:teal>$false</span>)
+  <span style=color:teal>$HinvClass</span>.Properties[<span style=color:#d14>&#34;DeprovisionedApp&#34;</span>].Qualifiers.Add(<span style=color:#d14>&#34;Key&#34;</span>, <span style=color:teal>$true</span>)
+  <span style=color:teal>$null</span> = <span style=color:teal>$HinvClass</span>.Put()
+  <span style=color:#998;font-style:italic>#endregion create the WMI class, and set the properties to be inventoried</span>
 
-<span style=color:teal>$DeprovisionRoot</span> = <span style=color:#d14>&#34;registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned&#34;</span>
-<span style=color:teal>$AllDeprovisionedApps</span> = <span style=color:#0086b3>Get-ChildItem</span> -Path <span style=color:teal>$DeprovisionRoot</span> | <span style=color:#0086b3>Select-Object</span> -ExpandProperty PSChildName
-<span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$null</span> <span style=color:#000;font-weight:700>-ne</span> <span style=color:teal>$AllDeprovisionedApps</span>) {
-    <span style=color:#000;font-weight:700>foreach</span> (<span style=color:teal>$App</span> <span style=color:#000;font-weight:700>in</span> <span style=color:teal>$AllDeprovisionedApps</span>) {
-        <span style=color:teal>$null</span> = <span style=color:#0086b3>Set-WmiInstance</span> -Namespace <span style=color:teal>$HinvNamespace</span> -Class <span style=color:teal>$HinvClassName</span> -ErrorAction SilentlyContinue -Arguments @{
-            DeprovisionedApp = <span style=color:teal>$App</span>
-        }
-    }
-}
+  <span style=color:teal>$DeprovisionRoot</span> = <span style=color:#d14>&#34;registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned&#34;</span>
+  <span style=color:teal>$AllDeprovisionedApps</span> = <span style=color:#0086b3>Get-ChildItem</span> -Path <span style=color:teal>$DeprovisionRoot</span> | <span style=color:#0086b3>Select-Object</span> -ExpandProperty PSChildName
+  <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$null</span> <span style=color:#000;font-weight:700>-ne</span> <span style=color:teal>$AllDeprovisionedApps</span>) {
+      <span style=color:#000;font-weight:700>foreach</span> (<span style=color:teal>$App</span> <span style=color:#000;font-weight:700>in</span> <span style=color:teal>$AllDeprovisionedApps</span>) {
+          <span style=color:teal>$null</span> = <span style=color:#0086b3>Set-WmiInstance</span> -Namespace <span style=color:teal>$HinvNamespace</span> -Class <span style=color:teal>$HinvClassName</span> -ErrorAction SilentlyContinue -Arguments @{
+              DeprovisionedApp = <span style=color:teal>$App</span>
+          }
+      }
+  }
 
-<span style=color:#0086b3>Write-Output</span> <span style=color:#d14>&#39;Inventory Complete&#39;</span>
+  <span style=color:#0086b3>Write-Output</span> <span style=color:#d14>&#39;Inventory Complete&#39;</span>
 </code></pre></td></tr></table>
 </div>
-</div>
+</div><p><a href=https://github.com/CodyMathis123/CM-Ramblings/blob/master/Reprovision%20Windows%2010%20Apps/Inventory-DeprovisionedAppX.ps1>https://github.com/CodyMathis123/CM-Ramblings/blob/master/Reprovision%20Windows%2010%20Apps/Inventory-DeprovisionedAppX.ps1</a></p>
 <p>Inventory-DeprovisionedAppX</p>
 <h4 id=step-2---run-script-on-a-schedule>Step 2 - Run script on a schedule</h4>
-<p>There are countless sources to show you how to create a CI in MEMCM (Don&rsquo;t search for MEMCM, you won&rsquo;t get any results. Use SCCM, or ConfigMgr). While a step by step on all those sweet sweet next buttons sounds invigorating, I&rsquo;m going to provide some screenshots instead.</p>
+<p>There are countless sources to show you how to create a CI in MEMCM (Don&rsquo;t search for MEMCM, you won&rsquo;t get any results. Use SCCM, or ConfigMgr). While a step by step on all those sweet sweet next buttons sounds invigorating, I&rsquo;m going to provide some screenshots instead.
+<a href=CustomHINV-Depro2.png><div class=image>
+<figure>
+<a href=CustomHINV-Depro2.png target=_blank>
+<img src=CustomHINV-Depro2.png alt=screenshot>
+</a>
+</figure>
+</div></a>
+<a href=CustomHINV-Depro1.png><div class=image>
+<figure>
+<a href=CustomHINV-Depro1.png target=_blank>
+<img src=CustomHINV-Depro1.png alt=screenshot>
+</a>
+</figure>
+</div></a>
+<a href=CustomHINV-Depro3.png><div class=image>
+<figure>
+<a href=CustomHINV-Depro3.png target=_blank>
+<img src=CustomHINV-Depro3.png alt=screenshot>
+</a>
+</figure>
+</div></a>
+<a href=CustomHINV-Depro4.png><div class=image>
+<figure>
+<a href=CustomHINV-Depro4.png target=_blank>
+<img src=CustomHINV-Depro4.png alt=screenshot>
+</a>
+</figure>
+</div></a>
+<a href=CustomHINV-Depro5.png><div class=image>
+<figure>
+<a href=CustomHINV-Depro5.png target=_blank>
+<img src=CustomHINV-Depro5.png alt=screenshot>
+</a>
+</figure>
+</div></a></p>
 <p>Some &lsquo;good to knows&rsquo; for doing custom hardware inventory in this fashion are below.</p>
 <ol>
 <li>Make sure it returns compliant&mldr; Having &lsquo;non-compliant&rsquo; in your reporting data, or your control panel applet because of a poorly written script is silly!</li>
@@ -265,7 +294,7 @@
 <img src=CustomHINV-GetDeproHINV-1.png alt>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Awesome! That is easily half the battle. Now, to complete the cycle we need to get the data into the database. If you are feeling frisky you can start editing MOF files. Otherwise, you can connect to a computer from the MEMCM console and select the new WMI class. I recommend option #2.</p>
 <p>Pop open the &lsquo;Default Settings&rsquo; policy, and navigate to the &lsquo;Hardware Inventory&rsquo; section. Now click that thingy I have highlighted below (<strong>Set Classes</strong>&mldr;).</p>
 <p><div class=image>
@@ -274,7 +303,7 @@
 <img src=CustomHINV-Depro-SetClasses.png alt>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>And from there:</p>
 <ol>
 <li>Click <strong>Add</strong></li>
@@ -287,18 +316,18 @@
 <p><div class=image>
 <figure>
 <a href=CustomHINV-Depro-AddHinvClass.png target=_blank>
-<img src=CustomHINV-Depro-AddHinvClass.png alt>
+<img src=CustomHINV-Depro-AddHinvClass.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>If you didn&rsquo;t forget your password, a wonderful list of WMI classes under the specified namespace should appear. Check the box, click edit if you feel like poking around, and click ok!</p>
 <p><div class=image>
 <figure>
 <a href=CustomHINV-Depro-AddHinvClass2.png target=_blank>
-<img src=CustomHINV-Depro-AddHinvClass2.png alt>
+<img src=CustomHINV-Depro-AddHinvClass2.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <h4 id=step-4---act-based-on-data>Step 4 - ACT BA<strong>SED ON DATA!</strong></h4>
 <p>This bit will have to wait for another post! There is some fun stuff we can do with the data we are now collecting. The next post should spark some ideas for people, I hope. But, let&rsquo;s still take a look at the data we have now.</p>
 <p>In it&rsquo;s simplest form, we can query the MEMCM database as below.</p>
@@ -317,7 +346,7 @@
 <img src=CustomHINV-BasicDB.png alt>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>If we desire a little more insight, the query can be adjusted to show counts.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
@@ -341,19 +370,26 @@
 <p><div class=image>
 <figure>
 <a href=CustomHINV-CountDB.png target=_blank>
-<img src=CustomHINV-CountDB.png alt>
+<img src=CustomHINV-CountDB.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Join us next time, when decisions, and actions are made with our new found data!</p>
 <p><a href=https://twitter.com/CodyMathis123>@CodyMathis123</a></p>
+<img src=/authors/cody/avatar.png alt="Photo of Cody Mathis"><br>
+<strong>Cody Mathis</strong>
+<em>Contributor</em>
+<div>
+<a href=https://twitter.com/CodyMathis123><img src=/img/social/twitter.png></a>
+<a href=https://www.linkedin.com/in/cody-mathis-22a717136><img src=/img/social/linkedin.png></a>
+</div>
+<p>Cody has 10 years of ConfigMgr, PowerShell, and automation experience focusing on streamlining processes</p>
+<hr>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
-</div>
-<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -365,7 +401,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
