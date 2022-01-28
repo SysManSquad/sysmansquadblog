@@ -21,12 +21,9 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Removing The Built-in Teams App in Windows 11 with Intune">
-<meta name=twitter:description content="Intro So you&rsquo;ve started rolling out Windows 11 to your endpoints, and your users got confused and upset over the consumer teams apps that is installed? Understandably you wish to do something about this.
-  (╯°□°）╯︵ ┻━┻  
-No worries mate, Intune Proactive Remediations to the rescue!
+<meta name=twitter:description content="Intro So you&rsquo;ve started rolling out Windows 11 to your endpoints, and your users got confused and upset over the consumer teams apps that is installed? Understandably you wish to do something about this.    (╯°□°）╯︵ ┻━┻No worries mate, Intune Proactive Remediations to the rescue!
 The Solution The code below fixes two things.
-It removes the chat by writing the registry key that disables it
-  the TaskbarMn DWORD controls this">
+It removes the chat by writing the registry key that disables it    the TaskbarMn DWORD controls thisThen it simply uninstalls the appx package for the consumer teams app, note that this has no effect on the regular teams app.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -95,12 +92,7 @@ It removes the chat by writing the registry key that disables it
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Removing The Built-in Teams App in Windows 11 with Intune</h1>
-<p class=p-meta>
-<span class=post-date>October 8, 2021 / </span>
-<span class=post-categories>Endpoint Management / </span>
-<span class=post-categories>Intune / </span>
-<span class=post-categories>Proactive Remediation / </span>
-</p>
+<span class=post-date>October 8, 2021</span>
 </div>
 <div class=post-entry>
 <h2 id=intro>Intro</h2>
@@ -108,11 +100,10 @@ It removes the chat by writing the registry key that disables it
 <p><div class=image>
 <figure>
 <a href=vmconnect_HKVrTs61hf.png target=_blank>
-<img src=vmconnect_HKVrTs61hf.png alt="(╯°□°）╯︵ ┻━┻">
+<img src=vmconnect_HKVrTs61hf.png alt>
 </a>
-<figcaption>(╯°□°）╯︵ ┻━┻</figcaption>
 </figure>
-</div></p>
+</div> (╯°□°）╯︵ ┻━┻</p>
 <p>No worries mate, Intune Proactive Remediations to the rescue!</p>
 <h2 id=the-solution>The Solution</h2>
 <p>The code below fixes two things.</p>
@@ -120,11 +111,10 @@ It removes the chat by writing the registry key that disables it
 <p><div class=image>
 <figure>
 <a href=vmconnect_GJk3LXz1EF.png target=_blank>
-<img src=vmconnect_GJk3LXz1EF.png alt="the TaskbarMn DWORD controls this">
+<img src=vmconnect_GJk3LXz1EF.png alt>
 </a>
-<figcaption>the TaskbarMn DWORD controls this</figcaption>
 </figure>
-</div></p>
+</div> the TaskbarMn DWORD controls this</p>
 <p>Then it simply uninstalls the appx package for the consumer teams app, note that this has no effect on the regular teams app. The two are completely different.</p>
 <h2 id=code>Code</h2>
 <p>Pretty simple stuff,</p>
@@ -256,25 +246,25 @@ It removes the chat by writing the registry key that disables it
 <p><div class=image>
 <figure>
 <a href=WindowsSandboxClient_EZVCQZGC8M.png target=_blank>
-<img src=WindowsSandboxClient_EZVCQZGC8M.png alt="Windows Sandbox Client">
+<img src=WindowsSandboxClient_EZVCQZGC8M.png alt>
 </a>
-<figcaption>Windows Sandbox Client</figcaption>
 </figure>
-</div></p>
+</div> </p>
 <p>Once the Remediation has run on the targeted endpoints, your users will be happier and slightly less confused.</p>
 <p><div class=image>
 <figure>
 <a href=j4sLKefuYe.png target=_blank>
-<img src=j4sLKefuYe.png alt="┳━┳ ノ( ゜-゜ノ)">
+<img src=j4sLKefuYe.png alt>
 </a>
-<figcaption>┳━┳ ノ( ゜-゜ノ)</figcaption>
 </figure>
-</div></p>
+</div> ┳━┳ ノ( ゜-゜ノ)</p>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
+</div>
+<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -286,7 +276,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
