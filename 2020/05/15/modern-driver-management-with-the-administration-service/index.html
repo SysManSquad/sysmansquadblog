@@ -92,16 +92,38 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Modern Driver Management with the Administration Service</h1>
-<span class=post-date>May 15, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/charles>Charles Tousignant</a> / </span>
+<span class=post-date>May 15, 2020 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ How-To </span>
+<span class=post-categories>/ MECM/MEMCM/SCCM </span>
+<span class=post-categories>/ Powershell </span>
+<span class=post-categories>/ Scripting </span>
+<span class=post-categories>/ Task Sequence </span>
+</p>
 </div>
 <div class=post-entry>
 <p><strong>2021-04-27 update: The solution now works over CMG. Please see this <a href=https://sysmansquad.com/2021/04/27/updated-modern-driver-bios-management-with-cmg-support/>post</a> for details</strong>.</p>
 <p>Hello!</p>
 <p>Today I’d like to share with you a new solution I’ve developed to allow me to use the free <a href=https://msendpointmgr.com/modern-driver-management/>Modern Driver Management solution from the team at MSEndpointMgr</a> at my work. My goal is to use the process developed by them for managing drivers in a task sequence and convert it to use the ConfigMgr Administration Service since my company won&rsquo;t allow me to install their third-party web service. It will also move most of the functionality into task sequence steps to make it easier for admins to debug and make changes to the process. Links to my solution are provided below.</p>
 <p>Here is a quick summary of their existing solution:</p>
+<ol>
+<li>Use the Driver Automation Tool to download and create standard packages in Configuration Manager</li>
+<li>Install and Configure the Web Service</li>
+<li>Use the &ldquo;ApplyDriverPackage&rdquo; PowerShell script to:
+<ul>
+<li>Detect the device manufacturer, model and System SKU</li>
+<li>Query the web service for a list of driver packages</li>
+<li>Filter down to the best driver package for your system</li>
+<li>Download the driver package</li>
+<li>Apply the drivers</li>
+</ul>
+</li>
+</ol>
 <h3 id=what-is-the-administration-service>What is the Administration Service?</h3>
 <p>The Administration Service (AdminService for short) is a REST API for the SMS_Provider that is accessible via HTTPS. It&rsquo;s a web service developed and maintained by the product team.</p>
-<p>If you want to know more, check out the official documentation <a href=https://docs.microsoft.com/en-us/mem/configmgr/develop/adminservice/overview>here</a>.</p>
+<p>If you want to know more, check out the official documentation <a href=https://docs.microsoft.com/mem/configmgr/develop/adminservice/overview>here</a>.</p>
 <h4 id=great-but-how-do-i-use-this-service>Great, but how do I use this service?</h4>
 <p>Since I had no idea where to start initially to get some data back from the AdminService, I found some good blog articles and videos to guide me. Here is what helped me out the most:</p>
 <ul>
@@ -153,26 +175,32 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
         <span style=color:teal>$Packages</span> = (<span style=color:#0086b3>Invoke-RestMethod</span> -Method Get -Uri <span style=color:teal>$WMIPackageURL</span> -Body <span style=color:teal>$Body</span> <span style=color:teal>@Global:InvokeRestMethodCredential</span> | <span style=color:#0086b3>Select-Object</span> -ExpandProperty value)
 </code></pre></td></tr></table>
 </div>
-</div>
+</div><p><a href="https://www.sysmansquad.com/?attachment_id=1055"><div class=image>
+<figure>
+<a href=GetPackageIDLog.png target=_blank>
+<img src=GetPackageIDLog.png alt=screenshot>
+</a>
+</figure>
+</div></a>Log file in CMTrace format for your troubleshooting needs</p>
 <p>The script is hosted on <a href=https://github.com/CharlesNRU/mdm-adminservice>GitHub</a> and I invite you to send me pull requests if you believe you can improve the script. I do not have that many different PC models to test and I might have missed something.</p>
 <h4 id=task-sequence-to-query-the-adminservice>Task Sequence to query the AdminService</h4>
 <p>The goal of this task sequence is to identify the manufacturer, model and SKU of the current system and make sure it matches the naming convention used by the Driver Automation Tool.</p>
 <p>Then, with those values, we call the Invoke-GetPackageIDFromAdminService to get the PackageID of the driver package we need.</p>
 <p><div class=image>
 <figure>
-<a href=QueryAdminServiceTS-1-1024x759.png target=_blank>
-<img src=QueryAdminServiceTS-1-1024x759.png alt>
+<a href=QueryAdminServiceTS-1.png target=_blank>
+<img src=QueryAdminServiceTS-1.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
-<p>Keep in mind that you will need to set the appropriate credentials to use to query the AdminService, see here: </p>
+</div></p>
+<p>Keep in mind that you will need to set the appropriate credentials to use to query the AdminService, see here:</p>
 <p><div class=image>
 <figure>
-<a href=QueryAdminServiceTS_Parameters-1-1024x518.png target=_blank>
-<img src=QueryAdminServiceTS_Parameters-1-1024x518.png alt>
+<a href=QueryAdminServiceTS_Parameters-1.png target=_blank>
+<img src=QueryAdminServiceTS_Parameters-1.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>The user account needed in this step only needs &ldquo;Read&rdquo; permission on Packages in configuration manager. That&rsquo;s it.</p>
 <p><strong>A quick note on “BypassCertCheck”:</strong> If you set this to 0, you will need to make sure that the certificate used by the AdminService is trusted by the device at the time it’s running the task sequence or the script will be unable to query the AdminService. If you have a good idea how to tackle this problem, please let me know.</p>
 <p>Disclaimer: I&rsquo;ve only been doing my test on current branch 2002 with enhanced HTTP enabled.</p>
@@ -196,11 +224,11 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 </ul>
 <p><div class=image>
 <figure>
-<a href=ApplyDrivers_TS-1-1024x984.png target=_blank>
-<img src=ApplyDrivers_TS-1-1024x984.png alt>
+<a href=ApplyDrivers_TS-1.png target=_blank>
+<img src=ApplyDrivers_TS-1.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>You can reuse this task sequence in multiple other task sequences simply by defining some key variables.</p>
 <p>I&rsquo;ve exported the task sequences for you to <a href=https://github.com/CharlesNRU/mdm-adminservice/raw/master/MDM-TS.zip>download here</a>.</p>
 <h3 id=examples>Examples</h3>
@@ -212,11 +240,11 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 </ul>
 <p><div class=image>
 <figure>
-<a href=Example1-1024x258.png target=_blank>
-<img src=Example1-1024x258.png alt>
+<a href=Example1.png target=_blank>
+<img src=Example1.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>There is no need to specify the &ldquo;DriverPackageOSArch&rdquo; in this case because the default value is x64. If you were deploying a 32-bit OS image, you would need to specify that too.</p>
 <h4 id=example-2---in-place-upgrade>Example 2 - In-place upgrade</h4>
 <ul>
@@ -226,10 +254,10 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <p><div class=image>
 <figure>
 <a href=image-2.png target=_blank>
-<img src=image-2.png alt>
+<img src=image-2.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Setting the &ldquo;DriverDeploymentType&rdquo; to OSUpgrade will assign the TS variable &ldquo;OSDUpgradeStagedContent&rdquo; to the location of the downloaded drivers.</p>
 <p>The content will be used by the upgrade step to apply the new drivers.</p>
 <p>For more information, see <a href=https://deploymentresearch.com/improving-the-configmgr-inplace-upgrade-task-sequence/>here</a>.</p>
@@ -241,10 +269,10 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <p><div class=image>
 <figure>
 <a href=image-3.png target=_blank>
-<img src=image-3.png alt>
+<img src=image-3.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>The default behavior of the &ldquo;Apply Driver Package&rdquo; TS is to perform a driver refresh when run in Full OS.</p>
 <h4 id=example-4---precache-drivers>Example 4 - Precache drivers</h4>
 <ul>
@@ -254,15 +282,23 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <p><div class=image>
 <figure>
 <a href=image-4.png target=_blank>
-<img src=image-4.png alt>
+<img src=image-4.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <h3 id=next-steps>Next steps</h3>
 <p>I&rsquo;m looking for feedback and suggestions to improve this solution.</p>
 <p>I will also be working on a similar task sequence for BIOS packages.</p>
 <p>Task Sequences exports and the script to query the AdminService is on my <a href=https://github.com/CharlesNRU/mdm-adminservice>GitHub repository</a>.</p>
 <p>Thank you - Charles.</p>
+<img src=/authors/charles/avatar.png alt="Photo of Charles Tousignant"><br>
+<strong>Charles Tousignant</strong>
+<em>Contributor</em>
+<div>
+<a href=https://twitter.com/NoRemoteUsers><img src=/img/social/twitter.png></a>
+</div>
+<p>Charles, a.k.a. 'No Remote Users' from MMS 2019, is a senior analyst working in the public sector focusing on Windows and systems management.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -274,7 +310,7 @@ Today I’d like to share with you a new solution I’ve developed to allow me t
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
