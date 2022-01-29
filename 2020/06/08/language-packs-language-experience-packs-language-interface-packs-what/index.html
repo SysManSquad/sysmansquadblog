@@ -21,7 +21,8 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Language Packs, Language Experience Packs, Language Interface Packs… what?!">
-<meta name=twitter:description content="<p> For a while I have been curious on how to do Windows OSD with multiple languages &#34;the proper way&#34; using Configuration Manager. Whenever I have approached the subject I have always felt overwhelmed. </p> <p> Googling the topic is just a hot mess. You're faced with information that's old, lacking real detail or generally misunderstood. My aim here is to demystify the topic and show you a solid way to do Windows 10 multi language OSD with ConfigMgr along with sound reasoning.">
+<meta name=twitter:description content="For a while I have been curious on how to do Windows OSD with multiple languages &ldquo;the proper way&rdquo; using Configuration Manager. Whenever I have approached the subject I have always felt overwhelmed.
+Googling the topic is just a hot mess. You&rsquo;re faced with information that&rsquo;s old, lacking real detail or generally misunderstood. My aim here is to demystify the topic and show you a solid way to do Windows 10 multi language OSD with ConfigMgr along with sound reasoning.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -90,114 +91,52 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Language Packs, Language Experience Packs, Language Interface Packs… what?!</h1>
-<span class=post-date>June 8, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/acc>Adam Cook</a> / </span>
+<span class=post-date>June 8, 2020 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ How-To </span>
+<span class=post-categories>/ MECM/MEMCM/SCCM </span>
+<span class=post-categories>/ Task Sequence </span>
+</p>
 </div>
 <div class=post-entry>
-<pre><code>            &lt;p&gt;
-              For a while I have been curious on how to do Windows OSD with multiple languages &quot;the proper way&quot; using Configuration Manager. Whenever I have approached the subject I have always felt overwhelmed.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Googling the topic is just a hot mess. You're faced with information that's old, lacking real detail or generally misunderstood. My aim here is to demystify the topic and show you a solid way to do Windows 10 multi language OSD with ConfigMgr along with sound reasoning.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              I'll also touch on how to deploy languages via the Software Center and discuss what's improved in Windows 10 version 2004.
-            &lt;/p&gt;&lt;section class=&quot;wp-block-uagb-section uagb-section__wrap uagb-section__background-undefined uagb-block-ba570ddf&quot;&gt;
-            
-            &lt;div class=&quot;uagb-section__overlay&quot;&gt;
-            &lt;/div&gt;
-            
-            &lt;div class=&quot;uagb-section__inner-wrap&quot;&gt;
-</code></pre>
+<p>For a while I have been curious on how to do Windows OSD with multiple languages &ldquo;the proper way&rdquo; using Configuration Manager. Whenever I have approached the subject I have always felt overwhelmed.</p>
+<p>Googling the topic is just a hot mess. You&rsquo;re faced with information that&rsquo;s old, lacking real detail or generally misunderstood. My aim here is to demystify the topic and show you a solid way to do Windows 10 multi language OSD with ConfigMgr along with sound reasoning.
+I&rsquo;ll also touch on how to deploy languages via the Software Center and discuss what&rsquo;s improved in Windows 10 version 2004.</p>
 <h4 id=update-2021-02-16>Update 2021-02-16</h4>
-<pre><code>              &lt;p&gt;
-                I've written a new post [Multilingual Windows 10 20H2 OSD with ConfigMgr](https://sysmansquad.com/2021/02/16/multilingual-windows-10-20h2-osd-with-configmgr/) which walks you through the detail on how to do this with Windows 10 2004 and onwards.
-              &lt;/p&gt;
-              
-              &lt;p&gt;
-                The new improvements negate the InstallLanguage issue. If you haven't read this post yet, it's still recommended to read it as it breaks down what Language Packs, Language Experience Packs, Language Interface Packs, and Features on Demands are. It also discusses what the InstallLanguage issue was.
-              &lt;/p&gt;
-              
-              &lt;p&gt;
-              &lt;/p&gt;
-            &lt;/div&gt;&lt;/section&gt; 
-            
-            &lt;p&gt;
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              While researching I had questions like:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                How and when do I install Language Experience Packs? What are they?
-              &lt;/li&gt;
-              &lt;li&gt;
-                To change a system's language I need a Language Pack. So what's the difference between a Language Experience Pack and Language Interface Pack?
-              &lt;/li&gt;
-              &lt;li&gt;
-                Why should I use one over the other?
-              &lt;/li&gt;
-              &lt;li&gt;
-                If a Language Pack does the job, why do Language Experience Packs exist?
-              &lt;/li&gt;
-              &lt;li&gt;
-                Why don't Language Experience Packs localise everything?
-              &lt;/li&gt;
-              &lt;li&gt;
-                What are language specific Features on Demand and do I need them?
-              &lt;/li&gt;
-              &lt;li&gt;
-                **What on earth do I need to do to deploy Windows 10 as another language (completely localised for a user in their most comfortable language), without a million different ISOs on my Distribution Points and in my task sequence, and not screw with the InstallLanguage / default system language? (if you're not familiar with the &quot;InstallLanguage&quot; issue, you will be after you've read this)**
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              That last question was my main driver for needing to learn this topic. I've spent many hours reading docs, blogs, messing around in my lab and putting this post together. I really hope it is useful!
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Throughout examples I'll assume your OS media is something like en-us, the target language is fr-fr and we're deploying Windows 10 1909.
-            &lt;/p&gt;
-</code></pre>
+<p>I&rsquo;ve written a new post <a href=https://sysmansquad.com/2021/02/16/multilingual-windows-10-20h2-osd-with-configmgr/>Multilingual Windows 10 20H2 OSD with ConfigMgr</a> which walks you through the detail on how to do this with Windows 10 2004 and onwards.</p>
+<p>The new improvements negate the InstallLanguage issue. If you haven&rsquo;t read this post yet, it&rsquo;s still recommended to read it as it breaks down what Language Packs, Language Experience Packs, Language Interface Packs, and Features on Demands are. It also discusses what the InstallLanguage issue was.</p>
+<p>While researching I had questions like:</p>
+<ul>
+<li>How and when do I install Language Experience Packs? What are they?</li>
+<li>To change a system&rsquo;s language I need a Language Pack. So what&rsquo;s the difference between a Language Experience Pack and Language Interface Pack?</li>
+<li>Why should I use one over the other?</li>
+<li>If a Language Pack does the job, why do Language Experience Packs exist?</li>
+<li>Why don&rsquo;t Language Experience Packs localise everything?</li>
+<li>What are language specific Features on Demand and do I need them?</li>
+<li><strong>What on earth do I need to do to deploy Windows 10 as another language (completely localized for a user in their most comfortable language), without a million different ISOs on my Distribution Points and in my task sequence, and not screw with the InstallLanguage / default system language? (if you&rsquo;re not familiar with the &ldquo;InstallLanguage&rdquo; issue, you will be after you&rsquo;ve read this)</strong></li>
+</ul>
+<p>That last question was my main driver for needing to learn this topic. I&rsquo;ve spent many hours reading docs, blogs, messing around in my lab and putting this post together. I really hope it is useful!</p>
+<p>Throughout examples I&rsquo;ll assume your OS media is something like en-us, the target language is fr-fr and we&rsquo;re deploying Windows 10 1909.</p>
 <h2 id=difference-between-lp-lxp-lip-and-fods>Difference between LP, LXP, LIP and FoDs</h2>
-<pre><code>            &lt;p&gt;
-              Language Pack (LP), Language Experience Pack (LXP), Language Interface Pack (LIP) and Features on Demand (FoD). For simplicity I'm just going to use acronyms from here on out.
-            &lt;/p&gt;
-</code></pre>
+<p>Language Pack (LP), Language Experience Pack (LXP), Language Interface Pack (LIP) and Features on Demand (FoD). For simplicity I&rsquo;m just going to use acronyms from here on out.</p>
 <h3 id=language-packs>Language Packs</h3>
-<pre><code>            &lt;p&gt;
-              These apparently used to come as &lt;code&gt;lp.cab&lt;/code&gt; files in the &quot;good ol' days&quot;. However more recently the naming convention is something like &lt;code&gt;Microsoft-Windows-Client-Language-Pack_x64_fr-fr.cab&lt;/code&gt;. These are grabbed from VLSC or MSDN / Visual Studio Subscription in an ISO.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              You'll see you can also download media for LXPs too, but these items are included just the &quot;Language Packs&quot; media too. For Windows 10 2004, there's no separate download in Visual Studio Subscription for LXP - all is included in one &quot;Language Packs&quot; media ISO.
-            &lt;/p&gt;
-            
-            &lt;div class=&quot;wp-block-image&quot;&gt;
-              &lt;figure class=&quot;aligncenter size-large&quot;&gt;[![](languagepackdownloadmsdn-1024x266.jpg)](languagepackdownloadmsdn-scaled.jpg)&lt;/figure&gt;
-            &lt;/div&gt;
-            
-            &lt;p&gt;
-              Microsoft offer 38 base / primary languages to choose from, so in other words you can get 38 ISOs of Windows 10 in 38 languages, and also 38 LP &lt;code&gt;.cab&lt;/code&gt; files. Click the below to see what these 38 base / primary languages are:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                [https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/available-language-packs-for-windows#language-packs](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/available-language-packs-for-windows#language-packs)
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              It's good to know that Windows 10 supports 110 languages. 38 are possible via just LPs whereas the rest are achievable via LXPs (ignore the fact the table further down in that page reads Language Interface Packs and not Language Experience Packs, I'll get on to that later.)
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              To achieve full localisation of our target language during OSD, generally we install LP &lt;code&gt;.cab&lt;/code&gt; files in WinPE (aka &quot;offline&quot;) using &lt;code&gt;dism.exe&lt;/code&gt; or &lt;code&gt;Add-WindowsPackage&lt;/code&gt;. This step normally occurs after the &lt;code&gt;Apply Operating System&lt;/code&gt; step and before the &lt;code&gt;Apply Windows Settings&lt;/code&gt; step. An example command below:
-            &lt;/p&gt;
-</code></pre>
+<p>These apparently used to come as <code>lp.cab</code> files in the &ldquo;good ol' days&rdquo;. However more recently the naming convention is something like <code>Microsoft-Windows-Client-Language-Pack_x64_fr-fr.cab</code>. These are grabbed from VLSC or MSDN / Visual Studio Subscription in an ISO.
+You&rsquo;ll see you can also download media for LXPs too, but these items are included just the &ldquo;Language Packs&rdquo; media too. For Windows 10 2004, there&rsquo;s no separate download in Visual Studio Subscription for LXP - all is included in one &ldquo;Language Packs&rdquo; media ISO.</p>
+<p><a href=languagepackdownloadmsdn-scaled.jpg><div class=image>
+<figure>
+<a href=languagepackdownloadmsdn-1024x266.jpg target=_blank>
+<img src=languagepackdownloadmsdn-1024x266.jpg alt=screenshot>
+</a>
+</figure>
+</div></a>
+Microsoft offer 38 base / primary languages to choose from, so in other words you can get 38 ISOs of Windows 10 in 38 languages, and also 38 LP <code>.cab</code> files. Click the below to see what these 38 base / primary languages are:</p>
+<ul>
+<li><a href=https://docs.microsoft.com/windows-hardware/manufacture/desktop/available-language-packs-for-windows#language-packs>https://docs.microsoft.com/windows-hardware/manufacture/desktop/available-language-packs-for-windows#language-packs</a></li>
+</ul>
+<p>It&rsquo;s good to know that Windows 10 supports 110 languages. 38 are possible via just LPs whereas the rest are achievable via LXPs (ignore the fact the table further down in that page reads Language Interface Packs and not Language Experience Packs, I&rsquo;ll get on to that later.)</p>
+<p>To achieve full localization of our target language during OSD, generally we install LP <code>.cab</code> files in WinPE (aka &ldquo;offline&rdquo;) using <code>dism.exe</code> or <code>Add-WindowsPackage</code>. This step normally occurs after the <code>Apply Operating System</code> step and before the <code>Apply Windows Settings</code> step. An example command below:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -206,422 +145,224 @@
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>dism.exe /Image:&#34;%OSDTargetSystemDrive%&#34; /ScratchDir:%OSDTargetSystemDrive%WindowsTemp /Add-Package /PackagePath=&#34;.Microsoft-Windows-Client-Language-Pack_x64_fr-fr.cab&#34;
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>            &lt;div class=&quot;wp-block-image&quot;&gt;
-              &lt;figure class=&quot;aligncenter size-medium&quot;&gt;[![](installLPtasksequenceexample.png)](installLPtasksequenceexample.png)&lt;figcaption&gt;Example step to install LP using dism.exe&lt;/figcaption&gt;&lt;/figure&gt;
-            &lt;/div&gt;
-            
-            &lt;p&gt;
-              At this point, this isn't enough to localise the system as fr-fr. The next key bit is to configure the locale dropdown settings in the &lt;code&gt;Apply Windows settings&lt;/code&gt; step as French.
-            &lt;/p&gt;
-            
-            &lt;div class=&quot;wp-block-image&quot;&gt;
-              &lt;figure class=&quot;aligncenter size-medium&quot;&gt;[![](applywindowssettingstasksequencetexample-2-2.jpg)](applywindowssettingstasksequencetexample-2-2.jpg)&lt;figcaption&gt;Example Apply Windows Settings step to adjust locale after LP install&lt;/figcaption&gt;&lt;/figure&gt;
-            &lt;/div&gt;
-            
-            &lt;p&gt;
-              You have two options with the&lt;code&gt;Apply Windows settings&lt;/code&gt;step. Either:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                Use the new-ish[OSDWindowsSettings* task sequence variables](https://docs.microsoft.com/en-us/mem/configmgr/osd/understand/task-sequence-steps#BKMK_ApplyWindowsSettings). These set what you would otherwise select from the dropdown settings in the &lt;code&gt;Apply Windows settings&lt;/code&gt; step.
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            
-              **OR**
-            
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                Have as many&lt;code&gt;Apply Windows settings&lt;/code&gt;steps as you do languages and select the locale options you want in the dropdown settings, then condition each step based on some criteria.
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              Either way, it's this &lt;code&gt;Apply Windows settings&lt;/code&gt; step which populates elements in the unattend.xml answer file on the fly.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Configuring this step will give you a completely localised system as fr-fr. Windows startup, the logon UI, input locale, format, everything. Every element in the UI possible is localised to French.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Here is what the system will look like:
-            &lt;/p&gt;
-            
-            &lt;div class=&quot;wp-block-image is-style-default&quot;&gt;
-              &lt;figure class=&quot;aligncenter size-medium&quot;&gt;[![](StoryBoard-LanguagePackUserExperience.png)](StoryBoard-LanguagePackUserExperience.png)&lt;figcaption&gt;Click me&lt;/figcaption&gt;&lt;/figure&gt;
-            &lt;/div&gt;
-            
-            &lt;p&gt;
-              Looks good, right? Well, sadly not. Let's discuss the 3 drawbacks with this approach:
-            &lt;/p&gt;
-</code></pre>
-<h4 id=1-start-menu-search-does-not-work>1) Start menu search does not work</h4>
-<pre><code>            &lt;p&gt;
-              You will find that the start menu search, and perhaps other things, just don't work unless you (re)install the latest cumulative update.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              It is a [known documented fact](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/add-language-packs-to-windows#considerations) that if you install anything that is language specific, such as a LP, then the latest cumulative update will want to reinstall again.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Perhaps an option here might to be use an RTM ISO/WIM of Windows 1909, or at least one that's serviced to be n-1, with the anticipation that you will install the latest cumulative update in your task sequence. Of course this will increase build time, although if you're installing software updates during OSD anyway then it might not be a big deal for you to do that.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              [The order of install matters](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/features-on-demand-v2--capabilities). First add LPs, FoDs and then apps in that order. If you install a cumulative update before any of those, then the update will want reinstalling.
-            &lt;/p&gt;
-</code></pre>
-<h4 id=2-the-installlanguage-issue>2) The &ldquo;InstallLanguage&rdquo; issue</h4>
-<pre><code>            &lt;p&gt;
-              If you're not familiar with the InstallLanguage issue, then it's well explained in the below Ignite 2019 session at around 7:45:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                [SolvingWindows10featureupdatesinamultilingualdeployment](https://www.youtube.com/watch?v=ZhL0AO8Cnig&amp;ab_channel=MicrosoftIgnite) - Sudhagar Thirumoolan ([@sudhagart](https://twitter.com/sudhagart?lang=en))
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              In summary, the InstallLanguage issue is caused by what we just did by using en-us install media, installing fr-fr LP and then setting the System Locale to be fr-fr during Windows Setup (via unattend.xml / &lt;code&gt;Apply Windows Settings&lt;/code&gt; step). It's symptoms are visible when you try to feature update Windows 10 using installation media which does not match the system language.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              To reclarify exactly what causes the InstallLanguage install: take the scenario where if we install Windows, apply an LP to the image and change the System Locale to different langauge via configuring the &lt;code&gt;Apply Windows Settings&lt;/code&gt; step like I've shown you, this will change the system language and create the InstallLanguage issue.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              To identify a system which suffers with the InstallLanguage issue, you will find the &lt;code&gt;InstallLanguage&lt;/code&gt; registry value in key &lt;code&gt;HKLM:SYSTEM\CurrentControlSet\Control\Nls\Language&lt;/code&gt; set to &lt;code&gt;040c&lt;/code&gt; (fr-fr) and not &lt;code&gt;0409&lt;/code&gt; (en-us). Remember, my scenario throughout this post is to use en-us base install media, and attempt to localise the system as fr-fr.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              After we've built a system like this, if we attempt to feature update it using en-us media &lt;code&gt;setupact.log&lt;/code&gt; and [SetupDiag.exe](https://docs.microsoft.com/en-us/windows/deployment/upgrade/setupdiag) will both tell you:
-            &lt;/p&gt;
-            
-            `Target language en-US is not compatible with the host language`
-            
-            &lt;p&gt;
-              Now what? Well your options are:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                Use all the Windows medias in your in-place upgrade task sequence that match the InstallLanguage on machines in your estate. This could get bulky very quick, but it'll work.
-              &lt;/li&gt;
-              &lt;li&gt;
-                Stop using in-place upgrade task sequences and use feature updates instead. This way you simply download, distribute and deploy all the feature updates in the languages that match the InstallLanguage on machines in your estate. This could also get bulky in storage as you'll need to download as many feature updates as you have languages in your estate.
-              &lt;/li&gt;
-              &lt;li&gt;
-                Point your clients to Windows Update / Windows Update for Business instead, because it &quot;just works&quot;. If your remote offices have their own leg out on the Internet, or WAN link speed isn't a concern, then I recommend you seriously consider this option.
-              &lt;/li&gt;
-              &lt;li&gt;
-                This is most probably unsupported, but change the InstallLanguage registry value back to &lt;code&gt;0409&lt;/code&gt; (en-us) and Windows will upgrade using en-us media. Just make sure en-us LP is definitely installed. Look in &lt;code&gt;HKLM:\SYSTEM\CurrentControlSet\Control\MUI\UILanguages&lt;/code&gt; or check out &lt;code&gt;dism.exe /online /get-intl&lt;/code&gt; (hey, don't shoot me, I'm just the messenger.)
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              Some of the above could be costly one way or another. It could mean more storage server side, more steps in your task sequence or saturated links. Take your pick. But maybe you're not happy with the options and you're convinced that there's got to be another way. Or maybe you need a little more translation than what's currently offered. In which case keep reading...
-            &lt;/p&gt;
-</code></pre>
-<h4 id=3-not-enough-translation>3) Not enough translation</h4>
-<pre><code>            &lt;p&gt;
-              Another problem with installing _only_ LPs is the limited translation support compared to the supposedly 110 languages available in Windows 10.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              I know I said LP offers complete translation of the whole UI, which is true, however there are scenarios when you need further translation.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              A good example of this is [this Twitter thread I had with Manel Rodero](https://twitter.com/manelrodero/status/1261359938481410048). Manel needs Windows 10 with Catalan language. The only Spanish options as far as base / primary languages go are es-mk (Mexico) or es-es (Spain).
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              This is where LXPs come in and why there is the concept of primary and secondary languages with Windows 10. Manel achieves Windows 10 localisation to Catalan using es-es base / primary language and then installs LXPs for Catalan which &quot;tops up&quot; the user experience with further, more specific, translations.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              So let's move on to LXPs, but first let's briefly mention LIPs.
-            &lt;/p&gt;
-</code></pre>
+</div><p><a href=installLPtasksequenceexample.png><div class=image>
+<figure>
+<a href=installLPtasksequenceexample.png target=_blank>
+<img src=installLPtasksequenceexample.png alt=screenshot>
+</a>
+</figure>
+</div></a>Example step to install LP using dism.exe
+At this point, this isn&rsquo;t enough to localize the system as fr-fr. The next key bit is to configure the locale dropdown settings in the <code>Apply Windows settings</code> step as French.</p>
+<p><a href=applywindowssettingstasksequencetexample-2-2.jpg><div class=image>
+<figure>
+<a href=applywindowssettingstasksequencetexample-2-2.jpg target=_blank>
+<img src=applywindowssettingstasksequencetexample-2-2.jpg alt=screenshot>
+</a>
+</figure>
+</div></a>Example Apply Windows Settings step to adjust locale after LP install
+You have two options with the<code>Apply Windows settings</code>step. Either:</p>
+<ul>
+<li>Use the new-ish<a href=https://docs.microsoft.com/mem/configmgr/osd/understand/task-sequence-steps#BKMK_ApplyWindowsSettings>OSDWindowsSettings* task sequence variables</a>. These set what you would otherwise select from the dropdown settings in the <code>Apply Windows settings</code> step.</li>
+<li><strong>OR</strong></li>
+<li>Have as many<code>Apply Windows settings</code>steps as you do languages and select the locale options you want in the dropdown settings, then condition each step based on some criteria.</li>
+</ul>
+<p>Either way, it&rsquo;s this <code>Apply Windows settings</code> step which populates elements in the unattend.xml answer file on the fly.
+Configuring this step will give you a completely localized system as fr-fr. Windows startup, the logon UI, input locale, format, everything. Every element in the UI possible is localized to French.</p>
+<p>Here is what the system will look like:</p>
+<p><a href=StoryBoard-LanguagePackUserExperience.png><div class=image>
+<figure>
+<a href=StoryBoard-LanguagePackUserExperience.png target=_blank>
+<img src=StoryBoard-LanguagePackUserExperience.png alt=screenshot>
+</a>
+</figure>
+</div></a></p>
+<p>Looks good, right? Well, sadly not. Let&rsquo;s discuss the 3 drawbacks with this approach:</p>
+<h4 id=start-menu-search-does-not-work>Start menu search does not work</h4>
+<p>You will find that the start menu search, and perhaps other things, just don&rsquo;t work unless you (re)install the latest cumulative update.
+It is a <a href=https://docs.microsoft.com/windows-hardware/manufacture/desktop/add-language-packs-to-windows#considerations>known documented fact</a> that if you install anything that is language specific, such as a LP, then the latest cumulative update will want to reinstall again.</p>
+<p>Perhaps an option here might to be use an RTM ISO/WIM of Windows 1909, or at least one that&rsquo;s serviced to be n-1, with the anticipation that you will install the latest cumulative update in your task sequence. Of course this will increase build time, although if you&rsquo;re installing software updates during OSD anyway then it might not be a big deal for you to do that.</p>
+<p><a href=https://docs.microsoft.com/windows-hardware/manufacture/desktop/features-on-demand-v2--capabilities>The order of install matters</a>. First add LPs, FoDs and then apps in that order. If you install a cumulative update before any of those, then the update will want reinstalling.</p>
+<h4 id=the-installlanguage-issue>The &ldquo;InstallLanguage&rdquo; issue</h4>
+<p>If you&rsquo;re not familiar with the InstallLanguage issue, then it&rsquo;s well explained in the below Ignite 2019 session at around 7:45:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=ZhL0AO8Cnig&ab_channel=MicrosoftIgnite">SolvingWindows10featureupdatesinamultilingualdeployment</a> - Sudhagar Thirumoolan (<a href="https://twitter.com/sudhagart?lang=en">@sudhagart</a>)</li>
+</ul>
+<p>In summary, the InstallLanguage issue is caused by what we just did by using en-us install media, installing fr-fr LP and then setting the System Locale to be fr-fr during Windows Setup (via unattend.xml / <code>Apply Windows Settings</code> step). It&rsquo;s symptoms are visible when you try to feature update Windows 10 using installation media which does not match the system language.</p>
+<p>To reclarify exactly what causes the InstallLanguage install: take the scenario where if we install Windows, apply an LP to the image and change the System Locale to different langauge via configuring the <code>Apply Windows Settings</code> step like I&rsquo;ve shown you, this will change the system language and create the InstallLanguage issue.</p>
+<p>To identify a system which suffers with the InstallLanguage issue, you will find the <code>InstallLanguage</code> registry value in key <code>HKLM:SYSTEM\CurrentControlSet\Control\Nls\Language</code> set to <code>040c</code> (fr-fr) and not <code>0409</code> (en-us). Remember, my scenario throughout this post is to use en-us base install media, and attempt to localise the system as fr-fr.</p>
+<p>After we&rsquo;ve built a system like this, if we attempt to feature update it using en-us media <code>setupact.log</code> and <a href=https://docs.microsoft.com/windows/deployment/upgrade/setupdiag>SetupDiag.exe</a> will both tell you:</p>
+<p><code>Target language en-US is not compatible with the host language</code></p>
+<p>Now what? Well your options are:</p>
+<ul>
+<li>Use all the Windows medias in your in-place upgrade task sequence that match the InstallLanguage on machines in your estate. This could get bulky very quick, but it&rsquo;ll work.</li>
+<li>Stop using in-place upgrade task sequences and use feature updates instead. This way you simply download, distribute and deploy all the feature updates in the languages that match the InstallLanguage on machines in your estate. This could also get bulky in storage as you&rsquo;ll need to download as many feature updates as you have languages in your estate.</li>
+<li>Point your clients to Windows Update / Windows Update for Business instead, because it &ldquo;just works&rdquo;. If your remote offices have their own leg out on the Internet, or WAN link speed isn&rsquo;t a concern, then I recommend you seriously consider this option.</li>
+<li>This is most probably unsupported, but change the InstallLanguage registry value back to <code>0409</code> (en-us) and Windows will upgrade using en-us media. Just make sure en-us LP is definitely installed. Look in <code>HKLM:\SYSTEM\CurrentControlSet\Control\MUI\UILanguages</code> or check out <code>dism.exe /online /get-intl</code> (hey, don&rsquo;t shoot me, I&rsquo;m just the messenger.)</li>
+</ul>
+<p>Some of the above could be costly one way or another. It could mean more storage server side, more steps in your task sequence or saturated links. Take your pick. But maybe you&rsquo;re not happy with the options and you&rsquo;re convinced that there&rsquo;s got to be another way. Or maybe you need a little more translation than what&rsquo;s currently offered. In which case keep reading&mldr;</p>
+<h4 id=not-enough-translation>Not enough translation</h4>
+<p>Another problem with installing <em>only</em> LPs is the limited translation support compared to the supposedly 110 languages available in Windows 10.</p>
+<p>I know I said LP offers complete translation of the whole UI, which is true, however there are scenarios when you need further translation.</p>
+<p>A good example of this is <a href=https://twitter.com/manelrodero/status/1261359938481410048>this Twitter thread I had with Manel Rodero</a>. Manel needs Windows 10 with Catalan language. The only Spanish options as far as base / primary languages go are es-mk (Mexico) or es-es (Spain).</p>
+<p>This is where LXPs come in and why there is the concept of primary and secondary languages with Windows 10. Manel achieves Windows 10 localisation to Catalan using es-es base / primary language and then installs LXPs for Catalan which &ldquo;tops up&rdquo; the user experience with further, more specific, translations.</p>
+<p>So let&rsquo;s move on to LXPs, but first let&rsquo;s briefly mention LIPs.</p>
 <h3 id=language-interface-packs>Language Interface Packs</h3>
-<pre><code>            &lt;p&gt;
-              Not much to be said about these. Essentially all there is to it: LIPs are out, LXPs are in.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Starting with Windows 10 1803 LXPs were introduced and LIPs were deprecated. I think starting from 1809 you can no longer source LIPs, only LXPs.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              All you do need to know is that LIPs provided partial translations to popular / common areas of the UI where LPs fell short.
-            &lt;/p&gt;
-</code></pre>
+<p>Not much to be said about these. Essentially all there is to it: LIPs are out, LXPs are in.
+Starting with Windows 10 1803 LXPs were introduced and LIPs were deprecated. I think starting from 1809 you can no longer source LIPs, only LXPs.
+All you do need to know is that LIPs provided partial translations to popular / common areas of the UI where LPs fell short.</p>
 <h3 id=language-experience-packs>Language Experience Packs</h3>
-<pre><code>            &lt;p&gt;
-              LXPs serve the same purpose as LIPs; they still provided partial translations where the LP fell short.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              They are in &lt;code&gt;.appx&lt;/code&gt; form and are continuously updated by Microsoft via the Store. You can download them for your task sequence from VLSC or your Visual Studio Subscription download portal. I think you can also export them from your Store for Business? But I don't know enough about that, sorry.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Since they're serviced via the Store, it means you get continuous delivery of translation improvements and beautiful peer caching with Delivery Optimization.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              If you block the Store then you prohibit your devices and users from receiving translation improvements.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Users can also submit translation feedback via the Feedback Hub:
-            &lt;/p&gt;
-            
-            &lt;div class=&quot;wp-block-image&quot;&gt;
-              &lt;figure class=&quot;aligncenter size-medium&quot;&gt;[![](feedbackhubexample.png)](feedbackhubexample.png)&lt;figcaption&gt;Feedback hub where users can submit translation feedback to Microsoft, which Microsoft can quickly patch and deliver via the store&lt;/figcaption&gt;&lt;/figure&gt;
-            &lt;/div&gt;
-            
-            &lt;p&gt;
-              You may think it's not a big deal if you block the Store, however when I built a task sequence to use LXP instead of LP, I observed some noticeable differences around Windows in testing before and after applying Store updates after OSD. I'll show you in a moment.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              The process I followed to use LXP instead of LP in my task sequence was the same as demonstrated in a recent Microsoft PFE blog post:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                [Windows10MultilanguageDeploymentwithMEMCM](https://techcommunity.microsoft.com/t5/premier-field-engineering/windows-10-multilanguage-deployment-with-memcm/ba-p/1347144)
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              The post is OK. I couldn't quite understand why we were only installing LXP, especially since LXP provides only partial translation. It makes sense if you're trying to get to Catalan from es-es base language, but from en-us to fr-fr or de-de, or any other, it's not ideal.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              I was also disappointed and confused to see what it felt like a hack being used to set the default language to that of the LXP using &lt;code&gt;control.exe intl.cpl&lt;/code&gt; and some weird undocumented parameters.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              **Note:** this is not a dig at the author. I am hugely grateful for the community contribution. It offers excellent insight with examples. At this point I'm mostly expressing my frustration toward Microsoft for making the task seem like magic or voodoo, when it should be clear and logical.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              The post suggests there's PowerShell cmdlets you can use instead to do the same as the &lt;code&gt;control.exe&lt;/code&gt; method but on a per-user basis instead. [You can find them here](https://docs.microsoft.com/en-gb/powershell/module/internationalcmdlets).
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              If you're interested in pursuing the LXP and &lt;code&gt;control.exe&lt;/code&gt; method then it might useful for you to know all the [Geo IDs](https://docs.microsoft.com/en-gb/windows/win32/intl/table-of-geographical-locations) and [language / region IDs](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/available-language-packs-for-windows#language-packs) too, which sadly were also not mentioned in the blog. These are needed for modifying the XML.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Nonetheless the post gives you an example on how to install LXP during OSD and make it the default language for new users.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Let me show you what a system looks like after OSD installing only LXP.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              To clarify what I did in my task sequence: I followed the process in the aforementioned Microsoft PFE blog by installing only LXP and kept the &lt;code&gt;Apply Windows settings&lt;/code&gt; locale options to en-us and used the &lt;code&gt;control.exe intl.cpl&lt;/code&gt; method to change the users' default language.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              When you see the screenshots of the TS at the end of this section, you may notice some minor differences e.g. local admin account instead of domain user account, and content-less scripts used instead of script files, etc. But generally, it's the same.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              This is what it gave me:
-            &lt;/p&gt;
-            
-            &lt;div class=&quot;wp-block-image is-style-default&quot;&gt;
-              &lt;figure class=&quot;aligncenter size-medium&quot;&gt;[![](StoryBoard-LanguageExperiencePackUserExperience-beforestoreupdates-1.png)](StoryBoard-LanguageExperiencePackUserExperience-beforestoreupdates-1.png)&lt;figcaption&gt;Click me&lt;/figcaption&gt;&lt;/figure&gt;
-            &lt;/div&gt;
-            
-            &lt;p&gt;
-              I'll list the notables:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                Start up, logon UI and first logon experience looks completely localised as fr-fr which is nice.
-              &lt;/li&gt;
-              &lt;li&gt;
-                Some parts of the Windows UI **are not** localised: start menu app shortcuts, the pre-populated text in the start menu search, and the text in the calendar pane.
-              &lt;/li&gt;
-              &lt;li&gt;
-                The Windows settings UI is partially localised. It may seem not localised in the image but in other areas of the settings I did see some translations, not many though. Also, you can see that the user can change back to &quot;English (United States)&quot; display language if they wanted to, which is nice.
-              &lt;/li&gt;
-              &lt;li&gt;
-                The InstallLanguage registry value remained unchanged as en-us! Score!
-              &lt;/li&gt;
-              &lt;li&gt;
-                PowerShell doesn't seem to be localised and &lt;code&gt;dism.exe&lt;/code&gt; is a bit weird: some parts are English some parts are French.
-              &lt;/li&gt;
-              &lt;li&gt;
-                The Microsoft Store is not localised at all, but **there are a boat load of updates...**
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              Remember when I mentioned I'll get to it about noticing a difference in translations before and after Store updates? OK so here's the difference of the exact same system as before, but I installed those boat load of updates from the Store:
-            &lt;/p&gt;
-            
-            &lt;div class=&quot;wp-block-image&quot;&gt;
-              &lt;figure class=&quot;aligncenter size-medium&quot;&gt;[![](StoryBoard-LanguageExperiencePackUserExperience-afterstoreupdates.png)](StoryBoard-LanguageExperiencePackUserExperience-afterstoreupdates.png)&lt;figcaption&gt;Click me&lt;/figcaption&gt;&lt;/figure&gt;
-            &lt;/div&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                Start up, logon UI and first logon experience looks no different: still localised.
-              &lt;/li&gt;
-              &lt;li&gt;
-                Several improvements to the Windows UI in the start menu and calendar pane.
-              &lt;/li&gt;
-              &lt;li&gt;
-                More or less the same mix of translations in the Windows settings UI.
-              &lt;/li&gt;
-              &lt;li&gt;
-                As expected, no change to the InstallLanguage registry value.
-              &lt;/li&gt;
-              &lt;li&gt;
-                Same experience with PowerShell and &lt;code&gt;dism.exe&lt;/code&gt;.
-              &lt;/li&gt;
-              &lt;li&gt;
-                The Microsoft Store is now completely localised.
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              After all that, it's clear that LXPs live up to their expectation: partial translation.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Two big bonuses with using LXPs instead of LPs are:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                No InstallLanguage issue
-              &lt;/li&gt;
-              &lt;li&gt;
-                No issue at any point with the start menu search or any other general functions of Windows that I noticed
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              Looking at the previous image, if this level of localisation is good for you and your users, then 100% the LXP-only solution is for you. I totally recommend it and Microsoft do too. Microsoft want us to stop using LPs and start using LXPs.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              However there's a problem if your users don't know the language of your base / primary language from install media (en-us in this scenario). For that reason, I can't quite understand how or why Microsoft want us to stop using LP and use LXP exclusively.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Then I thought, &quot;maybe I need to install LP _and_ LXP, keep the &lt;code&gt;Apply Windows settings&lt;/code&gt; locale option to match the language of the install media (en-us in this scenario, because we don't want the InstallLanguage issue) and then use the &lt;code&gt;control.exe intl.cpl&lt;/code&gt; method to change the default user language. What happens then?&quot;
-            &lt;/p&gt;
-            
-            &lt;div class=&quot;wp-block-image&quot;&gt;
-              &lt;figure class=&quot;aligncenter size-medium&quot;&gt;[![](StoryBoard-LanguagePackAndLanguageExperiencePackUserExperience.png)](StoryBoard-LanguagePackAndLanguageExperiencePackUserExperience.png)&lt;figcaption&gt;Click me&lt;/figcaption&gt;&lt;/figure&gt;
-            &lt;/div&gt;
-            
-            &lt;p&gt;
-              Bingo. Everything is completely localised and we don't have the InstallLanguage issue! As a sanity check, I managed to IPU to 2004 using en-us media with no issues.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              My task sequence steps in lab for that looks like the below. As I mentioned earlier, I tweaked some of the steps for the group &quot;Set Default Language&quot; compared to the PFE blog post.
-            &lt;/p&gt;&lt;figure class=&quot;wp-block-gallery aligncenter columns-4 is-cropped&quot;&gt;
-            
-            &lt;ul class=&quot;blocks-gallery-grid&quot;&gt;
-              &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;[![](finalts-1-1024x861.jpg)](finalts-1.jpg)&lt;/figure&gt;
-              &lt;/li&gt;
-              &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;[![](finalts-2-1024x861.jpg)](finalts-2.jpg)&lt;/figure&gt;
-              &lt;/li&gt;
-              &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;[![](finalts-3-1024x862.jpg)](finalts-3.jpg)&lt;/figure&gt;
-              &lt;/li&gt;
-              &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;[![](finalts-4-1024x861.jpg)](finalts-4.jpg)&lt;/figure&gt;
-              &lt;/li&gt;
-              &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;[![](finalts-5-1024x861.jpg)](finalts-5.jpg)&lt;/figure&gt;
-              &lt;/li&gt;
-              &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;[![](finalts-6.jpg)](finalts-6.jpg)&lt;/figure&gt;
-              &lt;/li&gt;
-              &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;[![](finalts-7.jpg)](finalts-7.jpg)&lt;/figure&gt;
-              &lt;/li&gt;
-              &lt;li class=&quot;blocks-gallery-item&quot;&gt;
-                &lt;figure&gt;[![](finalts-8-1024x861.jpg)](finalts-8.jpg)&lt;/figure&gt;
-              &lt;/li&gt;
-            &lt;/ul&gt;&lt;/figure&gt; 
-            
-            &lt;p&gt;
-              Make sure that you set the local options of the &lt;code&gt;Apply Windows Settings&lt;/code&gt; step to match that of the install media (en-us in this case). Equally the same is true if you use any of the [OSDWindowsSetings* task sequence variables](https://docs.microsoft.com/en-us/mem/configmgr/osd/understand/task-sequence-steps#BKMK_ApplyWindowsSettings).
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              The only drawback with this approach is that because we've installed a LP, we still need to reinstall the latest cumulative update because the start menu search is broken until you do that.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Again, if you run software updates step during OSD in your task sequence then this isn't going to be a big deal for you. I think this is a reasonable compromise if we get a fully localised system that doesn't cause us problems down the line when it comes to upgrading Windows 10. It also keeps the content capacity requirements low, since there's no need for an ISO for each language we want to support in our task sequence and therefore on your Distribution Points.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              However if build time is important to you, or you just don't/can't install software updates during OSD, then your only option is offline servicing. This enables you to inject all languages items (LP, LXP and FoD, which we will get on to next) directly in to the WIM. Once complete, you load the new Operating System Image into ConfigMgr.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Something like [David Segura](https://twitter.com/seguraosd)'s fantastic [OSDBuilder](https://osdbuilder.osdeploy.com/) is a great example of a community tool for servicing WIMs offline. His posts on building a [Windows 10 MultiLang baseline with OSDBuilder](https://osdbuilder.osdeploy.com/docs/advanced/multilang-baseline) highlights the importance of not applying updates to your WIM before you install the LPs or LXPs. I recommend using the RTM version of any Windows 10 you're looking to service.
-            &lt;/p&gt;
-            
-            &lt;hr class=&quot;wp-block-separator&quot; /&gt;
-            &lt;section class=&quot;wp-block-uagb-section uagb-section__wrap uagb-section__background-undefined uagb-block-abcdd797&quot;&gt;
-            &lt;div class=&quot;uagb-section__overlay&quot;&gt;
-            &lt;/div&gt;
-            
-            &lt;div class=&quot;uagb-section__inner-wrap&quot;&gt;
-</code></pre>
-<h4 id=update-2020-07-29>Update 2020-07-29</h4>
-<pre><code>              &lt;p&gt;
-                I've been able to reproduce a reported issue where if we install en-gb (LP + LXP) over en-us (as base language) using the guidelines in this blog post. You will see strange things immediately after OSD:
-              &lt;/p&gt;
-              
-              &lt;div class=&quot;wp-block-image&quot;&gt;
-                &lt;figure class=&quot;aligncenter size-large&quot;&gt;[![](2020-07-29_21-37-56-1024x870.jpg)](2020-07-29_21-37-56.jpg)&lt;/figure&gt;
-              &lt;/div&gt;
-              
-              &lt;p&gt;
-                For me, this was cleared up after I prompted an update for the en-gb LXP from the Microsoft Store. Immediately too, no reboot necessary. This shouldn't be too much of a surprise because I have detailed this quirk in the post already. LXPs are serviced via the store and odd translation issues were resolved after applying updates for the LXP(s) from the Store.
-              &lt;/p&gt;
-              
-              &lt;p&gt;
-                However this is a little different because it's clearly broken.
-              &lt;/p&gt;
-              
-              &lt;p&gt;
-                Perhaps this might be an issue with the RTM version of the en-gb LXP in the ISO from MSDN/Visual Studio downloads. None the less it's addressed in updates from the Store.
-              &lt;/p&gt;
-              
-              &lt;p&gt;
-                This might be a good opportunity to at least explore the idea of trying to export an updated LXP from Microsoft Store for Business. I haven't tested this.
-              &lt;/p&gt;
-              
-              &lt;p&gt;
-                Failing that, maybe you would be happy with force installing Store updates at the end of OSD using this tidbit [I found on Reddit](https://www.reddit.com/r/PowerShell/comments/94ikpc/any_way_to_update_windows_store_apps_via/):
-              &lt;/p&gt;
-</code></pre>
+<p>LXPs serve the same purpose as LIPs; they still provided partial translations where the LP fell short.
+They are in <code>.appx</code> form and are continuously updated by Microsoft via the Store. You can download them for your task sequence from VLSC or your Visual Studio Subscription download portal. I think you can also export them from your Store for Business? But I don&rsquo;t know enough about that, sorry.
+Since they&rsquo;re serviced via the Store, it means you get continuous delivery of translation improvements and beautiful peer caching with Delivery Optimization.
+If you block the Store then you prohibit your devices and users from receiving translation improvements.
+Users can also submit translation feedback via the Feedback Hub:</p>
+<p>![screenshot]<a href=feedbackhubexample.png><div class=image>
+<figure>
+<a href=feedbackhubexample.png target=_blank>
+<img src=feedbackhubexample.png alt=screenshot>
+</a>
+</figure>
+</div></a>Feedback hub where users can submit translation feedback to Microsoft, which Microsoft can quickly patch and deliver via the store</p>
+<p>You may think it&rsquo;s not a big deal if you block the Store, however when I built a task sequence to use LXP instead of LP, I observed some noticeable differences around Windows in testing before and after applying Store updates after OSD. I&rsquo;ll show you in a moment.</p>
+<p>The process I followed to use LXP instead of LP in my task sequence was the same as demonstrated in a recent Microsoft PFE blog post:</p>
+<ul>
+<li><a href=https://techcommunity.microsoft.com/t5/premier-field-engineering/windows-10-multilanguage-deployment-with-memcm/ba-p/1347144>Windows10MultilanguageDeploymentwithMEMCM</a></li>
+</ul>
+<p>The post is OK. I couldn&rsquo;t quite understand why we were only installing LXP, especially since LXP provides only partial translation. It makes sense if you&rsquo;re trying to get to Catalan from es-es base language, but from en-us to fr-fr or de-de, or any other, it&rsquo;s not ideal.</p>
+<p>I was also disappointed and confused to see what it felt like a hack being used to set the default language to that of the LXP using <code>control.exe intl.cpl</code> and some weird undocumented parameters.</p>
+<blockquote>
+<p><strong>Note:</strong> this is not a dig at the author. I am hugely grateful for the community contribution. It offers excellent insight with examples. At this point I&rsquo;m mostly expressing my frustration toward Microsoft for making the task seem like magic or voodoo, when it should be clear and logical.</p>
+</blockquote>
+<p>The post suggests there&rsquo;s PowerShell cmdlets you can use instead to do the same as the <code>control.exe</code> method but on a per-user basis instead. <a href=https://docs.microsoft.com/powershell/module/internationalcmdlets>You can find them here</a>.</p>
+<p>If you&rsquo;re interested in pursuing the LXP and <code>control.exe</code> method then it might useful for you to know all the <a href=https://docs.microsoft.com/windows/win32/intl/table-of-geographical-locations>Geo IDs</a> and <a href=https://docs.microsoft.com/windows-hardware/manufacture/desktop/available-language-packs-for-windows#language-packs>language / region IDs</a> too, which sadly were also not mentioned in the blog. These are needed for modifying the XML.</p>
+<p>Nonetheless the post gives you an example on how to install LXP during OSD and make it the default language for new users.</p>
+<p>Let me show you what a system looks like after OSD installing only LXP.</p>
+<p>To clarify what I did in my task sequence: I followed the process in the aforementioned Microsoft PFE blog by installing only LXP and kept the <code>Apply Windows settings</code> locale options to en-us and used the <code>control.exe intl.cpl</code> method to change the users' default language.</p>
+<p>When you see the screenshots of the TS at the end of this section, you may notice some minor differences e.g. local admin account instead of domain user account, and content-less scripts used instead of script files, etc. But generally, it&rsquo;s the same.</p>
+<p>This is what it gave me:</p>
+<p><a href=StoryBoard-LanguageExperiencePackUserExperience-beforestoreupdates-1.png><div class=image>
+<figure>
+<a href=StoryBoard-LanguageExperiencePackUserExperience-beforestoreupdates-1.png target=_blank>
+<img src=StoryBoard-LanguageExperiencePackUserExperience-beforestoreupdates-1.png alt=screenshot>
+</a>
+</figure>
+</div></a></p>
+<p>I&rsquo;ll list the notables:</p>
+<ul>
+<li>Start up, logon UI and first logon experience looks completely localized as fr-fr which is nice.</li>
+<li>Some parts of the Windows UI <strong>are not</strong> localized: start menu app shortcuts, the pre-populated text in the start menu search, and the text in the calendar pane.</li>
+<li>The Windows settings UI is partially localized. It may seem not localized in the image but in other areas of the settings I did see some translations, not many though. Also, you can see that the user can change back to &ldquo;English (United States)&rdquo; display language if they wanted to, which is nice.</li>
+<li>The InstallLanguage registry value remained unchanged as en-us! Score!</li>
+<li>PowerShell doesn&rsquo;t seem to be localized and <code>dism.exe</code> is a bit weird: some parts are English some parts are French.</li>
+<li>The Microsoft Store is not localized at all, but <strong>there are a boat load of updates&mldr;</strong></li>
+<li>Remember when I mentioned I&rsquo;ll get to it about noticing a difference in translations before and after Store updates? OK so here&rsquo;s the difference of the exact same system as before, but I installed those boat load of updates from the Store:<br>
+<a href=StoryBoard-LanguageExperiencePackUserExperience-afterstoreupdates.png><div class=image>
+<figure>
+<a href=StoryBoard-LanguageExperiencePackUserExperience-afterstoreupdates.png target=_blank>
+<img src=StoryBoard-LanguageExperiencePackUserExperience-afterstoreupdates.png alt=screenshot>
+</a>
+</figure>
+</div></a>Click me</li>
+<li>Start up, logon UI and first logon experience looks no different: still localized.</li>
+<li>Several improvements to the Windows UI in the start menu and calendar pane.</li>
+<li>More or less the same mix of translations in the Windows settings UI.</li>
+<li>As expected, no change to the InstallLanguage registry value.</li>
+<li>Same experience with PowerShell and <code>dism.exe</code>.</li>
+<li>The Microsoft Store is now completely localized.</li>
+</ul>
+<p>After all that, it&rsquo;s clear that LXPs live up to their expectation: partial translation.</p>
+<p>Two big bonuses with using LXPs instead of LPs are:</p>
+<ul>
+<li>No InstallLanguage issue</li>
+<li>No issue at any point with the start menu search or any other general functions of Windows that I noticed</li>
+</ul>
+<p>Looking at the previous image, if this level of localisation is good for you and your users, then 100% the LXP-only solution is for you. I totally recommend it and Microsoft do too. Microsoft want us to stop using LPs and start using LXPs.</p>
+<p>However there&rsquo;s a problem if your users don&rsquo;t know the language of your base / primary language from install media (en-us in this scenario). For that reason, I can&rsquo;t quite understand how or why Microsoft want us to stop using LP and use LXP exclusively.</p>
+<p>Then I thought, &ldquo;maybe I need to install LP <em>and</em> LXP, keep the <code>Apply Windows settings</code> locale option to match the language of the install media (en-us in this scenario, because we don&rsquo;t want the InstallLanguage issue) and then use the <code>control.exe intl.cpl</code> method to change the default user language. What happens then?&rdquo;</p>
+<p><a href=StoryBoard-LanguagePackAndLanguageExperiencePackUserExperience.png><div class=image>
+<figure>
+<a href=StoryBoard-LanguagePackAndLanguageExperiencePackUserExperience.png target=_blank>
+<img src=StoryBoard-LanguagePackAndLanguageExperiencePackUserExperience.png alt=screenshot>
+</a>
+</figure>
+</div></a>Click me
+Bingo. Everything is completely localized and we don&rsquo;t have the InstallLanguage issue! As a sanity check, I managed to IPU to 2004 using en-us media with no issues.
+My task sequence steps in lab for that looks like the below. As I mentioned earlier, I tweaked some of the steps for the group &ldquo;Set Default Language&rdquo; compared to the PFE blog post.</p>
+<p><a href=finalts-1.jpg><div class=image>
+<figure>
+<a href=finalts-1-1024x861.jpg target=_blank>
+<img src=finalts-1-1024x861.jpg alt=screenshot>
+</a>
+</figure>
+</div></a></p>
+<p><a href=finalts-2.jpg><div class=image>
+<figure>
+<a href=finalts-2-1024x861.jpg target=_blank>
+<img src=finalts-2-1024x861.jpg alt=screenshot>
+</a>
+</figure>
+</div></a>
+<a href=finalts-3.jpg><div class=image>
+<figure>
+<a href=finalts-3-1024x862.jpg target=_blank>
+<img src=finalts-3-1024x862.jpg alt=screenshot>
+</a>
+</figure>
+</div></a>
+<a href=finalts-4.jpg><div class=image>
+<figure>
+<a href=finalts-4-1024x861.jpg target=_blank>
+<img src=finalts-4-1024x861.jpg alt=screenshot>
+</a>
+</figure>
+</div></a>
+<a href=finalts-5.jpg><div class=image>
+<figure>
+<a href=finalts-5-1024x861.jpg target=_blank>
+<img src=finalts-5-1024x861.jpg alt=screenshot>
+</a>
+</figure>
+</div></a>
+<a href=finalts-6.jpg><div class=image>
+<figure>
+<a href=finalts-6.jpg target=_blank>
+<img src=finalts-6.jpg alt=screenshot>
+</a>
+</figure>
+</div></a>
+<a href=finalts-7.jpg><div class=image>
+<figure>
+<a href=finalts-7.jpg target=_blank>
+<img src=finalts-7.jpg alt=screenshot>
+</a>
+</figure>
+</div></a>
+<a href=finalts-8.jpg><div class=image>
+<figure>
+<a href=finalts-8-1024x861.jpg target=_blank>
+<img src=finalts-8-1024x861.jpg alt=screenshot>
+</a>
+</figure>
+</div></a></p>
+<p>Make sure that you set the local options of the <code>Apply Windows Settings</code> step to match that of the install media (en-us in this case). Equally the same is true if you use any of the <a href=https://docs.microsoft.com/mem/configmgr/osd/understand/task-sequence-steps#BKMK_ApplyWindowsSettings>OSDWindowsSetings* task sequence variables</a>.</p>
+<p>The only drawback with this approach is that because we&rsquo;ve installed a LP, we still need to reinstall the latest cumulative update because the start menu search is broken until you do that.</p>
+<p>Again, if you run software updates step during OSD in your task sequence then this isn&rsquo;t going to be a big deal for you. I think this is a reasonable compromise if we get a fully localized system that doesn&rsquo;t cause us problems down the line when it comes to upgrading Windows 10. It also keeps the content capacity requirements low, since there&rsquo;s no need for an ISO for each language we want to support in our task sequence and therefore on your Distribution Points.</p>
+<p>However if build time is important to you, or you just don&rsquo;t/can&rsquo;t install software updates during OSD, then your only option is offline servicing. This enables you to inject all languages items (LP, LXP and FoD, which we will get on to next) directly in to the WIM. Once complete, you load the new Operating System Image into ConfigMgr.</p>
+<p>Something like <a href=https://twitter.com/seguraosd>David Segura</a>&rsquo;s fantastic <a href=https://osdbuilder.osdeploy.com/>OSDBuilder</a> is a great example of a community tool for servicing WIMs offline. His posts on building a <a href=https://osdbuilder.osdeploy.com/docs/advanced/multilang-baseline>Windows 10 MultiLang baseline with OSDBuilder</a> highlights the importance of not applying updates to your WIM before you install the LPs or LXPs. I recommend using the RTM version of any Windows 10 you&rsquo;re looking to service.</p>
+<hr>
+<h4 id=update-2020-07-29-ive-been-able-to-reproduce-a-reported-issue-where-if-we-install-en-gb-lp--lxp-over-en-us-as-base-language-using-the-guidelines-in-this-blog-post-you-will-see-strange-things-immediately-after-osd>Update 2020-07-29 I&rsquo;ve been able to reproduce a reported issue where if we install en-gb (LP + LXP) over en-us (as base language) using the guidelines in this blog post. You will see strange things immediately after OSD:</h4>
+<p><a href=2020-07-29_21-37-56.jpg><div class=image>
+<figure>
+<a href=2020-07-29_21-37-56-1024x870.jpg target=_blank>
+<img src=2020-07-29_21-37-56-1024x870.jpg alt=screenshot>
+</a>
+</figure>
+</div></a></p>
+<p>For me, this was cleared up after I prompted an update for the en-gb LXP from the Microsoft Store. Immediately too, no reboot necessary. This shouldn&rsquo;t be too much of a surprise because I have detailed this quirk in the post already. LXPs are serviced via the store and odd translation issues were resolved after applying updates for the LXP(s) from the Store.</p>
+<p>However this is a little different because it&rsquo;s clearly broken.</p>
+<p>Perhaps this might be an issue with the RTM version of the en-gb LXP in the ISO from MSDN/Visual Studio downloads. None the less it&rsquo;s addressed in updates from the Store.</p>
+<p>This might be a good opportunity to at least explore the idea of trying to export an updated LXP from Microsoft Store for Business. I haven&rsquo;t tested this.
+Failing that, maybe you would be happy with force installing Store updates at the end of OSD using this tidbit <a href=https://www.reddit.com/r/PowerShell/comments/94ikpc/any_way_to_update_windows_store_apps_via/>I found on Reddit</a>:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -630,205 +371,96 @@
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Get-CimInstance</span> -Namespace <span style=color:#d14>&#34;Rootcimv2mdmdmmap&#34;</span> -ClassName <span style=color:#d14>&#34;MDM_EnterpriseModernAppManagement_AppManagement01&#34;</span> | <span style=color:#0086b3>Invoke-CimMethod</span> -MethodName UpdateScanMethod
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>              &lt;p&gt;
-              &lt;/p&gt;
-            &lt;/div&gt;&lt;/section&gt; 
-            
-            &lt;hr class=&quot;wp-block-separator&quot; /&gt;
-            
-            &lt;p&gt;
-              OK, we now have a task sequence which resolves most of the biggest issues with Windows 10 multi language OSD. What else should you be interested about? FoDs!
-            &lt;/p&gt;
-</code></pre>
+</div><hr>
+<p>OK, we now have a task sequence which resolves most of the biggest issues with Windows 10 multi language OSD. What else should you be interested about? FoDs!</p>
 <h3 id=features-on-demand>Features on Demand</h3>
-<pre><code>            &lt;p&gt;
-              FoDs complete the user experience for languages on Windows 10. They give users Windows 10 features such as handwriting recognition, speech recognition, fonts, OCR and text to speech (and many more) in their desired language.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              [Following the order of installation advice](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/features-on-demand-language-fod), remember FoDs must be installed after a LP.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Like LPs and LXPs, you can grab an ISO of FoDs for Windows 10 from VLSC or your MSDN / Visual Studio Subscription download page.
-            &lt;/p&gt;
-            
-            &lt;div class=&quot;wp-block-image&quot;&gt;
-              &lt;figure class=&quot;aligncenter size-large&quot;&gt;[![](foddownloadmsdn-1-1024x294.jpg)](foddownloadmsdn-1-scaled.jpg)&lt;/figure&gt;
-            &lt;/div&gt;
-            
-            &lt;p&gt;
-              Part 1 is what you want, Part 2 contains content for retail store demo units.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              It's worth pointing out that Microsoft don't offer FoDs for every language and weirdly provide a spreadsheet detailing which FoDs you should use for your desired target language. [Here's the link to the page](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/features-on-demand-language-fod) which links to the spreadsheet, and [here's the direct link to the spreadsheet](https://download.microsoft.com/download/7/6/0/7600F9DC-C296-4CF8-B92A-2D85BAFBD5D2/Windows-10-1809-FOD-to-LP-Mapping-Table.xlsx) which works at the time of writing this.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              FoDs come in two types: with satellite packages and without satellite packages.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              **FoDs with satellite packages: **come with language and architecture elements in independent packages.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              **FoDs without satellite packages:** come with language and architecture elements bundled into one package.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Looking at the below screenshot which are the contents of the Part 1 FoD ISO, you can see how satellite and non-satellite FoDs differ by looking at them on disk based on naming convention and file size.
-            &lt;/p&gt;
-            
-            &lt;div class=&quot;wp-block-image&quot;&gt;
-              &lt;figure class=&quot;aligncenter size-large&quot;&gt;[![](fodsondisk-1024x272.jpg)](fodsondisk.jpg)&lt;figcaption&gt;Showing satellite and non-satellite FoD differences on disk&lt;/figcaption&gt;&lt;/figure&gt;
-            &lt;/div&gt;
-            
-            &lt;p&gt;
-              After OSD using the method I shared last (with LP + LXP but keeping &lt;code&gt;Apply Windows settings&lt;/code&gt; the same as the install media), even the most &quot;basic&quot; language-focused FoDs are not installed.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              The basic language-focused FoDs I'm referring to are the following:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                Microsoft-Windows-LanguageFeatures-Basic-*
-              &lt;/li&gt;
-              &lt;li&gt;
-                Microsoft-Windows-LanguageFeatures-Handwriting-*
-              &lt;/li&gt;
-              &lt;li&gt;
-                Microsoft-Windows-LanguageFeatures-OCR-*
-              &lt;/li&gt;
-              &lt;li&gt;
-                Microsoft-Windows-LanguageFeatures-Speech-*
-              &lt;/li&gt;
-              &lt;li&gt;
-                Microsoft-Windows-LanguageFeatures-TextToSpeech-*
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              I recommend you at least install these FoDs in your task sequence too.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              You'll quickly get fed up with the process of downloading the ISO and grabbing all the FoDs you need for each new version of Windows 10, though. You've got to walk through a dozen folders, twice, for both LXP and FoD ISOs.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              To help with that, I wrote some functions included in the [PSCMWin10Language](https://github.com/codaamok/PSCMWin10Language) module.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              For more information on how to use these functions to build out LP, LXP and FoD repositories, [check out this blog post I also wrote](https://sysmansquad.com/2020/06/08/deploy-languages-via-software-center-with-pscmwin10language/).
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                &lt;code&gt;New-LPRepository&lt;/code&gt;&lt;ul&gt;
-                  &lt;li&gt;
-                    Copy out only the Language Packs you want from the Language Pack ISO
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-              
-              &lt;li&gt;
-                &lt;code&gt;New-LXPRepository&lt;/code&gt;&lt;ul&gt;
-                  &lt;li&gt;
-                    Copy out only the folders of the languages you want from the Language Experience Pack ISO
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-              
-              &lt;li&gt;
-                &lt;code&gt;New-FoDLanguageFeaturesRepository&lt;/code&gt;&lt;ul&gt;
-                  &lt;li&gt;
-                    CopyoutonlythelanguagesyouwantoftheFeaturesonDemandLanguageFeaturesBasic,Handwriting,OCR,SpeechandTextToSpeechfromFeaturesonDemandISO
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              In my task sequence, I added the install FoD step to look like this:
-            &lt;/p&gt;
-            
-            &lt;div class=&quot;wp-block-image&quot;&gt;
-              &lt;figure class=&quot;aligncenter size-medium&quot;&gt;[![](finalts-fodstep.jpg)](finalts-fodstep.jpg)&lt;figcaption&gt;Example step to install FoD&lt;/figcaption&gt;&lt;/figure&gt;
-            &lt;/div&gt;
-</code></pre>
+<p>FoDs complete the user experience for languages on Windows 10. They give users Windows 10 features such as handwriting recognition, speech recognition, fonts, OCR and text to speech (and many more) in their desired language.
+<a href=https://docs.microsoft.com/windows-hardware/manufacture/desktop/features-on-demand-language-fod>Following the order of installation advice</a>, remember FoDs must be installed after a LP.
+Like LPs and LXPs, you can grab an ISO of FoDs for Windows 10 from VLSC or your MSDN / Visual Studio Subscription download page.</p>
+<p><a href=foddownloadmsdn-1-scaled.jpg><div class=image>
+<figure>
+<a href=foddownloadmsdn-1-1024x294.jpg target=_blank>
+<img src=foddownloadmsdn-1-1024x294.jpg alt=screenshot>
+</a>
+</figure>
+</div></a>
+Part 1 is what you want, Part 2 contains content for retail store demo units.
+It&rsquo;s worth pointing out that Microsoft don&rsquo;t offer FoDs for every language and weirdly provide a spreadsheet detailing which FoDs you should use for your desired target language. <a href=https://docs.microsoft.com/windows-hardware/manufacture/desktop/features-on-demand-language-fod>Here&rsquo;s the link to the page</a> which links to the spreadsheet, and <a href=https://download.microsoft.com/download/7/6/0/7600F9DC-C296-4CF8-B92A-2D85BAFBD5D2/Windows-10-1809-FOD-to-LP-Mapping-Table.xlsx>here&rsquo;s the direct link to the spreadsheet</a> which works at the time of writing this.</p>
+<p>FoDs come in two types: with satellite packages and without satellite packages.</p>
+<ul>
+<li><strong>FoDs with satellite packages:</strong> come with language and architecture elements in independent packages.</li>
+<li><strong>FoDs without satellite packages:</strong> come with language and architecture elements bundled into one package.</li>
+</ul>
+<p>Looking at the below screenshot which are the contents of the Part 1 FoD ISO, you can see how satellite and non-satellite FoDs differ by looking at them on disk based on naming convention and file size.</p>
+<p><a href=fodsondisk.jpg><div class=image>
+<figure>
+<a href=fodsondisk-1024x272.jpg target=_blank>
+<img src=fodsondisk-1024x272.jpg alt=screenshot>
+</a>
+</figure>
+</div></a>Showing satellite and non-satellite FoD differences on disk
+After OSD using the method I shared last (with LP + LXP but keeping <code>Apply Windows settings</code> the same as the install media), even the most &ldquo;basic&rdquo; language-focused FoDs are not installed.
+The basic language-focused FoDs I&rsquo;m referring to are the following:</p>
+<ul>
+<li><code>Microsoft-Windows-LanguageFeatures-Basic-*</code></li>
+<li><code>Microsoft-Windows-LanguageFeatures-Handwriting-*</code></li>
+<li><code>Microsoft-Windows-LanguageFeatures-OCR-*</code></li>
+<li><code>Microsoft-Windows-LanguageFeatures-Speech-*</code></li>
+<li><code>Microsoft-Windows-LanguageFeatures-TextToSpeech-*</code></li>
+</ul>
+<p>I recommend you at least install these FoDs in your task sequence too.
+You&rsquo;ll quickly get fed up with the process of downloading the ISO and grabbing all the FoDs you need for each new version of Windows 10, though. You&rsquo;ve got to walk through a dozen folders, twice, for both LXP and FoD ISOs.
+To help with that, I wrote some functions included in the <a href=https://github.com/codaamok/PSCMWin10Language>PSCMWin10Language</a> module.
+For more information on how to use these functions to build out LP, LXP and FoD repositories, <a href=https://sysmansquad.com/2020/06/08/deploy-languages-via-software-center-with-pscmwin10language/>check out this blog post I also wrote</a>.</p>
+<ul>
+<li><code>New-LPRepository</code></li>
+<li>Copy out only the Language Packs you want from the Language Pack ISO</li>
+<li><code>New-LXPRepository</code></li>
+<li>Copy out only the folders of the languages you want from the Language Experience Pack ISO</li>
+<li><code>New-FoDLanguageFeaturesRepository</code></li>
+<li>CopyoutonlythelanguagesyouwantoftheFeaturesonDemandLanguageFeaturesBasic,Handwriting,OCR,SpeechandTextToSpeechfromFeaturesonDemandISO</li>
+</ul>
+<p>In my task sequence, I added the install FoD step to look like this:</p>
+<p><a href=finalts-fodstep.jpg><div class=image>
+<figure>
+<a href=finalts-fodstep.jpg target=_blank>
+<img src=finalts-fodstep.jpg alt=screenshot>
+</a>
+</figure>
+</div></a>Example step to install FoD</p>
 <h2 id=make-new-languages-available-via-the-software-center>Make new languages available via the Software Center</h2>
-<pre><code>            &lt;p&gt;
-              Take the scenario where you have a built machine already given to a user, however some time later that user (or another user) wants to change language. What are your options to change localisation after OSD?
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              You've probably noticed a user can install their own languages from the Settings UI or from the Store. However in both cases these are just LXPs - the user will only have a partially localised experienced after applying this.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              [Check out this blog post I wrote](https://sysmansquad.com/2020/06/08/deploy-languages-via-software-center-with-pscmwin10language/), where I show you how to use my PowerShell module [PSCMWin10Language](https://github.com/codaamok/PSCMWin10Language) to create LP, LXP and FoD repositories and create ConfigMgr Applications using those repositories to deploy via the Software Center.
-            &lt;/p&gt;
-</code></pre>
+<p>Take the scenario where you have a built machine already given to a user, however some time later that user (or another user) wants to change language. What are your options to change localisation after OSD?
+You&rsquo;ve probably noticed a user can install their own languages from the Settings UI or from the Store. However in both cases these are just LXPs - the user will only have a partially localized experienced after applying this.
+<a href=https://sysmansquad.com/2020/06/08/deploy-languages-via-software-center-with-pscmwin10language/>Check out this blog post I wrote</a>, where I show you how to use my PowerShell module <a href=https://github.com/codaamok/PSCMWin10Language>PSCMWin10Language</a> to create LP, LXP and FoD repositories and create ConfigMgr Applications using those repositories to deploy via the Software Center.</p>
 <h2 id=windows-10-2004-improvements-to-languages>Windows 10 2004 improvements to languages</h2>
-<pre><code>            &lt;p&gt;
-              I keep bringing up this Ignite session but it truly was amazing.
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                [SolvingWindows10featureupdatesinamultilingualdeployment](https://www.youtube.com/watch?v=ZhL0AO8Cnig&amp;ab_channel=MicrosoftIgnite) - Sudhagar Thirumoolan ([@sudhagart](https://twitter.com/sudhagart?lang=en))
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              We're promised some very key changes in Windows 10 2004: being able to configure system and user preferred languages. This gives us the completely localised experience on Windows 10, without being fussy with what we populate in the unattend.xml answer file other than the target language. And most importantly, no more InstallLanguage issue!
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Timing is perfect because Michael Niehaus (former Principal Program Manager at Microsoft) [just posted an excellent blog](https://oofhours.com/2020/06/01/new-in-windows-10-2004-better-language-handling/) which discusses these new 2004 changes in more detail.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              The upshot of the new changes in 2004 is: you can use en-us installation media, apply (for example) fr-fr LP, and update &lt;code&gt;Apply Windows Settings&lt;/code&gt; to be French instead of English. Lo and behold, a French system with no more InstallLanguage issue!
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              This way, we can ditch the hacky &lt;code&gt;control.exe intl.cpl&lt;/code&gt; method to change default user language.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              I recommend you to still consider including LXPs in your task sequence, though, even if your target language is one of the 38 base languages. Just in case Microsoft push out some improved translations to UI.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              My only gripe, still, is that there's still a remark in there about pushing to use LXP instead of LP, which I still don't understand or agree with. However, nonetheless, this is a hugely welcomed improvement.
-            &lt;/p&gt;
-</code></pre>
+<p>I keep bringing up this Ignite session but it truly was amazing.</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=ZhL0AO8Cnig&ab_channel=MicrosoftIgnite">SolvingWindows10featureupdatesinamultilingualdeployment</a> - Sudhagar Thirumoolan (<a href="https://twitter.com/sudhagart?lang=en">@sudhagart</a>)</li>
+</ul>
+<p>We&rsquo;re promised some very key changes in Windows 10 2004: being able to configure system and user preferred languages. This gives us the completely localized experience on Windows 10, without being fussy with what we populate in the unattend.xml answer file other than the target language. And most importantly, no more InstallLanguage issue!</p>
+<p>Timing is perfect because Michael Niehaus (former Principal Program Manager at Microsoft) <a href=https://oofhours.com/2020/06/01/new-in-windows-10-2004-better-language-handling/>just posted an excellent blog</a> which discusses these new 2004 changes in more detail.</p>
+<p>The upshot of the new changes in 2004 is: you can use en-us installation media, apply (for example) fr-fr LP, and update <code>Apply Windows Settings</code> to be French instead of English. Lo and behold, a French system with no more InstallLanguage issue!
+This way, we can ditch the hacky <code>control.exe intl.cpl</code> method to change default user language.
+I recommend you to still consider including LXPs in your task sequence, though, even if your target language is one of the 38 base languages. Just in case Microsoft push out some improved translations to UI.</p>
+<p>My only gripe, still, is that there&rsquo;s still a remark in there about pushing to use LXP instead of LP, which I still don&rsquo;t understand or agree with. However, nonetheless, this is a hugely welcomed improvement.</p>
 <h2 id=closing-thoughts>Closing thoughts</h2>
-<pre><code>            &lt;p&gt;
-              As I've mentioned, Microsoft want us to get away from using LP and instead use LXP, but I don't see how that's possible. If the partial translation of LXPs is good enough for your users, then I totally agree with that recommendation. But I'd imagine most users might need a totally translated experience for Windows 10, in which case you still need the LP in there.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Before Microsoft announced the 2004 improvements to the system and user default languages, the tone of this blog post would have been very different. However they've finally delivered on a solution by listening to our pain, which is excellent.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              If you have any questions about any of this, don't hesitate to comment or ping me on Twitter ([@codaamok](https://twitter.com/codaamok)). Thanks for reading if you made it this far!
-            &lt;/p&gt;
-</code></pre>
+<p>As I&rsquo;ve mentioned, Microsoft want us to get away from using LP and instead use LXP, but I don&rsquo;t see how that&rsquo;s possible. If the partial translation of LXPs is good enough for your users, then I totally agree with that recommendation. But I&rsquo;d imagine most users might need a totally translated experience for Windows 10, in which case you still need the LP in there.
+Before Microsoft announced the 2004 improvements to the system and user default languages, the tone of this blog post would have been very different. However they&rsquo;ve finally delivered on a solution by listening to our pain, which is excellent.
+If you have any questions about any of this, don&rsquo;t hesitate to comment or ping me on Twitter (<a href=https://twitter.com/codaamok>@codaamok</a>). Thanks for reading if you made it this far!</p>
+<img src=/authors/acc/avatar.png alt="Photo of Adam Cook"><br>
+<strong>Adam Cook</strong>
+<em>Admin/Contributor</em>
+<div>
+<a href=https://twitter.com/codaamok><img src=/img/social/twitter.png></a>
+<a href=https://www.linkedin.com/in/adamcharlescook><img src=/img/social/linkedin.png></a>
+</div>
+<p>Adam loves technology and helping people, focusing on PowerShell, Azure, ConfigMgr, and Linux.</p>
+<hr>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
-</div>
-<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -840,7 +472,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
