@@ -91,7 +91,16 @@ What does all that mean?">
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>ARM (Azure Resource Manager) Templating for Windows Virtual Desktop</h1>
-<span class=post-date>May 26, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/jake>Jake Shackelford</a> / </span>
+<span class=post-date>May 26, 2020 </span>
+<span class=post-categories>/ Azure </span>
+<span class=post-categories>/ How-To </span>
+<span class=post-categories>/ Microsoft </span>
+<span class=post-categories>/ Powershell </span>
+<span class=post-categories>/ Scripting </span>
+<span class=post-categories>/ Windows </span>
+</p>
 </div>
 <div class=post-entry>
 <h3 id=why-would-i-use-arm-templating-isnt-the-default-image-gallery-fine>Why would I use ARM templating, isn&rsquo;t the default Image Gallery fine?</h3>
@@ -103,7 +112,7 @@ What does all that mean?">
 <p>Well I don&rsquo;t know about you - but creating a new azure VM, downloading the data files, installing the app, setting my customization options, and generalizing the image would take about 2-3 hours of manual work. So I did what any sane person would do, and figured out how to automate it!</p>
 <p>This automation process involves using an ARM Template that deploys a new VM, installs &ldquo;Horrible Java app&rdquo;, sets registry settings, and turns the VM into an image we can use for WVD deployments and then deletes the VM so all you&rsquo;re left with is a ready-to-go image that costs pennies to store!</p>
 <h3 id=lets-get-cracking>Lets get cracking</h3>
-<p>Before we start, I&rsquo;d like to suggest you do this in a lab and not production (like I did), and before you ask - this is, in essence, build and capture. Yes I know it&rsquo;s 2020 but sadly this is the reality we live in.</p>
+<p><strong>Before we start, I&rsquo;d like to suggest you do this in a lab and not production (like I did)</strong>, and before you ask - this is, in essence, build and capture. Yes I know it&rsquo;s 2020 but sadly this is the reality we live in.</p>
 <p>We are going to have to create a few <strong>resource groups</strong>, a <strong>key vault</strong>, and a <strong>storage account</strong> to store all our info. (I should mention this is going to be a good old step by step with explanations on things scattered throughout)</p>
 <h3 id=creating-our-resource-groups-key-vault-and-storage-account>Creating our resource groups, key vault, and storage account</h3>
 <p>We are going to open Powershell as an Admin and install the required module to connect to Azure. Then we&rsquo;ll create a few resource groups to store our images, our secure passwords in a keyvault, and a storage account for our powershell scripts and other items we may need. Feel free to change the names and location as you see fit (Remember to keep location the same throughout).</p>
@@ -224,7 +233,7 @@ What does all that mean?">
 ****<div class=image>
 <figure>
 <a href=msedge_uFT7VQv2mm.png target=_blank>
-<img src=msedge_uFT7VQv2mm.png alt>
+<img src=msedge_uFT7VQv2mm.png alt=screenshot>
 </a>
 </figure>
 </div></li>
@@ -250,21 +259,21 @@ What does all that mean?">
 <li>Select <strong>Add</strong><div class=image>
 <figure>
 <a href=msedge_MCoWS09HuE.png target=_blank>
-<img src=msedge_MCoWS09HuE.png alt>
+<img src=msedge_MCoWS09HuE.png alt=screenshot>
 </a>
 </figure>
 </div></li>
 <li>Type in &ldquo;<strong>Windows 10</strong>&rdquo; and select <strong>Microsoft Windows 10 + Office 365 ProPlus</strong><div class=image>
 <figure>
 <a href=msedge_sl8U6dkdIm.png target=_blank>
-<img src=msedge_sl8U6dkdIm.png alt>
+<img src=msedge_sl8U6dkdIm.png alt=screenshot>
 </a>
 </figure>
 </div></li>
 <li>Select <strong>Create</strong><div class=image>
 <figure>
 <a href=msedge_CxaaJwZiAP.png target=_blank>
-<img src=msedge_CxaaJwZiAP.png alt>
+<img src=msedge_CxaaJwZiAP.png alt=screenshot>
 </a>
 </figure>
 </div></li>
@@ -282,7 +291,7 @@ What does all that mean?">
 <li>Select <strong>Download a template for automation</strong><div class=image>
 <figure>
 <a href=msedge_TyKXYqsKI6.png target=_blank>
-<img src=msedge_TyKXYqsKI6.png alt>
+<img src=msedge_TyKXYqsKI6.png alt=screenshot>
 </a>
 </figure>
 </div></li>
@@ -294,9 +303,9 @@ What does all that mean?">
 <ol>
 <li>Open both parameters.json and template.json</li>
 <li>In parameters.json change the &ldquo;adminPassword&rdquo; from<br>
-&ldquo;adminPassword&rdquo;:{&ldquo;value&rdquo;:null}<br>
+<code>"adminPassword":{"value":null}</code><br>
 to<br>
-&ldquo;adminPassword&rdquo;: {br>&ldquo;reference&rdquo;: {br>&ldquo;keyVault&rdquo;: {br>&ldquo;id&rdquo;: &ldquo;THE KEYVAULTID ID YOU COPIED EARLIER"br>},br>&ldquo;secretName&rdquo;: &ldquo;vmAdminPassword"br>}</li>
+<code>"adminPassword": {br>"reference": {br>"keyVault": {br>"id": "THE KEYVAULTID ID YOU COPIED EARLIER"br>},br>"secretName": "vmAdminPassword"br>}</code></li>
 <li>Change the id to the KeyVaultID you copied earlier</li>
 <li>The rest of parameters.json can be left as is, you can override these values later in our execution script if desired</li>
 <li>Open template.json</li>
@@ -362,7 +371,7 @@ add the following after (Make sure it&rsquo;s after the bracket)</li>
 <p>I want you to take a deep breathe as you&rsquo;ve done a lot so far.<div class=image>
 <figure>
 <a href=giphy.gif target=_blank>
-<img src=giphy.gif alt>
+<img src=giphy.gif alt=screenshot>
 </a>
 </figure>
 </div></p>
@@ -429,9 +438,17 @@ add the following after (Make sure it&rsquo;s after the bracket)</li>
 </code></pre></td></tr></table>
 </div>
 </div><p>Resources:<br>
-<a href=https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-tutorial-use-key-vault>https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-tutorial-use-key-vault</a><br>
-<a href="https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-powershell">https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-powershell</a><br>
-<a href=https://docs.microsoft.com/en-us/fslogix/install-ht>https://docs.microsoft.com/en-us/fslogix/install-ht</a></p>
+<a href=https://docs.microsoft.com/azure/azure-resource-manager/templates/template-tutorial-use-key-vault>https://docs.microsoft.com/azure/azure-resource-manager/templates/template-tutorial-use-key-vault</a><br>
+<a href="https://docs.microsoft.com/azure/storage/common/storage-account-create?tabs=azure-powershell">https://docs.microsoft.com/azure/storage/common/storage-account-create?tabs=azure-powershell</a><br>
+<a href=https://docs.microsoft.com/fslogix/install-ht>https://docs.microsoft.com/fslogix/install-ht</a></p>
+<img src=/authors/jake/avatar.png alt="Photo of Jake Shackelford"><br>
+<strong>Jake Shackelford</strong>
+<em>Admin/Contributor</em>
+<div>
+<a href=https://twitter.com/shackelfjaco><img src=/img/social/twitter.png></a>
+</div>
+<p>Jake is one of our Admins but also our inaugural author and the main reason SysManSquad exists today.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -443,7 +460,7 @@ add the following after (Make sure it&rsquo;s after the bracket)</li>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

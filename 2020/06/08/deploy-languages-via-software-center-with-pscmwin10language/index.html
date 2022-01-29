@@ -21,7 +21,9 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Deploy languages via Software Center with PSCMWin10Language">
-<meta name=twitter:description content="<p> This post complements [my other post](https://sysmansquad.com/2020/06/02/language-packs,-language-experience-packs,-language-interface-packs-what?!), where I walk-through the differences of LP, LIP, LXP and FoD. </p> <p> Here I will show you how to use a PowerShell module I wrote, [PSCMWin10Languages](https://github.com/codaamok/PSCMWin10Language), to create Microsoft Endpoint Manager Configuration Manager Applications for each language you want to deploy via the Software Center. </p> <p> These Applications are not for OSD. It changes the language only for the user who installs the Application via the Software Center.">
+<meta name=twitter:description content="This post complements my other post, where I walk-through the differences of LP, LIP, LXP and FoD.
+Here I will show you how to use a PowerShell module I wrote, PSCMWin10Languages, to create Microsoft Endpoint Manager Configuration Manager Applications for each language you want to deploy via the Software Center.
+These Applications are not for OSD. It changes the language only for the user who installs the Application via the Software Center.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -90,28 +92,21 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Deploy languages via Software Center with PSCMWin10Language</h1>
-<span class=post-date>June 8, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/acc>Adam Cook</a> / </span>
+<span class=post-date>June 8, 2020 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ MECM/MEMCM/SCCM </span>
+<span class=post-categories>/ Powershell </span>
+<span class=post-categories>/ Scripting </span>
+</p>
 </div>
 <div class=post-entry>
-<pre><code>          &lt;p&gt;
-            This post complements [my other post](https://sysmansquad.com/2020/06/02/language-packs,-language-experience-packs,-language-interface-packs-what?!), where I walk-through the differences of LP, LIP, LXP and FoD.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            Here I will show you how to use a PowerShell module I wrote, [PSCMWin10Languages](https://github.com/codaamok/PSCMWin10Language), to create Microsoft Endpoint Manager Configuration Manager Applications for each language you want to deploy via the Software Center.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            These Applications are not for OSD. It changes the language only for the user who installs the Application via the Software Center. They will not work for OSD via task sequence.
-          &lt;/p&gt;
-          
-          ## Install the module
-          
-          
-          &lt;p&gt;
-            The module can be found on [GitHub](https://github.com/codaamok/PSCMWin10Language) or the [PowerShell Gallery](https://www.powershellgallery.com/packages/PSCMWin10Language/0.0.1). You can install it like so:
-          &lt;/p&gt;
-</code></pre>
+<p>This post complements <a href=https://sysmansquad.com/2020/06/02/language-packs,-language-experience-packs,-language-interface-packs-what?!>my other post</a>, where I walk-through the differences of LP, LIP, LXP and FoD.</p>
+<p>Here I will show you how to use a PowerShell module I wrote, <a href=https://github.com/codaamok/PSCMWin10Language>PSCMWin10Languages</a>, to create Microsoft Endpoint Manager Configuration Manager Applications for each language you want to deploy via the Software Center.</p>
+<p>These Applications are not for OSD. It changes the language only for the user who installs the Application via the Software Center. They will not work for OSD via task sequence.</p>
+<h2 id=install-the-module>Install the module</h2>
+<p>The module can be found on <a href=https://github.com/codaamok/PSCMWin10Language>GitHub</a> or the <a href=https://www.powershellgallery.com/packages/PSCMWin10Language/0.0.1>PowerShell Gallery</a>. You can install it like so:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -120,10 +115,7 @@
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Install-Module</span> <span style=color:#d14>&#34;PSCMWin10Language&#34;</span> -Scope CurrentUser
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>          &lt;p&gt;
-            Check out what functions are given to you:
-          &lt;/p&gt;
-</code></pre>
+</div><p>Check out what functions are given to you:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -134,41 +126,17 @@
 <span style=color:#0086b3>Get-Command</span> -Module <span style=color:#d14>&#34;PSCMWin10Language&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>          ## Create LP, LXP and FoD repositories
-          
-          
-          &lt;p&gt;
-            We need to form the source folders for each of our Applications (in other words, for each language we want to support). The source folders will contain the needed LP, LXP and FoD files for each language - a mix of .cab and .appx files.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            Using the below functions, we can create the need folders and populate them with the files by extracting them from the ISOs downloaded from VLSC / Visual Studio subscription download portal (MSDN).
-          &lt;/p&gt;
-          
-          &lt;ul&gt;
-            &lt;li&gt;
-              New-LPRepository
-            &lt;/li&gt;
-            &lt;li&gt;
-              New-LXPRepository
-            &lt;/li&gt;
-            &lt;li&gt;
-              New-FoDLanguageFeaturesRepository
-            &lt;/li&gt;
-          &lt;/ul&gt;
-          
-          &lt;p&gt;
-            **Note:** New-FoDLanguageFeaturesRepository only extracts &quot;LanguageFeature&quot; FoDs. If you want to include more FoDs than these, you'll have to arrange something yourself.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            If you want to support fewer than a handful of languages, then this process is typically just about OK being completed manually. However, you will have to repeat this for each new version of Windows 10 which will quickly become a drag. Especially if you want to support many more languages. This is what inspired me to write these functions.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            Let's assume I want to support languages French and German. Our end goal is to create a folder structure that looks something like this:
-          &lt;/p&gt;
-</code></pre>
+</div><h2 id=create-lp-lxp-and-fod-repositories>Create LP, LXP and FoD repositories</h2>
+<p>We need to form the source folders for each of our Applications (in other words, for each language we want to support). The source folders will contain the needed LP, LXP and FoD files for each language - a mix of .cab and .appx files.</p>
+<p>Using the below functions, we can create the need folders and populate them with the files by extracting them from the ISOs downloaded from VLSC / Visual Studio subscription download portal (MSDN).</p>
+<p>*New-LPRepository
+*New-LXPRepository
+*New-FoDLanguageFeaturesRepository</p>
+<blockquote>
+<p><strong>Note:</strong> New-FoDLanguageFeaturesRepository only extracts &ldquo;LanguageFeature&rdquo; FoDs. If you want to include more FoDs than these, you&rsquo;ll have to arrange something yourself.</p>
+</blockquote>
+<p>If you want to support fewer than a handful of languages, then this process is typically just about OK being completed manually. However, you will have to repeat this for each new version of Windows 10 which will quickly become a drag. Especially if you want to support many more languages. This is what inspired me to write these functions.</p>
+<p>Let&rsquo;s assume I want to support languages French and German. Our end goal is to create a folder structure that looks something like this:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
@@ -195,23 +163,12 @@
     +---LXP
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>          &lt;p&gt;
-            Start off by going to VLSC or MSDN and downloading the following ISOs for your target Windows 10 version:
-          &lt;/p&gt;
-          
-          &lt;ul&gt;
-            &lt;li&gt;
-              Language Pack
-            &lt;/li&gt;
-            &lt;li&gt;
-              Features on Demand (part 1)
-            &lt;/li&gt;
-          &lt;/ul&gt;
-          
-          &lt;p&gt;
-            Once downloaded, mount them all and go back to the PowerShell prompt where we imported PSCMWin10Language, and execute the following (replace the appropriate drive letters):
-          &lt;/p&gt;
-</code></pre>
+</div><p>Start off by going to VLSC or MSDN and downloading the following ISOs for your target Windows 10 version:</p>
+<ul>
+<li>Language Pack</li>
+<li>Features on Demand (part 1)</li>
+</ul>
+<p>Once downloaded, mount them all and go back to the PowerShell prompt where we imported PSCMWin10Language, and execute the following (replace the appropriate drive letters):</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -224,13 +181,8 @@
 <span style=color:#0086b3>New-FoDLanguageFeaturesRepository</span> -Language <span style=color:#d14>&#34;fr-FR&#34;</span>, <span style=color:#d14>&#34;de-DE&#34;</span> -SourcePath <span style=color:#d14>&#34;J:\&#34;</span> -TargetPath <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\1909-Languages&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>          ## Create the Applications
-          
-          
-          &lt;p&gt;
-            With the LP, LXP and FoD repositories set up, we're now ready to create our ConfigMgr Application(s)
-          &lt;/p&gt;
-</code></pre>
+</div><h2 id=create-the-applications>Create the Applications</h2>
+<p>With the LP, LXP and FoD repositories set up, we&rsquo;re now ready to create our ConfigMgr Application(s)</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -239,59 +191,28 @@
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>New-CMLanguagePackApplication</span> -SiteServer <span style=color:#d14>&#34;cm.contoso.com&#34;</span> -SiteCode <span style=color:#d14>&#34;P01&#34;</span> -SourcePath <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\1909-Languages&#34;</span> -Languages <span style=color:#d14>&#34;fr-fr&#34;</span>, <span style=color:#d14>&#34;de-de&#34;</span> -WindowsVersion @{ <span style=color:#d14>&#34;Version&#34;</span> = <span style=color:#d14>&#34;1909&#34;</span>; <span style=color:#d14>&#34;Build&#34;</span> = <span style=color:#d14>&#34;18363&#34;</span> } -GlobalConditionName <span style=color:#d14>&#34;Operating System build&#34;</span> -CreateAppIfMissing -CreateGlobalConditionIfMissing
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>          &lt;p&gt;
-            There's quite a few parameters used here so let me explain them:
-          &lt;/p&gt;
-          
-          &lt;ul&gt;
-            &lt;li&gt;
-              Site server and site code of your hierarchy, standard stuff
-            &lt;/li&gt;
-            &lt;li&gt;
-              &lt;code&gt;-SourcePath&lt;/code&gt; of where we exported all our languages' LP, LXP and FoDs to
-            &lt;/li&gt;
-            &lt;li&gt;
-              &lt;code&gt;-Languages&lt;/code&gt; an array of Language tags of which we want to create Applications for. The elements of this array will correlate with the folders directly beneath the given -SouthPath
-            &lt;/li&gt;
-            &lt;li&gt;
-              &lt;code&gt;-WindowsVersion&lt;/code&gt; a hashtable which denoates the version and build number of Windows 10 you're deploying language items for. Must contain two keys: &quot;Version&quot; and &quot;Build&quot;.
-            &lt;/li&gt;
-            &lt;li&gt;
-              &lt;code&gt;-GlobalConditionName&lt;/code&gt; name of the Global Condition which queries the WMI class Win32_OperatingSystem for property Build. If a Global Condition with the given name does not exist, a terminating error is thrown. If it does exist, but it does not query the Win32_OperatingSystem class for the Build property, a terminating error is thrown.
-            &lt;/li&gt;
-            &lt;li&gt;
-              Lastly, the two switches &lt;code&gt;-CreateAppIfMissing&lt;/code&gt; and &lt;code&gt;-CreateGlobalConditionIfMissing&lt;/code&gt; does pretty much it says on the tin; creates those items if they're missing.
-            &lt;/li&gt;
-          &lt;/ul&gt;
-          
-          &lt;p&gt;
-            This is what the end result looks like:
-          &lt;/p&gt;
-          
-          &lt;div class=&quot;wp-block-image&quot;&gt;
-            &lt;figure class=&quot;aligncenter size-large&quot;&gt;[![](LPSoftwareCenter-EndResult-2-new-1024x658.jpg)](LPSoftwareCenter-EndResult-2-new.jpg)&lt;/figure&gt;
-          &lt;/div&gt;
-          
-          &lt;p&gt;
-            There are two deployment types: one which runs as user and the other which runs as system. The system deployment type installs LP, LXP and FoD. Whereas the user deployment type registers the LXP, configures the user's language and prompts a reboot is required by returning exit code 3010.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            The user deployment type depends on the system deployment type.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            Poking around, you'll notice the requirements for all deployment types are that of what you used in the &lt;code&gt;-WindowsVersion&lt;/code&gt; parameter.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            When you're ready to support another OS, or another language, just repeat these instructions with that context in mind and you're good to go!
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            For example, I used the same process again to create deployment types on the existing Applications for Windows 10 2004:
-          &lt;/p&gt;
-</code></pre>
+</div><p>There&rsquo;s quite a few parameters used here so let me explain them:</p>
+<ul>
+<li>Site server and site code of your hierarchy, standard stuff</li>
+<li><code>-SourcePath</code> of where we exported all our languages' LP, LXP and FoDs to</li>
+<li><code>-Languages</code> an array of Language tags of which we want to create Applications for. The elements of this array will correlate with the folders directly beneath the given -SouthPath</li>
+<li><code>-WindowsVersion</code> a hashtable which denoates the version and build number of Windows 10 you&rsquo;re deploying language items for. Must contain two keys: &ldquo;Version&rdquo; and &ldquo;Build&rdquo;.</li>
+<li><code>-GlobalConditionName</code> name of the Global Condition which queries the WMI class Win32_OperatingSystem for property Build. If a Global Condition with the given name does not exist, a terminating error is thrown. If it does exist, but it does not query the Win32_OperatingSystem class for the Build property, a terminating error is thrown.</li>
+<li>Lastly, the two switches <code>-CreateAppIfMissing</code> and <code>-CreateGlobalConditionIfMissing</code> does pretty much it says on the tin; creates those items if they&rsquo;re missing.</li>
+</ul>
+<p>This is what the end result looks like:</p>
+<p><a href=LPSoftwareCenter-EndResult-2-new.jpg><div class=image>
+<figure>
+<a href=LPSoftwareCenter-EndResult-2-new-1024x658.jpg target=_blank>
+<img src=LPSoftwareCenter-EndResult-2-new-1024x658.jpg alt=screenshot>
+</a>
+</figure>
+</div></a></p>
+<p>There are two deployment types: one which runs as user and the other which runs as system. The system deployment type installs LP, LXP and FoD. Whereas the user deployment type registers the LXP, configures the user&rsquo;s language and prompts a reboot is required by returning exit code 3010.</p>
+<p>The user deployment type depends on the system deployment type.</p>
+<p>Poking around, you&rsquo;ll notice the requirements for all deployment types are that of what you used in the <code>-WindowsVersion</code> parameter.</p>
+<p>When you&rsquo;re ready to support another OS, or another language, just repeat these instructions with that context in mind and you&rsquo;re good to go!</p>
+<p>For example, I used the same process again to create deployment types on the existing Applications for Windows 10 2004:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -306,22 +227,29 @@
 <span style=color:#0086b3>New-CMLanguagePackApplication</span> -SiteServer <span style=color:#d14>&#34;cm.contoso.com&#34;</span> -SiteCode <span style=color:#d14>&#34;P01&#34;</span> -SourcePath <span style=color:#d14>&#34;\\sccm.acc.local\OSD\Source\2004-Languages&#34;</span> -Languages <span style=color:#d14>&#34;fr-fr&#34;</span>, <span style=color:#d14>&#34;de-de&#34;</span> -WindowsVersion @{ <span style=color:#d14>&#34;Version&#34;</span> = <span style=color:#d14>&#34;2004&#34;</span>; <span style=color:#d14>&#34;Build&#34;</span> = <span style=color:#d14>&#34;19041&#34;</span> } -GlobalConditionName <span style=color:#d14>&#34;Operating System build&#34;</span> -CreateAppIfMissing -CreateGlobalConditionIfMissing
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>          &lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-          
-          [![](LPSoftwareCenter-EndResult-3-new-1024x658.jpg)](LPSoftwareCenter-EndResult-3-new.jpg)&lt;/figure&gt; 
-</code></pre>
+</div><p><a href=LPSoftwareCenter-EndResult-3-new.jpg><div class=image>
+<figure>
+<a href=LPSoftwareCenter-EndResult-3-new-1024x658.jpg target=_blank>
+<img src=LPSoftwareCenter-EndResult-3-new-1024x658.jpg alt=screenshot>
+</a>
+</figure>
+</div></a></p>
 <h2 id=support>Support</h2>
-<pre><code>          &lt;p&gt;
-            If you have any issues with the module, please do open an issue on the [PSCMWin10Language GitHub repository](https://github.com/codaamok/PSCMWin10Language)!
-          &lt;/p&gt;
-</code></pre>
+<p>If you have any issues with the module, please do open an issue on the <a href=https://github.com/codaamok/PSCMWin10Language>PSCMWin10Language GitHub repository</a>!</p>
+<img src=/authors/acc/avatar.png alt="Photo of Adam Cook"><br>
+<strong>Adam Cook</strong>
+<em>Admin/Contributor</em>
+<div>
+<a href=https://twitter.com/codaamok><img src=/img/social/twitter.png></a>
+<a href=https://www.linkedin.com/in/adamcharlescook><img src=/img/social/linkedin.png></a>
+</div>
+<p>Adam loves technology and helping people, focusing on PowerShell, Azure, ConfigMgr, and Linux.</p>
+<hr>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
-</div>
-<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -333,7 +261,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
