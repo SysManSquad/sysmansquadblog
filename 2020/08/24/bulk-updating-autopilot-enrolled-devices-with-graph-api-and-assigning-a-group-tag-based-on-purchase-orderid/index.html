@@ -90,7 +90,15 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Bulk Updating Autopilot enrolled devices with Graph API and assigning a Group Tag based on Purchase OrderID</h1>
-<span class=post-date>August 24, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/jake>Jake Shackelford</a> / </span>
+<span class=post-date>August 24, 2020 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ Graph </span>
+<span class=post-categories>/ Intune </span>
+<span class=post-categories>/ Powershell </span>
+<span class=post-categories>/ Scripting </span>
+</p>
 </div>
 <div class=post-entry>
 <h3 id=the-problem>The Problem</h3>
@@ -123,71 +131,30 @@
 </ol>
 <h3 id=registering-an-app-to-access-graph-api-and-grabbing-additional-information>Registering an APP to access Graph API and Grabbing Additional Information</h3>
 <ol>
-<li>
-<p>Navigate to your <a href=https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps>Azure Active Directory</a></p>
-</li>
-<li>
-<p>Select <strong>App registrations</strong></p>
-</li>
-<li>
-<p>Select <strong>New registration</strong></p>
-</li>
-<li>
-<p>Give your app a name such as Intune Graph Access</p>
-</li>
-<li>
-<p>Select <strong>Register</strong></p>
-</li>
-<li>
-<p>Go to your newly created App</p>
-</li>
-<li>
-<p>Select <strong>API permissions</strong></p>
-</li>
-<li>
-<p>Select <strong>Add a permission</strong></p>
-</li>
-<li>
-<p>Select <strong>Microsoft Graph</strong></p>
-</li>
-<li>
-<p>Select <strong>Application permissions</strong></p>
-</li>
-<li>
-<p>Enable <strong>DeviceManagementServiceConfig.ReadWrite.All</strong></p>
-</li>
-<li>
-<p>Select <strong>Add permissions</strong></p>
-</li>
-<li>
-<p>Select <strong>Grant Admin Consent for CONTOSO</strong></p>
-</li>
-<li>
-<p>Navigate to <strong>Certificates & Secrets</strong> for your app</p>
-</li>
-<li>
-<p>Select <strong>New client secret</strong></p>
-</li>
-<li>
-<p>Give a description and select an expiration time</p>
-</li>
-<li>
-<p>Select <strong>Add</strong></p>
-</li>
-<li>
-<p>Copy the key value for later use</p>
-</li>
-<li>
-<p>Select <strong>Overview</strong></p>
-</li>
-<li>
-<p>Copy the Application (client) ID for later use</p>
-</li>
-<li>
-<p>Select <strong>Custom domain names</strong></p>
-</li>
-<li>
-<p>Copy your domain that has the .onmicrosoft.com for later use</p>
+<li>Navigate to your <a href=https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps>Azure Active Directory</a></li>
+<li>Select <strong>App registrations</strong></li>
+<li>Select <strong>New registration</strong></li>
+<li>Give your app a name such as Intune Graph Access</li>
+<li>Select <strong>Register</strong></li>
+<li>Go to your newly created App</li>
+<li>Select <strong>API permissions</strong></li>
+<li>Select <strong>Add a permission</strong></li>
+<li>Select <strong>Microsoft Graph</strong></li>
+<li>Select <strong>Application permissions</strong></li>
+<li>Enable <strong>DeviceManagementServiceConfig.ReadWrite.All</strong></li>
+<li>Select <strong>Add permissions</strong></li>
+<li>Select <strong>Grant Admin Consent for CONTOSO</strong>
+<ol>
+<li>Navigate to <strong>Certificates & Secrets</strong> for your app</li>
+<li>Select <strong>New client secret</strong></li>
+<li>Give a description and select an expiration time</li>
+<li>Select <strong>Add</strong></li>
+<li>Copy the key value for later use</li>
+<li>Select <strong>Overview</strong></li>
+<li>Copy the Application (client) ID for later use</li>
+<li>Select <strong>Custom domain names</strong></li>
+<li>Copy your domain that has the .onmicrosoft.com for later use</li>
+</ol>
 </li>
 </ol>
 <h3 id=the-script>The Script</h3>
@@ -267,6 +234,14 @@
 </code></pre></td></tr></table>
 </div>
 </div>
+<img src=/authors/jake/avatar.png alt="Photo of Jake Shackelford"><br>
+<strong>Jake Shackelford</strong>
+<em>Admin/Contributor</em>
+<div>
+<a href=https://twitter.com/shackelfjaco><img src=/img/social/twitter.png></a>
+</div>
+<p>Jake is one of our Admins but also our inaugural author and the main reason SysManSquad exists today.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -278,7 +253,7 @@
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

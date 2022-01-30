@@ -21,7 +21,8 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Manage Distribution Point Content Using PSCMContentMgmt">
-<meta name=twitter:description content="Introduction  <p> I recently wrote [PSCMContentMgmt](https://github.com/codaamok/PSCMContentMgmt) which provides a simple and effective workflow for managing your MEMCM distribution points. Here are some of the things you can do with it: </p> <ul> <li> Query content objects which are distributed to distribution point(s) or distribution point group(s) </li> <li> Compare content objects distributed to distribution point(s) or distribution point group(s) </li> <li> Find content objects in a &#34;distribution failed&#34; state for all or selective distribution points </li> <li> Remove, distribute or redistribute content objects returned by any function to distribution point(s) </li> <li> Find an object in your site by searching on any arbitrary ID (useful when reading logs and want to know what object an ID resolves to) </li> <li> Migrate a distribution point's content to a new/different distribution point by exporting its content library to prestaged .">
+<meta name=twitter:description content="Introduction I recently wrote PSCMContentMgmt which provides a simple and effective workflow for managing your MEMCM distribution points. Here are some of the things you can do with it:
+ Query content objects which are distributed to distribution point(s) or distribution point group(s) Compare content objects distributed to distribution point(s) or distribution point group(s) Find content objects in a &ldquo;distribution failed&rdquo; state for all or selective distribution points Remove, distribute or redistribute content objects returned by any function to distribution point(s) Find an object in your site by searching on any arbitrary ID (useful when reading logs and want to know what object an ID resolves to) Migrate a distribution point&rsquo;s content to a new/different distribution point by exporting its content library to prestaged .">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -90,121 +91,56 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Manage Distribution Point Content Using PSCMContentMgmt</h1>
-<span class=post-date>September 4, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/acc>Adam Cook</a> / </span>
+<span class=post-date>September 4, 2020 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ MECM/MEMCM/SCCM </span>
+<span class=post-categories>/ Powershell </span>
+<span class=post-categories>/ Scripting </span>
+</p>
 </div>
 <div class=post-entry>
 <h2 id=introduction>Introduction</h2>
-<pre><code>                                    &lt;p&gt;
-                                      I recently wrote [PSCMContentMgmt](https://github.com/codaamok/PSCMContentMgmt) which provides a simple and effective workflow for managing your MEMCM distribution points. Here are some of the things you can do with it:
-                                    &lt;/p&gt;
-                                    
-                                    &lt;ul&gt;
-                                      &lt;li&gt;
-                                        Query content objects which are distributed to distribution point(s) or distribution point group(s)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Compare content objects distributed to distribution point(s) or distribution point group(s)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Find content objects in a &quot;distribution failed&quot; state for all or selective distribution points
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Remove, distribute or redistribute content objects returned by any function to distribution point(s)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Find an object in your site by searching on any arbitrary ID (useful when reading logs and want to know what object an ID resolves to)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Migrate a distribution point's content to a new/different distribution point by exporting its content library to prestaged .pkgx files and importing the .pkgx files to the new distribution point
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Invoke the ContentLibraryCleanup.exe tool
-                                      &lt;/li&gt;
-                                    &lt;/ul&gt;
-                                    
-                                    &lt;p&gt;
-                                      PSCMContentMgmt is a mix of being no more than a wrapper for MEMCM cmdlets or native binaries. Some functions query WMI or invoke WMI methods.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      PSCMContentMgmt does not intend to reinvent the wheel from already available cmdlets. Instead it provides a simpler workflow for managing your distribution points by offering:
-                                    &lt;/p&gt;
-                                    
-                                    &lt;ul&gt;
-                                      &lt;li&gt;
-                                        Easy to use pipeline support, so you can easily progress through the motions for tasks such as querying content on a distribution point or distribution point group - perhaps in a particular state (e.g. &quot;distribution failed&quot;) - and distributing, redistributing or removing it from another (or the same) distribution point or distribution point group.
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Consistent property names when dealing with different types of content objects, i.e. the ObjectID property is always PackageID except for Applications/Deployment Types where it is CI_ID (same is true for the -ObjectID parameter on functions that offer it).
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Functionality which the Configuration Manager console does not provide e.g. content redistribution or import .pkgx files.
-                                      &lt;/li&gt;
-                                    &lt;/ul&gt;
-                                    
-                                    &lt;p&gt;
-                                      At the time of writing this, here are a list of functions in PSCMContentMgmt (be sure to check out the docs on the [GitHub repository](https://github.com/codaamok/PSCMContentMgmt) in case there are changes):
-                                    &lt;/p&gt;
-                                    
-                                    &lt;ul&gt;
-                                      &lt;li&gt;
-                                        [Find-CMObject](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Find-CMOBject.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Compare-DPContent](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Compare-DPContent.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Compare-DPGroupContent](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Compare-DPGroupContent.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Export-DPContent](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Export-DPContent.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Get-DP](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DP.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Get-DPContent](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPContent.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Get-DPDistributionStatus](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPDistributionStatus.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Get-DPGroup](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPGroup.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Get-DPGroupContent](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPGroupContent.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Import-DPContent](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Import-DPContent.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Invoke-DPContentLibraryCleanup](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Invoke-DPContentLibraryCleanup.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Remove-DPContent](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Remove-DPContent.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Remove-DPGroupContent](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Remove-DPGroupContent.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Set-DPAllowPrestagedContent](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Set-DPAllowPrestagedContent.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Start-DPContentDistribution](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Start-DPContentDistribution.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Start-DPContentRedistribution](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Start-DPContentRedistribution.md)
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        [Start-DPGroupContentDistribution](https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Start-DPGroupContentDistribution.md)
-                                      &lt;/li&gt;
-                                    &lt;/ul&gt;
-</code></pre>
+<p>I recently wrote <a href=https://github.com/codaamok/PSCMContentMgmt>PSCMContentMgmt</a> which provides a simple and effective workflow for managing your MEMCM distribution points. Here are some of the things you can do with it:</p>
+<ul>
+<li>Query content objects which are distributed to distribution point(s) or distribution point group(s)</li>
+<li>Compare content objects distributed to distribution point(s) or distribution point group(s)</li>
+<li>Find content objects in a &ldquo;distribution failed&rdquo; state for all or selective distribution points</li>
+<li>Remove, distribute or redistribute content objects returned by any function to distribution point(s)</li>
+<li>Find an object in your site by searching on any arbitrary ID (useful when reading logs and want to know what object an ID resolves to)</li>
+<li>Migrate a distribution point&rsquo;s content to a new/different distribution point by exporting its content library to prestaged .pkgx files and importing the .pkgx files to the new distribution point</li>
+<li>Invoke the ContentLibraryCleanup.exe tool</li>
+</ul>
+<p>PSCMContentMgmt is a mix of being no more than a wrapper for MEMCM cmdlets or native binaries. Some functions query WMI or invoke WMI methods.</p>
+<p>PSCMContentMgmt does not intend to reinvent the wheel from already available cmdlets. Instead it provides a simpler workflow for managing your distribution points by offering:</p>
+<ul>
+<li>Easy to use pipeline support, so you can easily progress through the motions for tasks such as querying content on a distribution point or distribution point group - perhaps in a particular state (e.g. &ldquo;distribution failed&rdquo;) - and distributing, redistributing or removing it from another (or the same) distribution point or distribution point group.</li>
+<li>Consistent property names when dealing with different types of content objects, i.e. the ObjectID property is always PackageID except for Applications/Deployment Types where it is CI_ID (same is true for the -ObjectID parameter on functions that offer it).</li>
+<li>Functionality which the Configuration Manager console does not provide e.g. content redistribution or import .pkgx files.</li>
+</ul>
+<p>At the time of writing this, here are a list of functions in PSCMContentMgmt (be sure to check out the docs on the <a href=https://github.com/codaamok/PSCMContentMgmt>GitHub repository</a> in case there are changes):</p>
+<ul>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Find-CMOBject.md>Find-CMObject</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Compare-DPContent.md>Compare-DPContent</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Compare-DPGroupContent.md>Compare-DPGroupContent</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Export-DPContent.md>Export-DPContent</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DP.md>Get-DP</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPContent.md>Get-DPContent</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPDistributionStatus.md>Get-DPDistributionStatus</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPGroup.md>Get-DPGroup</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Get-DPGroupContent.md>Get-DPGroupContent</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Import-DPContent.md>Import-DPContent</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Invoke-DPContentLibraryCleanup.md>Invoke-DPContentLibraryCleanup</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Remove-DPContent.md>Remove-DPContent</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Remove-DPGroupContent.md>Remove-DPGroupContent</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Set-DPAllowPrestagedContent.md>Set-DPAllowPrestagedContent</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Start-DPContentDistribution.md>Start-DPContentDistribution</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Start-DPContentRedistribution.md>Start-DPContentRedistribution</a></li>
+<li><a href=https://github.com/codaamok/PSCMContentMgmt/blob/master/docs/Start-DPGroupContentDistribution.md>Start-DPGroupContentDistribution</a></li>
+</ul>
 <h2 id=installing>Installing</h2>
-<pre><code>                                    &lt;p&gt;
-                                      Install the module from the PowerShell gallery and import it to your session:
-                                    &lt;/p&gt;
-</code></pre>
+<p>Install the module from the PowerShell gallery and import it to your session:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -215,49 +151,30 @@
 <span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Import-Module</span> PSCMContentMgmt
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>                                    &lt;p&gt;
-                                      All functions of the module require use of &lt;code&gt;-SiteServer&lt;/code&gt; or &lt;code&gt;-SiteCode&lt;/code&gt; parameters. This can be tedious to repeatedly type out. Therefore upon importing the module, two variables will be set in your session:
-                                    &lt;/p&gt;
-                                    
-                                    &lt;ul&gt;
-                                      &lt;li&gt;
-                                        &lt;code&gt;$CMSiteServer&lt;/code&gt;&lt;ul&gt;
-                                          &lt;li&gt;
-                                            Value determined by reading the &lt;code&gt;Server&lt;/code&gt; registry value in the key &lt;code&gt;HKLM:\SOFTWARE\WOW6432Node\Microsoft\ConfigMgr10\AdminUI\Connection&lt;/code&gt;.
-                                          &lt;/li&gt;
-                                          &lt;li&gt;
-                                            This registry key is used by the Configuration Manager module, therefore it is assumed this is the site you want to work in.
-                                          &lt;/li&gt;
-                                        &lt;/ul&gt;
-                                      &lt;/li&gt;
-                                      
-                                      &lt;li&gt;
-                                        &lt;code&gt;$CMSiteCode&lt;/code&gt;&lt;ul&gt;
-                                          &lt;li&gt;
-                                            Value determined by reading the &lt;code&gt;SiteCode&lt;/code&gt; property in the&lt;code&gt;SMS_ProviderLocation&lt;/code&gt; WMI class on the server defined in &lt;code&gt;$CMSiteServer&lt;/code&gt;
-                                          &lt;/li&gt;
-                                        &lt;/ul&gt;
-                                      &lt;/li&gt;
-                                    &lt;/ul&gt;
-                                    
-                                    &lt;p&gt;
-                                      Ovewritting these variables is OK and essential if you operate in a multi-site environment.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      If you receive a warning along the lines of being unable to auto-populate variables&lt;code&gt;$CMSiteServer&lt;/code&gt;or&lt;code&gt;$CMSiteCode&lt;/code&gt;, that means the module failed to read the previously mentioned registry value or the&lt;code&gt;SMS_ProviderLocation&lt;/code&gt;class on your site server.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      If the reason why the module could not set these variables itself is not known, or there's no viable workaround for you, then you can set&lt;code&gt;$CMSiteServer&lt;/code&gt;or&lt;code&gt;$CMSiteCode&lt;/code&gt;yourself. Alternatively you can use the&lt;code&gt;-SiteServer&lt;/code&gt;and&lt;code&gt;-SiteCode&lt;/code&gt;parameters on an ad-hoc basis.
-                                    &lt;/p&gt;
-</code></pre>
+</div><p>All functions of the module require use of <code>-SiteServer</code> or <code>-SiteCode</code> parameters. This can be tedious to repeatedly type out. Therefore upon importing the module, two variables will be set in your session:</p>
+<ul>
+<li>
+<p><code>$CMSiteServer</code></p>
+</li>
+<li>
+<p>Value determined by reading the <code>Server</code> registry value in the key <code>HKLM:\SOFTWARE\WOW6432Node\Microsoft\ConfigMgr10\AdminUI\Connection</code>.</p>
+</li>
+<li>
+<p>This registry key is used by the Configuration Manager module, therefore it is assumed this is the site you want to work in.</p>
+</li>
+<li>
+<p><code>$CMSiteCode</code></p>
+</li>
+<li>
+<p>Value determined by reading the <code>SiteCode</code> property in the<code>SMS_ProviderLocation</code> WMI class on the server defined in <code>$CMSiteServer</code></p>
+</li>
+</ul>
+<p>Overwriting these variables is OK and essential if you operate in a multi-site environment.</p>
+<p>If you receive a warning along the lines of being unable to auto-populate variables<code>$CMSiteServer</code>or<code>$CMSiteCode</code>, that means the module failed to read the previously mentioned registry value or the<code>SMS_ProviderLocation</code>class on your site server.</p>
+<p>If the reason why the module could not set these variables itself is not known, or there&rsquo;s no viable workaround for you, then you can set<code>$CMSiteServer</code>or<code>$CMSiteCode</code>yourself. Alternatively you can use the<code>-SiteServer</code>and<code>-SiteCode</code>parameters on an ad-hoc basis.</p>
 <h2 id=examples>Examples</h2>
-<pre><code>                                    &lt;p&gt;
-                                      I'll walk you through some key examples which I think most people will benefit from.
-                                    &lt;/p&gt;
-</code></pre>
-<h4 id=comparing-distributed-content-objects-between-two-distribution-points-or-distribution-point-groups><strong>Comparing distributed content objects between two distribution points or distribution point groups</strong></h4>
+<p>I&rsquo;ll walk you through some key examples which I think most people will benefit from.</p>
+<h2 id=comparing-distributed-content-objects-between-two-distribution-points-or-distribution-point-groups><strong>Comparing distributed content objects between two distribution points or distribution point groups</strong></h2>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
@@ -298,14 +215,8 @@ DistributionPoint <span style=color:#a61717;background-color:#e3d2d2>:</span> dp
 ...
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>                                    &lt;p&gt;
-                                      Returns content objects which are on dp1.contoso.com but not dp2.contoso.com.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      With this command, you can pipe it to other appropriate functions within PSCMContentMgmt, e.g. &lt;code&gt;Remove-DPContent&lt;/code&gt; or &lt;code&gt;Start-DPContentDistribution&lt;/code&gt;.
-                                    &lt;/p&gt;
-</code></pre>
+</div><p>Returns content objects which are on dp1.contoso.com but not dp2.contoso.com.</p>
+<p>With this command, you can pipe it to other appropriate functions within PSCMContentMgmt, e.g. <code>Remove-DPContent</code> or <code>Start-DPContentDistribution</code>.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
@@ -344,11 +255,8 @@ Success   17007034 Application
 ...
 </code></pre></td></tr></table>
 </div>
-</div><h4 id=finding-content-objects-in-distribution-failed-state-and-initiating-redistribution-en-masse><strong>Finding content objects in &ldquo;distribution failed&rdquo; state and initiating redistribution en masse</strong></h4>
-<pre><code>                                    &lt;p&gt;
-                                      This is the most practical function I like about PSCMContentMgmt. It is not uncommon for me to experience distribution failures in my environments and I wanted a way to quickly have a visual on those, and take action.
-                                    &lt;/p&gt;
-</code></pre>
+</div><h2 id=finding-content-objects-in-distribution-failed-state-and-initiating-redistribution-en-masse><strong>Finding content objects in &ldquo;distribution failed&rdquo; state and initiating redistribution en masse</strong></h2>
+<p>This is the most practical function I like about PSCMContentMgmt. It is not uncommon for me to experience distribution failures in my environments and I wanted a way to quickly have a visual on those, and take action.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -363,14 +271,11 @@ Success   17007034 Application
 
 Count Name                      <span style=color:#0086b3>Group
 </span><span style=color:#0086b3></span>----- ----                      -----
-   42 dp1.contoso.com           {@{ObjectID=17099179; ObjectType=Applicat...
-   30 dp2.contoso.com	        {@{ObjectID=17099179; ObjectType=Applicat...
+42 dp1.contoso.com           {@{ObjectID=17099179; ObjectType=Applicat...
+30 dp2.contoso.com	        {@{ObjectID=17099179; ObjectType=Applicat...
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>                                    &lt;p&gt;
-                                      Return all distribution points, their associated failed distribution tasks and group the results by distribution point name for an overview.
-                                    &lt;/p&gt;
-</code></pre>
+</div><p>Return all distribution points, their associated failed distribution tasks and group the results by distribution point name for an overview.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -379,68 +284,27 @@ Count Name                      <span style=color:#0086b3>Group
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-DPDistributionStatus</span> -DistributionPoint <span style=color:#d14>&#34;dp1.contoso.com&#34;</span> -DistributionFailed | <span style=color:#0086b3>Start-DPContentRedistribution</span>
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>                                    &lt;p&gt;
-                                      This is an example on taking action on those items. In this instance, I'm initiating redistribution for all of the objects on dp1.contoso.com in a &quot;distribution failed&quot; state.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      If you didn't want to redistribute, you could pipe to &lt;code&gt;Remove-DPContent&lt;/code&gt; instead.
-                                    &lt;/p&gt;
-</code></pre>
-<h4 id=finding-objects-in-your-environment-with-some-arbitrary-id><strong>Finding objects in your environment with some arbitrary ID</strong></h4>
-<pre><code>                                    &lt;p&gt;
-                                      This is my favourite function. Do you ever look through log files, see some random ID that you know represents some object in console and just want to know what object that is?
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      &lt;code&gt;Find-CMObject&lt;/code&gt; accepts one parameter and that's &lt;code&gt;-ID&lt;/code&gt;. Pass it anything and it'll do its best to find these objects for you:
-                                    &lt;/p&gt;
-                                    
-                                    &lt;ul&gt;
-                                      &lt;li&gt;
-                                        Applications
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Deployment Types
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Packages
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Drivers
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Driver Packages
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Boot Images
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Operating System Images
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Operating System Upgrade Images
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Task Sequences
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Configuration Items
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Configuration Baselines
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        User Collections
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Device Collections
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        (Software Update) Deployment Packages
-                                      &lt;/li&gt;
-                                    &lt;/ul&gt;
-</code></pre>
+</div><p>This is an example on taking action on those items. In this instance, I&rsquo;m initiating redistribution for all of the objects on dp1.contoso.com in a &ldquo;distribution failed&rdquo; state.</p>
+<p>If you didn&rsquo;t want to redistribute, you could pipe to <code>Remove-DPContent</code> instead.</p>
+<h2 id=finding-objects-in-your-environment-with-some-arbitrary-id><strong>Finding objects in your environment with some arbitrary ID</strong></h2>
+<p>This is my favourite function. Do you ever look through log files, see some random ID that you know represents some object in console and just want to know what object that is?</p>
+<p><code>Find-CMObject</code> accepts one parameter and that&rsquo;s <code>-ID</code>. Pass it anything and it&rsquo;ll do its best to find these objects for you:</p>
+<ul>
+<li>Applications</li>
+<li>Deployment Types</li>
+<li>Packages</li>
+<li>Drivers</li>
+<li>Driver Packages</li>
+<li>Boot Images</li>
+<li>Operating System Images</li>
+<li>Operating System Upgrade Images</li>
+<li>Task Sequences</li>
+<li>Configuration Items</li>
+<li>Configuration Baselines</li>
+<li>User Collections</li>
+<li>Device Collections</li>
+<li>(Software Update) Deployment Packages</li>
+</ul>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -449,40 +313,16 @@ Count Name                      <span style=color:#0086b3>Group
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Find-CMObject</span> -ID <span style=color:#d14>&#34;ACC00048&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>                                    &lt;p&gt;
-                                      Finds any object which has the PackageID &quot;ACC00048&quot;, this includes Applications, collections, driver packages, boot images, OS images, OS upgrade images, task sequences and deployment packages.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      It searches for Applications by PackageID as a last resort if no match has been found yet by loading every Application's PackageID property which is a lazy property in WMI. This can be time consuming, depending on how many Applications you have in your site, hence why it is last in the list.
-                                    &lt;/p&gt;
-</code></pre>
-<h4 id=migrating-a-distribution-point-to-another><strong>Migrating a distribution point to another</strong></h4>
-<pre><code>                                    &lt;p&gt;
-                                      Do you need to stand up a new distribution point beside an existing one, but don't want to send content across the WAN?
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      This requirement was what originally inspired me to write the module. A couple of years ago I came across [this post](http://synack87.blogspot.com/2017/03/distribution-point-migration-tool-kit.html) by someone with the handle SYN_ACK_87. The code offered on TechNet helped me hugely at the time for what I needed, but I felt like adding extra bits. I rolled my own and here we are.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      Pull distribution points are undoubtedly a million miles easier than this. If you can, or do currently, use pull distribution points, don't follow this. Configure the new distribution point to pull from the old distribution point.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      However if for whatever reason you can't or don't want to use the pull distribution point method, then this is for you.
-                                    &lt;/p&gt;
-</code></pre>
-<h6 id=1-begin-by-exporting-your-oldsource-distribution-points-content-using-codeexport-dpcontentcode>1. Begin by exporting your old/source distribution point&rsquo;s content using Export-DPContent.</h6>
-<pre><code>                                    &lt;p&gt;
-                                      Preferably this server will be on the same LAN as the distribution point you intend to import the .pkgx files to.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      If the server is remote across a slow link, it is recommended you copy the .pkgx files generated by &lt;code&gt;Export-DPContent&lt;/code&gt; to your new/target distribution point.
-                                    &lt;/p&gt;
-</code></pre>
+</div><p>Finds any object which has the PackageID &ldquo;ACC00048&rdquo;, this includes Applications, collections, driver packages, boot images, OS images, OS upgrade images, task sequences and deployment packages.</p>
+<p>It searches for Applications by PackageID as a last resort if no match has been found yet by loading every Application&rsquo;s PackageID property which is a lazy property in WMI. This can be time consuming, depending on how many Applications you have in your site, hence why it is last in the list.</p>
+<h2 id=migrating-a-distribution-point-to-another><strong>Migrating a distribution point to another</strong></h2>
+<p>Do you need to stand up a new distribution point beside an existing one, but don&rsquo;t want to send content across the WAN?</p>
+<p>This requirement was what originally inspired me to write the module. A couple of years ago I came across <a href=http://synack87.blogspot.com/2017/03/distribution-point-migration-tool-kit.html>this post</a> by someone with the handle SYN_ACK_87. The code offered on TechNet helped me hugely at the time for what I needed, but I felt like adding extra bits. I rolled my own and here we are.</p>
+<p>Pull distribution points are undoubtedly a million miles easier than this. If you can, or do currently, use pull distribution points, don&rsquo;t follow this. Configure the new distribution point to pull from the old distribution point.</p>
+<p>However if for whatever reason you can&rsquo;t or don&rsquo;t want to use the pull distribution point method, then this is for you.</p>
+<h3 id=1-begin-by-exporting-your-oldsource-distribution-points-content-using-export-dpcontent>1. Begin by exporting your old/source distribution point&rsquo;s content using <code>Export-DPContent</code>.</h3>
+<p>Preferably this server will be on the same LAN as the distribution point you intend to import the .pkgx files to.</p>
+<p>If the server is remote across a slow link, it is recommended you copy the .pkgx files generated by <code>Export-DPContent</code> to your new/target distribution point.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -491,11 +331,8 @@ Count Name                      <span style=color:#0086b3>Group
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-DPContent</span> -DistributionPoint <span style=color:#d14>&#34;OldDP.contoso.com&#34;</span> | <span style=color:#0086b3>Export-DPContent</span> -Folder <span style=color:#d14>&#34;E:\exported&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h6 id=2-configure-your-newtarget-distribution-point-to-allow-prestaged-content-using-codeset-dpallowprestagedcontentcode>2. Configure your new/target distribution point to allow prestaged content using Set-DPAllowPrestagedContent.</h6>
-<pre><code>                                    &lt;p&gt;
-                                      This will ensure when we use &lt;code&gt;Start-DPContentDistribution&lt;/code&gt; in the next step that the content will not inadvertently transfer across an undesired route.
-                                    &lt;/p&gt;
-</code></pre>
+</div><h3 id=2-configure-your-newtarget-distribution-point-to-allow-prestaged-content-using-set-dpallowprestagedcontent>2. Configure your new/target distribution point to allow prestaged content using <code>Set-DPAllowPrestagedContent</code>.</h3>
+<p>This will ensure when we use <code>Start-DPContentDistribution</code> in the next step that the content will not inadvertently transfer across an undesired route.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -504,15 +341,9 @@ Count Name                      <span style=color:#0086b3>Group
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Set-DPAllowPrestagedContent</span> -DistributionPoint <span style=color:#d14>&#34;NewDP.contoso.com&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h6 id=3-distribute-the-exported-content-from-step-1-using-codestart-dpcontentdistributioncode-using-its-code-foldercode-parameter>3. Distribute the exported content from step 1 using Start-DPContentDistribution using its -Folder parameter.</h6>
-<pre><code>                                    &lt;p&gt;
-                                      This will walk through all .pkgx files in the given folder, identifying each object by the particular naming convention of the .pkgx files generated by &lt;code&gt;Export-DPContent&lt;/code&gt;, and distribute each of the objects they represent in console to your new/target distribution point.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      This will put the content objects in console in a &quot;Pending&quot; state; waiting to be imported on your new/target distribution point.
-                                    &lt;/p&gt;
-</code></pre>
+</div><h3 id=3-distribute-the-exported-content-from-step-1-using-start-dpcontentdistribution-using-its--folder-parameter>3. Distribute the exported content from step 1 using <code>Start-DPContentDistribution</code> using its <code>-Folder</code> parameter.</h3>
+<p>This will walk through all .pkgx files in the given folder, identifying each object by the particular naming convention of the .pkgx files generated by <code>Export-DPContent</code>, and distribute each of the objects they represent in console to your new/target distribution point.</p>
+<p>This will put the content objects in console in a &ldquo;Pending&rdquo; state; waiting to be imported on your new/target distribution point.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -521,19 +352,10 @@ Count Name                      <span style=color:#0086b3>Group
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Start-DPContentDistribution</span> -Folder <span style=color:#d14>&#34;E:\exported&#34;</span> -DistributionPoint <span style=color:#d14>&#34;NewDP.contoso.com&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h6 id=4-log-on-locally-or-enter-a-powershell-session-to-your-newtarget-distribution-point-and-import-pscmcontentmgmt-to-run-codeimport-dpcontentcode>4. Log on locally or enter a PowerShell session to your new/target distribution point and import PSCMContentMgmt to run Import-DPContent.</h6>
-<pre><code>                                    &lt;p&gt;
-                                      This step must be executed locally to your new/target distribution point. This is because &lt;code&gt;Import-DPContent&lt;/code&gt; simply invokes ExtractContent.exe.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      Use Import-DPContent and the -Folder parameter (which is preferably a local drive path, or a UNC path where the host is on the same LAN) to begin importing content.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      Similar to step 3, &lt;code&gt;Import-DPContent&lt;/code&gt; depends on the particular naming convention of .pkgx files generated by &lt;code&gt;Export-DPContent&lt;/code&gt; to successfully import the content.
-                                    &lt;/p&gt;
-</code></pre>
+</div><h3 id=4-log-on-locally-or-enter-a-powershell-session-to-your-newtarget-distribution-point-and-import-pscmcontentmgmt-to-run-import-dpcontent>4. Log on locally or enter a PowerShell session to your new/target distribution point and import PSCMContentMgmt to run <code>Import-DPContent</code>.</h3>
+<p>This step must be executed locally to your new/target distribution point. This is because <code>Import-DPContent</code> simply invokes ExtractContent.exe.</p>
+<p>Use Import-DPContent and the -Folder parameter (which is preferably a local drive path, or a UNC path where the host is on the same LAN) to begin importing content.</p>
+<p>Similar to step 3, <code>Import-DPContent</code> depends on the particular naming convention of .pkgx files generated by <code>Export-DPContent</code> to successfully import the content.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -542,7 +364,7 @@ Count Name                      <span style=color:#0086b3>Group
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Import-DPContent</span> -Folder <span style=color:#d14>&#34;\\OldDP.contoso.com\e$\exported&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h6 id=5-unconfigure-your-newtarget-distribution-point-to-only-allow-prestaged-content>5. Unconfigure your new/target distribution point to only allow prestaged content.</h6>
+</div><h3 id=5-unconfigure-your-newtarget-distribution-point-to-only-allow-prestaged-content>5. Unconfigure your new/target distribution point to only allow prestaged content.</h3>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -552,18 +374,9 @@ Count Name                      <span style=color:#0086b3>Group
 </code></pre></td></tr></table>
 </div>
 </div><h2 id=getting-help>Getting help</h2>
-<pre><code>                                    &lt;p&gt;
-                                      If you're seeing or hearing things, I recommend you drink more rum.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      I encourage you to read the documentation on the [GitHub repository page](https://github.com/codaamok/PSCMContentMgmt) and the &lt;code&gt;Get-Help&lt;/code&gt; material. I wrote several &quot;About&quot; help topics , filling all functions with examples and detailed descriptions for parameters.
-                                    &lt;/p&gt;
-                                    
-                                    &lt;p&gt;
-                                      To view the help material for a particular function:
-                                    &lt;/p&gt;
-</code></pre>
+<p>If you&rsquo;re seeing or hearing things, I recommend you drink more rum.</p>
+<p>I encourage you to read the documentation on the <a href=https://github.com/codaamok/PSCMContentMgmt>GitHub repository page</a> and the <code>Get-Help</code> material. I wrote several &ldquo;About&rdquo; help topics , filling all functions with examples and detailed descriptions for parameters.</p>
+<p>To view the help material for a particular function:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -572,10 +385,7 @@ Count Name                      <span style=color:#0086b3>Group
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-Help</span> <span style=color:#0086b3>Compare-DPContent</span> -Detailed
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>                                    &lt;p&gt;
-                                      To see all of the &quot;About&quot; help topics available for PSCMContentMgmt:
-                                    &lt;/p&gt;
-</code></pre>
+</div><p>To see all of the &ldquo;About&rdquo; help topics available for PSCMContentMgmt:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -584,10 +394,7 @@ Count Name                      <span style=color:#0086b3>Group
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-Help</span> about_PSCMContentMgmt*
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>                                    &lt;p&gt;
-                                      To read one of the &quot;About&quot; help topics:
-                                    &lt;/p&gt;
-</code></pre>
+</div><p>To read one of the &ldquo;About&rdquo; help topics:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -596,33 +403,27 @@ Count Name                      <span style=color:#0086b3>Group
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-Help</span> about_PSCMContentMgmt_Query
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>                                    &lt;p&gt;
-                                      Failing that:
-                                    &lt;/p&gt;
-                                    
-                                    &lt;ul&gt;
-                                      &lt;li&gt;
-                                        If you think you're experiencing, or have found, a bug in PSCMContentMgmt, please open an issue on its [GitHub repository](https://github.com/codaamok/PSCMContentMgmt).
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Ping me on Twitter [@codaamok](https://twitter.com/codaamok).
-                                      &lt;/li&gt;
-                                      &lt;li&gt;
-                                        Come to the [WinAdmins Discord](https://winadmins.io/) and bug me there, my handle is @acc.
-                                      &lt;/li&gt;
-                                    &lt;/ul&gt;
-                                    
-                                    &lt;p&gt;
-                                      The Configuration Manager module notoriously returns generic error messages (if any) for most of its cmdlets/functions. Since this module is mostly nothing more than a wrapper for most cmdlets/functions, I just forward those messages on to you so please bear that in mind.
-                                    &lt;/p&gt;
-</code></pre>
+</div><p>Failing that:</p>
+<ul>
+<li>If you think you&rsquo;re experiencing, or have found, a bug in PSCMContentMgmt, please open an issue on its <a href=https://github.com/codaamok/PSCMContentMgmt>GitHub repository</a>.</li>
+<li>Ping me on Twitter <a href=https://twitter.com/codaamok>@codaamok</a>.</li>
+<li>Come to the <a href=https://winadmins.io/>WinAdmins Discord</a> and bug me there, my handle is @acc.</li>
+</ul>
+<p>The Configuration Manager module notoriously returns generic error messages (if any) for most of its cmdlets/functions. Since this module is mostly nothing more than a wrapper for most cmdlets/functions, I just forward those messages on to you so please bear that in mind.</p>
+<img src=/authors/acc/avatar.png alt="Photo of Adam Cook"><br>
+<strong>Adam Cook</strong>
+<em>Admin/Contributor</em>
+<div>
+<a href=https://twitter.com/codaamok><img src=/img/social/twitter.png></a>
+<a href=https://www.linkedin.com/in/adamcharlescook><img src=/img/social/linkedin.png></a>
+</div>
+<p>Adam loves technology and helping people, focusing on PowerShell, Azure, ConfigMgr, and Linux.</p>
+<hr>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
-</div>
-<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -634,7 +435,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

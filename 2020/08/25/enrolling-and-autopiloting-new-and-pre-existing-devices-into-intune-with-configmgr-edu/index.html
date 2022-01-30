@@ -90,21 +90,25 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Enrolling and Autopiloting New and Pre-existing Devices into Intune with ConfigMgr – EDU</h1>
-<span class=post-date>August 25, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/andrew>Andrew Arsenault</a> / </span>
+<span class=post-date>August 25, 2020 </span>
+<span class=post-categories>/ Endpoint Management </span>
+</p>
 </div>
 <div class=post-entry>
 <p>Months after we issued students and faculty 600+ unmanaged off the shelf laptops (no AD, no Azure AD, no Intune, no ConfigMgr) to get them off and running temporarily during this pandemic, my co-worker and I were tasked with figuring out how to bring these machines under some form of management. We did not have these machines in ConfigMgr or have the hardware hashes uploaded into Intune, so we had some work ahead of us. Ultimately, we decided to re-image the devices using a ConfigMgr task sequence which also enrolls them into Autopilot. This allows us to remotely manage the device and wipe it after being used by a student.</p>
 <p>I created a ConfigMgr PXE task sequence that with minimal intervention, will &ldquo;reimage&rdquo; the device to whatever version of Win 10 you choose (we use 1909 for now). It copies the AutopilotConfigurationFile.JSON and then resets the machine, ultimately bringing you to a login screen where any user with permissions can provision the device. The device will then bring down any policies and convert to Autopilot and you are off and running with an Intune managed device. Let&rsquo;s walk through the steps!</p>
 <p><strong>Disclaimer:</strong> This blog assumes you have a working knowledge of ConfigMgr and Endpoint Manager Admin Center (MEMAC), and have administrative rights to your Intune Tenant.</p>
 <p>First off we will prepare the Autopilot Profile and download the config JSON</p>
-<p>In MEMAC, navigate to the &ldquo;Windows Autopilot deployment profiles&rdquo; blade, and create a new Autopilot profile, call this whatever you want. The only basic setting we are worried about is the &ldquo;Convert all targeted devices to Autopilot&rdquo;, set this to Yes. Next we will set the OOBE settings to the following (Note: the &ldquo;Enter a name&rdquo; option can be whatever you want to name your devices, this is important as we will use this to target the Autopilot profile post image): </p>
+<p>In MEMAC, navigate to the &ldquo;Windows Autopilot deployment profiles&rdquo; blade, and create a new Autopilot profile, call this whatever you want. The only basic setting we are worried about is the &ldquo;Convert all targeted devices to Autopilot&rdquo;, set this to Yes. Next we will set the OOBE settings to the following (Note: the &ldquo;Enter a name&rdquo; option can be whatever you want to name your devices, this is important as we will use this to target the Autopilot profile post image):</p>
 <p><div class=image>
 <figure>
 <a href=image.png target=_blank>
-<img src=image.png alt>
+<img src=image.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>For now we will not assign this to a group, this comes later.</p>
 <p>Next we are going to pull down this config into a file called AutopilotConfigurationFile.JSON. In powershell run the following commands:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
@@ -133,26 +137,26 @@
 <p><div class=image>
 <figure>
 <a href=image-1.png target=_blank>
-<img src=image-1.png alt>
+<img src=image-1.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>We are going to make some small changes to this task sequence, when completed, it should look like this:</p>
 <p><div class=image>
 <figure>
 <a href=image-3.png target=_blank>
-<img src=image-3.png alt>
+<img src=image-3.png alt=screenshot>
 </a>
 </figure>
-</div> The final reboot step reboots to the currently installed operation system </p>
+</div> The final reboot step reboots to the currently installed operation system</p>
 <p>The step we added &ldquo;Autopilot for existing devices config file&rdquo; is a &ldquo;Run Command Line&rdquo; and will copy the config JSON from the package we created earlier and place it in the C:\Windows\Provisioning\Autopilot\ folder. It should look something like this:</p>
 <p><div class=image>
 <figure>
 <a href=image-9.png target=_blank>
-<img src=image-9.png alt>
+<img src=image-9.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -176,7 +180,7 @@
 <p><div class=image>
 <figure>
 <a href=image-4-1024x767.png target=_blank>
-<img src=image-4-1024x767.png alt>
+<img src=image-4-1024x767.png alt=screenshot>
 </a>
 </figure>
 </div> Choose any options for all of these screens as they will be handled by AutoPilot going forward</p>
@@ -184,37 +188,45 @@
 <p><div class=image>
 <figure>
 <a href=ap-1024x773.jpg target=_blank>
-<img src=ap-1024x773.jpg alt>
+<img src=ap-1024x773.jpg alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>After another couple of minutes of setup, the provisioning process begins! At this point it will apply any settings that were configured as a part of that Autopilot Profile we set up earlier.</p>
 <p>If you check MEMAC at this stage you should see your newly created device but it won&rsquo;t be named properly yet, and is missing some info.</p>
 <p><div class=image>
 <figure>
 <a href=image-5-1024x29.png target=_blank>
-<img src=image-5-1024x29.png alt>
+<img src=image-5-1024x29.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>At this point the machine still isn&rsquo;t completely converted, that comes a little later, for now, let the device provision and send you to your desktop.</p>
 <p>Once we are at the desktop, take a look in MEMAC, TA-DA!</p>
 <p><div class=image>
 <figure>
 <a href=image-7-1024x24.png target=_blank>
-<img src=image-7-1024x24.png alt>
+<img src=image-7-1024x24.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>The new device is named according to our AP config file, and is now managed by Intune. If we check the Autopiloted Devices blade we see the following:</p>
 <p><div class=image>
 <figure>
 <a href=complete-1.png target=_blank>
-<img src=complete-1.png alt>
+<img src=complete-1.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Your device is now Autopiloted and managed by Intune! You can now reset this device and it will come up with the settings configured in the AP Config JSON.</p>
+<img src=/authors/andrew/avatar.png alt="Photo of Andrew Arsenault"><br>
+<strong>Andrew Arsenault</strong>
+<em>Contributor</em>
+<div>
+<a href=https://twitter.com/aarsenault1984><img src=/img/social/twitter.png></a>
+</div>
+<p>Andrew is a systems administrator based out of Canada bringing some education sector experience to the blog.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -226,7 +238,7 @@
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

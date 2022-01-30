@@ -91,7 +91,13 @@ As I opened an old stand-by function from my stash (originally posted here: http
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Getting Reboot History and Optimizing Legacy Functions</h1>
-<span class=post-date>August 28, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/nic>Nic Wendlowsky</a> / </span>
+<span class=post-date>August 28, 2020 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ MECM/MEMCM/SCCM </span>
+<span class=post-categories>/ Powershell </span>
+</p>
 </div>
 <div class=post-entry>
 <p>The other day, I logged on to a jump server and, while investigating an unrelated issue, I noticed the BG Info background showed the Last Reboot as March 1st, 2020. &ldquo;That can&rsquo;t be right,&rdquo; I thought. &ldquo;We have weekly maintenance windows to reboot these servers.&rdquo;</p>
@@ -153,8 +159,18 @@ As I opened an old stand-by function from my stash (originally posted here: http
 <span style=color:#0086b3>Remove-Variable</span> Params,count
 </code></pre></td></tr></table>
 </div>
-</div>
+</div><p>Note: <strong>Get-EventLog InstanceID</strong></p>
+<blockquote>
+<p>Even though it&rsquo;s not used in the script, I wanted to point out that <code>Get-EventLog</code>&rsquo;s InstanceID value does not correspond to the Event ID used in the other cmdlets. I used this <a href=https://community.idera.com/database-tools/powershell/powertips/b/tips/posts/translate-eventid-to-instanceid>ConvertTo-InstanceID</a> function to get the corresponding InstanceID for each Event ID.</p>
+</blockquote>
 <p>Which resulted in the following times:</p>
+<p><div class=image>
+<figure>
+<a href=Snag_21a99dae.png target=_blank>
+<img src=Snag_21a99dae.png alt="Measure cmdlets to search Event Logs">
+</a>
+</figure>
+</div> A 99.78% decrease in time!</p>
 <p>Wow, I knew WMI cmdlets were a bit slow, but I didn&rsquo;t expect to see such a drastic improvement by using <code>Get-WinEvent</code>. It&rsquo;s safe to say this is how we&rsquo;ll move forward.</p>
 <p>I like the information that <code>Get-RebootHistory</code> outputs, so I want to keep the same data while using the more efficient command. Let&rsquo;s dig through the function to find out what we&rsquo;re modifying.</p>
 <p>Identify the main, slow command:</p>
@@ -395,6 +411,15 @@ Additionally, we can once again replace the <code>InsertionStrings</code> and si
 </div><p>All of that leads to the finished product, which I&rsquo;ve put in a gist on GitHub.<br>
 Enjoy!</p>
 <p><a href=https://gist.github.com/hkystar35/12b5f54401edfb9077346da7fe938e4e>https://gist.github.com/hkystar35/12b5f54401edfb9077346da7fe938e4e</a></p>
+<img src=/authors/nic/avatar.png alt="Photo of Nic Wendlowsky"><br>
+<strong>Nic Wendlowsky</strong>
+<em>Contributor</em>
+<div>
+<a href=https://twitter.com/wendlowsky><img src=/img/social/twitter.png></a>
+<a href=https://www.linkedin.com/in/nic-wendlowsky><img src=/img/social/linkedin.png></a>
+</div>
+<p>Nic is an IT professional of 12+ years, specializing in ConfigMgr over the last 5 with an MCTS for ConfigMgr 2012r2.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -406,7 +431,7 @@ Enjoy!</p>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
