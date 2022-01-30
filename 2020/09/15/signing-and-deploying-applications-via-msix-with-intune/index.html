@@ -91,11 +91,15 @@ Do you have a bloated application? Maybe one or two that are so old it doesn&rsq
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Signing and Deploying Applications via MSIX with Intune</h1>
-<span class=post-date>September 15, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/jake>Jake Shackelford</a> / </span>
+<span class=post-date>September 15, 2020 </span>
+<span class=post-categories>/ Endpoint Management </span>
+</p>
 </div>
 <div class=post-entry>
 <h3 id=why-would-i-want-to-use-msix-and-what-is-it>Why would I want to use MSIX and what is it?</h3>
-<p><a href="https://docs.microsoft.com/en-us/windows/msix/overview#:~:text=MSIX%20is%20a%20Windows%20app,WPF%2C%20and%20Windows%20Forms%20apps.">MSIX is a Windows app package format that provides a modern packaging experience to all Windows apps. The MSIX package format preserves the functionality of existing app packages and/or install files in addition to enabling new, modern packaging and deployment features to Win32, WPF, and Windows Forms apps.</a></p>
+<p><a href="https://docs.microsoft.com/windows/msix/overview#:~:text=MSIX%20is%20a%20Windows%20app,WPF%2C%20and%20Windows%20Forms%20apps.">MSIX is a Windows app package format that provides a modern packaging experience to all Windows apps. The MSIX package format preserves the functionality of existing app packages and/or install files in addition to enabling new, modern packaging and deployment features to Win32, WPF, and Windows Forms apps.</a></p>
 <p>Do you have a bloated application? Maybe one or two that are so old it doesn&rsquo;t even have any install parameters? Maybe you have a massive application that is a pain to deploy?</p>
 <p>Well MSIX might be for you! Wrapping your app with MSIX sounds fine and dandy however you need to also create a certificate otherwise you won&rsquo;t be able to deploy the app properly. I&rsquo;ll walk you through the setup from start to finish.</p>
 <h3 id=prerequisites>Prerequisites</h3>
@@ -107,19 +111,19 @@ Do you have a bloated application? Maybe one or two that are so old it doesn&rsq
 <div class=image>
 <figure>
 <a href=vmconnect_1eSsb6FTKd.png target=_blank>
-<img src=vmconnect_1eSsb6FTKd.png alt>
+<img src=vmconnect_1eSsb6FTKd.png alt=screenshot>
 </a>
 </figure>
 </div></p>
 <ol>
-<li>Log in to <a href="https://businessstore.microsoft.com/en-us/store?signin=">Microsoft Store for Business</a></li>
+<li>Log in to <a href="https://businessstore.microsoft.com/store?signin=">Microsoft Store for Business</a></li>
 <li>Select <strong>Manage</strong></li>
 <li>Select <strong>Settings</strong></li>
 <li>Select <strong>Devices</strong></li>
 <li>Select <strong>Download</strong> on Download your organization&rsquo;s root certificate file for use with Device Guard<div class=image>
 <figure>
 <a href=msedge_5t3OJ6orOw.png target=_blank>
-<img src=msedge_5t3OJ6orOw.png alt>
+<img src=msedge_5t3OJ6orOw.png alt=screenshot>
 </a>
 </figure>
 </div></li>
@@ -194,17 +198,23 @@ Do you have a bloated application? Maybe one or two that are so old it doesn&rsq
 <p><div class=image>
 <figure>
 <a href=giphy-2.gif target=_blank>
-<img src=giphy-2.gif alt>
+<img src=giphy-2.gif alt=gif>
 </a>
 </figure>
 </div> </p>
+<img src=/authors/jake/avatar.png alt="Photo of Jake Shackelford"><br>
+<strong>Jake Shackelford</strong>
+<em>Admin/Contributor</em>
+<div>
+<a href=https://twitter.com/shackelfjaco><img src=/img/social/twitter.png></a>
+</div>
+<p>Jake is one of our Admins but also our inaugural author and the main reason SysManSquad exists today.</p>
+<hr>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
-</div>
-<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -216,7 +226,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

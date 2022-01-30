@@ -22,7 +22,8 @@
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Automating Outside of Business Hours Responses">
 <meta name=twitter:description content="Have you ever had customers emailing in outside of hours? In this post we will setup some scripted automatic maintenance of Auto-Reply responses on a user account.
-We considered several possibilities but the customer did not have an Azure Subscription yet, we ended up using PowerShell, Microsoft Graph, App Authentication, and a Scheduled Task.">
+We considered several possibilities but the customer did not have an Azure Subscription yet, we ended up using PowerShell, Microsoft Graph, App Authentication, and a Scheduled Task.
+Our customer will be moving to Azure later so we will probably revisit this as Azure Functions, or possibly Power Automate later on.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -91,7 +92,17 @@ We considered several possibilities but the customer did not have an Azure Subsc
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Automating Outside of Business Hours Responses</h1>
-<span class=post-date>December 30, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/kevin-crouch>Kevin Crouch</a> / </span>
+<span class=post-date>December 30, 2020 </span>
+<span class=post-categories>/ Azure </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ Graph </span>
+<span class=post-categories>/ How-To </span>
+<span class=post-categories>/ Microsoft </span>
+<span class=post-categories>/ Powershell </span>
+<span class=post-categories>/ Scripting </span>
+</p>
 </div>
 <div class=post-entry>
 <p>Have you ever had customers emailing in outside of hours? In this post we will setup some scripted automatic maintenance of Auto-Reply responses on a user account.</p>
@@ -103,91 +114,59 @@ We considered several possibilities but the customer did not have an Azure Subsc
 <li>Out-of-office responses</li>
 <li>Some tool or process to receive and process emails and respond at appropriate times</li>
 </ul>
-<pre><code>            &lt;p&gt;
-              We chose to use the **out-of-office responses** for our setup, because they would not need a separate server/service to run them, a running copy of Outlook to process them, and this customer did not have a current Azure Subscription to charge against for a more server-less solution like Azure Automation, Functions, or Power Automate.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              So, since Microsoft doesn't have a way to set up multiple sets of responses ahead of time, we need to create:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                something to make the changes &lt;ul&gt;
-                  &lt;li&gt;
-                    our script below will use **Microsoft Graph** to update the user's **Auto-Reply** settings
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-              
-              &lt;li&gt;
-                a way for our script to log in without a user present&lt;ul&gt;
-                  &lt;li&gt;
-                    we set up **Certificate Authentication** so that we can have this working securely, without a password or token to compromise
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-              
-              &lt;li&gt;
-                and an automated way to run our script&lt;ul&gt;
-                  &lt;li&gt;
-                    we opted for a **Scheduled Task** just as a simple way to schedule the update script to run regularly and access the certificate we will use to authenticate to **MS Graph**
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-            &lt;/ul&gt;
-</code></pre>
+<p>We chose to use the <strong>out-of-office responses</strong> for our setup, because they would not need a separate server/service to run them, a running copy of Outlook to process them, and this customer did not have a current Azure Subscription to charge against for a more server-less solution like Azure Automation, Functions, or Power Automate.</p>
+<p>So, since Microsoft doesn&rsquo;t have a way to set up multiple sets of responses ahead of time, we need to create:</p>
+<ul>
+<li>something to make the changes
+<ul>
+<li>our script below will use <strong>Microsoft Graph</strong> to update the user&rsquo;s <strong>Auto-Reply</strong> settings</li>
+</ul>
+</li>
+<li>a way for our script to log in without a user present
+<ul>
+<li>we set up <strong>Certificate Authentication</strong> so that we can have this working securely, without a password or token to compromise</li>
+</ul>
+</li>
+<li>and an automated way to run our script
+<ul>
+<li>we opted for a <strong>Scheduled Task</strong> just as a simple way to schedule the update script to run regularly and access the certificate we will use to authenticate to <strong>MS Graph</strong></li>
+</ul>
+</li>
+</ul>
 <h2 id=create-our-app-registration>Create our App Registration</h2>
-<pre><code>            &lt;p&gt;
-              First, we need to create an App to use for authentication, so that a user or administrator doesn't have to log in every time to run this. Just like my last post, where we created an app registration to [Find Microsoft Accounts on your company domain](https://sysmansquad.com/2020/11/23/find-microsoft-accounts/#setting-up-your-app-registration), we need to register an App for our script to authenticate and be granted permissions.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              This time, for our setup process we will:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                create a **single tenant** app
-              &lt;/li&gt;
-              &lt;li&gt;
-                add API Permissions to **ReadWrite **all **MailboxSettings**&lt;ul&gt;
-                  &lt;li&gt;
-                    in my example, I am requesting ReadWrite to all, but you should be able to [scope it to specific users](https://docs.microsoft.com/en-us/graph/auth-limit-mailbox-access) for a more secure implementation
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-              
-              &lt;li&gt;
-                create a **certificate** for authentication
-              &lt;/li&gt;
-              &lt;li&gt;
-                upload the authentication **certificate** to the new **App**
-              &lt;/li&gt;
-              &lt;li&gt;
-                export local copies of the **Public cert** and **PFX **to C:\Temp&lt;ul&gt;
-                  &lt;li&gt;
-                    if you need to set this Script up on another machine, you will need to import the **PFX** into the **user store** on that **machine**
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-              
-              &lt;li&gt;
-                grant **Admin Consent** for the **app permissions**
-              &lt;/li&gt;
-              &lt;li&gt;
-                Generate our **Connect-MGGraph** Command to use in the out-of-office automation script
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              This is a long list of tasks, and for more details and a more GUI-based walkthrough, I recommend you check out [this post](https://laurakokkarinen.com/authenticating-to-office-365-apis-with-a-certificate-step-by-step/#creating-the-certificate). For the ease of my setup (and to keep this a reasonable length) I included a script below to set everything up.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Just setup the first few variables on lines 2-4 with your options
-            &lt;/p&gt;
-</code></pre>
+<p>First, we need to create an App to use for authentication, so that a user or administrator doesn&rsquo;t have to log in every time to run this. Just like my last post, where we created an app registration to <a href=https://sysmansquad.com/2020/11/23/find-microsoft-accounts/#setting-up-your-app-registration>Find Microsoft Accounts on your company domain</a>, we need to register an App for our script to authenticate and be granted permissions.</p>
+<p>This time, for our setup process we will:</p>
+<ul>
+<li>
+<p>create a <strong>single tenant</strong> app</p>
+</li>
+<li>
+<p>add API Permissions to <strong>ReadWrite</strong> all <strong>MailboxSettings</strong></p>
+</li>
+<li>
+<p>in my example, I am requesting ReadWrite to all, but you should be able to <a href=https://docs.microsoft.com/graph/auth-limit-mailbox-access>scope it to specific users</a> for a more secure implementation</p>
+</li>
+<li>
+<p>create a <strong>certificate</strong> for authentication</p>
+</li>
+<li>
+<p>upload the authentication <strong>certificate</strong> to the new <strong>App</strong></p>
+</li>
+<li>
+<p>export local copies of the <strong>Public cert</strong> and <strong>PFX</strong> to C:\Temp</p>
+</li>
+<li>
+<p>if you need to set this Script up on another machine, you will need to import the <strong>PFX</strong> into the <strong>user store</strong> on that <strong>machine</strong></p>
+</li>
+<li>
+<p>grant <strong>Admin Consent</strong> for the <strong>app permissions</strong></p>
+</li>
+<li>
+<p>Generate our <strong>Connect-MGGraph</strong> Command to use in the out-of-office automation script</p>
+</li>
+</ul>
+<p>This is a long list of tasks, and for more details and a more GUI-based walkthrough, I recommend you check out <a href=https://laurakokkarinen.com/authenticating-to-office-365-apis-with-a-certificate-step-by-step/#creating-the-certificate>this post</a>. For the ease of my setup (and to keep this a reasonable length) I included a script below to set everything up.</p>
+<p>Just setup the first few variables on lines 2-4 with your options</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
@@ -250,14 +229,12 @@ We considered several possibilities but the customer did not have an Azure Subsc
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59>59</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60>60</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61>61</a>
 </span></code></pre></td>
 <td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># --- config start</span>
 <span style=color:teal>$appName</span> = <span style=color:#d14>&#34;AutomaticAutoReply&#34;</span>
 <span style=color:teal>$password</span> = <span style=color:#d14>&#34;Come up with something secure!&#34;</span> <span style=color:#998;font-style:italic># Certificate password</span>
 <span style=color:teal>$folderPath</span> = <span style=color:#d14>&#34;C:\temp&#34;</span> <span style=color:#998;font-style:italic># Where do you want the certificate files to get saved to? The folder needs to exist.</span>
-
 
 <span style=color:#998;font-style:italic>#region Graph permissions &amp; constants</span>
 <span style=color:teal>$graphResourceId</span> = <span style=color:#d14>&#34;00000003-0000-0000-c000-000000000000&#34;</span>
@@ -316,42 +293,23 @@ Pause ; <span style=color:#0086b3>Write-Host</span>
 
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>            ## Using our App Auth Certificate
-            
-            
-            &lt;p&gt;
-              To use the App auth Certificate is fairly simple, and the script above outputs the command to use. For my app it came out to the **Connect-mgGraph** command shown below.
-            &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot; id=&quot;AppAuthExampleImage&quot;&gt;
-            
-            ![](image-8.png)&lt;figcaption&gt;Sample **Connect-mgGraph** command shown above&lt;br /&gt;Connected with Certificate based, AppOnly login. &lt;/figcaption&gt;&lt;/figure&gt; &lt;p&gt;**Connect-mgGraph****Connect-mgGraph****Connect-mgGraph****Connect-mgGraph**
-              You can use the &lt;strong&gt;Get-mgContext&lt;/strong&gt; to verify you are connected &lt;strong&gt;AppOnly&lt;/strong&gt;/non-interactive login, as well as the &lt;strong&gt;app name &lt;/strong&gt;and your &lt;strong&gt;permissions scopes&lt;/strong&gt;.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              For a comparison, here is a screenshot of what this looks like connected as my Global Admin during the app registration - [Screenshot](https://i.imgur.com/cEi2DNy.png)
-            &lt;/p&gt;
-</code></pre>
+</div><h2 id=using-our-app-auth-certificate>Using our App Auth Certificate</h2>
+<p>To use the App auth Certificate is fairly simple, and the script above outputs the command to use. For my app it came out to the <strong>Connect-mgGraph</strong> command shown below.</p>
+<p><div class=image>
+<figure>
+<a href=image-8.png target=_blank>
+<img src=image-8.png alt=screenshot>
+</a>
+</figure>
+</div>Sample <strong>Connect-mgGraph</strong> command shown above Connected with Certificate based, AppOnly login.</p>
+<p>You can use the <em>Get-mgContext</em> to verify you are connected <em>AppOnly</em>/non-interactive login, as well as the <em>app name _and your _permissions scopes</em>.</p>
+<p>For a comparison, here is a screenshot of what this looks like connected as my Global Admin during the app registration - <a href=https://i.imgur.com/cEi2DNy.png>Screenshot</a></p>
 <h2 id=assembling-our-update-script>Assembling our Update Script</h2>
-<pre><code>            &lt;p&gt;
-              Now that we can authenticate to the Graph API, we need to make a script to update the Out-of-office messages, which are part of the [MailboxSettings](https://docs.microsoft.com/en-us/graph/api/user-get-mailboxsettings?view=graph-rest-1.0&amp;tabs=http) resource.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Using those variables from the previous app we created above, it provided out several variables we will need in the top of the script below. You can see them in the [previous screenshot](#AppAuthExampleImage). Pull those variables into Lines 3-6 below.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              We can select our User to update the Automatic Out-of-office responses on, and even setup a Teams WebHook notification for failures or errors, like they did for this post [Teams Channel Notification when OSD Fails](https://sysmansquad.com/2020/04/22/teams-channel-notification-when-osd-fails/#step-1). Just update &lt;code&gt;$WebHookURL&lt;/code&gt; on line 12 with your WebHookURL and set the user you want to maintain on line 9.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              In the script below, I set up Out-Of-Office replies scheduled from 5PM until 8AM the following workday morning.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Next, on lines 58-75, I assemble a **patch JSON**, and use Invoke-GraphRequest to patch it onto our user and change the settings.
-            &lt;/p&gt;
-</code></pre>
+<p>Now that we can authenticate to the Graph API, we need to make a script to update the Out-of-office messages, which are part of the <a href="https://docs.microsoft.com/graph/api/user-get-mailboxsettings?view=graph-rest-1.0&tabs=http">MailboxSettings</a> resource.</p>
+<p>Using those variables from the previous app we created above, it provided out several variables we will need in the top of the script below. You can see them in the <a href=#AppAuthExampleImage>previous screenshot</a>. Pull those variables into Lines 3-6 below.</p>
+<p>We can select our User to update the Automatic Out-of-office responses on, and even setup a Teams WebHook notification for failures or errors, like they did for this post <a href=https://sysmansquad.com/2020/04/22/teams-channel-notification-when-osd-fails/#step-1>Teams Channel Notification when OSD Fails</a>. Just update <code>$WebHookURL</code> on line 12 with your WebHookURL and set the user you want to maintain on line 9.</p>
+<p>In the script below, I set up Out-Of-Office replies scheduled from 5PM until 8AM the following workday morning.</p>
+<p>Next, on lines 58-75, I assemble a <strong>patch JSON</strong>, and use Invoke-GraphRequest to patch it onto our user and change the settings.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
@@ -533,61 +491,50 @@ Pause ; <span style=color:#0086b3>Write-Host</span>
 </code></pre></td></tr></table>
 </div>
 </div><h2 id=scheduling-the-script>Scheduling the Script</h2>
-<pre><code>            &lt;p&gt;
-              Since this script is scheduling the out-of-office messages, but not setting them directly, it can run any time after the previous out-of-office scheduled time has finished.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Since my schedule was 5PM to 8AM Monday-Friday, I made a scheduled task and set it up to run Weekly - Monday-Friday at 9AM.
-            &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-            
-            ![](image-12.png)&lt;/figure&gt; &lt;p&gt;
-              In my testing, since it was only accessing the Current User's profile, and did not need access to other networked resources, you can skip storing the password to increase security.
-            &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-            
-            ![](image-9.png)&lt;/figure&gt; &lt;p&gt;
-              For the program to run, we just need to specify to run the file with powershell.exe. On my system, it was trying to default opening the .ps1 in notepad, so I switched to directly running powershell.exe to bypass that.
-            &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-            
-            ![](image-13.png)&lt;/figure&gt; 
-</code></pre>
+<p>Since this script is scheduling the out-of-office messages, but not setting them directly, it can run any time after the previous out-of-office scheduled time has finished.</p>
+<p>Since my schedule was 5PM to 8AM Monday-Friday, I made a scheduled task and set it up to run Weekly - Monday-Friday at 9AM.</p>
+<p><div class=image>
+<figure>
+<a href=image-12.png target=_blank>
+<img src=image-12.png alt=screenshot>
+</a>
+</figure>
+</div> In my testing, since it was only accessing the Current User&rsquo;s profile, and did not need access to other networked resources, you can skip storing the password to increase security.</p>
+<p><div class=image>
+<figure>
+<a href=image-9.png target=_blank>
+<img src=image-9.png alt=screenshot>
+</a>
+</figure>
+</div> For the program to run, we just need to specify to run the file with powershell.exe. On my system, it was trying to default opening the .ps1 in notepad, so I switched to directly running powershell.exe to bypass that.</p>
+<p><div class=image>
+<figure>
+<a href=image-13.png target=_blank>
+<img src=image-13.png alt=screenshot>
+</a>
+</figure>
+</div></p>
 <h2 id=conclusion>Conclusion</h2>
-<pre><code>            &lt;p&gt;
-              With this setup, we have an automated flow to update the Out-Of-Office replies outside of business hours. To recap, we have:
-            &lt;/p&gt;
-            
-            &lt;ul&gt;
-              &lt;li&gt;
-                Made an app registration to grant the needed API Permissions to.
-              &lt;/li&gt;
-              &lt;li&gt;
-                Setup and used an authentication certificate for our script to connect without a user logging in.
-              &lt;/li&gt;
-              &lt;li&gt;
-                Made a script to invoke the Microsoft Graph API and make our change.
-              &lt;/li&gt;
-              &lt;li&gt;
-                Used a simple scheduled task that could run on any machine with access to the certificate to make the changes. Mostly just for a scheduling and recurrence mechanism.
-              &lt;/li&gt;
-            &lt;/ul&gt;
-            
-            &lt;p&gt;
-              This was just one small example of using the tools at hand, within our current constraints of this customer that doesn't currently have an Azure Subscription to charge against, but it can be used with any tenant.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              What processes are you looking at automating? You could dump a report of user sign-ins every week, fetch email statistics every hour, schedule removing licenses from users who are inactive, run a report of all newly created Teams and Groups in your Tenant and email those out to your admin team, or any number of other things.
-            &lt;/p&gt;
-            
-            &lt;p&gt;
-              Next time, maybe we can go over some of the serverless options that we could run this on if we have an active subscription, like Azure Functions, or possibly Power Automate.
-            &lt;/p&gt;
-</code></pre>
-<h4 id=where-to-find-me>Where to find me</h4>
-<pre><code>            &lt;p&gt;
-              If you have questions, are having problems, or just want to chat over something, you can leave a comment below or reach me on the [WinAdmins Discord](https://discord.com/invite/winadmins) at [@PsychoData](https://discordapp.com/users/264652399824601088)
-            &lt;/p&gt;
-</code></pre>
+<p>With this setup, we have an automated flow to update the Out-Of-Office replies outside of business hours. To recap, we have:</p>
+<ul>
+<li>Made an app registration to grant the needed API Permissions to.</li>
+<li>Setup and used an authentication certificate for our script to connect without a user logging in.</li>
+<li>Made a script to invoke the Microsoft Graph API and make our change.</li>
+<li>Used a simple scheduled task that could run on any machine with access to the certificate to make the changes. Mostly just for a scheduling and recurrence mechanism.</li>
+</ul>
+<p>This was just one small example of using the tools at hand, within our current constraints of this customer that doesn&rsquo;t currently have an Azure Subscription to charge against, but it can be used with any tenant.</p>
+<p>What processes are you looking at automating? You could dump a report of user sign-ins every week, fetch email statistics every hour, schedule removing licenses from users who are inactive, run a report of all newly created Teams and Groups in your Tenant and email those out to your admin team, or any number of other things.</p>
+<p>Next time, maybe we can go over some of the serverless options that we could run this on if we have an active subscription, like Azure Functions, or possibly Power Automate.</p>
+<h2 id=where-to-find-me>Where to find me</h2>
+<p>If you have questions, are having problems, or just want to chat over something, you can leave a comment below or reach me on the <a href=https://discord.com/invite/winadmins>WinAdmins Discord</a> at <a href=https://discordapp.com/users/264652399824601088>@PsychoData</a></p>
+<img src=/authors/kevin-crouch/avatar.png alt="Photo of Kevin Crouch"><br>
+<strong>Kevin Crouch</strong>
+<em>Contributor</em>
+<div>
+<a href=https://twitter.com/PsychoData><img src=/img/social/twitter.png></a>
+</div>
+<p>System Administrator</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -599,7 +546,7 @@ Pause ; <span style=color:#0086b3>Write-Host</span>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

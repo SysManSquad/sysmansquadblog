@@ -93,7 +93,11 @@ MSIX crash course While MSIX is generally marketed as a replacement for MSI for 
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Downloading a Device Guard Signing Service version 2 Root Certificate for MSIX</h1>
-<span class=post-date>November 2, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/johannes>Jóhannes Geir Kristjánsson</a> / </span>
+<span class=post-date>November 2, 2020 </span>
+<span class=post-categories>/ Endpoint Management </span>
+</p>
 </div>
 <div class=post-entry>
 <p>Howdy y&rsquo;all<br>
@@ -113,11 +117,11 @@ In this post I will show you how to get the Device Guard Signing Service v2 root
 The MSIX packaging format has a strict signing requirement. While you can always buy a code signing certificate, you can use a free DGSSv2 certificate from Microsoft.</p>
 <p>If you want to know how MSIX apps are setup and deployed, check out <a href=https://sysmansquad.com/2020/09/15/signing-and-deploying-applications-via-msix-with-intune/>Jake&rsquo;s blog post on MSIX</a>.</p>
 <h2 id=registering-the-azuread-app>Registering the AzureAD app</h2>
-<p>First we need to setup an AzureAd Application, <a href=https://docs.microsoft.com/en-us/windows/msix/package/signing-package-device-guard-signing>this is mostly covered in the official docs</a> but it&rsquo;s not very user friendly and when this post was written (31.10.2020), it was missing a crucial step.</p>
+<p>First we need to setup an AzureAd Application, <a href=https://docs.microsoft.com/windows/msix/package/signing-package-device-guard-signing>this is mostly covered in the official docs</a> but it&rsquo;s not very user friendly and when this post was written (31.10.2020), it was missing a crucial step.</p>
 <p>For those of you who have done this sort of thing before, here is the quick overview:</p>
 <ul>
 <li>Sign into AzureAd and start registering an app</li>
-<li>Under Redirect URI, select &ldquo;Public client (mobile & desktop)&rdquo;. and set <a href=https://dgss.microsoft.com>https://dgss.microsoft.com</a> as the URI</li>
+<li>Under Redirect URI, select &ldquo;Public client (mobile & desktop)&rdquo;. and set <code>https://dgss.microsoft.com</code> as the URI</li>
 <li>In the API permissions, select the &ldquo;Windows Store for Business API&rdquo;, Delegated permissions and select <strong>user_impersonation</strong></li>
 <li>Go to the overview and copy the Application (client) ID, and head to the <strong>Get-DGSSv2RootCert</strong> part of this post</li>
 </ul>
@@ -126,19 +130,19 @@ The MSIX packaging format has a strict signing requirement. While you can always
 <p><div class=image>
 <figure>
 <a href=1-app-registration-1024x573.png target=_blank>
-<img src=1-app-registration-1024x573.png alt>
+<img src=1-app-registration-1024x573.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Give it a descriptive name.<br>
-Under Redirect URI, select &ldquo;Public client (mobile & desktop)&rdquo;, and set <a href=https://dgss.microsoft.com>https://dgss.microsoft.com</a> as the URI.</p>
+Under Redirect URI, select &ldquo;Public client (mobile & desktop)&rdquo;, and set <code>https://dgss.microsoft.com</code> as the URI.</p>
 <p><div class=image>
 <figure>
 <a href=2-replyurl.png target=_blank>
-<img src=2-replyurl.png alt>
+<img src=2-replyurl.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Once the app has been created, click on <strong>API permissions</strong>.<br>
 <strong>Add permissions</strong>.<br>
 Click on <strong>APIs my organization uses</strong>.<br>
@@ -147,37 +151,37 @@ And click on it.</p>
 <p><div class=image>
 <figure>
 <a href=3-api-permissions-1024x342.png target=_blank>
-<img src=3-api-permissions-1024x342.png alt>
+<img src=3-api-permissions-1024x342.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Click on <strong>Delegated permissions</strong>.<br>
 And select <strong>user_impresonation</strong>.</p>
 <p><div class=image>
 <figure>
 <a href=4-delegate-access.png target=_blank>
-<img src=4-delegate-access.png alt>
+<img src=4-delegate-access.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Click on <strong>Grant consent for&mldr;</strong> otherwise the app will not work.</p>
 <p><div class=image>
 <figure>
 <a href=5-consent-1024x494.png target=_blank>
-<img src=5-consent-1024x494.png alt>
+<img src=5-consent-1024x494.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Now head back to the application overview and copy the GUID that&rsquo;s next to <strong>Application (client) ID</strong>, this is used in a script that is featured in this blog post.</p>
 <p><div class=image>
 <figure>
 <a href=6-appid.png target=_blank>
-<img src=6-appid.png alt>
+<img src=6-appid.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <h2 id=get-dgssv2rootcert>Get-DGSSv2RootCert</h2>
-<p>Since for most people, downloading the root certificate is a one time operation, I elected to run this this in a <a href=https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-overview>windows sandbox</a>. but that is 100% optional.</p>
+<p>Since for most people, downloading the root certificate is a one time operation, I elected to run this this in a <a href=https://docs.microsoft.com/windows/security/threat-protection/windows-sandbox/windows-sandbox-overview>windows sandbox</a>. but that is 100% optional.</p>
 <p>Paste the application GUID into the $AppID variable and you should be ready to go.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
@@ -203,18 +207,12 @@ And select <strong>user_impresonation</strong>.</p>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
 </span></code></pre></td>
 <td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># This simple script is used to download the Device Guard Signing Service v2 Root Certificate</span>
 
-
 <span style=color:#998;font-style:italic># please add your own App ID</span>
 <span style=color:teal>$AppID</span> = <span style=color:#d14>&#34;PUT YOUR GUID HERE&#34;</span>
-
-
 
 <span style=color:#998;font-style:italic># we need to add nuget as a package source first</span>
 <span style=color:#0086b3>Register-PackageSource</span> -Name MyNuGet -Location https<span style=color:#a61717;background-color:#e3d2d2>:</span>//www.nuget.org/api/v2 -ProviderName NuGet -Confirm<span style=color:#a61717;background-color:#e3d2d2>:</span><span style=color:teal>$false</span> -Force
@@ -237,6 +235,14 @@ And select <strong>user_impresonation</strong>.</p>
 </div>
 </div><p>Congrats, you now have a Device Guard Signing Service v2 Root Certificate in your possession.</p>
 <p>Now you can deploy the cert to your clients using your delivery mechanism of choice.</p>
+<img src=/authors/johannes/avatar.png alt="Photo of Jóhannes Geir Kristjánsson"><br>
+<strong>Jóhannes Geir Kristjánsson</strong>
+<em>Contributor</em>
+<div>
+<a href=https://twitter.com/jgkps><img src=/img/social/twitter.png></a>
+</div>
+<p>Jóhannes is one of our contributors.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -248,7 +254,7 @@ And select <strong>user_impresonation</strong>.</p>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
