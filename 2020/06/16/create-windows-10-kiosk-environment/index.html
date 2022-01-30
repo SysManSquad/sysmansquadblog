@@ -93,7 +93,11 @@ These registry edits will result in the following:
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Create Windows 10 Kiosk Environment</h1>
-<span class=post-date>June 16, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/ashmt>Ashley Mann-Thomas</a> / </span>
+<span class=post-date>June 16, 2020 </span>
+<span class=post-categories>/ Endpoint Management </span>
+</p>
 </div>
 <div class=post-entry>
 <p>Recently I had case where a we had to deploy computers that required Kiosk mode. Trouble was, I couldn&rsquo;t run Windows Kiosk mode for the auto start of the application I wanted the Kiosk users to operate.</p>
@@ -106,30 +110,81 @@ These registry edits will result in the following:
 <li>The user will login automatically when the computer turns on (If you opt in for that registry edit.)</li>
 </ul>
 <p>First enter Registry Editor:<br>
-Win+R</p>
+<strong>Hotkey</strong>: <code>Win+R</code></p>
 <p><div class=image>
 <figure>
 <a href=image-8.png target=_blank>
-<img src=image-8.png alt>
+<img src=image-8.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
-<p><div class=image>
+</div></p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Add startup application:</span>
+
+    [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System]
+    <span style=color:#d14>&#34;Shell&#34;</span>=<span style=color:#d14>&#34;C:\\full\\path\\to\\your\\application.exe&gt;&#34;</span>
+
+<span style=color:#998;font-style:italic># Autologin for kiosk user (Optional):</span>
+  
+    [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon] 
+    <span style=color:#d14>&#34;AutoAdminLogon&#34;</span>=<span style=color:#d14>&#34;1&#34;</span>
+    <span style=color:#d14>&#34;ForceAutoLogon&#34;</span>=<span style=color:#d14>&#34;1&#34;</span>
+    <span style=color:#d14>&#34;DefaultUserName&#34;</span>=<span style=color:#d14>&#34;kiosk&#34;</span>
+    <span style=color:#d14>&#34;DefaultDomainName&#34;</span>=<span style=color:#d14>&#34;place here pc hostname&gt;&#34;</span>
+    <span style=color:#d14>&#34;DefaultPassword&#34;</span>=<span style=color:#d14>&#34;&#34;</span>
+
+<span style=color:#998;font-style:italic># If you need to disable Ctrl+Alt+Del</span>
+
+    Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System
+     <span style=color:#998;font-style:italic>## the registry key &#34;System&#34; may not exist. In that situation just create       a new key called System.</span>
+    <span style=color:#d14>&#34;DisableTaskMgr &#34;</span>=<span style=color:#d14>&#34;1&#34;</span>&lt;/code&gt;&lt;/pre&gt;&lt;figure class=<span style=color:#d14>&#34;wp-block-image size-large&#34;</span>&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p><div class=image>
 <figure>
 <a href=image-10-1024x556.png target=_blank>
-<img src=image-10-1024x556.png alt>
+<img src=image-10-1024x556.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>I also suggest downgrading that user to a &ldquo;Standard User&rdquo; so they can&rsquo;t make changes to the computer without admin privileges.</p>
 <p><div class=image>
 <figure>
 <a href=image-9.png target=_blank>
-<img src=image-9.png alt>
+<img src=image-9.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Using these simple Registry settings you will be up and running with a Kiosk that runs any application you need as well as locking down the interface of the Windows 10 computer.</p>
+<img src=/authors/ashmt/avatar.png alt="Photo of Ashley Mann-Thomas"><br>
+<strong>Ashley Mann-Thomas</strong>
+<em>Contributor</em>
+<div>
+</div>
+<p>Ashley is an ICT Systems Engineer and Manager based in Melbourne with a passion for sharing experiences.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -141,7 +196,7 @@ Win+R</p>
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

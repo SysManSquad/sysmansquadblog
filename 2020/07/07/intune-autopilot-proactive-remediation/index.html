@@ -90,7 +90,19 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Intune/Autopilot Proactive Remediation</h1>
-<span class=post-date>July 7, 2020</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/jake>Jake Shackelford</a> / </span>
+<span class=post-date>July 7, 2020 </span>
+<span class=post-categories>/ Documentation </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ How-To </span>
+<span class=post-categories>/ Intune </span>
+<span class=post-categories>/ Microsoft </span>
+<span class=post-categories>/ Powershell </span>
+<span class=post-categories>/ Proactive Remediation </span>
+<span class=post-categories>/ Scripting </span>
+<span class=post-categories>/ Windows </span>
+</p>
 </div>
 <div class=post-entry>
 <h3 id=what-is-proactive-remediation>What is Proactive Remediation?</h3>
@@ -98,7 +110,7 @@
 <p><div class=image>
 <figure>
 <a href=msedge_OGHmAQhYGe-1024x448.png target=_blank>
-<img src=msedge_OGHmAQhYGe-1024x448.png alt>
+<img src=msedge_OGHmAQhYGe-1024x448.png alt=screenshot>
 </a>
 </figure>
 </div> Example of a proactive remediation graph in the Intune Portal</p>
@@ -133,7 +145,7 @@
     <span style=color:#000;font-weight:700>if</span> (<span style=color:#0086b3>Get-VpnConnection</span> -AllUserConnection -Name <span style=color:#d14>&#34;VPN&#34;</span> -ErrorAction Stop)
     {
         <span style=color:#0086b3>write-host</span> <span style=color:#d14>&#34;Success&#34;</span>
-    	exit 0  
+        exit 0  
     }
   
 }
@@ -183,7 +195,7 @@
 <p><div class=image>
 <figure>
 <a href=msedge_Pm7pXyDNrT.png target=_blank>
-<img src=msedge_Pm7pXyDNrT.png alt>
+<img src=msedge_Pm7pXyDNrT.png alt=screenshot>
 </a>
 </figure>
 </div>
@@ -192,7 +204,7 @@
 8. By default it will schedule to run daily, you can edit this to be Once, Hourly, or Daily<div class=image>
 <figure>
 <a href=msedge_dZOZmuqnCB.png target=_blank>
-<img src=msedge_dZOZmuqnCB.png alt>
+<img src=msedge_dZOZmuqnCB.png alt=screenshot>
 </a>
 </figure>
 </div>
@@ -209,21 +221,27 @@
 <div class=image>
 <figure>
 <a href=msedge_UJCXFijoRN.png target=_blank>
-<img src=msedge_UJCXFijoRN.png alt>
+<img src=msedge_UJCXFijoRN.png alt=screenshot>
 </a>
 </figure>
 </div></li>
 <li>Check the respective field for where the error occurred and you should be able to diagnose why the failure happened</li>
 </ol>
 <h3 id=other-issues>Other issues?</h3>
-<p>If you run into any other issues or have questions about anything Intune head over to the <a href=http://aka.ms/winadmins>WinAdmins discord community</a> and go to the #Intune channel.</p>
+<p>If you run into any other issues or have questions about anything Intune head over to the <a href=https://aka.ms/winadmins>WinAdmins discord community</a> and go to the #Intune channel.</p>
+<img src=/authors/jake/avatar.png alt="Photo of Jake Shackelford"><br>
+<strong>Jake Shackelford</strong>
+<em>Admin/Contributor</em>
+<div>
+<a href=https://twitter.com/shackelfjaco><img src=/img/social/twitter.png></a>
+</div>
+<p>Jake is one of our Admins but also our inaugural author and the main reason SysManSquad exists today.</p>
+<hr>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
-</div>
-<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -235,7 +253,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
