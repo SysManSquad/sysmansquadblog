@@ -22,8 +22,9 @@
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Setting A Default Outlook Signature in Outlook using Intune Proactive Remediations">
 <meta name=twitter:description content="So you have already figured out how to dynamically generated outlook signatures, but now you want to make sure that people actually use them. but without preventing the use of other signatures your users might have.
-Well it just so happens that I have a solution for you!    No default signature has been setTo do all this, we create a new Proactive Remediation in Intune.
-Add the detection and remediations scripts from below, and set it to run as the user.">
+Well it just so happens that I have a solution for you!
+    No default signature has been set
+To do all this, we create a new Proactive Remediation in Intune.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -92,7 +93,15 @@ Add the detection and remediations scripts from below, and set it to run as the 
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Setting A Default Outlook Signature in Outlook using Intune Proactive Remediations</h1>
-<span class=post-date>June 18, 2021</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/johannes>Jóhannes Geir Kristjánsson</a> / </span>
+<span class=post-date>June 18, 2021 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ Intune </span>
+<span class=post-categories>/ Powershell </span>
+<span class=post-categories>/ Proactive Remediation </span>
+<span class=post-categories>/ Windows </span>
+</p>
 </div>
 <div class=post-entry>
 <p>So you have already figured out <a href=https://sysmansquad.com/2020/07/08/dynamic-outlook-email-signature-using-with-intune-endpoint-analytics-proactive-remediations/>how to dynamically generated outlook signatures</a>, but now you want to make sure that people actually use them. but without preventing the use of other signatures your users might have.</p>
@@ -100,7 +109,7 @@ Add the detection and remediations scripts from below, and set it to run as the 
 <p><div class=image>
 <figure>
 <a href=before.png target=_blank>
-<img src=before.png alt>
+<img src=before.png alt=screenshot>
 </a>
 </figure>
 </div> No default signature has been set</p>
@@ -109,10 +118,10 @@ Add the detection and remediations scripts from below, and set it to run as the 
 <p><div class=image>
 <figure>
 <a href=vmconnect_68MRJGl48P.png target=_blank>
-<img src=vmconnect_68MRJGl48P.png alt>
+<img src=vmconnect_68MRJGl48P.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>This solution takes care of picking the default outlook profile. but keep in mind that this has only been tested on Office 365/microsoft 365 apps for business. so I have no idea if it works on the legacy versions.</p>
 <p>You only need to specify the name of the signature file on line 4 in both the detection and remediation scripts, which are case sensitive.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
@@ -251,7 +260,7 @@ Add the detection and remediations scripts from below, and set it to run as the 
 
 <span style=color:#998;font-style:italic># grabs all the data we need to detect the signature configuration from the default outlook profile</span>
     <span style=color:teal>$profilepath</span> = <span style=color:#0086b3>Get-ItemProperty</span> -Path <span style=color:#d14>&#34;hkcu:\SOFTWARE\Microsoft\Office\16.0\Outlook\Profiles\$profilename\9375CFF0413111d3B88A00104B2A6676\*&#34;</span> | <span style=color:#0086b3>Where-Object</span> { <span style=color:teal>$_</span>.<span style=color:#d14>&#34;Account name&#34;</span> <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$upn</span> } | <span style=color:#0086b3>Select-Object</span> -ExpandProperty pspath
-	<span style=color:#998;font-style:italic># did you know adam gross is an amazing singer?</span>
+    <span style=color:#998;font-style:italic># did you know adam gross is an amazing singer?</span>
     <span style=color:#998;font-style:italic># and finally we create/set the &#34;new signature&#34; key</span>
     <span style=color:#0086b3>New-ItemProperty</span> -Path <span style=color:teal>$profilepath</span> -Name <span style=color:#d14>&#34;New Signature&#34;</span> -Value <span style=color:teal>$DefaultSignatureName</span> -Force -ErrorAction stop
 
@@ -269,11 +278,19 @@ Add the detection and remediations scripts from below, and set it to run as the 
 </div><p>There is one caveat, this change will only take effect when outlook is restarted.</p>
 <p><div class=image>
 <figure>
-<a href=after.png target=_blank>
-<img src=after.png alt>
+<a href=after-768x539.png target=_blank>
+<img src=after-768x539.png alt=screenshot>
 </a>
 </figure>
 </div> Neato burrito, check it out!</p>
+<img src=/authors/johannes/avatar.png alt="Photo of Jóhannes Geir Kristjánsson"><br>
+<strong>Jóhannes Geir Kristjánsson</strong>
+<em>Contributor</em>
+<div>
+<a href=https://twitter.com/jgkps><img src=/img/social/twitter.png></a>
+</div>
+<p>Jóhannes is one of our contributors.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -285,7 +302,7 @@ Add the detection and remediations scripts from below, and set it to run as the 
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

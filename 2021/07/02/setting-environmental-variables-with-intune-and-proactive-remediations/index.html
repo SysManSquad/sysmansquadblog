@@ -23,7 +23,7 @@
 <meta name=twitter:title content="Setting Environmental Variables with Intune and proactive remediations">
 <meta name=twitter:description content="As you may have noticed by now, there doesn&rsquo;t seem to be any nice built in way to set environmental variables in intune 🙁
 The Problem Setting a user environmental variable using powershell is an easy task to accomplish, you basically just run the following:
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  This works just fine, but won't take effect until the user either reboots or signs into the device again.">
+1  Set-ItemProperty -Path HKCU:\Environment -Name temp -Value &#34;c:\temp\&#34;   This works just fine, but won&rsquo;t take effect until the user either reboots or signs into the device again.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -92,7 +92,16 @@ The Problem Setting a user environmental variable using powershell is an easy ta
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Setting Environmental Variables with Intune and proactive remediations</h1>
-<span class=post-date>July 2, 2021</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/johannes>Jóhannes Geir Kristjánsson</a> / </span>
+<span class=post-date>July 2, 2021 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ How-To </span>
+<span class=post-categories>/ Intune </span>
+<span class=post-categories>/ Powershell </span>
+<span class=post-categories>/ Proactive Remediation </span>
+<span class=post-categories>/ Windows </span>
+</p>
 </div>
 <div class=post-entry>
 <p>As you may have noticed by now, there doesn&rsquo;t seem to be any nice built in way to set environmental variables in intune 🙁</p>
@@ -100,38 +109,22 @@ The Problem Setting a user environmental variable using powershell is an easy ta
 <p>Setting a user environmental variable using powershell is an easy task to accomplish, you basically just run the following:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span></code></pre></td>
 <td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>
-
-
-This works just fine, but won<span style=color:#d14>&#39;t take effect until the user either reboots or signs into the device again. Which is obviously not ideal.
-</span><span style=color:#d14>
-</span><span style=color:#d14>I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a [WM_SETTINGCHANGE message](https://docs.microsoft.com/en-us/windows/win32/winmsg/wm-settingchange) is broadcast to the system and that refreshes them, but how you do that with powershell?
-</span><span style=color:#d14>
-</span><span style=color:#d14>## The Solution
-</span><span style=color:#d14>
-</span><span style=color:#d14>As it turned out, my fellow sysmansquad member [Grant Dickins](https://sysmansquad.com/author/gduk/) had a solution to the problem.
-</span><span style=color:#d14>
-</span><span style=color:#d14>
-</span><span style=color:#d14>  ```powershell 
-</span><span style=color:#d14>[System.Environment]::SetEnvironmentVariable(&#39;</span>TEMP<span style=color:#d14>&#39;,&#39;</span>c:\temp\<span style=color:#d14>&#39;,&#39;</span>User<span style=color:#a61717;background-color:#e3d2d2>&#39;</span>)
-
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Set-ItemProperty</span> -Path HKCU<span style=color:#a61717;background-color:#e3d2d2>:</span>\Environment -Name temp -Value <span style=color:#d14>&#34;c:\temp\&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>This works just fine, but won&rsquo;t take effect until the user either reboots or signs into the device again. Which is obviously not ideal.</p>
+<p>I spent a little time looking into this and i found out that when you change the environmental variable manually via the GUI, a <a href=https://docs.microsoft.com/windows/win32/winmsg/wm-settingchange>WM_SETTINGCHANGE message</a> is broadcast to the system and that refreshes them, but how you do that with powershell?</p>
+<h2 id=the-solution>The Solution</h2>
+<p>As it turned out, my fellow sysmansquad member <a href=https://sysmansquad.com/author/gduk/>Grant Dickins</a> had a solution to the problem.</p>
+<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:teal>[System.Environment]</span>::SetEnvironmentVariable(<span style=color:#d14>&#39;TEMP&#39;</span>,<span style=color:#d14>&#39;c:\temp\&#39;</span>,<span style=color:#d14>&#39;User&#39;</span>)
 </code></pre></td></tr></table>
 </div>
 </div><p>Which both sets the variable and broadcasts the change to the rest of the system!</p>
@@ -142,10 +135,10 @@ This works just fine, but won<span style=color:#d14>&#39;t take effect until the
 <p><div class=image>
 <figure>
 <a href=vmconnect_68MRJGl48P.png target=_blank>
-<img src=vmconnect_68MRJGl48P.png alt>
+<img src=vmconnect_68MRJGl48P.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <h2 id=the-script>The Script</h2>
 <p>First up is the Detection script, pretty simple stuff, it checks if the temp and tmp variables are set to the path i want.</p>
 <p>Note that if you want to use a different path, just change line 5 in both scripts.</p>
@@ -288,6 +281,14 @@ This works just fine, but won<span style=color:#d14>&#39;t take effect until the
 </div>
 </div><h2 id=outro>Outro</h2>
 <p>So there you go, a simple proactive remediation that you can use to change user environmental variables with relative ease. You can trivially adopt this to change any other variable. Either user or System variable.</p>
+<img src=/authors/johannes/avatar.png alt="Photo of Jóhannes Geir Kristjánsson"><br>
+<strong>Jóhannes Geir Kristjánsson</strong>
+<em>Contributor</em>
+<div>
+<a href=https://twitter.com/jgkps><img src=/img/social/twitter.png></a>
+</div>
+<p>Jóhannes is one of our contributors.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -299,7 +300,7 @@ This works just fine, but won<span style=color:#d14>&#39;t take effect until the
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

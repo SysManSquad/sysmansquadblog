@@ -19,9 +19,11 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://blog.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/2021/10/18/get-rid-of-the-continue-connecting-prompt-for-your-policy-configured-wifi-networks/image.png">
 <meta name=twitter:title content="Get rid of the “Continue connecting?” prompt for your policy-configured wifi networks">
-<meta name=twitter:description content="As of Windows 11, we noticed that we were getting prompted to continue connecting to a network that we&rsquo;d never had a problem with before. It&rsquo;s already defined in group policy, so this new behavior is puzzling and annoying. The certificate in question is for the NPS/Radius server our network uses to validate credentials for the wifi.     I really had no idea how to even begin googling for this problem, but while talking to some of my fellow nerds on the Winadmins Discord server, tossing around some ideas on what could be causing this, looking to see whether there was a problem with the certificate, etc.">
+<meta name=twitter:description content="As of Windows 11, we noticed that we were getting prompted to continue connecting to a network that we&rsquo;d never had a problem with before. It&rsquo;s already defined in group policy, so this new behavior is puzzling and annoying. The certificate in question is for the NPS/Radius server our network uses to validate credentials for the wifi.
+  Continue Connecting  
+I really had no idea how to even begin googling for this problem, but while talking to some of my fellow nerds on the Winadmins Discord server, tossing around some ideas on what could be causing this, looking to see whether there was a problem with the certificate, etc.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -90,21 +92,34 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Get rid of the “Continue connecting?” prompt for your policy-configured wifi networks</h1>
-<span class=post-date>October 18, 2021</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/aaron>Aaron Glenn</a> / </span>
+<span class=post-date>October 18, 2021 </span>
+<span class=post-categories>/ Endpoint Management </span>
+</p>
 </div>
 <div class=post-entry>
-<p>As of Windows 11, we noticed that we were getting prompted to continue connecting to a network that we&rsquo;d never had a problem with before. It&rsquo;s already defined in group policy, so this new behavior is puzzling and annoying. The certificate in question is for the NPS/Radius server our network uses to validate credentials for the wifi. </p>
+<p>As of Windows 11, we noticed that we were getting prompted to continue connecting to a network that we&rsquo;d never had a problem with before. It&rsquo;s already defined in group policy, so this new behavior is puzzling and annoying. The certificate in question is for the NPS/Radius server our network uses to validate credentials for the wifi.</p>
 <p><div class=image>
 <figure>
 <a href=image.png target=_blank>
-<img src=image.png alt>
+<img src=image.png alt="Continue Connecting">
 </a>
+<figcaption>Continue Connecting</figcaption>
 </figure>
-</div> </p>
+</div></p>
 <p>I really had no idea how to even begin googling for this problem, but while talking to some of my fellow nerds on the <a href=http://winadmins.io/>Winadmins</a> Discord server, tossing around some ideas on what could be causing this, looking to see whether there was a problem with the certificate, etc. While I was poking around and testing these suggestions I stumbled across the fix.</p>
 <p>In the group policy editor, find the defined wifi policies under Computer -> policies > windows settings > Wireless Network (802.11) Policies. Open the properties for the configuration in question.</p>
 <p>On the General tab, find the SSID you&rsquo;ve configured and click Edit. On the Security tab, under the authentication method (Microsoft: Protected EAP in my case), click properties.</p>
 <p>On the Protected EAP Properties tab, the checkmark for &ldquo;Verify the server&rsquo;s identity by validating the certificate&rdquo; was already checked. The fix ended up being to select the checkmark by my company&rsquo;s internal CA service. After updating the group policy on the laptop in question, the network connects properly on login again with no further questions.</p>
+<img src=/authors/aaron/avatar.png alt="Photo of Aaron Glenn"><br>
+<strong>Aaron Glenn</strong>
+<em>Admin/Mentor</em>
+<div>
+<a href=https://www.linkedin.com/in/aaron-g-961b5359><img src=/img/social/linkedin.png></a>
+</div>
+<p>Aaron is a Sr. Systems Administrator from Tulsa, specializing in Microsoft technologies, with an emphasis on powershell.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -116,7 +131,7 @@
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

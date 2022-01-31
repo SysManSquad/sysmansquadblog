@@ -90,22 +90,16 @@
 <div id=content>
 <div id=main>
 <article class=list-item>
-<div class=post-img>
-<a href=https://blog.sysmansquad.com/2020/09/14/vpn-boundary-type-and-understanding-its-options/>
-<img width=520 height=400 src=https://blog.sysmansquad.com/2020/09/14/vpn-boundary-type-and-understanding-its-options/Snag_2a0b39b.png>
-</a>
-</div>
 <div class=list-content>
 <div class=post-header>
 <h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2020/09/14/vpn-boundary-type-and-understanding-its-options/>VPN Boundary Type and Understanding Its Options</a>
+<a href=https://blog.sysmansquad.com/2021/04/27/updated-modern-driver-bios-management-with-cmg-support/>Updated Modern Driver/BIOS Management with CMG Support</a>
 </h2>
 </div>
 <div class=post-entry>
 <p>
-Like many, I was very excited that the new Configuration Manager 2006 release included a huge improvement for remote devices by adding a new VPN Boundary type.
-&ldquo;Finally! I don&rsquo;t have to constantly bug my Network Engineers as to which IP pools are being used for which VPN appliances."
-Create A New Boundary In the Admin Console, navigate to the Administration Node and open up Hierarchy Configuration and right-click on Boundaries
+Hello,
+This is a long and overdue update on a solution I started working on last year to allow my organization to use the modern driver management solution without the need of the custom webservice. I also wanted the solution to use the built-in task sequence steps as much as possible to allow other administrators to customize the solution to their need without the need to go modify a big PowerShell script.
 </p>
 </div>
 <div class=list-meta>
@@ -118,13 +112,13 @@ Create A New Boundary In the Admin Console, navigate to the Administration Node 
 <div class=list-content>
 <div class=post-header>
 <h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2020/09/11/allow-onedrive-syncing-on-aad-joined-devices/>Allow OneDrive Syncing on AAD joined Devices</a>
+<a href=https://blog.sysmansquad.com/2021/02/22/create-a-new-winpe-boot-image/>Create a new WinPE boot image</a>
 </h2>
 </div>
 <div class=post-entry>
 <p>
-The Problem So I was walking on the beach and noticed that OneDrive wasn&rsquo;t syncing anymore on my AzureAD joined laptop. I later learned that my endpoint administrator, Adam Gross, had enabled Allow syncing only on computers joined to specific domains in the OneDrive admin portal. which effectively blocked my AzureAD device 🙁
-Which resulted in this message on my corporate device
+Introduction In this post I&rsquo;ll show you how you can create a new boot image in ConfigMgr.
+There&rsquo;s plenty of good content out there already on this, but I was interested to write this because I didn&rsquo;t see many PowerShell examples out there until I came across Michael Niehaus' post on Build your own Windows PE image. A fantastic post, highly recommend reading it. Michael provided a useful script at the end of this post in a .
 </p>
 </div>
 <div class=list-meta>
@@ -137,13 +131,13 @@ Which resulted in this message on my corporate device
 <div class=list-content>
 <div class=post-header>
 <h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2020/09/04/manage-distribution-point-content-using-pscmcontentmgmt/>Manage Distribution Point Content Using PSCMContentMgmt</a>
+<a href=https://blog.sysmansquad.com/2021/02/17/keeping-up-with-distribution-points/>Keeping Up with Distribution Points</a>
 </h2>
 </div>
 <div class=post-entry>
 <p>
-Introduction I recently wrote PSCMContentMgmt which provides a simple and effective workflow for managing your MEMCM distribution points. Here are some of the things you can do with it:
-Query content objects which are distributed to distribution point(s) or distribution point group(s) Compare content objects distributed to distribution point(s) or distribution point group(s) Find content objects in a &ldquo;distribution failed&rdquo; state for all or selective distribution points Remove, distribute or redistribute content objects returned by any function to distribution point(s) Find an object in your site by searching on any arbitrary ID (useful when reading logs and want to know what object an ID resolves to) Migrate a distribution point&rsquo;s content to a new/different distribution point by exporting its content library to prestaged .
+Distribution Points are great, but they can often be a huge annoyance. Getting content distributed is one thing, but then making sure it STAYS distributed, and old things are getting cleaned up, and making sure all the content hashes are correct, etc. It’s easy to feel like you’re constantly drowning in a sea of DP warnings and errors.
+Luckily, there’s some simple things we can do to take this burden away.
 </p>
 </div>
 <div class=list-meta>
@@ -156,31 +150,14 @@ Query content objects which are distributed to distribution point(s) or distribu
 <div class=list-content>
 <div class=post-header>
 <h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2020/08/28/getting-reboot-history-and-optimizing-legacy-functions/>Getting Reboot History and Optimizing Legacy Functions</a>
+<a href=https://blog.sysmansquad.com/2021/02/16/multilingual-windows-10-20h2-osd-with-configmgr/>Multilingual Windows 10 20H2 OSD with ConfigMgr</a>
 </h2>
 </div>
 <div class=post-entry>
 <p>
-The other day, I logged on to a jump server and, while investigating an unrelated issue, I noticed the BG Info background showed the Last Reboot as March 1st, 2020. &ldquo;That can&rsquo;t be right,&rdquo; I thought. &ldquo;We have weekly maintenance windows to reboot these servers.&rdquo;
-As I opened an old stand-by function from my stash (originally posted here: https://gallery.technet.microsoft.com/scriptcenter/Get-RebootHistory-bc804819 in 2015) and ran it, I was a bit annoyed at how SLOW it was.
-</p>
-</div>
-<div class=list-meta>
-<span class=post-date>
-</span>
-</div>
-</div>
-</article>
-<article class=list-item>
-<div class=list-content>
-<div class=post-header>
-<h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2020/08/25/enrolling-and-autopiloting-new-and-pre-existing-devices-into-intune-with-configmgr-edu/>Enrolling and Autopiloting New and Pre-existing Devices into Intune with ConfigMgr – EDU</a>
-</h2>
-</div>
-<div class=post-entry>
-<p>
-Months after we issued students and faculty 600+ unmanaged off the shelf laptops (no AD, no Azure AD, no Intune, no ConfigMgr) to get them off and running temporarily during this pandemic, my co-worker and I were tasked with figuring out how to bring these machines under some form of management. We did not have these machines in ConfigMgr or have the hardware hashes uploaded into Intune, so we had some work ahead of us.
+Introduction In this post I&rsquo;m going to share with you a task sequence for ConfigMgr / SCCM / MEMCM / MECM / MCM (this is just getting silly now) that localises Windows 10 to a language other than the default language of the OS install media.
+This is a follow up from my previous post Language Packs, Language Experience Packs, Language Interface Packs… what?!
+In that post I broke down the necessary bits in order to understand how to localise a Windows system.
 </p>
 </div>
 <div class=list-meta>
@@ -191,38 +168,19 @@ Months after we issued students and faculty 600+ unmanaged off the shelf laptops
 </article>
 <article class=list-item>
 <div class=post-img>
-<a href=https://blog.sysmansquad.com/2020/08/24/bulk-updating-autopilot-enrolled-devices-with-graph-api-and-assigning-a-group-tag-based-on-purchase-orderid/>
-<img width=520 height=400 src=https://blog.sysmansquad.com/2020/08/24/bulk-updating-autopilot-enrolled-devices-with-graph-api-and-assigning-a-group-tag-based-on-purchase-orderid/msedge_qxJ7I3fI72.png>
+<a href=https://blog.sysmansquad.com/2021/02/13/create-a-small-discord-py-bot-to-deploy-a-server/>
+<img width=520 height=400 src=https://blog.sysmansquad.com/2021/02/13/create-a-small-discord-py-bot-to-deploy-a-server/eagle.png>
 </a>
 </div>
 <div class=list-content>
 <div class=post-header>
 <h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2020/08/24/bulk-updating-autopilot-enrolled-devices-with-graph-api-and-assigning-a-group-tag-based-on-purchase-orderid/>Bulk Updating Autopilot enrolled devices with Graph API and assigning a Group Tag based on Purchase OrderID</a>
+<a href=https://blog.sysmansquad.com/2021/02/13/create-a-small-discord-py-bot-to-deploy-a-server/>Create a small discord.py bot to deploy a server</a>
 </h2>
 </div>
 <div class=post-entry>
 <p>
-The Problem For any new machines ordered from a vendor such as Dell that get enrolled into Autopilot you get the basic device info enrolled but nothing defining that would let it get auto-enrolled into a dynamic group easily. Purchase Order ID is included in every order we receive from Dell however I don&rsquo;t want to have to add that Purchase Order ID into the dynamic device query every time a new machine gets added.
-</p>
-</div>
-<div class=list-meta>
-<span class=post-date>
-</span>
-</div>
-</div>
-</article>
-<article class=list-item>
-<div class=list-content>
-<div class=post-header>
-<h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2020/07/27/setting-acl-using-intune-endpoint-analytics-proactive-remediations/>Setting ACL using Intune Endpoint Analytics Proactive Remediations</a>
-</h2>
-</div>
-<div class=post-entry>
-<p>
-Namaste y&rsquo;all! In todays Siri dictated blog post, I will show you how you can configure access control lists (ACL) for a directory using Intune Proactive remediations.
-The issue I was facing was that regular users do not have modify permissions to the public desktop on their corporate devices, meaning that the user is unable to remove annoying shortcuts that would get placed there by the various apps they install. While this is hardly a high priority task to solve.
+I volunteer to help run Southwest CCDC every year, and had a need to deploy all of the communication infrastructure in a hurry. With Covid Times™ upon us, we needed to move a competition that usually has at least one round in person to all-virtual. Discord was the obvious choice for how to do that successfully - it is targeted to communities of people, and has moderation tools. My discord server needed to have a few things:
 </p>
 </div>
 <div class=list-meta>
@@ -233,21 +191,20 @@ The issue I was facing was that regular users do not have modify permissions to 
 </article>
 <article class=list-item>
 <div class=post-img>
-<a href=https://blog.sysmansquad.com/2020/07/08/dynamic-outlook-email-signature-using-with-intune-endpoint-analytics-proactive-remediations/>
-<img width=520 height=400 src=https://blog.sysmansquad.com/2020/07/08/dynamic-outlook-email-signature-using-with-intune-endpoint-analytics-proactive-remediations/outlook-signature.png>
+<a href=https://blog.sysmansquad.com/2021/02/09/access-public-github-repo-feeds-in-power-automate/>
+<img width=520 height=400 src=https://blog.sysmansquad.com/2021/02/09/access-public-github-repo-feeds-in-power-automate/Github-RSS-Flow-4.png>
 </a>
 </div>
 <div class=list-content>
 <div class=post-header>
 <h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2020/07/08/dynamic-outlook-email-signature-using-with-intune-endpoint-analytics-proactive-remediations/>Dynamic Outlook Email Signature Using with Intune Endpoint Analytics Proactive Remediations</a>
+<a href=https://blog.sysmansquad.com/2021/02/09/access-public-github-repo-feeds-in-power-automate/>Access Public GitHub Repo Feeds in Power Automate</a>
 </h2>
 </div>
 <div class=post-entry>
 <p>
-Howdy y&rsquo;all!
-Since you have already read señor Shackelfords blog post on setting up Endpoint Analytics Proactive remediations, we can skip the intro and dive right in.
-In this blog post we will be get familiar with a somewhat novel idea that proactive remediation&rsquo;s can be used for. Which, as the title of this post suggests, is the creation of a dynamic email signature in the form of a .html file using Microsoft Graph.
+Have you ever wanted to get a simple notification when there is a new Release for your favorite PowerShell Module or other Public Repo on GitHub? In this post we&rsquo;ll talk about how you can use Power Automate to watch for new releases and trigger events on these and send out Teams messages, Emails, or even Kick off an Azure Function or similar automation.
+Introduction In my previous post, we did some automation with client-side scripts and Microsoft Graph to update Outlook Auto-Responses on a schedule.
 </p>
 </div>
 <div class=list-meta>
@@ -258,19 +215,68 @@ In this blog post we will be get familiar with a somewhat novel idea that proact
 </article>
 <article class=list-item>
 <div class=post-img>
-<a href=https://blog.sysmansquad.com/2020/07/07/intune-autopilot-proactive-remediation/>
-<img width=520 height=400 src=https://blog.sysmansquad.com/2020/07/07/intune-autopilot-proactive-remediation/msedge_OGHmAQhYGe.png>
+<a href=https://blog.sysmansquad.com/2021/01/26/trigger-teams-installer-for-user-after-machine-wide-installer/>
+<img width=520 height=400 src=https://blog.sysmansquad.com/2021/01/26/trigger-teams-installer-for-user-after-machine-wide-installer/Teams-NotFound.png>
 </a>
 </div>
 <div class=list-content>
 <div class=post-header>
 <h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2020/07/07/intune-autopilot-proactive-remediation/>Intune/Autopilot Proactive Remediation</a>
+<a href=https://blog.sysmansquad.com/2021/01/26/trigger-teams-installer-for-user-after-machine-wide-installer/>Trigger Teams Installer for User After Machine Wide Installer</a>
 </h2>
 </div>
 <div class=post-entry>
 <p>
-What is Proactive Remediation? Proactive remediations are a pair of scripts used to detect and remediate a problem on a machine. The first script runs a query on your endpoints that returns an exit code of success or failure. We call this first script the detection script. On a successful exit code it is reported as &ldquo;Without issue&rdquo; in the Intune portal and nothing else is executed. On a failed exit code the second script is run which is called a remediation script.
+The Problem: Teams Machine Wide Installer finishes&mldr; Then&mldr; Nothing? Have you or a loved one ever deployed Microsoft Teams in an enterprise environment? Did the users complain? Did project management complain? Management? You?
+I&rsquo;m sure someone was not happy about the overall user experience. In particular when the Teams Machine Wide installer is finished, and detected by your application management tool of choice it does&mldr; nothing. The user is left with a message claiming Teams is &lsquo;Installed&rsquo; when clearly it is not.
+</p>
+</div>
+<div class=list-meta>
+<span class=post-date>
+</span>
+</div>
+</div>
+</article>
+<article class=list-item>
+<div class=post-img>
+<a href=https://blog.sysmansquad.com/2021/01/18/collecting-logs-with-log-analytics-for-intune-devices/>
+<img width=520 height=400 src=https://blog.sysmansquad.com/2021/01/18/collecting-logs-with-log-analytics-for-intune-devices/image-1.png>
+</a>
+</div>
+<div class=list-content>
+<div class=post-header>
+<h2 class=post-title>
+<a href=https://blog.sysmansquad.com/2021/01/18/collecting-logs-with-log-analytics-for-intune-devices/>Collecting Logs with Log Analytics for Intune devices</a>
+</h2>
+</div>
+<div class=post-entry>
+<p>
+Why do I need logs? The purpose of this guide is to configure the collection of Logs in an Intune environment. By default the log analytics you enable in Intune does not give you much information beyond auditing basic things. With this approach we can record any desired log for all of our machines. There is a companion video for this setup https://youtu.be/Uw3GjMnSXbI.
+Enabling Log Analytics Navigate to endpoint.microsoft.com Select Reports Select Diagnostic Settings Select Add Diagnostic setting Select all options under Log Select Send to Log Analytics workspace Select a Log Analytics workspace You can archive to a storage account to keep data longer Now that we have the log analytics workspace configured we can configure the Microsoft Monitoring Agent (MMA)
+</p>
+</div>
+<div class=list-meta>
+<span class=post-date>
+</span>
+</div>
+</div>
+</article>
+<article class=list-item>
+<div class=post-img>
+<a href=https://blog.sysmansquad.com/2021/01/05/finding-azure-virtual-machines-in-configuration-manager/>
+<img width=520 height=400 src=https://blog.sysmansquad.com/2021/01/05/finding-azure-virtual-machines-in-configuration-manager/image-14.png>
+</a>
+</div>
+<div class=list-content>
+<div class=post-header>
+<h2 class=post-title>
+<a href=https://blog.sysmansquad.com/2021/01/05/finding-azure-virtual-machines-in-configuration-manager/>Finding Azure Virtual Machines in Configuration Manager</a>
+</h2>
+</div>
+<div class=post-entry>
+<p>
+A request came in from my System Admin group to push certain policies only to VMs hosted in Azure. Currently, they had a naming convention being used (well, supposed to be used) to simply prefix the hostname with AZ-, but they came across a couple Domain Controllers that hadn&rsquo;t installed Updates in 7+ months, and of course the names didn&rsquo;t follow the accepted standard.
+So I started looking for ways to identify Azure devices definitively and came across this Detect Windows Azure Virtual Machine post, which led to reading the Azure Metadata Service docs, and eventually got me to turn this into a Configuration Item / Configuration Baseline and subsequent Device Collections.
 </p>
 </div>
 <div class=list-meta>
@@ -283,14 +289,14 @@ What is Proactive Remediation? Proactive remediations are a pair of scripts used
 <div class=list-content>
 <div class=post-header>
 <h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2020/06/18/modern-bios-management-with-the-administration-service/>Modern BIOS Management with the Administration Service</a>
+<a href=https://blog.sysmansquad.com/2020/12/30/automating-changing-out-of-business-hours-responses/>Automating Outside of Business Hours Responses</a>
 </h2>
 </div>
 <div class=post-entry>
 <p>
-2021-04-27 update: The solution now works over CMG. Please see this post for details.
-If you haven&rsquo;t seen my first blog post about modern driver management, the quick summary is that the solution uses packages created with the Driver Automation Tool and the administration service to retrieve information on these packages and identify the most suitable driver package to apply in a task sequence.
-In this second part, I&rsquo;ll be discussing the changes and improvements done to the existing solution to also dynamically retrieve and filter and apply BIOS updates.
+Have you ever had customers emailing in outside of hours? In this post we will setup some scripted automatic maintenance of Auto-Reply responses on a user account.
+We considered several possibilities but the customer did not have an Azure Subscription yet, we ended up using PowerShell, Microsoft Graph, App Authentication, and a Scheduled Task.
+Our customer will be moving to Azure later so we will probably revisit this as Azure Functions, or possibly Power Automate later on.
 </p>
 </div>
 <div class=list-meta>
@@ -320,11 +326,11 @@ In this second part, I&rsquo;ll be discussing the changes and improvements done 
 <div class="widget widget_recent_entries">
 <h4 class=widget-title>Squad Posts</h4>
 <ul>
-<li><a href=/2021/01/05/finding-azure-virtual-machines-in-configuration-manager/ target=_blank>Finding Azure Virtual Machines in Configuration Manager</a></li>
-<li><a href=/2020/12/30/automating-changing-out-of-business-hours-responses/ target=_blank>Automating Outside of Business Hours Responses</a></li>
-<li><a href=/2020/12/16/mapping-network-drives-on-intune-devices/ target=_blank>Mapping Network Drives on Intune Devices</a></li>
-<li><a href=/2020/12/08/give-your-adr-a-little-boost-with-status-filter-rules-and-powershell/ target=_blank>Give your ADR a little boost with Status Filter Rules and PowerShell</a></li>
-<li><a href=/2020/11/23/find-microsoft-accounts/ target=_blank>Find Microsoft Accounts on Company Domains</a></li>
+<li><a href=/2021/11/11/microsoft-teams-cache-a-burden-to-us-all/ target=_blank>Microsoft Teams Cache, a burden to us all</a></li>
+<li><a href=/2021/10/18/get-rid-of-the-continue-connecting-prompt-for-your-policy-configured-wifi-networks/ target=_blank>Get rid of the “Continue connecting?” prompt for your policy-configured wifi networks</a></li>
+<li><a href=/2021/10/08/removing-the-built-in-teams-app-in-windows-11-with-intune/ target=_blank>Removing The Built-in Teams App in Windows 11 with Intune</a></li>
+<li><a href=/2021/08/30/installing-the-configuration-manager-client-during-autopilot/ target=_blank>Installing The Configuration Manager Client During Autopilot</a></li>
+<li><a href=/2021/07/12/use-azure-policy-to-configure-boot-diagnostics-settings/ target=_blank>Use Azure Policy to configure Boot Diagnostics Settings</a></li>
 </ul>
 </div>
 </aside>

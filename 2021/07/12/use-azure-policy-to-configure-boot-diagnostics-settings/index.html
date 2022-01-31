@@ -22,7 +22,9 @@
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Use Azure Policy to configure Boot Diagnostics Settings">
 <meta name=twitter:description content="I found several posts about configuring Diagnostic Settings on VMs, but none that specified or included boot diagnostics.
-With this Azure Policy you can automatically enable Boot Diagnostics and apply a storage account to it. This is also a great base if you want to start testing out your own policies.">
+With this Azure Policy you can automatically enable Boot Diagnostics and apply a storage account to it. This is also a great base if you want to start testing out your own policies.
+1. Overview Our process will have several major parts
+ Create a Custom Azure Policy Definition Assign to a Subscription or Resource Group  Find the Blob Storage URI to use   Create a Remediation task to Apply the changes Optional: Link to GitHub for versioning  2.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -91,82 +93,49 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Use Azure Policy to configure Boot Diagnostics Settings</h1>
-<span class=post-date>July 12, 2021</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/kevin-crouch>Kevin Crouch</a> / </span>
+<span class=post-date>July 12, 2021 </span>
+<span class=post-categories>/ Endpoint Management </span>
+</p>
 </div>
 <div class=post-entry>
 <p>I found several posts about configuring Diagnostic Settings on VMs, but none that specified or included <strong>boot diagnostics</strong>.</p>
 <p>With this Azure Policy you can automatically enable Boot Diagnostics and apply a storage account to it. This is also a great base if you want to start testing out your own policies.</p>
-<pre><code>      &lt;li class=&quot;uagb-toc__list&quot;&gt;
-        [4. Create Remediation Task](#4-create-remediation-task)&lt;li class=&quot;uagb-toc__list&quot;&gt;
-          [5. Be Patient and Enjoy](#5-be-patient-and-enjoy)&lt;li class=&quot;uagb-toc__list&quot;&gt;
-            [6. Optional: Export to GitHub](#6-optional-export-to-github)
-          &lt;/li&gt;&lt;/ul&gt;&lt;/ol&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; 
-          &lt;div class=&quot;wp-block-group&quot;&gt;
-            &lt;div class=&quot;wp-block-group__inner-container&quot;&gt;
-              ## 1. Overview
-              &lt;p&gt;
-                Our process will have several major parts
-              &lt;/p&gt;
-              
-              &lt;ul&gt;
-                &lt;li&gt;
-                  Create a Custom Azure Policy Definition
-                &lt;/li&gt;
-                &lt;li&gt;
-                  Assign to a Subscription or Resource Group&lt;ul&gt;
-                    &lt;li&gt;
-                      Find the Blob Storage URI to use
-                    &lt;/li&gt;
-                  &lt;/ul&gt;
-                &lt;/li&gt;
-                
-                &lt;li&gt;
-                  Create a Remediation task to Apply the changes
-                &lt;/li&gt;
-                &lt;li&gt;
-                  Optional: Link to GitHub for versioning
-                &lt;/li&gt;
-              &lt;/ul&gt;
-              
-              &lt;p&gt;
-              &lt;/p&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-          
-          ## 2.Create a Custom Policy Definition
-          
-          
-          &lt;p&gt;
-            First we will need to Create a Custom Definition. To start with head to Portal.Azure.com &gt; [Azure Policy | Definitions](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Definitions).
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            From here, we will need to create a new Policy Definition
-          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-          
-          ![](https://i.imgur.com/7ANVOqt.png)&lt;/figure&gt; &lt;p&gt;
-            Fill in several fields
-          &lt;/p&gt;
-          
-          &lt;ul&gt;
-            &lt;li&gt;
-              &quot;Definition Location&quot; - which will be the Subscription.
-            &lt;/li&gt;
-            &lt;li&gt;
-              Give it a name
-            &lt;/li&gt;
-            &lt;li&gt;
-              Create a custom category, or select an existing one
-            &lt;/li&gt;
-          &lt;/ul&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-          
-          ![](https://i.imgur.com/BRJEnNY.png)&lt;/figure&gt; &lt;p&gt;
-            For the Policy Rule Definition, you should be able to copy over this JSON below, or use [this JSON](https://gist.github.com/PsychoData/27c5028a5a78237f9910d4f652f6b269#file-enable_boot_diagnostics-json). Note: Later on, you can configure this to be deployed from a GitHub repo directly, though GitHub actions, but we will talk about that in a later section.
-          &lt;/p&gt;
-</code></pre>
+<h2 id=1-overview>1. Overview</h2>
+<p>Our process will have several major parts</p>
+<ul>
+<li>Create a Custom Azure Policy Definition</li>
+<li>Assign to a Subscription or Resource Group
+<ul>
+<li>Find the Blob Storage URI to use</li>
+</ul>
+</li>
+<li>Create a Remediation task to Apply the changes</li>
+<li>Optional: Link to GitHub for versioning</li>
+</ul>
+<h2 id=2create-a-custom-policy-definition>2.Create a Custom Policy Definition</h2>
+<p>First we will need to Create a Custom Definition. To start with head to Portal.Azure.com > <a href=https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Definitions>Azure Policy | Definitions</a>.</p>
+<p>From here, we will need to create a new Policy Definition
+<div class=image>
+<figure>
+<a href=https://i.imgur.com/7ANVOqt.png target=_blank>
+<img src=https://i.imgur.com/7ANVOqt.png alt=screenshot>
+</a>
+</figure>
+</div> Fill in several fields</p>
+<ul>
+<li>&ldquo;Definition Location&rdquo; - which will be the Subscription.</li>
+<li>Give it a name</li>
+<li>Create a custom category, or select an existing one</li>
+</ul>
+<p><div class=image>
+<figure>
+<a href=https://i.imgur.com/BRJEnNY.png target=_blank>
+<img src=https://i.imgur.com/BRJEnNY.png alt=screenshot>
+</a>
+</figure>
+</div> For the Policy Rule Definition, you should be able to copy over this JSON below, or use <a href=https://gist.github.com/PsychoData/27c5028a5a78237f9910d4f652f6b269#file-enable_boot_diagnostics-json>this JSON</a>. Note: Later on, you can configure this to be deployed from a GitHub repo directly, though GitHub actions, but we will talk about that in a later section.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
@@ -289,100 +258,84 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
 }
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>          ## 3. Assign Policy to Resources
-          
-          &lt;p&gt;
-            Next you can select a Resource Group or entire Subscription to apply to.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            By default, the JSON policy provided will ignore any resources with the tag **IgnoreBootDiagnostics **, but you can also add **Exclusions** here, as well.
-          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-          
-          ![](https://i.imgur.com/1lJbBMM.png)&lt;/figure&gt; &lt;p&gt;
-            For the parameter, you need to fill in the URL to a Azure Blob storage service.
-          &lt;/p&gt;
-</code></pre>
+</div><h2 id=3-assign-policy-to-resources>3. Assign Policy to Resources</h2>
+<p>Next you can select a Resource Group or entire Subscription to apply to.</p>
+<p>By default, the JSON policy provided will ignore any resources with the tag <strong>IgnoreBootDiagnostics</strong>, but you can also add <strong>Exclusions</strong> here, as well.</p>
+<p><div class=image>
+<figure>
+<a href=https://i.imgur.com/1lJbBMM.png target=_blank>
+<img src=https://i.imgur.com/1lJbBMM.png alt=screenshot>
+</a>
+</figure>
+</div><br>
+For the parameter, you need to fill in the URL to a Azure Blob storage service.</p>
 <h3 id=get-your-blob-storage-endpoint>Get your Blob Storage Endpoint</h3>
-<pre><code>          &lt;p&gt;
-            My example is [https://YourBlobStorage.blob.core.windows.net](https://YourBlobStorage.blob.core.windows.net) , but you can find the endpoint for your Storage Account by opening your [Storage Accounts](https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/Microsoft.Storage%2FStorageAccounts) &gt; Select or Create Relevant Storage account &gt; Settings &gt; Endpoints
-          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-          
-          ![](https://i.imgur.com/XIQQYC4.png)&lt;/figure&gt;
-          
-          ## 4. Create Remediation Task
-          
-          &lt;p&gt;
-            Part of the assignment process will give you the option to create the Remediation Task.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            Since the policy specifies the access needed, it will default to creating a managed Identity to remediate the issues.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            Without the Remediation Task, the Policy will just Report Compliance or failure, but you can always start with no Remediation and then add it back later.
-          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-          
-          ![](https://i.imgur.com/4Ndafmo.png)&lt;/figure&gt; 
-          
-          ## 5. Be Patient and Enjoy
-          
-          &lt;p&gt;
-            In my experience, the policy will take around 15-45 minutes to evaluate, depending on the amount of resources it is checking over.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            From there it usually takes *another* 30 minutes to multiple hours before the remediation runs. These are not the most immediate methods to apply the policy, but they can be fully automatic!
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            You can check your Remediation status by going to [Policy Assignments ](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments)&gt; Select your policy name &gt; Remediation tab
-          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-          
-          ![](https://i.imgur.com/JtkoH2i.png)&lt;/figure&gt; &lt;p&gt;
-            To see the details, use the three-dots menu on the right to View remediation task
-          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-          
-          ![](https://i.imgur.com/qESeb98.png)&lt;/figure&gt; 
-          
-          ## 6. Optional: Export to GitHub
-          
-          &lt;p&gt;
-            Modifying the Azure Policies can be a highly iterative process, so being able to reference or revert to previous versions can be an **enormous** benefit.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            Azure Policies has this built in, including Automated Deployment from GitHub with GitHub Actions! You can read more about that [here](https://docs.microsoft.com/azure/governance/policy/tutorials/policy-as-code-github?WT.mc_id=Portal-AzureTfsExtension#export-azure-policy-objects-from-the-azure-portal), but the basic process is shown below.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            Open [Azure Policy Assignments](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments) &gt; Select your assignment &gt; **View Definition** button near the top &gt; **Export Definition** button
-          &lt;/p&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-          
-          ![](https://i.imgur.com/KGmXwlg.gif)&lt;/figure&gt; &lt;p&gt;
-            From there, you will need to authorize a connection to a GitHub account with rights to the Account/Repo you want to store the policy in.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            Now, I would mention the important difference that the GitHub repo stores the Rules, Parameters, and any remaining parts into separate files within that Repo. Don't be surprised that it took your glorious new policy and chopped it up into different sections, and fills out a few metadata attributes.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            If you aren't familiar with [GitHub Actions](https://github.com/features/actions), the export process will create a **.github/workflows/manage_azure_policy_xxxxxx.yml** that will outline the Workflow and use secrets to securely connect back to Azure.
-          &lt;/p&gt;
-          
-          &lt;p&gt;
-            To make future changes, commit them to the Repository and the GitHub Action will try to build the policy, apply it, and let you know if it was able to apply successfully.
-          &lt;/p&gt;
-</code></pre>
+<p>My example is <a href=https://YourBlobStorage.blob.core.windows.net>https://YourBlobStorage.blob.core.windows.net</a> , but you can find the endpoint for your Storage Account by opening your <a href=https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/Microsoft.Storage%2FStorageAccounts>Storage Accounts</a> > Select or Create Relevant Storage account > Settings > Endpoints</p>
+<p><div class=image>
+<figure>
+<a href=https://i.imgur.com/XIQQYC4.png target=_blank>
+<img src=https://i.imgur.com/XIQQYC4.png alt=screenshot>
+</a>
+</figure>
+</div></p>
+<h2 id=4-create-remediation-task>4. Create Remediation Task</h2>
+<p>Part of the assignment process will give you the option to create the Remediation Task.</p>
+<p>Since the policy specifies the access needed, it will default to creating a managed Identity to remediate the issues.</p>
+<p>Without the Remediation Task, the Policy will just Report Compliance or failure, but you can always start with no Remediation and then add it back later.</p>
+<p><div class=image>
+<figure>
+<a href=https://i.imgur.com/4Ndafmo.png target=_blank>
+<img src=https://i.imgur.com/4Ndafmo.png alt=screenshot>
+</a>
+</figure>
+</div></p>
+<h2 id=5-be-patient-and-enjoy>5. Be Patient and Enjoy</h2>
+<p>In my experience, the policy will take around 15-45 minutes to evaluate, depending on the amount of resources it is checking over.</p>
+<p>From there it usually takes <em>another</em> 30 minutes to multiple hours before the remediation runs. These are not the most immediate methods to apply the policy, but they can be fully automatic!</p>
+<p>You can check your Remediation status by going to <a href=https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments>Policy Assignments</a>> Select your policy name > Remediation tab</p>
+<p><div class=image>
+<figure>
+<a href=https://i.imgur.com/JtkoH2i.png target=_blank>
+<img src=https://i.imgur.com/JtkoH2i.png alt=screenshot>
+</a>
+</figure>
+</div></p>
+<p>To see the details, use the three-dots menu on the right to View remediation task</p>
+<p><div class=image>
+<figure>
+<a href=https://i.imgur.com/qESeb98.png target=_blank>
+<img src=https://i.imgur.com/qESeb98.png alt=screenshot>
+</a>
+</figure>
+</div></p>
+<h2 id=6-optional-export-to-github>6. Optional: Export to GitHub</h2>
+<p>Modifying the Azure Policies can be a highly iterative process, so being able to reference or revert to previous versions can be an <strong>enormous</strong> benefit.</p>
+<p>Azure Policies has this built in, including Automated Deployment from GitHub with GitHub Actions! You can read more about that <a href="https://docs.microsoft.com/azure/governance/policy/tutorials/policy-as-code-github?WT.mc_id=Portal-AzureTfsExtension#export-azure-policy-objects-from-the-azure-portal">here</a>, but the basic process is shown below.</p>
+<p>Open <a href=https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments>Azure Policy Assignments</a> > Select your assignment > <strong>View Definition</strong> button near the top > <strong>Export Definition</strong> button</p>
+<p><div class=image>
+<figure>
+<a href=https://i.imgur.com/KGmXwlg.gif target=_blank>
+<img src=https://i.imgur.com/KGmXwlg.gif alt=screenshot>
+</a>
+</figure>
+</div></p>
+<p>From there, you will need to authorize a connection to a GitHub account with rights to the Account/Repo you want to store the policy in.</p>
+<p>Now, I would mention the important difference that the GitHub repo stores the Rules, Parameters, and any remaining parts into separate files within that Repo. Don&rsquo;t be surprised that it took your glorious new policy and chopped it up into different sections, and fills out a few metadata attributes.</p>
+<p>If you aren&rsquo;t familiar with <a href=https://github.com/features/actions>GitHub Actions</a>, the export process will create a <strong>.github/workflows/manage_azure_policy_xxxxxx.yml</strong> that will outline the Workflow and use secrets to securely connect back to Azure.</p>
+<p>To make future changes, commit them to the Repository and the GitHub Action will try to build the policy, apply it, and let you know if it was able to apply successfully.</p>
+<img src=/authors/kevin-crouch/avatar.png alt="Photo of Kevin Crouch"><br>
+<strong>Kevin Crouch</strong>
+<em>Contributor</em>
+<div>
+<a href=https://twitter.com/PsychoData><img src=/img/social/twitter.png></a>
+</div>
+<p>System Administrator</p>
+<hr>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
-</div>
-<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -394,7 +347,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

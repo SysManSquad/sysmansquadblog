@@ -21,7 +21,10 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Working around NPS limitations for AADJ Windows devices">
-<meta name=twitter:description content="Introduction  <p> In this post, I'll show you a workaround to get device based wireless authentication working for AADJ Windows devices via NPS. Keep in mind this is a workaround and your mileage may vary. </p>  Background  <p> NPS does not play nice when it comes to AADJ device authentication. There is a fantastic writeup on this issue [here](https://docs.microsoft.com/en-us/answers/questions/57999/device-certificate-scep-based-authentication-again.html). </p>  The tl;dr of the issue  <p> Device based authentication works when there is a computer object in your on-prem.">
+<meta name=twitter:description content="Author Andrew Blackburn
+Introduction In this post, I&rsquo;ll show you a workaround to get device based wireless authentication working for AADJ Windows devices via NPS. Keep in mind this is a workaround and your mileage may vary.
+Background NPS does not play nice when it comes to AADJ device authentication. There is a fantastic writeup on this issue here.
+The tl;dr of the issue Device based authentication works when there is a computer object in your on-prem.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -90,73 +93,53 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Working around NPS limitations for AADJ Windows devices</h1>
-<span class=post-date>April 28, 2021</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/molly>SysManSquad</a> / </span>
+<span class=post-date>April 28, 2021 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ Intune </span>
+<span class=post-categories>/ Networking </span>
+</p>
 </div>
 <div class=post-entry>
+<h1 id=author>Author</h1>
+<p>Andrew Blackburn</p>
 <h2 id=introduction>Introduction</h2>
-<pre><code>                      &lt;p&gt;
-                        In this post, I'll show you a workaround to get device based wireless authentication working for AADJ Windows devices via NPS. Keep in mind this is a workaround and your mileage may vary.
-                      &lt;/p&gt;
-</code></pre>
+<p>In this post, I&rsquo;ll show you a workaround to get device based wireless authentication working for AADJ Windows devices via NPS. Keep in mind this is a workaround and your mileage may vary.</p>
 <h2 id=background>Background</h2>
-<pre><code>                      &lt;p&gt;
-                        NPS does not play nice when it comes to AADJ device authentication. There is a fantastic writeup on this issue [here](https://docs.microsoft.com/en-us/answers/questions/57999/device-certificate-scep-based-authentication-again.html).
-                      &lt;/p&gt;
-</code></pre>
-<h5 id=the-tldr-of-the-issue><strong>The tl;dr of the issue</strong></h5>
-<pre><code>                      &lt;p&gt;
-                        Device based authentication works when there is a computer object in your on-prem. directory that backs up NPS's authentication checks. If the devices are AADJ only (not hybrid), then there is no computer object in the on-prem. directory. NPS sees the device as unknown and authentication fails.
-                      &lt;/p&gt;
-</code></pre>
-<h5 id=why-is-device-based-authentication-important><strong>Why is device based authentication important?</strong></h5>
-<pre><code>                      &lt;p&gt;
-                        Ideally, there should be a connection to the network at the login screen. This isn't a big deal if you're 1:1 because of cached credentials. If you're not 1:1, e.g. shared devices, you will need a network connection at the login screen to ensure the first time login for a user works.
-                      &lt;/p&gt;
-</code></pre>
-<h5 id=why-not-just-hybrid-join-your-machines><strong>Why not just hybrid join your machines?</strong></h5>
-<pre><code>                      &lt;div class=&quot;wp-block-image&quot;&gt;
-                        &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;![](haadj.gif)&lt;figcaption&gt;More great gifs like this on the [Windows Admins](https://aka.ms/winadmins) Discord server.&lt;/figcaption&gt;&lt;/figure&gt;
-                      &lt;/div&gt;
-</code></pre>
+<p>NPS does not play nice when it comes to AADJ device authentication. There is a fantastic writeup on this issue <a href=https://docs.microsoft.com/answers/questions/57999/device-certificate-scep-based-authentication-again.html>here</a>.</p>
+<h3 id=the-tldr-of-the-issue><strong>The tl;dr of the issue</strong></h3>
+<p>Device based authentication works when there is a computer object in your on-prem. directory that backs up NPS&rsquo;s authentication checks. If the devices are AADJ only (not hybrid), then there is no computer object in the on-prem. directory. NPS sees the device as unknown and authentication fails.</p>
+<h3 id=why-is-device-based-authentication-important><strong>Why is device based authentication important?</strong></h3>
+<p>Ideally, there should be a connection to the network at the login screen. This isn&rsquo;t a big deal if you&rsquo;re 1:1 because of cached credentials. If you&rsquo;re not 1:1, e.g. shared devices, you will need a network connection at the login screen to ensure the first time login for a user works.</p>
+<h3 id=why-not-just-hybrid-join-your-machines><strong>Why not just hybrid join your machines?</strong></h3>
+<p><div class=image>
+<figure>
+<a href=haadj.gif target=_blank>
+<img src=haadj.gif alt=gif>
+</a>
+</figure>
+</div>
+More great gifs like this on the <a href=https://aka.ms/winadmins>Windows Admins</a> Discord server.</p>
 <h2 id=things-i-am-assuming-you-have>Things I am assuming you have</h2>
-<pre><code>                      &lt;ul&gt;
-                        &lt;li&gt;
-                          Healthy PKI&lt;ul&gt;
-                            &lt;li&gt;
-                              Certificate enrollment configured for the user **and **device via your MDM
-                            &lt;/li&gt;
-                          &lt;/ul&gt;
-                        &lt;/li&gt;
-                        
-                        &lt;li&gt;
-                          Healthy wireless network&lt;ul&gt;
-                            &lt;li&gt;
-                              802.1X via an on-prem. NPS
-                            &lt;/li&gt;
-                          &lt;/ul&gt;
-                          
-                          &lt;ul&gt;
-                            &lt;li&gt;
-                              WiFi profile(s) pushed out to your devices via your MDM
-                            &lt;/li&gt;
-                          &lt;/ul&gt;
-                        &lt;/li&gt;
-                      &lt;/ul&gt;
-</code></pre>
+<ul>
+<li>Healthy PKI
+<ul>
+<li>Certificate enrollment configured for the user <strong>and</strong> device via your MDM</li>
+</ul>
+</li>
+<li>Healthy wireless network
+<ul>
+<li>802.1X via an on-prem. NPS</li>
+<li>WiFi profile(s) pushed out to your devices via your MDM</li>
+</ul>
+</li>
+</ul>
 <h2 id=the-workaround>The workaround</h2>
-<pre><code>                      &lt;p&gt;
-                        There are several workarounds discussed in the post I linked above. For me, the easiest method is creating &quot;dummy&quot; computer objects in Active Directory that match the AADJ devices. Once NPS sees the AADJ device in your local AD, authentication works.
-                      &lt;/p&gt;
-                      
-                      &lt;p&gt;
-                        I settled on using PowerShell for this workaround. Although tedious, you could do your initial testing via ADUC and the attribute editor.
-                      &lt;/p&gt;
-</code></pre>
-<h5 id=basic-version-of-the-script>Basic version of the script</h5>
-<pre><code>                      &lt;p&gt;
-                        This basic version of the script lets you create one device at a time (useful for testing):
-                      &lt;/p&gt;
-</code></pre>
+<p>There are several workarounds discussed in the post I linked above. For me, the easiest method is creating &ldquo;dummy&rdquo; computer objects in Active Directory that match the AADJ devices. Once NPS sees the AADJ device in your local AD, authentication works.</p>
+<p>I settled on using PowerShell for this workaround. Although tedious, you could do your initial testing via ADUC and the attribute editor.</p>
+<h3 id=basic-version-of-the-script>Basic version of the script</h3>
+<p>This basic version of the script lets you create one device at a time (useful for testing):</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
@@ -229,65 +212,46 @@
 }
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>                      &lt;p&gt;
-                        There are three important things this script does:
-                      &lt;/p&gt;
-                      
-                      &lt;ol&gt;
-                        &lt;li&gt;
-                          Creates the computer object&lt;ul&gt;
-                            &lt;li&gt;
-                              Be sure to use the correct device name. Usually this will be what you have mapped to your device certificate. In my case, I used the AAD Device ID for the computer.
-                            &lt;/li&gt;
-                          &lt;/ul&gt;
-                        &lt;/li&gt;
-                        
-                        &lt;li&gt;
-                          Adds the service principal name (SPN) to the computer object&lt;ul&gt;
-                            &lt;li&gt;
-                              This is what NPS sees when a device authenticates (HOST/devicename). Again, device name is very important here.
-                            &lt;/li&gt;
-                          &lt;/ul&gt;
-                        &lt;/li&gt;
-                        
-                        &lt;li&gt;
-                          Adds a certificate name mapping to the computer object if needed&lt;ul&gt;
-                            &lt;li&gt;
-                              I have heard from others this may not be necessary. This won't work in my environment unless there is a name mapping.
-                            &lt;/li&gt;
-                          &lt;/ul&gt;
-                        &lt;/li&gt;
-                      &lt;/ol&gt;
-                      
-                      &lt;p&gt;
-                        Be sure to run this on a domain computer that has the 'ActiveDirectory' module. Also, the account that the script is running under will need permissions to create and edit computer objects in AD.
-                      &lt;/p&gt;
-                      
-                      &lt;p&gt;
-                        Here is an example run command:
-                      &lt;/p&gt;
-                      
-                      &lt;div class=&quot;wp-block-jetpack-markdown&quot;&gt;
-                        &lt;pre&gt;&lt;code&gt;.\New-DummyADComputer.ps1 -deviceName &quot;device-name-here&quot; -nameMap&lt;/code&gt;&lt;/pre&gt;
-                      &lt;/div&gt;&lt;figure class=&quot;wp-block-image size-large&quot;&gt;
-                      
-                      ![](image-8.png)&lt;/figure&gt; &lt;p&gt;
-                        After using the script for a test device, you should see the computer object in your AD.
-                      &lt;/p&gt;
-                      
-                      &lt;div class=&quot;wp-block-image&quot;&gt;
-                        &lt;figure class=&quot;aligncenter size-large&quot;&gt;![](image-9.png)&lt;/figure&gt;
-                      &lt;/div&gt;
-                      
-                      &lt;p&gt;
-                        Now, you should be able to perform successful device based 802.1X authentication on your test device. 👍
-                      &lt;/p&gt;
-</code></pre>
-<h5 id=more-advanced-version-of-the-script-that-works-with-ms-graph>More advanced version of the script that works with MS Graph</h5>
-<pre><code>                      &lt;p&gt;
-                        For my use case, I needed something that I could run on a schedule and forget about. This more advanced version of the script pulls down all of the Autopilot devices from MS Graph using the 'WindowsAutopilotIntune' module. It then uses the 'ActiveDirectory' module to create/prepare matching computer objects in AD.
-                      &lt;/p&gt;
-</code></pre>
+</div><p>There are three important things this script does:</p>
+<ol>
+<li>Creates the computer object
+<ul>
+<li>Be sure to use the correct device name. Usually this will be what you have mapped to your device certificate. In my case, I used the AAD Device ID for the computer.</li>
+</ul>
+</li>
+<li>Adds the service principal name (SPN) to the computer object
+<ul>
+<li>This is what NPS sees when a device authenticates (HOST/devicename). Again, device name is very important here.</li>
+</ul>
+</li>
+<li>Adds a certificate name mapping to the computer object if needed
+<ul>
+<li>I have heard from others this may not be necessary. This won&rsquo;t work in my environment unless there is a name mapping.</li>
+</ul>
+</li>
+</ol>
+<p>Be sure to run this on a domain computer that has the &lsquo;ActiveDirectory&rsquo; module. Also, the account that the script is running under will need permissions to create and edit computer objects in AD.</p>
+<p>Here is an example run command:</p>
+<blockquote>
+<p>.\New-DummyADComputer.ps1 -deviceName &ldquo;device-name-here&rdquo; -nameMap</p>
+</blockquote>
+<p><div class=image>
+<figure>
+<a href=image-8.png target=_blank>
+<img src=image-8.png alt=screenshot>
+</a>
+</figure>
+</div> After using the script for a test device, you should see the computer object in your AD.</p>
+<p><div class=image>
+<figure>
+<a href=image-9.png target=_blank>
+<img src=image-9.png alt=screenshot>
+</a>
+</figure>
+</div></p>
+<p>Now, you should be able to perform successful device based 802.1X authentication on your test device. 👍</p>
+<h3 id=more-advanced-version-of-the-script-that-works-with-ms-graph>More advanced version of the script that works with MS Graph</h3>
+<p>For my use case, I needed something that I could run on a schedule and forget about. This more advanced version of the script pulls down all of the Autopilot devices from MS Graph using the &lsquo;WindowsAutopilotIntune&rsquo; module. It then uses the &lsquo;ActiveDirectory&rsquo; module to create/prepare matching computer objects in AD.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
@@ -414,7 +378,7 @@
 <span style=color:#998;font-style:italic># Reverse the process and remove any dummmy computer objects in AD that are no longer in Autopilot</span>
 <span style=color:teal>$DummyDevices</span> = <span style=color:#0086b3>Get-ADComputer</span> -Filter * -SearchBase <span style=color:teal>$orgUnit</span> | <span style=color:#0086b3>Select-Object</span> Name, SAMAccountName
 <span style=color:#000;font-weight:700>foreach</span> (<span style=color:teal>$DummyDevice</span> <span style=color:#000;font-weight:700>in</span> <span style=color:teal>$DummyDevices</span>) {
-	<span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$AutopilotDevices</span>.azureActiveDirectoryDeviceId <span style=color:#000;font-weight:700>-contains</span> <span style=color:teal>$DummyDevice</span>.Name) {
+  <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$AutopilotDevices</span>.azureActiveDirectoryDeviceId <span style=color:#000;font-weight:700>-contains</span> <span style=color:teal>$DummyDevice</span>.Name) {
         <span style=color:#998;font-style:italic># Write-Host &#34;$($DummyDevice.Name) exists in Autopilot.&#34; -ForegroundColor Green</span>
     } <span style=color:#000;font-weight:700>else</span> {
         <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;</span>$(<span style=color:teal>$DummyDevice</span>.Name)<span style=color:#d14> does not exist in Autopilot.&#34;</span> -ForegroundColor Yellow
@@ -424,43 +388,26 @@
 }
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>                      &lt;p&gt;
-                        Here is a play-by-play of the script:
-                      &lt;/p&gt;
-                      
-                      &lt;ol&gt;
-                        &lt;li&gt;
-                          Connects to MS Graph with application credentials&lt;ul&gt;
-                            &lt;li&gt;
-                              You could change this to perform an interactive login. For my use case, Azure app-based authentication allows me to schedule this script. The Azure app registration only needs API permissions to read Autopilot devices.
-                            &lt;/li&gt;
-                          &lt;/ul&gt;
-                        &lt;/li&gt;
-                        
-                        &lt;li&gt;
-                          Pulls Autopilot device information from MS Graph
-                        &lt;/li&gt;
-                        &lt;li&gt;
-                          Createsnewdummy computer objectsinAD using the Autopilot device information&lt;ul&gt;
-                            &lt;li&gt;
-                              Alreadyexistingdummy devices are skipped
-                            &lt;/li&gt;
-                          &lt;/ul&gt;
-                        &lt;/li&gt;
-                        
-                        &lt;li&gt;
-                          Reverses the process and removes any dummy computer objects in AD that no longer exist in Autopilot&lt;ul&gt;
-                            &lt;li&gt;
-                              **This step is potentially dangerous. **Because of that, I added comments in the script above (line 63) and added *-WhatIf* as further risk control.
-                            &lt;/li&gt;
-                          &lt;/ul&gt;
-                        &lt;/li&gt;
-                      &lt;/ol&gt;
-                      
-                      &lt;p&gt;
-                        Here is an example run command:
-                      &lt;/p&gt;
-</code></pre>
+</div><p>Here is a play-by-play of the script:</p>
+<ul>
+<li>Connects to MS Graph with application credentials
+<ul>
+<li>You could change this to perform an interactive login. For my use case, Azure app-based authentication allows me to schedule this script. The Azure app registration only needs API permissions to read Autopilot devices.</li>
+</ul>
+</li>
+<li>Pulls Autopilot device information from MS Graph</li>
+<li>Createsnewdummy computer objectsinAD using the Autopilot device information
+<ul>
+<li>Alreadyexistingdummy devices are skipped</li>
+</ul>
+</li>
+<li>Reverses the process and removes any dummy computer objects in AD that no longer exist in Autopilot
+<ul>
+<li><strong>This step is potentially dangerous.</strong> Because of that, I added comments in the script above (line 63) and added <em>-WhatIf</em> as further risk control.</li>
+</ul>
+</li>
+</ul>
+<p>Here is an example run command:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -469,72 +416,49 @@
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>.\<span style=color:#0086b3>Sync-DummyComputers</span>.ps1 -TenantId <span style=color:#d14>&#34;your-tenant-id-here&#34;</span> -ClientId <span style=color:#d14>&#34;your-app-id-here&#34;</span> -ClientSecret <span style=color:#d14>&#34;your-app-secret-here&#34;</span> -NameMap
 </code></pre></td></tr></table>
 </div>
-</div><pre><code>                      &lt;div class=&quot;wp-block-image&quot;&gt;
-                        &lt;figure class=&quot;aligncenter size-large is-resized&quot;&gt;![](image-3-1024x71.png)&lt;/figure&gt;
-                      &lt;/div&gt;
-                      
-                      &lt;p&gt;
-                        After running this script for the first time, you should see your new dummy computer objects in the OU you configured.
-                      &lt;/p&gt;
-                      
-                      &lt;div class=&quot;wp-block-image&quot;&gt;
-                        &lt;figure class=&quot;aligncenter size-large&quot;&gt;![](image-15.png)&lt;/figure&gt;
-                      &lt;/div&gt;
-                      
-                      &lt;p&gt;
-                        Now, you should be able to perform successful device based 802.1X authentication on your devices. 👍
-                      &lt;/p&gt;
-</code></pre>
-<h5 id=expected-changes-for-readers>Expected changes for readers</h5>
-<pre><code>                      &lt;p&gt;
-                        I would expect you need to make changes to the script based off of your needs. Here are a few things I think will vary between readers:
-                      &lt;/p&gt;
-                      
-                      &lt;ul&gt;
-                        &lt;li&gt;
-                          Device name &lt;ul&gt;
-                            &lt;li&gt;
-                              I went with the AAD Device ID in my certificates
-                            &lt;/li&gt;
-                          &lt;/ul&gt;
-                        &lt;/li&gt;
-                        
-                        &lt;li&gt;
-                          The org. unit where your dummy computer objects will live
-                        &lt;/li&gt;
-                        &lt;li&gt;
-                          The X509 certificate path used for name mapping&lt;ul&gt;
-                            &lt;li&gt;
-                              This is dependent on your CA and other factors. I was able to find this path by performing the name mapping in ADUC and looking at the 'altSecurityIdentities' attribute on the object
-                            &lt;/li&gt;
-                          &lt;/ul&gt;
-                        &lt;/li&gt;
-                      &lt;/ul&gt;
-</code></pre>
+</div><p><div class=image>
+<figure>
+<a href=image-3-1024x71.png target=_blank>
+<img src=image-3-1024x71.png alt=screenshot>
+</a>
+</figure>
+</div></p>
+<p>After running this script for the first time, you should see your new dummy computer objects in the OU you configured.</p>
+<p><div class=image>
+<figure>
+<a href=image-15.png target=_blank>
+<img src=image-15.png alt=screenshot>
+</a>
+</figure>
+</div></p>
+<p>Now, you should be able to perform successful device based 802.1X authentication on your devices. 👍</p>
+<h3 id=expected-changes-for-readers>Expected changes for readers</h3>
+<p>I would expect you need to make changes to the script based off of your needs. Here are a few things I think will vary between readers:</p>
+<ul>
+<li>Device name</li>
+<li>I went with the AAD Device ID in my certificates</li>
+<li>The org. unit where your dummy computer objects will live</li>
+<li>The X509 certificate path used for name mapping</li>
+<li>This is dependent on your CA and other factors. I was able to find this path by performing the name mapping in ADUC and looking at the &lsquo;altSecurityIdentities&rsquo; attribute on the object</li>
+</ul>
 <h2 id=closing-thoughts>Closing thoughts</h2>
-<pre><code>                      &lt;p&gt;
-                        It took me several tries to nail this down and I would expect this on your end too. Analyzing NPS logs to see what I was missing was the most helpful troubleshooting step on my end.
-                      &lt;/p&gt;
-                      
-                      &lt;p&gt;
-                        I'm not sure why Microsoft hasn't considered this or even followed up to the [linked post above](https://docs.microsoft.com/en-us/answers/questions/57999/device-certificate-scep-based-authentication-again.html). In an ideal world, Microsoft might create some sort of connector for on-prem. NPS to check AAD, as well as the local AD, for devices during authentications.
-                      &lt;/p&gt;
-                      
-                      &lt;p&gt;
-                        I realize that a solution like ClearPass would completely mitigate the need for a workaround like this. For many reasons, like budget, continuing to use NPS is ideal for my environment.
-                      &lt;/p&gt;
-                      
-                      &lt;p&gt;
-                        I hope this gets you to a decent starting point when you are considering device based authentication for your AADJ Windows devices.
-                      &lt;/p&gt;
-</code></pre>
+<p>It took me several tries to nail this down and I would expect this on your end too. Analyzing NPS logs to see what I was missing was the most helpful troubleshooting step on my end.</p>
+<p>I&rsquo;m not sure why Microsoft hasn&rsquo;t considered this or even followed up to the <a href=https://docs.microsoft.com/answers/questions/57999/device-certificate-scep-based-authentication-again.html>linked post above</a>. In an ideal world, Microsoft might create some sort of connector for on-prem. NPS to check AAD, as well as the local AD, for devices during authentications.</p>
+<p>I realize that a solution like ClearPass would completely mitigate the need for a workaround like this. For many reasons, like budget, continuing to use NPS is ideal for my environment.</p>
+<p>I hope this gets you to a decent starting point when you are considering device based authentication for your AADJ Windows devices.</p>
+<img src=/authors/molly/avatar.png alt="Photo of SysManSquad"><br>
+<strong>SysManSquad</strong>
+<em>Staff</em>
+<div>
+<a href=https://twitter.com/sysmansquad><img src=/img/social/twitter.png></a>
+</div>
+<p>Molly, the best puppy</p>
+<hr>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
-</div>
-<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -546,7 +470,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

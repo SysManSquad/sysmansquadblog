@@ -91,7 +91,19 @@ Enabling Log Analytics  Navigate to endpoint.microsoft.com Select Reports Select
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Collecting Logs with Log Analytics for Intune devices</h1>
-<span class=post-date>January 18, 2021</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/jake>Jake Shackelford</a> / </span>
+<span class=post-date>January 18, 2021 </span>
+<span class=post-categories>/ Azure </span>
+<span class=post-categories>/ Documentation </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ General </span>
+<span class=post-categories>/ How-To </span>
+<span class=post-categories>/ Intune </span>
+<span class=post-categories>/ MECM/MEMCM/SCCM </span>
+<span class=post-categories>/ Microsoft </span>
+<span class=post-categories>/ Windows </span>
+</p>
 </div>
 <div class=post-entry>
 <h2 id=why-do-i-need-logs>Why do I need logs?</h2>
@@ -117,15 +129,15 @@ Enabling Log Analytics  Navigate to endpoint.microsoft.com Select Reports Select
 <li>Navigate to your log analytics workspace</li>
 <li>Select <strong>Advanced Settings</strong></li>
 <li>Select <strong>Data</strong><br>
-You can now add any event log you wish to collect. Begin typing a log you wish to collect and it should auto populate. If the log you wish to use does not appear you can type in the full log path and it will be added. I&rsquo;ve included an example of a few logs below, please bare in mind that if the log is not enabled by default you will still need to enable that log separately. </li>
+You can now add any event log you wish to collect. Begin typing a log you wish to collect and it should auto populate. If the log you wish to use does not appear you can type in the full log path and it will be added. I&rsquo;ve included an example of a few logs below, please bare in mind that if the log is not enabled by default you will still need to enable that log separately.</li>
 </ol>
 <p><div class=image>
 <figure>
 <a href=image.png target=_blank>
-<img src=image.png alt>
+<img src=image.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <ol>
 <li>Navigate back to your log analytics workspace</li>
 <li>Select <strong>Agents management</strong></li>
@@ -135,7 +147,7 @@ You can now add any event log you wish to collect. Begin typing a log you wish t
 <li>Open command prompt and run <strong>MMA-Setup-AMD64.exe /C</strong> in the directory your install exists<div class=image>
 <figure>
 <a href=Discord_KkLVtr1Ip4.png target=_blank>
-<img src=Discord_KkLVtr1Ip4.png alt>
+<img src=Discord_KkLVtr1Ip4.png alt=screenshot>
 </a>
 </figure>
 </div></li>
@@ -147,7 +159,7 @@ You can now add any event log you wish to collect. Begin typing a log you wish t
 <li>Specify an <strong>output folder</strong><div class=image>
 <figure>
 <a href=SQQldCGPu6.png target=_blank>
-<img src=SQQldCGPu6.png alt>
+<img src=SQQldCGPu6.png alt=screenshot>
 </a>
 </figure>
 </div></li>
@@ -200,6 +212,14 @@ You can now add any event log you wish to collect. Begin typing a log you wish t
 <code>| where EventLog == "System"</code><br>
 <code>| project TimeGenerated, EventLog, EventLevelName, EventID, RenderedDescription, Computer</code></p>
 <p>At this point you have everything configured and are only limited to your querying knowledge!</p>
+<img src=/authors/jake/avatar.png alt="Photo of Jake Shackelford"><br>
+<strong>Jake Shackelford</strong>
+<em>Admin/Contributor</em>
+<div>
+<a href=https://twitter.com/shackelfjaco><img src=/img/social/twitter.png></a>
+</div>
+<p>Jake is one of our Admins but also our inaugural author and the main reason SysManSquad exists today.</p>
+<hr>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -211,7 +231,7 @@ You can now add any event log you wish to collect. Begin typing a log you wish t
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

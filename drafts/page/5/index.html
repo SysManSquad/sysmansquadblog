@@ -89,21 +89,17 @@
 <div id=content>
 <div id=main>
 <article class=list-item>
-<div class=post-img>
-<a href=https://blog.sysmansquad.com/2019/12/17/net-101-create-a-basic-lab-network-design/>
-<img width=520 height=400 src=https://blog.sysmansquad.com/2019/12/17/net-101-create-a-basic-lab-network-design/Lab-Network-3.png>
-</a>
-</div>
 <div class=list-content>
 <div class=post-header>
 <h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2019/12/17/net-101-create-a-basic-lab-network-design/>NET-101 : Create a Basic Lab Network – Design</a>
+<a href=https://blog.sysmansquad.com/2020/06/15/getting-started-with-automatedlab/>Getting started with AutomatedLab</a>
 </h2>
 </div>
 <div class=post-entry>
 <p>
-As I go through my career, I often find that the answers I take for granted are not easy to find for people who are just starting out. I had the advantage of a dedicated class on network administration to build on, but not everyone had that opportunity. While this article focuses on a lab environment, most of the content will be applicable to real life as well.
-I&rsquo;ve tried to include as many reference links as possible to help you learn about the concepts involved, but I cannot explain everything in one article.
+What is AutomatedLab? AutomatedLab is simply PowerShell module. In some ways it’s a framework because it encourages a particular workflow for managing named labs consisting of VMs with prefined applications / “roles” or custom roles.
+The benefit using AutomatedLab is the simplicity it offers to quickly fire up and throw away environments, and rebuild again. It also offers a huge range of functions to build out whatever you want.
+Generally, the workflow goes something like:
 </p>
 </div>
 <div class=list-meta>
@@ -116,12 +112,188 @@ I&rsquo;ve tried to include as many reference links as possible to help you lear
 <div class=list-content>
 <div class=post-header>
 <h2 class=post-title>
-<a href=https://blog.sysmansquad.com/2019/12/12/how-to-use-modules-and-package-providers-during-osd-with-mecm-sccm-memcm/>How to use modules and package providers during OSD with MECM (SCCM/MEMCM)</a>
+<a href=https://blog.sysmansquad.com/2020/06/10/working-with-internet-optimized-task-sequences-and-generic-status-messages/>Working With Internet-Optimized Task Sequences and Generic Status Messages</a>
 </h2>
 </div>
 <div class=post-entry>
 <p>
-For the past few days, I&rsquo;ve been implementing SnipeIT into our environment to start actually tracking assets as opposed to the archaic spreadsheet we had going. I wanted to add any new machine that were imaged into the database right away without any input from me. That way, all I had to do was assign a user to the device in the asset management portal for SnipeIT, and I was good to go.
+For my customer the move to remote work is here to stay. In adjustment to the “New Normal,” deployment projects put on hold these last months are in discussion again. One project resuming soon is the upgrade from Office 2016 to Microsoft 365 Apps. With many laptop computers now internet or VPN-based what can be done to optimize upgrades for these remote users?
+To provide background, my customer has recently implemented cloud management gateways and cloud distribution points.
+</p>
+</div>
+<div class=list-meta>
+<span class=post-date>
+</span>
+</div>
+</div>
+</article>
+<article class=list-item>
+<div class=list-content>
+<div class=post-header>
+<h2 class=post-title>
+<a href=https://blog.sysmansquad.com/2020/06/08/deploy-languages-via-software-center-with-pscmwin10language/>Deploy languages via Software Center with PSCMWin10Language</a>
+</h2>
+</div>
+<div class=post-entry>
+<p>
+This post complements my other post, where I walk-through the differences of LP, LIP, LXP and FoD.
+Here I will show you how to use a PowerShell module I wrote, PSCMWin10Languages, to create Microsoft Endpoint Manager Configuration Manager Applications for each language you want to deploy via the Software Center.
+These Applications are not for OSD. It changes the language only for the user who installs the Application via the Software Center.
+</p>
+</div>
+<div class=list-meta>
+<span class=post-date>
+</span>
+</div>
+</div>
+</article>
+<article class=list-item>
+<div class=list-content>
+<div class=post-header>
+<h2 class=post-title>
+<a href=https://blog.sysmansquad.com/2020/06/08/language-packs-language-experience-packs-language-interface-packs-what/>Language Packs, Language Experience Packs, Language Interface Packs… what?!</a>
+</h2>
+</div>
+<div class=post-entry>
+<p>
+For a while I have been curious on how to do Windows OSD with multiple languages &ldquo;the proper way&rdquo; using Configuration Manager. Whenever I have approached the subject I have always felt overwhelmed.
+Googling the topic is just a hot mess. You&rsquo;re faced with information that&rsquo;s old, lacking real detail or generally misunderstood. My aim here is to demystify the topic and show you a solid way to do Windows 10 multi language OSD with ConfigMgr along with sound reasoning.
+</p>
+</div>
+<div class=list-meta>
+<span class=post-date>
+</span>
+</div>
+</div>
+</article>
+<article class=list-item>
+<div class=post-img>
+<a href=https://blog.sysmansquad.com/2020/05/26/arm-azure-resource-manager-templating-for-windows-virtual-desktop/>
+<img width=520 height=400 src=https://blog.sysmansquad.com/2020/05/26/arm-azure-resource-manager-templating-for-windows-virtual-desktop/msedge_CxaaJwZiAP.png>
+</a>
+</div>
+<div class=list-content>
+<div class=post-header>
+<h2 class=post-title>
+<a href=https://blog.sysmansquad.com/2020/05/26/arm-azure-resource-manager-templating-for-windows-virtual-desktop/>ARM (Azure Resource Manager) Templating for Windows Virtual Desktop</a>
+</h2>
+</div>
+<div class=post-entry>
+<p>
+Why would I use ARM templating, isn&rsquo;t the default Image Gallery fine? Well first off, what is ARM Templating? According to Microsoft &ldquo;You can automate deployments and use the practice of infrastructure as code. In code, you define the infrastructure that needs to be deployed. The infrastructure code becomes part of your project. Just like application code, you store the infrastructure code in a source repository and version it&mldr;&rdquo;
+What does all that mean?
+</p>
+</div>
+<div class=list-meta>
+<span class=post-date>
+</span>
+</div>
+</div>
+</article>
+<article class=list-item>
+<div class=post-img>
+<a href=https://blog.sysmansquad.com/2020/05/19/net-103-layering-in-active-directory/>
+<img width=520 height=400 src=https://blog.sysmansquad.com/2020/05/19/net-103-layering-in-active-directory/Canada_Goose_Branta_Canadensis.jpg>
+</a>
+</div>
+<div class=list-content>
+<div class=post-header>
+<h2 class=post-title>
+<a href=https://blog.sysmansquad.com/2020/05/19/net-103-layering-in-active-directory/>NET-103 : Layering in Active Directory</a>
+</h2>
+</div>
+<div class=post-entry>
+<p>
+Joe Ravi / CC BY-SA https://creativecommons.org/licenses/by-sa/3.0
+In previous articles, we&rsquo;ve built the basic services you need without getting too far in the weeds. Now we&rsquo;re going to layer in a central identity service.
+It&rsquo;s also hopefully going to be a lot shorter than previous articles, though I can&rsquo;t make any promises - these things tend to all start small, then balloon rapidly.
+If you&rsquo;re continuing from NET-102 you&rsquo;ll already have the following machines:
+</p>
+</div>
+<div class=list-meta>
+<span class=post-date>
+</span>
+</div>
+</div>
+</article>
+<article class=list-item>
+<div class=post-img>
+<a href=https://blog.sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/>
+<img width=520 height=400 src=https://blog.sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/GetPackageIDLog.png>
+</a>
+</div>
+<div class=list-content>
+<div class=post-header>
+<h2 class=post-title>
+<a href=https://blog.sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/>Modern Driver Management with the Administration Service</a>
+</h2>
+</div>
+<div class=post-entry>
+<p>
+2021-04-27 update: The solution now works over CMG. Please see this post for details.
+Hello!
+Today I’d like to share with you a new solution I’ve developed to allow me to use the free Modern Driver Management solution from the team at MSEndpointMgr at my work. My goal is to use the process developed by them for managing drivers in a task sequence and convert it to use the ConfigMgr Administration Service since my company won&rsquo;t allow me to install their third-party web service.
+</p>
+</div>
+<div class=list-meta>
+<span class=post-date>
+</span>
+</div>
+</div>
+</article>
+<article class=list-item>
+<div class=list-content>
+<div class=post-header>
+<h2 class=post-title>
+<a href=https://blog.sysmansquad.com/2020/04/26/sharing-google-meet-links-with-students-safely/>Sharing Google Meet Links With Students Safely Can Be Confusing For I.T. Pros, Let Alone Teachers</a>
+</h2>
+</div>
+<div class=post-entry>
+<p>
+TL;DR: Classroom-Meet integrated meeting links are safe. Nickname Meet meeting links are safe. Blank/Non-Nickname Meet meeting links ARE NOT safe. Calendar generated Meet meeting links ARE NOT safe. I&rsquo;ll start by saying that I recognize COVID-19 and it&rsquo;s impact on technology use in K-12 public education put many of us in a position of building the airplane as we&rsquo;re flying on it. Administration, Curriculum and Technology have been working hard in school districts around the world to quickly train and support staff and faculty using systems they may never have heard of before this situation.
+</p>
+</div>
+<div class=list-meta>
+<span class=post-date>
+</span>
+</div>
+</div>
+</article>
+<article class=list-item>
+<div class=list-content>
+<div class=post-header>
+<h2 class=post-title>
+<a href=https://blog.sysmansquad.com/2020/04/22/teams-channel-notification-when-osd-fails/>Teams Channel Notification when OSD Fails</a>
+</h2>
+</div>
+<div class=post-entry>
+<p>
+How would you like this lovely notification appearing within MS Teams every time a build failed? Better than getting a helpdesk ticket or not finding out at all.
+Well, now you can!
+Removed broken screenshot - editor
+Step 1 - Configure Teams You need to make sure your O365 Administrator has enabled Incoming webhooks connectors in your O365 Tenant.
+Open Teams. Select a channel, or create a new channel specific for these notifications (This is best practice so normal channels are not spammed) Click the &mldr; Next to the channel name and choose Connectors Removed broken screenshot - editor
+</p>
+</div>
+<div class=list-meta>
+<span class=post-date>
+</span>
+</div>
+</div>
+</article>
+<article class=list-item>
+<div class=list-content>
+<div class=post-header>
+<h2 class=post-title>
+<a href=https://blog.sysmansquad.com/2020/04/08/collect-client-logs-the-fast-channel-way/>Collect Client Logs – The Fast Channel Way</a>
+</h2>
+</div>
+<div class=post-entry>
+<p>
+What&rsquo;s New? Starting in MEMCM 2002 there is an incredible new tool in the Client Notification tool bag. Client log collection!
+This is a vital addition to the console. At first glance I thought&mldr;
+But then the features full value was realized!
+Collecting Logs Over CMG Scenario: Increasing remote workforce, no VPN, but that nifty CMG thing is in place. What does that imply? There is no SMB access to the client.
 </p>
 </div>
 <div class=list-meta>
@@ -135,6 +307,7 @@ For the past few days, I&rsquo;ve been implementing SnipeIT into our environment
 <a href=/drafts/page/4/>← Newer Posts</a>
 </div>
 <div class=older>
+<a href=/drafts/page/6/>Older Posts →</a>
 </div>
 </div>
 </div>
@@ -150,11 +323,11 @@ For the past few days, I&rsquo;ve been implementing SnipeIT into our environment
 <div class="widget widget_recent_entries">
 <h4 class=widget-title>Squad Posts</h4>
 <ul>
-<li><a href=/2021/01/05/finding-azure-virtual-machines-in-configuration-manager/ target=_blank>Finding Azure Virtual Machines in Configuration Manager</a></li>
-<li><a href=/2020/12/30/automating-changing-out-of-business-hours-responses/ target=_blank>Automating Outside of Business Hours Responses</a></li>
-<li><a href=/2020/12/16/mapping-network-drives-on-intune-devices/ target=_blank>Mapping Network Drives on Intune Devices</a></li>
-<li><a href=/2020/12/08/give-your-adr-a-little-boost-with-status-filter-rules-and-powershell/ target=_blank>Give your ADR a little boost with Status Filter Rules and PowerShell</a></li>
-<li><a href=/2020/11/23/find-microsoft-accounts/ target=_blank>Find Microsoft Accounts on Company Domains</a></li>
+<li><a href=/2021/11/11/microsoft-teams-cache-a-burden-to-us-all/ target=_blank>Microsoft Teams Cache, a burden to us all</a></li>
+<li><a href=/2021/10/18/get-rid-of-the-continue-connecting-prompt-for-your-policy-configured-wifi-networks/ target=_blank>Get rid of the “Continue connecting?” prompt for your policy-configured wifi networks</a></li>
+<li><a href=/2021/10/08/removing-the-built-in-teams-app-in-windows-11-with-intune/ target=_blank>Removing The Built-in Teams App in Windows 11 with Intune</a></li>
+<li><a href=/2021/08/30/installing-the-configuration-manager-client-during-autopilot/ target=_blank>Installing The Configuration Manager Client During Autopilot</a></li>
+<li><a href=/2021/07/12/use-azure-policy-to-configure-boot-diagnostics-settings/ target=_blank>Use Azure Policy to configure Boot Diagnostics Settings</a></li>
 </ul>
 </div>
 </aside>

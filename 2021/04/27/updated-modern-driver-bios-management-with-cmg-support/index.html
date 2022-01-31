@@ -21,7 +21,8 @@
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://blog.sysmansquad.com/83">
 <meta name=twitter:title content="Updated Modern Driver/BIOS Management with CMG Support">
-<meta name=twitter:description content="<li class=&#34;uagb-toc__list&#34;> [Improvements to Invoke-GetPackageIDFromAdminService](#improvements-to-invoke-getpackageidfromadminservice)<ul class=&#34;uagb-toc__list&#34;> <li class=&#34;uagb-toc__list&#34;> [1) New parameters and ParameterSets](#1-new-parameters-and-parametersets)<li class=&#34;uagb-toc__list&#34;> <li class=&#34;uagb-toc__list&#34;> [2) Verify, Install and Import the MSAL.PS module](#2-verify-install-and-import-the-msalps-module)<li class=&#34;uagb-toc__list&#34;> <li class=&#34;uagb-toc__list&#34;> [3) Querying the AdminService](#3-querying-the-adminservice) </li></ul> </li></ul> </li></ul> </li> <li class=&#34;uagb-toc__list&#34;> [Improvements to the task sequence](#improvements-to-the-task-sequence)<ul class=&#34;uagb-toc__list&#34;> <li class=&#34;uagb-toc__list&#34;> [1) Is the client on Internet?](#1-is-the-client-on-internet)<li class=&#34;uagb-toc__list&#34;> <li class=&#34;uagb-toc__list&#34;> [2) Additional Parameters for Internet clients](#2-additional-parameters-for-internet-clients)<li class=&#34;uagb-toc__list&#34;> <li class=&#34;uagb-toc__list&#34;> [3) Running the script with the right parameters](#3-running-the-script-with-the-right-parameters) </li></ul> </li></ul> </li></ul> </li></ul> </li> <li class=&#34;uagb-toc__list&#34;> [The end result](#the-end-result)<li class=&#34;uagb-toc__list&#34;> [How do I set this up in my environment?">
+<meta name=twitter:description content="Hello,
+This is a long and overdue update on a solution I started working on last year to allow my organization to use the modern driver management solution without the need of the custom webservice. I also wanted the solution to use the built-in task sequence steps as much as possible to allow other administrators to customize the solution to their need without the need to go modify a big PowerShell script.">
 </head>
 <body class="home blog">
 <div id=asd-container>
@@ -90,70 +91,32 @@
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Updated Modern Driver/BIOS Management with CMG Support</h1>
-<span class=post-date>April 28, 2021</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/charles>Charles Tousignant</a> / </span>
+<span class=post-date>April 28, 2021 </span>
+<span class=post-categories>/ Endpoint Management </span>
+<span class=post-categories>/ MECM/MEMCM/SCCM </span>
+<span class=post-categories>/ Powershell </span>
+<span class=post-categories>/ Task Sequence </span>
+</p>
 </div>
 <div class=post-entry>
-<pre><code>        &lt;li class=&quot;uagb-toc__list&quot;&gt;
-          [Improvements to Invoke-GetPackageIDFromAdminService](#improvements-to-invoke-getpackageidfromadminservice)&lt;ul class=&quot;uagb-toc__list&quot;&gt;
-            &lt;li class=&quot;uagb-toc__list&quot;&gt;
-              [1) New parameters and ParameterSets](#1-new-parameters-and-parametersets)&lt;li class=&quot;uagb-toc__list&quot;&gt;
-                &lt;li class=&quot;uagb-toc__list&quot;&gt;
-                  [2) Verify, Install and Import the MSAL.PS module](#2-verify-install-and-import-the-msalps-module)&lt;li class=&quot;uagb-toc__list&quot;&gt;
-                    &lt;li class=&quot;uagb-toc__list&quot;&gt;
-                      [3) Querying the AdminService](#3-querying-the-adminservice)
-                    &lt;/li&gt;&lt;/ul&gt;
-                  &lt;/li&gt;&lt;/ul&gt;
-                &lt;/li&gt;&lt;/ul&gt;
-              &lt;/li&gt;
-              &lt;li class=&quot;uagb-toc__list&quot;&gt;
-                [Improvements to the task sequence](#improvements-to-the-task-sequence)&lt;ul class=&quot;uagb-toc__list&quot;&gt;
-                  &lt;li class=&quot;uagb-toc__list&quot;&gt;
-                    [1) Is the client on Internet?](#1-is-the-client-on-internet)&lt;li class=&quot;uagb-toc__list&quot;&gt;
-                      &lt;li class=&quot;uagb-toc__list&quot;&gt;
-                        [2) Additional Parameters for Internet clients](#2-additional-parameters-for-internet-clients)&lt;li class=&quot;uagb-toc__list&quot;&gt;
-                          &lt;li class=&quot;uagb-toc__list&quot;&gt;
-                            [3) Running the script with the right parameters](#3-running-the-script-with-the-right-parameters)
-                          &lt;/li&gt;&lt;/ul&gt;
-                        &lt;/li&gt;&lt;/ul&gt;
-                      &lt;/li&gt;&lt;/ul&gt;
-                    &lt;/li&gt;&lt;/ul&gt;
-                  &lt;/li&gt;
-                  &lt;li class=&quot;uagb-toc__list&quot;&gt;
-                    [The end result](#the-end-result)&lt;li class=&quot;uagb-toc__list&quot;&gt;
-                      [How do I set this up in my environment?](#how-do-i-set-this-up-in-my-environment)&lt;ul class=&quot;uagb-toc__list&quot;&gt;
-                        &lt;li class=&quot;uagb-toc__list&quot;&gt;
-                          [What if I have multiple CMGs?](#what-if-i-have-multiple-cmgs)
-                        &lt;/li&gt;
-                      &lt;/ul&gt;
-                    &lt;/li&gt;&lt;/ul&gt;
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;&lt;/ul&gt;
-            &lt;/li&gt;
-          &lt;/ul&gt;
-        &lt;/li&gt;
-        
-        &lt;li class=&quot;uagb-toc__list&quot;&gt;
-          [A note on the task sequence size](#a-note-on-the-task-sequence-size)&lt;li class=&quot;uagb-toc__list&quot;&gt;
-            [Links](#links)
-          &lt;/li&gt;&lt;/ul&gt;
-        &lt;/li&gt;
-      &lt;/ul&gt;
-    &lt;/li&gt;&lt;/ul&gt;
-  &lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
-&lt;/ol&gt;
-</code></pre>
 <p>Hello,</p>
 <p>This is a long and overdue update on a solution I started working on last year to allow my organization to use the modern driver management solution without the need of the custom webservice. I also wanted the solution to use the built-in task sequence steps as much as possible to allow other administrators to customize the solution to their need without the need to go modify a big PowerShell script.</p>
 <p>You can read the original blog posts here:</p>
-<p><strong>Modern Driver Management with the Administration Service</strong></p>
-<p><strong>Modern BIOS Management with the Administration Service</strong></p>
+<p><a href=https://sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/>Modern Driver Management with the Administration Service</a>
+<a href=https://sysmansquad.com/2020/06/18/modern-bios-management-with-the-administration-service/>Modern BIOS Management with the Administration Service</a></p>
 <h2 id=notable-improvements>Notable improvements</h2>
+<ul>
+<li>The solution now works for clients on the internet by querying the AdminService over a cloud management gateway (CMG) Bonus: It works in WinPE! You can do a complete reinstallation of a device over CMG using this solution to dynamically apply bios updates and drivers at the same time during the task sequence.</li>
+<li>The solution now supports 7-Zip and Wim driver packages</li>
+<li>Improvements to handle driver packages using the DisplayVersion property instead of ReleaseId (ex: 20H2 instead of 2009)</li>
+</ul>
 <h2 id=prerequisites-to-use-the-solution-over-cmg>Prerequisites to use the solution over CMG</h2>
 <h3 id=a-working-cmg>A working CMG</h3>
 <p>There are multiple blog articles and guides online to help you set up your CMG. Here are some links that helped me:</p>
 <ul>
-<li><a href=https://docs.microsoft.com/en-us/mem/configmgr/core/clients/manage/cmg/setup-cloud-management-gateway>Official documentation/guidance from Microsoft</a></li>
+<li><a href=https://docs.microsoft.com/mem/configmgr/core/clients/manage/cmg/setup-cloud-management-gateway>Official documentation/guidance from Microsoft</a></li>
 <li><a href=https://systemcenterdudes.com/setup-and-configure-sccm-cloud-management-gateway-1806/>CMG Guide from System Center Dudes</a></li>
 <li><a href=https://www.prajwaldesai.com/setup-sccm-cloud-management-gateway/>CMG Guide from Prajwal Desai</a></li>
 </ul>
@@ -169,20 +132,20 @@
 <p><div class=image>
 <figure>
 <a href=image.png target=_blank>
-<img src=image.png alt>
+<img src=image.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <h2 id=how-to-query-the-adminservice-over-cmg>How to query the AdminService over CMG?</h2>
 <p>I started my research by reading the blog post from Sandy Zeng here: <a href=https://msendpointmgr.com/2019/07/16/use-configmgr-administration-service-adminservice-over-internet/>https://msendpointmgr.com/2019/07/16/use-configmgr-administration-service-adminservice-over-internet/</a></p>
 <p>Also, at the same time, when I was looking at my application registration in the Azure Portal I saw this notification:</p>
 <p><div class=image>
 <figure>
 <a href=image-1.png target=_blank>
-<img src=image-1.png alt>
+<img src=image-1.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>After inspecting Sandy’s script, I confirmed that it was using Azure Active Directory Authentication Library (ADAL), so I wanted to make my solution work with MSAL instead of ADAL.</p>
 <p>After doing some research, I found the perfect PowerShell module to help me: <a href=https://github.com/AzureAD/MSAL.PS/>MSAL.PS</a></p>
 <p>With the help of that module, I was easily able to get an access token that is needed to query the AdminService over CMG.</p>
@@ -191,31 +154,31 @@
 <p><div class=image>
 <figure>
 <a href=image-2.png target=_blank>
-<img src=image-2.png alt>
+<img src=image-2.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>And here is what the result looks like:</p>
 <p><div class=image>
 <figure>
 <a href=getmsaltoken-1-1024x873.png target=_blank>
-<img src=getmsaltoken-1-1024x873.png alt>
+<img src=getmsaltoken-1-1024x873.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Now that I have an access token, I can easily query the AdminService over CMG. I reused the same part of the code used by Sandy to do this:</p>
 <p><div class=image>
 <figure>
 <a href=image-4.png target=_blank>
-<img src=image-4.png alt>
+<img src=image-4.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>In the example above, I was successfully able to retrieve information for 36 packages from the AdminService over CMG.</p>
 <h2 id=improvements-to-invoke-getpackageidfromadminservice>Improvements to Invoke-GetPackageIDFromAdminService</h2>
 <p>Now that I knew what information I needed to use to query the AdminService over CMG, I was ready to make the necessary modifications to my script.</p>
 <h3 id=1-new-parameters-and-parametersets>1) New parameters and ParameterSets</h3>
-<p>Depending on if the client is on the internet or not, my script would require a different set of parameters. This was the perfect opportunity to use <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parameter_sets?view=powershell-7.1">parameter sets</a>.</p>
+<p>Depending on if the client is on the internet or not, my script would require a different set of parameters. This was the perfect opportunity to use <a href="https://docs.microsoft.com/powershell/module/microsoft.powershell.core/about/about_parameter_sets?view=powershell-7.1">parameter sets</a>.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
@@ -292,7 +255,7 @@
 </div>
 </div><h3 id=2-verify-install-and-import-the-msalps-module>2) Verify, Install and Import the MSAL.PS module</h3>
 <p>I wrote a function to handle installing & importing the MSAL.PS.</p>
-<p>The tricky part here is that the MSAL.PS module requires us to accept the license agreement before we can install the module. There is a parameter <strong>-AcceptLicense</strong> for the Install-Module function but it is only available in the <a href=https://docs.microsoft.com/en-us/powershell/module/powershellget>PowerShellGet module</a> version 2 or higher.</p>
+<p>The tricky part here is that the MSAL.PS module requires us to accept the license agreement before we can install the module. There is a parameter <strong>-AcceptLicense</strong> for the Install-Module function but it is only available in the <a href=https://docs.microsoft.com/powershell/module/powershellget>PowerShellGet module</a> version 2 or higher.</p>
 <p>This function checks for the availability of the MSAL.PS module and if it’s not there it will check for the prerequisites to install before it can import the module.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
@@ -400,22 +363,34 @@
 </div>
 </div><h4 id=what-about-winpe-powershell-gallery-does-not-work-in-winpe>What about WinPE? PowerShell Gallery does not work in WinPE!</h4>
 <p>You are right, by default PowerShell Gallery does not work in WinPE. To solve this issue, you have 2 options:</p>
-<pre><code>  &lt;div class=&quot;wp-block-media-text__content&quot;&gt;
-    &lt;p&gt;
-      a) Create a package with the saved module and distribute it to your CMG
-    &lt;/p&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-<pre><code>      &lt;div class=&quot;wp-block-media-text__content&quot;&gt;
-        &lt;p&gt;
-          b) Edit the package in the “Manually install MSAL.PS module” step:
-        &lt;/p&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
+<ul>
+<li>Add PowerShell Gallery support to your boot image:
+<ul>
+<li>See this post by David Segura on how it can be achieved: <a href=https://www.osdeploy.com/blog/2021/winpe-powershell-gallery>https://www.osdeploy.com/blog/2021/winpe-powershell-gallery</a></li>
+<li>The easiest way to add PowerShellGallery support to your boot image is to use a <a href=https://osdcloud.osdeploy.com/concepts/universal-winpe>Universal WinPE</a> that can be created with the OSD PowerShell module. Use this as a base for your boot image in Configuration Manager and you will be able to install modules from PSGallery directly in WinPE.</li>
+</ul>
+</li>
+<li>Manually install the MSAL.PS module during the task sequence before you run the script to query the AdminService:
+<ul>
+<li>Create a package with the saved module and distribute it to your CMG<br>
+<div class=image>
+<figure>
+<a href=image-5-1024x514.png target=_blank>
+<img src=image-5-1024x514.png alt=screenshot>
+</a>
+</figure>
+</div></li>
+<li>Edit the package in the “Manually install MSAL.PS module” step:<br>
+<div class=image>
+<figure>
+<a href=manuallyinstallmsal_step-1024x667.png target=_blank>
+<img src=manuallyinstallmsal_step-1024x667.png alt=screenshot>
+</a>
+</figure>
+</div></li>
+</ul>
+</li>
+</ul>
 <p>Both options will allow you to install and import the MSAL.PS module in WinPE.</p>
 <p>If you decide to go with enabling support for PowerShell Gallery in WinPE, you can disable the step to manually install the module in the task sequence.</p>
 <h3 id=3-querying-the-adminservice>3) Querying the AdminService</h3>
@@ -445,7 +420,7 @@
         <span style=color:teal>$authHeader</span> = @{
             <span style=color:#d14>&#39;Content-Type&#39;</span>  = <span style=color:#d14>&#39;application/json&#39;</span>
             <span style=color:#d14>&#39;Authorization&#39;</span> = <span style=color:#d14>&#34;Bearer &#34;</span> + <span style=color:teal>$token</span>.AccessToken
-            <span style=color:#d14>&#39;ExpiresOn&#39;</span>	    = <span style=color:teal>$token</span>.ExpiresOn
+            <span style=color:#d14>&#39;ExpiresOn&#39;</span>     = <span style=color:teal>$token</span>.ExpiresOn
         }
         <span style=color:teal>$Packages</span> = <span style=color:#0086b3>Invoke-RestMethod</span> -Method Get -Uri <span style=color:teal>$WMIPackageURL</span> -Headers <span style=color:teal>$authHeader</span> -Body <span style=color:teal>$Body</span> | <span style=color:#0086b3>Select-Object</span> -ExpandProperty value
     }
@@ -461,10 +436,10 @@
 <p><div class=image>
 <figure>
 <a href=image-6.png target=_blank>
-<img src=image-6.png alt>
+<img src=image-6.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>Note: In my limited testing, I found that if a task sequence does not reference any package, this variable may not be set.</p>
 <p>If the “ClientIsOnInternet” is still not set after this step and device is not in WinPE, we use the following PowerShell command to determine if the device is on Internet:</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
@@ -475,14 +450,13 @@
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Get-CimInstance</span> -ClassName <span style=color:#d14>&#34;ClientInfo&#34;</span> -Namespace <span style=color:#d14>&#34;Root\CCM&#34;</span> | <span style=color:#0086b3>Select-Object</span> -ExpandProperty InInternet
 </code></pre></td></tr></table>
 </div>
-</div>
-<p><div class=image>
+</div><p><div class=image>
 <figure>
 <a href=clientinfo-1024x613.png target=_blank>
-<img src=clientinfo-1024x613.png alt>
+<img src=clientinfo-1024x613.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <h3 id=2-additional-parameters-for-internet-clients>2) Additional Parameters for Internet clients</h3>
 <p>Here you fill out your environment-specific information. The additional parameters needed for CMG support are:</p>
 <ul>
@@ -512,51 +486,52 @@
 <p><div class=image>
 <figure>
 <a href=setparam-1024x503.png target=_blank>
-<img src=setparam-1024x503.png alt>
+<img src=setparam-1024x503.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <h3 id=3-running-the-script-with-the-right-parameters>3) Running the script with the right parameters</h3>
 <p>Depending on the value of the “ClientIsOnInternet” variable, we run the script with different parameters.</p>
 <p>If the client is determined to be intranet, use the intranet parameters:</p>
 <p><div class=image>
 <figure>
 <a href=invoke-intranet-1024x357.png target=_blank>
-<img src=invoke-intranet-1024x357.png alt>
+<img src=invoke-intranet-1024x357.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>If the client is on Internet, use the internet parameters:</p>
 <p><div class=image>
 <figure>
 <a href=invoke-internet-1024x262.png target=_blank>
-<img src=invoke-internet-1024x262.png alt>
+<img src=invoke-internet-1024x262.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <h2 id=the-end-result>The end result</h2>
 <p>You can now use the Modern Driver Management and Modern BIOS Management solution for Internet clients just like you are doing with your intranet clients.</p>
 <p>If you are on Current Branch 2010 or later, you can use a boot media to run bare metal deployment on the Internet and still use the Modern Driver/BIOS Management solution.</p>
 <p><div class=image>
 <figure>
 <a href=log-921x1024.png target=_blank>
-<img src=log-921x1024.png alt>
+<img src=log-921x1024.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <h2 id=how-do-i-set-this-up-in-my-environment>How do I set this up in my environment?</h2>
 <ol>
 <li>Download the task sequences <a href=https://github.com/CharlesNRU/mdm-adminservice/raw/master/MDM-TS.zip>here</a>.</li>
 <li>Import the task sequences in your environment</li>
-<li>Configure the parameters correctly in the “Query AdminService for PackageID” task sequence:</li>
-</ol>
-<p><div class=image>
+<li>Configure the parameters correctly in the “Query AdminService for PackageID” task sequence:<br>
+<div class=image>
 <figure>
 <a href=setparam-1024x503.png target=_blank>
-<img src=setparam-1024x503.png alt>
+<img src=setparam-1024x503.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></li>
+<li>Add the “Apply Driver Package” and/or “Apply BIOS Package” task sequences in your existing task sequences.</li>
+</ol>
 <p>For example on what you can do with these task sequences, see my previous blog posts:</p>
 <ul>
 <li><a href=https://sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/>https://sysmansquad.com/2020/05/15/modern-driver-management-with-the-administration-service/</a></li>
@@ -570,22 +545,28 @@
 <p><div class=image>
 <figure>
 <a href=tasksequencesize-1024x193.png target=_blank>
-<img src=tasksequencesize-1024x193.png alt>
+<img src=tasksequencesize-1024x193.png alt=screenshot>
 </a>
 </figure>
-</div> </p>
+</div></p>
 <p>If you are concerned about the total size of the task sequence, you could store the scripts in a package instead and this would greatly reduce the size of the task sequence.</p>
-<p>Reference regarding task sequence size: <a href=https://docs.microsoft.com/en-us/mem/configmgr/osd/deploy-use/manage-task-sequences-to-automate-tasks#reduce-the-size-of-task-sequence-policy>https://docs.microsoft.com/en-us/mem/configmgr/osd/deploy-use/manage-task-sequences-to-automate-tasks#reduce-the-size-of-task-sequence-policy</a></p>
+<p>Reference regarding task sequence size: <a href=https://docs.microsoft.com/mem/configmgr/osd/deploy-use/manage-task-sequences-to-automate-tasks#reduce-the-size-of-task-sequence-policy>https://docs.microsoft.com/mem/configmgr/osd/deploy-use/manage-task-sequences-to-automate-tasks#reduce-the-size-of-task-sequence-policy</a></p>
 <h2 id=links>Links</h2>
 <p><a href=https://github.com/CharlesNRU/mdm-adminservice/raw/master/MDM-TS.zip>Task Sequence Exports</a></p>
 <p><a href=https://github.com/CharlesNRU/mdm-adminservice>MDM-AdminService GitHub repository</a></p>
+<img src=/authors/charles/avatar.png alt="Photo of Charles Tousignant"><br>
+<strong>Charles Tousignant</strong>
+<em>Contributor</em>
+<div>
+<a href=https://twitter.com/NoRemoteUsers><img src=/img/social/twitter.png></a>
+</div>
+<p>Charles, a.k.a. 'No Remote Users' from MMS 2019, is a senior analyst working in the public sector focusing on Windows and systems management.</p>
+<hr>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
-</div>
-<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -597,7 +578,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>

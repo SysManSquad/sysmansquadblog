@@ -93,7 +93,13 @@ Quick Walkthrough Here is the short version of how this works:
 <article class="post type-post status-publish format-standard has-post-thumbnail hentry">
 <div class=post-header>
 <h1>Creating an Ubuntu 20.04 cloud template & cloud-init configuration in Xen Orchestra</h1>
-<span class=post-date>July 7, 2021</span>
+<p class=p-meta>
+<span class=post-author><a href=/authors/aaron>Aaron Glenn</a> / </span>
+<span class=post-date>July 7, 2021 </span>
+<span class=post-categories>/ Documentation </span>
+<span class=post-categories>/ How-To </span>
+<span class=post-categories>/ Networking </span>
+</p>
 </div>
 <div class=post-entry>
 <p>I had a need in my home lab to quickly deploy a bunch of thin clones of Ubuntu&rsquo;s cloud image. I chose to use the cloud images Ubuntu <a href=https://cloud-images.ubuntu.com/>provides</a> instead of building a custom template.</p>
@@ -167,8 +173,8 @@ users<span style=color:#a61717;background-color:#e3d2d2>:</span>
     -----END CERTIFICATE-----
 </code></pre></td></tr></table>
 </div>
-</div>
-<h4 id=network-config>Network config</h4>
+</div><h3 id=network-config>Network config</h3>
+<p>I don&rsquo;t know if this is unique to Xen Orchestra or not, but the syntax of the network config is a little odd. No matter what else you change, leave the first line EXACTLY as you see it below.</p>
 <div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
@@ -185,29 +191,35 @@ users<span style=color:#a61717;background-color:#e3d2d2>:</span>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
 </span></code></pre></td>
 <td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic>#network:</span>
-    version<span style=color:#a61717;background-color:#e3d2d2>:</span> 2
-    renderer<span style=color:#a61717;background-color:#e3d2d2>:</span> networkd
-    ethernets<span style=color:#a61717;background-color:#e3d2d2>:</span>
-        eth0<span style=color:#a61717;background-color:#e3d2d2>:</span>
-            addresses<span style=color:#a61717;background-color:#e3d2d2>:</span>
-                - 192.168.0.124/24
-                - 2001<span style=color:#a61717;background-color:#e3d2d2>:</span>db8::1<span style=color:#a61717;background-color:#e3d2d2>:</span>9f/64
-            gateway4<span style=color:#a61717;background-color:#e3d2d2>:</span> 192.168.0.1
-            nameservers<span style=color:#a61717;background-color:#e3d2d2>:</span>
-                search<span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:teal>[example.com]</span>
-                addresses<span style=color:#a61717;background-color:#e3d2d2>:</span> [192.168.0.1, 8.8.8.8]
-</code></pre></td></tr></table>
+<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#998;font-style:italic>#network:</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>version</span>:<span style=color:#bbb> </span><span style=color:#099>2</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>renderer</span>:<span style=color:#bbb> </span>networkd<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>ethernets</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>eth0</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>            </span><span style=color:navy>addresses</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>                </span>- <span style=color:#099>192.168.0.124</span>/24<span style=color:#bbb>
+</span><span style=color:#bbb>                </span>- <span style=color:#099>2001</span>:db8::1:9f/64<span style=color:#bbb>
+</span><span style=color:#bbb>            </span><span style=color:navy>gateway4</span>:<span style=color:#bbb> </span><span style=color:#099>192.168.0.1</span><span style=color:#bbb>
+</span><span style=color:#bbb>            </span><span style=color:navy>nameservers</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>                </span><span style=color:navy>search</span>:<span style=color:#bbb> </span>[example.com]<span style=color:#bbb>
+</span><span style=color:#bbb>                </span><span style=color:navy>addresses</span>:<span style=color:#bbb> </span>[<span style=color:#099>192.168.0.1</span>,<span style=color:#bbb> </span><span style=color:#099>8.8.8.8</span>]<span style=color:#bbb>
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id=caveats>Caveats</h2>
 <p>This approach is fast, but doesn&rsquo;t properly install the xcp-ng guest tools. You&rsquo;ll probably want those if you want XCP-NG or Xen-Orchestra to be able to dive into each guest VM and display a useful level of detail about the guest. You can do a normal install from an iso, install some packages and run &ldquo;cloud-init clean&rdquo;, then immediately shut down the VM. This will force cloud init to run the same way it would if this were a fresh machine - generating host keys, naming the machine and applying any other config you pass in.</p>
+<img src=/authors/aaron/avatar.png alt="Photo of Aaron Glenn"><br>
+<strong>Aaron Glenn</strong>
+<em>Admin/Mentor</em>
+<div>
+<a href=https://www.linkedin.com/in/aaron-g-961b5359><img src=/img/social/linkedin.png></a>
+</div>
+<p>Aaron is a Sr. Systems Administrator from Tulsa, specializing in Microsoft technologies, with an emphasis on powershell.</p>
+<hr>
 </div>
 <div class=post-share>
 <div class="post-share-box share-comments">
 hello
 </div>
-</div>
-<div class=post-author>
 </div>
 <comments id=comments>
 <script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
@@ -219,7 +231,7 @@ hello
 <footer id=footer>
 <div class=container>
 <div id=footer-copyright>
-<p class=copyright>&copy; 2021 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
+<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
 </div>
 </div>
 </footer>
