@@ -19,7 +19,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
 <script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://blog.sysmansquad.com/83">
+<meta name=twitter:image content="https://blog.sysmansquad.com/2021/07/12/use-azure-policy-to-configure-boot-diagnostics-settings/BRJEnNY.png">
 <meta name=twitter:title content="Use Azure Policy to configure Boot Diagnostics Settings">
 <meta name=twitter:description content="I found several posts about configuring Diagnostic Settings on VMs, but none that specified or included boot diagnostics.
 With this Azure Policy you can automatically enable Boot Diagnostics and apply a storage account to it. This is also a great base if you want to start testing out your own policies.
@@ -119,8 +119,8 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
 <p>From here, we will need to create a new Policy Definition
 <div class=image>
 <figure>
-<a href=https://i.imgur.com/7ANVOqt.png target=_blank>
-<img src=https://i.imgur.com/7ANVOqt.png alt=screenshot>
+<a href=7ANVOqt.png target=_blank>
+<img src=7ANVOqt.png alt=screenshot>
 </a>
 </figure>
 </div> Fill in several fields</p>
@@ -131,8 +131,8 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
 </ul>
 <p><div class=image>
 <figure>
-<a href=https://i.imgur.com/BRJEnNY.png target=_blank>
-<img src=https://i.imgur.com/BRJEnNY.png alt=screenshot>
+<a href=BRJEnNY.png target=_blank>
+<img src=BRJEnNY.png alt=screenshot>
 </a>
 </figure>
 </div> For the Policy Rule Definition, you should be able to copy over this JSON below, or use <a href=https://gist.github.com/PsychoData/27c5028a5a78237f9910d4f652f6b269#file-enable_boot_diagnostics-json>this JSON</a>. Note: Later on, you can configure this to be deployed from a GitHub repo directly, though GitHub actions, but we will talk about that in a later section.</p>
@@ -263,8 +263,8 @@ With this Azure Policy you can automatically enable Boot Diagnostics and apply a
 <p>By default, the JSON policy provided will ignore any resources with the tag <strong>IgnoreBootDiagnostics</strong>, but you can also add <strong>Exclusions</strong> here, as well.</p>
 <p><div class=image>
 <figure>
-<a href=https://i.imgur.com/1lJbBMM.png target=_blank>
-<img src=https://i.imgur.com/1lJbBMM.png alt=screenshot>
+<a href=1lJbBMM.png target=_blank>
+<img src=1lJbBMM.png alt=screenshot>
 </a>
 </figure>
 </div><br>
@@ -273,8 +273,8 @@ For the parameter, you need to fill in the URL to a Azure Blob storage service.<
 <p>My example is <a href=https://YourBlobStorage.blob.core.windows.net>https://YourBlobStorage.blob.core.windows.net</a> , but you can find the endpoint for your Storage Account by opening your <a href=https://portal.azure.com/#blade/HubsExtension/BrowseResource/resourceType/Microsoft.Storage%2FStorageAccounts>Storage Accounts</a> > Select or Create Relevant Storage account > Settings > Endpoints</p>
 <p><div class=image>
 <figure>
-<a href=https://i.imgur.com/XIQQYC4.png target=_blank>
-<img src=https://i.imgur.com/XIQQYC4.png alt=screenshot>
+<a href=XIQQYC4.png target=_blank>
+<img src=XIQQYC4.png alt=screenshot>
 </a>
 </figure>
 </div></p>
@@ -284,8 +284,8 @@ For the parameter, you need to fill in the URL to a Azure Blob storage service.<
 <p>Without the Remediation Task, the Policy will just Report Compliance or failure, but you can always start with no Remediation and then add it back later.</p>
 <p><div class=image>
 <figure>
-<a href=https://i.imgur.com/4Ndafmo.png target=_blank>
-<img src=https://i.imgur.com/4Ndafmo.png alt=screenshot>
+<a href=4Ndafmo.png target=_blank>
+<img src=4Ndafmo.png alt=screenshot>
 </a>
 </figure>
 </div></p>
@@ -295,16 +295,16 @@ For the parameter, you need to fill in the URL to a Azure Blob storage service.<
 <p>You can check your Remediation status by going to <a href=https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments>Policy Assignments</a>> Select your policy name > Remediation tab</p>
 <p><div class=image>
 <figure>
-<a href=https://i.imgur.com/JtkoH2i.png target=_blank>
-<img src=https://i.imgur.com/JtkoH2i.png alt=screenshot>
+<a href=JtkoH2i.png target=_blank>
+<img src=JtkoH2i.png alt=screenshot>
 </a>
 </figure>
 </div></p>
 <p>To see the details, use the three-dots menu on the right to View remediation task</p>
 <p><div class=image>
 <figure>
-<a href=https://i.imgur.com/qESeb98.png target=_blank>
-<img src=https://i.imgur.com/qESeb98.png alt=screenshot>
+<a href=qESeb98.png target=_blank>
+<img src=qESeb98.png alt=screenshot>
 </a>
 </figure>
 </div></p>
@@ -314,8 +314,8 @@ For the parameter, you need to fill in the URL to a Azure Blob storage service.<
 <p>Open <a href=https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Assignments>Azure Policy Assignments</a> > Select your assignment > <strong>View Definition</strong> button near the top > <strong>Export Definition</strong> button</p>
 <p><div class=image>
 <figure>
-<a href=https://i.imgur.com/KGmXwlg.gif target=_blank>
-<img src=https://i.imgur.com/KGmXwlg.gif alt=screenshot>
+<a href=KGmXwlg.gif target=_blank>
+<img src=KGmXwlg.gif alt=screenshot>
 </a>
 </figure>
 </div></p>
