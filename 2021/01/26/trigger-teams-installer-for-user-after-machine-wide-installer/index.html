@@ -1,292 +1,99 @@
-<!doctype html><html lang=en-us>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
-<meta name=viewport content="width=device-width">
-<meta name=description content="A community blog and subsidiary of WinAdmins.io">
-<link rel="shortcut icon" href=/img/favicon.ico>
-<title>Trigger Teams Installer for User After Machine Wide Installer-SysManSquad | Systems Management Squad</title>
-<link rel=canonical href=/2021/01/26/trigger-teams-installer-for-user-after-machine-wide-installer/>
-<link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins"><meta name=viewport content="width=device-width"><meta name=description content="A community blog and subsidiary of WinAdmins.io"><link rel="shortcut icon" href=/img/favicon.ico><title>Trigger Teams Installer for User After Machine Wide Installer-SysManSquad | Systems Management Squad</title><link rel=canonical href=/2021/01/26/trigger-teams-installer-for-user-after-machine-wide-installer/><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css><script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
 <script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
 <script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
 <script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
-<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://blog.sysmansquad.com/83">
-<meta name=twitter:title content="Trigger Teams Installer for User After Machine Wide Installer">
-<meta name=twitter:description content="The Problem: Teams Machine Wide Installer finishes&mldr; Then&mldr; Nothing? Have you or a loved one ever deployed Microsoft Teams in an enterprise environment? Did the users complain? Did project management complain? Management? You?
-I&rsquo;m sure someone was not happy about the overall user experience. In particular when the Teams Machine Wide installer is finished, and detected by your application management tool of choice it does&mldr; nothing. The user is left with a message claiming Teams is &lsquo;Installed&rsquo; when clearly it is not.">
-</head>
-<body class="home blog">
-<div id=asd-container>
-<div id=top-bar>
-<div class=container>
-<div id=nav-wrapper>
-<ul class=menu id=menu-top-menu>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/>Home</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/about/>
-<span>About</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=https://github.com/SysManSquad>
-<span>GitHub</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/jointhesquad/>
-<span>Join the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/meetthesquad/>
-<span>Meet the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=#>
-<span>MORE></span>
-</a>
-<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/contact/>Contact</a>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-<div id=top-search>
-<a href=# class=search><i class="fa fa-search"></i></a>
-<div class=show-search>
-<form role=search method=get action=https://www.google.com/search id=searchform>
-<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-XXZR1RSQYX",{anonymize_ip:!1})}</script><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.sysmansquad.com/83"><meta name=twitter:title content="Trigger Teams Installer for User After Machine Wide Installer"><meta name=twitter:description content="The Problem: Teams Machine Wide Installer finishes&mldr; Then&mldr; Nothing? Have you or a loved one ever deployed Microsoft Teams in an enterprise environment? Did the users complain? Did project management complain? Management? You?
+I&rsquo;m sure someone was not happy about the overall user experience. In particular when the Teams Machine Wide installer is finished, and detected by your application management tool of choice it does&mldr; nothing. The user is left with a message claiming Teams is &lsquo;Installed&rsquo; when clearly it is not."></head><body class="home blog"><div id=asd-container><div id=top-bar><div class=container><div id=nav-wrapper><ul class=menu id=menu-top-menu><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/>Home</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/about/><span>About</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=https://github.com/SysManSquad><span>GitHub</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/jointhesquad/><span>Join the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/meetthesquad/><span>Meet the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=#><span>MORE></span></a><ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/contact/>Contact</a></li></ul></li></ul></div><div id=top-search><a href=# class=search><i class="fa fa-search"></i></a><div class=show-search><form role=search method=get action=https://www.google.com/search id=searchform><input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
 <input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
-<button type=submit value=Search>
-</form>
-</div>
-</div>
-<div class=menu id=menu-mobile></div>
-</div>
-</div>
-<header id=header class=noslider>
-<div class=container>
-<div id=logo>
-<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
-</div>
-</div>
-</header>
-<div class=container>
-<div id=content>
-<div id=main class=fullwidth>
-<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
-<div class=post-header>
-<h1>Trigger Teams Installer for User After Machine Wide Installer</h1>
-<p class=p-meta>
-<span class=post-author><a href=/authors/cody>Cody Mathis</a> / </span>
-<span class=post-date>January 26, 2021 </span>
-<span class=post-categories>/ Endpoint Management </span>
-<span class=post-categories>/ Intune </span>
-<span class=post-categories>/ MECM/MEMCM/SCCM </span>
-<span class=post-categories>/ Microsoft </span>
-<span class=post-categories>/ Powershell </span>
-<span class=post-categories>/ Scripting </span>
-</p>
-</div>
-<div class=post-entry>
-<h2 id=the-problem-teams-machine-wide-installer-finishes-then-nothing>The Problem: Teams Machine Wide Installer finishes&mldr; Then&mldr; Nothing?</h2>
-<p>Have you or a loved one ever deployed Microsoft Teams in an enterprise environment? Did the users complain? Did project management complain? Management? You?</p>
-<p>I&rsquo;m sure <strong>someone</strong> was not happy about the overall user experience. In particular when the <a href=https://docs.microsoft.com/microsoftteams/msi-deployment>Teams Machine Wide installer</a> is finished, and detected by your application management tool of choice <strong>it does&mldr; nothing</strong>. The user is left with a message claiming Teams is &lsquo;<strong>Installed</strong>&rsquo; when clearly it is not.</p>
-<p>To solve this we will dig in to&mldr;</p>
-<h2 id=whats-going-on-here>What&rsquo;s Going On Here?</h2>
-<p>The Teams Machine Wide installer is not what the user will &lsquo;run&rsquo; on a day-to-day basis. Instead, it stages the binaries in the &lsquo;Program Files (x86)&rsquo; directory, depending on OS Architecture, where each user will call the installer at a later time. By default, every user will have Teams installed in their own user profile the next time they log in once the machine-wide installer is in place. This is pretty well noted by various people on the internet and Microsoft makes a note of it in their docs <a href=https://docs.microsoft.com/microsoftteams/msi-deployment#pc-installation>here</a>. For some reason, Microsoft states it a bit strangely, &lsquo;Whenever a user signs into a new Windows User Profile&mldr;&rsquo; But really it does not have to be a new user profile. Existing user profiles will receive Teams on their next login as well.</p>
-<p>Microsoft is leveraging a <a href=https://docs.microsoft.com/windows/win32/setupapi/run-and-runonce-registry-keys>Run Key</a> in order to execute a command line every time a user logs in. This key can be seen below.</p>
-<p><div class=image>
-<figure>
-<a href=TeamsRunOnce.png target=_blank>
-<img src=TeamsRunOnce.png alt="TeamsMachineWideInstaller registry key under HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run">
-</a>
-</figure>
-</div> %ProgramFiles%\Teams Installer\Teams.exe -checkInstall -source=default</p>
-<p>The command which is executed is &lsquo;<strong>%ProgramFiles%\Teams Installer\Teams.exe -checkInstall -source=default</strong>&rsquo;</p>
-<p>Keep in mind this falls under the WOW6432Node section of the registry on a 64-Bit operating system. This causes the %ProgramFiles% environment variable to resolve to &lsquo;C:\Program Files (x86)&rsquo; for example. This would change on a 32-Bit operating system accordingly with the registry key falling under HKLM\Software, and the Teams.exe being found under the C:\Program Files' directory.</p>
-<p>An interesting note here is a <strong>Run key runs EVERY time a user logs in</strong>. The command found in the registry has a <strong>-checkInstall</strong> parameter. If you run this binary without the -checkInstall parameter you can see it will perform a Teams installation every time, instead of only when not found.</p>
-<p>Alright alright, this is <strong>boring</strong>. How do we improve the user experience where Microsoft has failed?</p>
-<h2 id=solution-improve-the-user-experience>Solution: Improve the User Experience</h2>
-<p>As much as I would enjoy writing an essay about how frustrating it is to see many norms of software installation be violated by Microsoft that is not what we are here for! <strong>We care about the users</strong>.</p>
-<p>What the user expects is to click &lsquo;<strong>Install</strong>&rsquo; in the software distribution platform of choice, such as Software Center, or the Company Portal and once the installation is complete the software should be available for use on the device. This behavior is implied by the feedback of &lsquo;<strong>Installed</strong>&rsquo; that is presented in the UI.</p>
-<h3 id=current-behavior>Current Behavior</h3>
-<p>The Teams Machine Wide installer will finish, and the detection of the software will show &lsquo;<strong>Installed</strong>&rsquo; based on the MSI having been found. Unfortunately this is <em>not</em> the software which the user cares about.</p>
-<p><div class=image>
-<figure>
-<a href=Teams-NotFound.png target=_blank>
-<img src=Teams-NotFound.png alt=screenshot>
-</a>
-</figure>
-</div></p>
-<h3 id=the-new-and-improved-experience>The New and Improved Experience!</h3>
-<p>&mldr; can be seen below in an excessively long GIF!</p>
-<p><div class=image>
-<figure>
-<a href=0TCMvCmzxY.gif target=_blank>
-<img src=0TCMvCmzxY.gif alt=screenshot>
-</a>
-</figure>
-</div></p>
-<p>This result is achieved by using a <strong>Windows Scheduled Task</strong>. The PowerShell script that generates this task is found below at the <a href=#The-Script>end of the article</a>, and also on <a href=https://github.com/CodyMathis123/CM-Ramblings/blob/master/New-PostTeamsMachineWideInstallScheduledTask.ps1><strong>GitHub</strong></a>.</p>
-<p>A scheduled task can be found in Task Scheduler after the script runs as shown below.</p>
-<p><div class=image>
-<figure>
-<a href=Teams-TaskRunning-1.png target=_blank>
-<img src=Teams-TaskRunning-1.png alt=screenshot>
-</a>
-</figure>
-</div></p>
-<p>At a high level the improved experience shown is achieved via the following workflow:</p>
-<ul>
-<li>Microsoft Teams Machine Wide Installer is executed</li>
-<li>Provided <a href=#The-Script>script</a> is executed immediately after the Teams installer which creates the <strong>scheduled task</strong> which is set to execute as &lsquo;<strong>Users</strong>&rsquo;
-<ul>
-<li>User is currently logged on:
-<ul>
-<li>The scheduled task will execute as the logged-on user</li>
-<li>Teams.exe installer will be launched according to the parameters in the Run key discussed</li>
-<li>User will see the Teams installer start and receive the login prompt</li>
-<li>The scheduled task will expire and auto-delete itself after 10 minutes</li>
-</ul>
-</li>
-<li>No user is currently logged on:
-<ul>
-<li>The scheduled task will have no user to execute as and will not trigger</li>
-<li>The scheduled task will expire and auto-delete itself after 10 minutes</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>This is <strong>not meant to be used as a standalone script</strong> as it is only useful if ran immediately after a Teams Machine Wide Installer executes.</p>
-<p>You are welcome to package the script alongside the Teams MSI and run them back to back using any mechanism you&rsquo;d like, whether that be your own cmd file, VB script, PowerShell, PSADT, or any other convoluted mechanism! The end goal is the MSI installs first, and the script runs second.</p>
-<h3 id=just-give-me-the-script---ill-figure-out-the-rest>Just Give Me The Script - I&rsquo;ll Figure Out the Rest</h3>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic>#
-</span><span style=color:#998;font-style:italic></span><span style=color:#d14>.SYNOPSIS</span>
-    Launch the Teams install as the logged <span style=color:#000;font-weight:700>in</span> user via a scheduled task
-.DESCRIPTION
-    This script will create a scheduled task <span style=color:#000;font-weight:700>if</span> one is not found which is used to
-    install Microsoft Teams as the logged <span style=color:#000;font-weight:700>in</span> user. This scheduled task executes
-    the Teams.exe found <span style=color:#000;font-weight:700>in</span> <span style=color:#000;font-weight:700>%</span>ProgramFiles% so that a user can <span style=color:#0086b3>start </span>using Teams
-    shortly after the Machine Wide installer completes instead of having to 
-    log off and back on.
-.NOTES
-    Generally used as a script that runs after a Teams Machine Wide Installer completes
-<span style=color:#998;font-style:italic>#&gt;</span>
-<span style=color:#000;font-weight:700>if</span> (!(<span style=color:#0086b3>Get-ScheduledTask</span> -TaskName <span style=color:#d14>&#39;Teams User Install - Post Machine Wide Install&#39;</span> -ErrorAction SilentlyContinue)) {
-    <span style=color:#000;font-weight:700>switch</span> (<span style=color:teal>[System.Environment]</span>::Is64BitOperatingSystem) {
-        <span style=color:teal>$true</span> {
-            <span style=color:teal>[string]</span><span style=color:teal>$TeamsMachineInstaller</span> = <span style=color:#0086b3>Get-ItemPropertyValue</span> -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run\ -Name TeamsMachineInstaller -ErrorAction Stop
-            <span style=color:teal>[string]</span><span style=color:teal>$Exe</span> = <span style=color:teal>$TeamsMachineInstaller</span>.Substring(0, <span style=color:teal>$TeamsMachineInstaller</span>.IndexOf(<span style=color:#d14>&#39;.exe&#39;</span>) + 4).Trim() <span style=color:#000;font-weight:700>-Replace</span> <span style=color:#d14>&#34;C:\\Program Files\\&#34;</span>, <span style=color:#d14>&#34;${env:ProgramFiles(x86)}\&#34;</span>
-    
-        }
-        <span style=color:teal>$false</span> {
-            <span style=color:teal>[string]</span><span style=color:teal>$TeamsMachineInstaller</span> = <span style=color:#0086b3>Get-ItemPropertyValue</span> -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\ -Name TeamsMachineInstaller -ErrorAction Stop
-            <span style=color:teal>[string]</span><span style=color:teal>$Exe</span> = <span style=color:teal>$TeamsMachineInstaller</span>.Substring(0, <span style=color:teal>$TeamsMachineInstaller</span>.IndexOf(<span style=color:#d14>&#39;.exe&#39;</span>) + 4).Trim()
-        }
-    }
-    <span style=color:teal>[string]</span><span style=color:teal>$InstallerArgs</span> = <span style=color:teal>$TeamsMachineInstaller</span>.Substring(<span style=color:teal>$Exe</span>.Length, <span style=color:teal>$TeamsMachineInstaller</span>.Length - <span style=color:teal>$exe</span>.Length).Trim()
-    <span style=color:teal>$newScheduledTaskSplat</span> = @{
-        Action      = <span style=color:#0086b3>New-ScheduledTaskAction</span> -Execute <span style=color:teal>$Exe</span> -Argument <span style=color:teal>$InstallerArgs</span>
-        Description = <span style=color:#d14>&#39;Start the Teams installer for the currently logged on user after a Teams Machine Wide install&#39;</span>
-        Settings    = <span style=color:#0086b3>New-ScheduledTaskSettingsSet</span> -Compatibility Vista -AllowStartIfOnBatteries -MultipleInstances IgnoreNew -ExecutionTimeLimit (<span style=color:#0086b3>New-TimeSpan</span> -Hours 1)
-        Trigger     = <span style=color:#0086b3>New-ScheduledTaskTrigger</span> -At (<span style=color:teal>$Start</span> = (<span style=color:#0086b3>Get-Date</span>).AddSeconds(5)) -Once
-        Principal   = <span style=color:#0086b3>New-ScheduledTaskPrincipal</span> -GroupId <span style=color:#d14>&#39;S-1-5-32-545&#39;</span> -RunLevel Limited
-    }
-    
-    <span style=color:teal>$ScheduledTask</span> = <span style=color:#0086b3>New-ScheduledTask</span> <span style=color:teal>@newScheduledTaskSplat</span>
-    <span style=color:teal>$ScheduledTask</span>.Settings.DeleteExpiredTaskAfter = <span style=color:#d14>&#34;PT0S&#34;</span>
-    <span style=color:teal>$ScheduledTask</span>.Triggers[0].StartBoundary = <span style=color:teal>$Start</span>.ToString(<span style=color:#d14>&#34;yyyy-MM-dd&#39;T&#39;HH:mm:ss&#34;</span>)
-    <span style=color:teal>$ScheduledTask</span>.Triggers[0].EndBoundary = <span style=color:teal>$Start</span>.AddMinutes(10).ToString(<span style=color:#d14>&#39;s&#39;</span>)
-    
-    <span style=color:#0086b3>Register-ScheduledTask</span> -InputObject <span style=color:teal>$ScheduledTask</span> -TaskName <span style=color:#d14>&#39;Teams User Install - Post Machine Wide Install&#39;</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><p><a href=https://twitter.com/CodyMathis123>@CodyMathis123</a></p>
-<img src=/authors/cody/avatar.png alt="Photo of Cody Mathis"><br>
-<strong>Cody Mathis</strong>
-<em>Contributor</em>
-<div>
-<a href=https://twitter.com/CodyMathis123><img src=/img/social/twitter.png></a>
-<a href=https://www.linkedin.com/in/cody-mathis-22a717136><img src=/img/social/linkedin.png></a>
-</div>
-<p>Cody has 10 years of ConfigMgr, PowerShell, and automation experience focusing on streamlining processes</p>
-<hr>
-</div>
-<comments id=comments>
-<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
-</comments>
-</article>
-</div>
-</div>
-</div>
-<footer id=footer>
-<div class=container>
-<div id=footer-copyright>
-<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
-</div>
-</div>
-</footer>
-</div>
-</body>
-</html>
+<button type=submit value=Search></form></div></div><div class=menu id=menu-mobile></div></div></div><header id=header class=noslider><div class=container><div id=logo><h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1></div></div></header><div class=container><div id=content><div id=main class=fullwidth><article class="post type-post status-publish format-standard has-post-thumbnail hentry"><div class=post-header><h1>Trigger Teams Installer for User After Machine Wide Installer</h1><p class=p-meta><span class=post-author><a href=/authors/cody>Cody Mathis</a> /</span>
+<span class=post-date>January 26, 2021</span>
+<span class=post-categories>/ Endpoint Management</span>
+<span class=post-categories>/ Intune</span>
+<span class=post-categories>/ MECM/MEMCM/SCCM</span>
+<span class=post-categories>/ Microsoft</span>
+<span class=post-categories>/ Powershell</span>
+<span class=post-categories>/ Scripting</span></p></div><div class=post-entry><h2 id=the-problem-teams-machine-wide-installer-finishes-then-nothing>The Problem: Teams Machine Wide Installer finishes&mldr; Then&mldr; Nothing?</h2><p>Have you or a loved one ever deployed Microsoft Teams in an enterprise environment? Did the users complain? Did project management complain? Management? You?</p><p>I&rsquo;m sure <strong>someone</strong> was not happy about the overall user experience. In particular when the <a href=https://docs.microsoft.com/microsoftteams/msi-deployment>Teams Machine Wide installer</a> is finished, and detected by your application management tool of choice <strong>it does&mldr; nothing</strong>. The user is left with a message claiming Teams is &lsquo;<strong>Installed</strong>&rsquo; when clearly it is not.</p><p>To solve this we will dig in to&mldr;</p><h2 id=whats-going-on-here>What&rsquo;s Going On Here?</h2><p>The Teams Machine Wide installer is not what the user will &lsquo;run&rsquo; on a day-to-day basis. Instead, it stages the binaries in the &lsquo;Program Files (x86)&rsquo; directory, depending on OS Architecture, where each user will call the installer at a later time. By default, every user will have Teams installed in their own user profile the next time they log in once the machine-wide installer is in place. This is pretty well noted by various people on the internet and Microsoft makes a note of it in their docs <a href=https://docs.microsoft.com/microsoftteams/msi-deployment#pc-installation>here</a>. For some reason, Microsoft states it a bit strangely, &lsquo;Whenever a user signs into a new Windows User Profile&mldr;&rsquo; But really it does not have to be a new user profile. Existing user profiles will receive Teams on their next login as well.</p><p>Microsoft is leveraging a <a href=https://docs.microsoft.com/windows/win32/setupapi/run-and-runonce-registry-keys>Run Key</a> in order to execute a command line every time a user logs in. This key can be seen below.</p><p><div class=image><figure><a href=TeamsRunOnce.png target=_blank><img src=TeamsRunOnce.png alt="TeamsMachineWideInstaller registry key under HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run"></a></figure></div>%ProgramFiles%\Teams Installer\Teams.exe -checkInstall -source=default</p><p>The command which is executed is &lsquo;<strong>%ProgramFiles%\Teams Installer\Teams.exe -checkInstall -source=default</strong>&rsquo;</p><p>Keep in mind this falls under the WOW6432Node section of the registry on a 64-Bit operating system. This causes the %ProgramFiles% environment variable to resolve to &lsquo;C:\Program Files (x86)&rsquo; for example. This would change on a 32-Bit operating system accordingly with the registry key falling under HKLM\Software, and the Teams.exe being found under the C:\Program Files&rsquo; directory.</p><p>An interesting note here is a <strong>Run key runs EVERY time a user logs in</strong>. The command found in the registry has a <strong>-checkInstall</strong> parameter. If you run this binary without the -checkInstall parameter you can see it will perform a Teams installation every time, instead of only when not found.</p><p>Alright alright, this is <strong>boring</strong>. How do we improve the user experience where Microsoft has failed?</p><h2 id=solution-improve-the-user-experience>Solution: Improve the User Experience</h2><p>As much as I would enjoy writing an essay about how frustrating it is to see many norms of software installation be violated by Microsoft that is not what we are here for! <strong>We care about the users</strong>.</p><p>What the user expects is to click &lsquo;<strong>Install</strong>&rsquo; in the software distribution platform of choice, such as Software Center, or the Company Portal and once the installation is complete the software should be available for use on the device. This behavior is implied by the feedback of &lsquo;<strong>Installed</strong>&rsquo; that is presented in the UI.</p><h3 id=current-behavior>Current Behavior</h3><p>The Teams Machine Wide installer will finish, and the detection of the software will show &lsquo;<strong>Installed</strong>&rsquo; based on the MSI having been found. Unfortunately this is <em>not</em> the software which the user cares about.</p><p><div class=image><figure><a href=Teams-NotFound.png target=_blank><img src=Teams-NotFound.png alt=screenshot></a></figure></div></p><h3 id=the-new-and-improved-experience>The New and Improved Experience!</h3><p>&mldr; can be seen below in an excessively long GIF!</p><p><div class=image><figure><a href=0TCMvCmzxY.gif target=_blank><img src=0TCMvCmzxY.gif alt=screenshot></a></figure></div></p><p>This result is achieved by using a <strong>Windows Scheduled Task</strong>. The PowerShell script that generates this task is found below at the <a href=#The-Script>end of the article</a>, and also on <a href=https://github.com/CodyMathis123/CM-Ramblings/blob/master/New-PostTeamsMachineWideInstallScheduledTask.ps1><strong>GitHub</strong></a>.</p><p>A scheduled task can be found in Task Scheduler after the script runs as shown below.</p><p><div class=image><figure><a href=Teams-TaskRunning-1.png target=_blank><img src=Teams-TaskRunning-1.png alt=screenshot></a></figure></div></p><p>At a high level the improved experience shown is achieved via the following workflow:</p><ul><li>Microsoft Teams Machine Wide Installer is executed</li><li>Provided <a href=#The-Script>script</a> is executed immediately after the Teams installer which creates the <strong>scheduled task</strong> which is set to execute as &lsquo;<strong>Users</strong>&rsquo;<ul><li>User is currently logged on:<ul><li>The scheduled task will execute as the logged-on user</li><li>Teams.exe installer will be launched according to the parameters in the Run key discussed</li><li>User will see the Teams installer start and receive the login prompt</li><li>The scheduled task will expire and auto-delete itself after 10 minutes</li></ul></li><li>No user is currently logged on:<ul><li>The scheduled task will have no user to execute as and will not trigger</li><li>The scheduled task will expire and auto-delete itself after 10 minutes</li></ul></li></ul></li></ul><p>This is <strong>not meant to be used as a standalone script</strong> as it is only useful if ran immediately after a Teams Machine Wide Installer executes.</p><p>You are welcome to package the script alongside the Teams MSI and run them back to back using any mechanism you&rsquo;d like, whether that be your own cmd file, VB script, PowerShell, PSADT, or any other convoluted mechanism! The end goal is the MSI installs first, and the script runs second.</p><h3 id=just-give-me-the-script---ill-figure-out-the-rest>Just Give Me The Script - I&rsquo;ll Figure Out the Rest</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-29>29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-30><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-30>30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-31><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-31>31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-32><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-32>32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-33>33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-34>34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-35><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-35>35</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-36><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-36>36</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-37><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-37>37</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-38><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-38>38</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-39><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-39>39</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-40><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-40>40</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#998;font-style:italic>#
+</span></span></span><span style=display:flex><span><span style=color:#998;font-style:italic></span><span style=color:#d14>.SYNOPSIS</span>
+</span></span><span style=display:flex><span>    Launch the Teams install as the logged <span style=color:#000;font-weight:700>in</span> user via a scheduled task
+</span></span><span style=display:flex><span>.DESCRIPTION
+</span></span><span style=display:flex><span>    This script will create a scheduled task <span style=color:#000;font-weight:700>if</span> one is not found which is used to
+</span></span><span style=display:flex><span>    install Microsoft Teams as the logged <span style=color:#000;font-weight:700>in</span> user. This scheduled task executes
+</span></span><span style=display:flex><span>    the Teams.exe found <span style=color:#000;font-weight:700>in</span> <span style=color:#000;font-weight:700>%</span>ProgramFiles% so that a user can <span style=color:#0086b3>start </span>using Teams
+</span></span><span style=display:flex><span>    shortly after the Machine Wide installer completes instead of having to 
+</span></span><span style=display:flex><span>    log off and back on.
+</span></span><span style=display:flex><span>.NOTES
+</span></span><span style=display:flex><span>    Generally used as a script that runs after a Teams Machine Wide Installer completes
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#&gt;</span>
+</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>if</span> (!(<span style=color:#0086b3>Get-ScheduledTask</span> -TaskName <span style=color:#d14>&#39;Teams User Install - Post Machine Wide Install&#39;</span> -ErrorAction SilentlyContinue)) {
+</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>switch</span> (<span style=color:teal>[System.Environment]</span>::Is64BitOperatingSystem) {
+</span></span><span style=display:flex><span>        <span style=color:teal>$true</span> {
+</span></span><span style=display:flex><span>            <span style=color:teal>[string]</span><span style=color:teal>$TeamsMachineInstaller</span> = <span style=color:#0086b3>Get-ItemPropertyValue</span> -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run\ -Name TeamsMachineInstaller -ErrorAction Stop
+</span></span><span style=display:flex><span>            <span style=color:teal>[string]</span><span style=color:teal>$Exe</span> = <span style=color:teal>$TeamsMachineInstaller</span>.Substring(0, <span style=color:teal>$TeamsMachineInstaller</span>.IndexOf(<span style=color:#d14>&#39;.exe&#39;</span>) + 4).Trim() <span style=color:#000;font-weight:700>-Replace</span> <span style=color:#d14>&#34;C:\\Program Files\\&#34;</span>, <span style=color:#d14>&#34;${env:ProgramFiles(x86)}\&#34;</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        <span style=color:teal>$false</span> {
+</span></span><span style=display:flex><span>            <span style=color:teal>[string]</span><span style=color:teal>$TeamsMachineInstaller</span> = <span style=color:#0086b3>Get-ItemPropertyValue</span> -Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\ -Name TeamsMachineInstaller -ErrorAction Stop
+</span></span><span style=display:flex><span>            <span style=color:teal>[string]</span><span style=color:teal>$Exe</span> = <span style=color:teal>$TeamsMachineInstaller</span>.Substring(0, <span style=color:teal>$TeamsMachineInstaller</span>.IndexOf(<span style=color:#d14>&#39;.exe&#39;</span>) + 4).Trim()
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:teal>[string]</span><span style=color:teal>$InstallerArgs</span> = <span style=color:teal>$TeamsMachineInstaller</span>.Substring(<span style=color:teal>$Exe</span>.Length, <span style=color:teal>$TeamsMachineInstaller</span>.Length - <span style=color:teal>$exe</span>.Length).Trim()
+</span></span><span style=display:flex><span>    <span style=color:teal>$newScheduledTaskSplat</span> = @{
+</span></span><span style=display:flex><span>        Action      = <span style=color:#0086b3>New-ScheduledTaskAction</span> -Execute <span style=color:teal>$Exe</span> -Argument <span style=color:teal>$InstallerArgs</span>
+</span></span><span style=display:flex><span>        Description = <span style=color:#d14>&#39;Start the Teams installer for the currently logged on user after a Teams Machine Wide install&#39;</span>
+</span></span><span style=display:flex><span>        Settings    = <span style=color:#0086b3>New-ScheduledTaskSettingsSet</span> -Compatibility Vista -AllowStartIfOnBatteries -MultipleInstances IgnoreNew -ExecutionTimeLimit (<span style=color:#0086b3>New-TimeSpan</span> -Hours 1)
+</span></span><span style=display:flex><span>        Trigger     = <span style=color:#0086b3>New-ScheduledTaskTrigger</span> -At (<span style=color:teal>$Start</span> = (<span style=color:#0086b3>Get-Date</span>).AddSeconds(5)) -Once
+</span></span><span style=display:flex><span>        Principal   = <span style=color:#0086b3>New-ScheduledTaskPrincipal</span> -GroupId <span style=color:#d14>&#39;S-1-5-32-545&#39;</span> -RunLevel Limited
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:teal>$ScheduledTask</span> = <span style=color:#0086b3>New-ScheduledTask</span> <span style=color:teal>@newScheduledTaskSplat</span>
+</span></span><span style=display:flex><span>    <span style=color:teal>$ScheduledTask</span>.Settings.DeleteExpiredTaskAfter = <span style=color:#d14>&#34;PT0S&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:teal>$ScheduledTask</span>.Triggers[0].StartBoundary = <span style=color:teal>$Start</span>.ToString(<span style=color:#d14>&#34;yyyy-MM-dd&#39;T&#39;HH:mm:ss&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:teal>$ScheduledTask</span>.Triggers[0].EndBoundary = <span style=color:teal>$Start</span>.AddMinutes(10).ToString(<span style=color:#d14>&#39;s&#39;</span>)
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#0086b3>Register-ScheduledTask</span> -InputObject <span style=color:teal>$ScheduledTask</span> -TaskName <span style=color:#d14>&#39;Teams User Install - Post Machine Wide Install&#39;</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p><a href=https://twitter.com/CodyMathis123>@CodyMathis123</a></p><img src=/authors/cody/avatar.png alt="Photo of Cody Mathis"><br><strong>Cody Mathis</strong>
+<em>Contributor</em><div><a href=https://twitter.com/CodyMathis123><img src=/img/social/twitter.png></a>
+<a href=https://www.linkedin.com/in/cody-mathis-22a717136><img src=/img/social/linkedin.png></a></div><p>Cody has 10 years of ConfigMgr, PowerShell, and automation experience focusing on streamlining processes</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

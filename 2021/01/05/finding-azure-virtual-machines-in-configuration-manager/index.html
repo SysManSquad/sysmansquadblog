@@ -1,330 +1,56 @@
-<!doctype html><html lang=en-us>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
-<meta name=viewport content="width=device-width">
-<meta name=description content="A community blog and subsidiary of WinAdmins.io">
-<link rel="shortcut icon" href=/img/favicon.ico>
-<title>Finding Azure Virtual Machines in Configuration Manager-SysManSquad | Systems Management Squad</title>
-<link rel=canonical href=/2021/01/05/finding-azure-virtual-machines-in-configuration-manager/>
-<link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins"><meta name=viewport content="width=device-width"><meta name=description content="A community blog and subsidiary of WinAdmins.io"><link rel="shortcut icon" href=/img/favicon.ico><title>Finding Azure Virtual Machines in Configuration Manager-SysManSquad | Systems Management Squad</title><link rel=canonical href=/2021/01/05/finding-azure-virtual-machines-in-configuration-manager/><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css><script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
 <script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
 <script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
 <script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
-<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://blog.sysmansquad.com/83">
-<meta name=twitter:title content="Finding Azure Virtual Machines in Configuration Manager">
-<meta name=twitter:description content="A request came in from my System Admin group to push certain policies only to VMs hosted in Azure. Currently, they had a naming convention being used (well, supposed to be used) to simply prefix the hostname with AZ-, but they came across a couple Domain Controllers that hadn&rsquo;t installed Updates in 7+ months, and of course the names didn&rsquo;t follow the accepted standard.
-So I started looking for ways to identify Azure devices definitively and came across this Detect Windows Azure Virtual Machine post, which led to reading the Azure Metadata Service docs, and eventually got me to turn this into a Configuration Item / Configuration Baseline and subsequent Device Collections.">
-</head>
-<body class="home blog">
-<div id=asd-container>
-<div id=top-bar>
-<div class=container>
-<div id=nav-wrapper>
-<ul class=menu id=menu-top-menu>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/>Home</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/about/>
-<span>About</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=https://github.com/SysManSquad>
-<span>GitHub</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/jointhesquad/>
-<span>Join the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/meetthesquad/>
-<span>Meet the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=#>
-<span>MORE></span>
-</a>
-<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/contact/>Contact</a>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-<div id=top-search>
-<a href=# class=search><i class="fa fa-search"></i></a>
-<div class=show-search>
-<form role=search method=get action=https://www.google.com/search id=searchform>
-<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-XXZR1RSQYX",{anonymize_ip:!1})}</script><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.sysmansquad.com/83"><meta name=twitter:title content="Finding Azure Virtual Machines in Configuration Manager"><meta name=twitter:description content="A request came in from my System Admin group to push certain policies only to VMs hosted in Azure. Currently, they had a naming convention being used (well, supposed to be used) to simply prefix the hostname with AZ-, but they came across a couple Domain Controllers that hadn&rsquo;t installed Updates in 7+ months, and of course the names didn&rsquo;t follow the accepted standard.
+So I started looking for ways to identify Azure devices definitively and came across this Detect Windows Azure Virtual Machine post, which led to reading the Azure Metadata Service docs, and eventually got me to turn this into a Configuration Item / Configuration Baseline and subsequent Device Collections."></head><body class="home blog"><div id=asd-container><div id=top-bar><div class=container><div id=nav-wrapper><ul class=menu id=menu-top-menu><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/>Home</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/about/><span>About</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=https://github.com/SysManSquad><span>GitHub</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/jointhesquad/><span>Join the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/meetthesquad/><span>Meet the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=#><span>MORE></span></a><ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/contact/>Contact</a></li></ul></li></ul></div><div id=top-search><a href=# class=search><i class="fa fa-search"></i></a><div class=show-search><form role=search method=get action=https://www.google.com/search id=searchform><input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
 <input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
-<button type=submit value=Search>
-</form>
-</div>
-</div>
-<div class=menu id=menu-mobile></div>
-</div>
-</div>
-<header id=header class=noslider>
-<div class=container>
-<div id=logo>
-<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
-</div>
-</div>
-</header>
-<div class=container>
-<div id=content>
-<div id=main class=fullwidth>
-<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
-<div class=post-header>
-<h1>Finding Azure Virtual Machines in Configuration Manager</h1>
-<p class=p-meta>
-<span class=post-author><a href=/authors/nic>Nic Wendlowsky</a> / </span>
-<span class=post-date>January 6, 2021 </span>
-<span class=post-categories>/ Azure </span>
-<span class=post-categories>/ Endpoint Management </span>
-<span class=post-categories>/ MECM/MEMCM/SCCM </span>
-<span class=post-categories>/ Powershell </span>
-<span class=post-categories>/ Windows </span>
-</p>
-</div>
-<div class=post-entry>
-<p>A request came in from my System Admin group to push certain policies only to VMs hosted in Azure. Currently, they had a naming convention being used (well, <em>supposed</em> to be used) to simply prefix the hostname with <code>AZ-</code>, but they came across a couple Domain Controllers that hadn&rsquo;t installed Updates in 7+ months, and of course the names didn&rsquo;t follow the accepted standard.</p>
-<p>So I started looking for ways to identify Azure devices definitively and came across this <a href=https://gallery.technet.microsoft.com/scriptcenter/Detect-Windows-Azure-aed06d51>Detect Windows Azure Virtual Machine</a> post, which led to reading the <a href=https://docs.microsoft.com/azure/virtual-machines/linux/instance-metadata-service>Azure Metadata Service</a> docs, and eventually got me to turn this into a Configuration Item / Configuration Baseline and subsequent Device Collections.</p>
-<h1 id=azure-metadata-service>Azure Metadata Service</h1>
-<p>Officially, the Azure Metadata Service is:</p>
-<p><code>[...] a REST API that's available at a well-known, non-routable IP address (169.254.169.254). You can only access it from within the VM. Communication between the VM and IMDS never leaves the host. Have your HTTP clients bypass web proxies within the VM when querying IMDS, and treat 169.254.169.254 the same as 168.63.129.16.</code></p>
-<p>Basically, it&rsquo;s an internal API using APIPA addressing to ensure that it can only be accessed while logged into the OS (or using <code>Invoke-Command</code> ). It allows us to get information about the guest OS. For our purposes today, we only care if it exists and won&rsquo;t be utilizing the actual data, but you can use this as a starting point for whatever&rsquo;s useful for you.</p>
-<h1 id=detection-script>Detection Script</h1>
-<p>First, let&rsquo;s convert the Azure Metadata Service documentation Curl command from bash/shell:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -H Metadata:true --noproxy <span style=color:#d14>&#34;*&#34;</span> <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance?api-version=2020-09-01&#34;</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>to PowerShell:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{<span style=color:#d14>&#34;Metadata&#34;</span>=<span style=color:#d14>&#34;true&#34;</span>} -Uri <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance/compute?api-version=2018-10-01&#34;</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Next, we should turn it into a simple Function</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#000;font-weight:700>FUNCTION</span> <span style=color:#0086b3>Test-IsAzureVM</span> {
-    <span style=color:#000;font-weight:700>IF</span>(<span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{<span style=color:#d14>&#34;Metadata&#34;</span>=<span style=color:#d14>&#34;true&#34;</span>} -URI <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance/compute?api-version=2017-08-01&#34;</span>){
-      <span style=color:teal>$true</span>
-    }<span style=color:#000;font-weight:700>ELSE</span>{
-      <span style=color:teal>$false</span>
-    }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>And test on an Azure VM to make sure it works</p>
-<p><div class=image>
-<figure>
-<a href=image-14-1024x332.png target=_blank>
-<img src=image-14-1024x332.png alt=screenshot>
-</a>
-</figure>
-</div>
-Success!
-Now let&rsquo;s make sure it works on a non-Azure VM</p>
-<p><div class=image>
-<figure>
-<a href=Snag_233efd31-1024x321.png target=_blank>
-<img src=Snag_233efd31-1024x321.png alt=screenshot>
-</a>
-</figure>
-</div>
-Yikes. Ok, now to handle that error message. We could try adding <code>-Erroraction silentlycontinue</code></p>
-<p><div class=image>
-<figure>
-<a href=Snag_234114b7-1024x276.png target=_blank>
-<img src=Snag_234114b7-1024x276.png alt=screenshot>
-</a>
-</figure>
-</div>
-Dang, still isn&rsquo;t suppressing that exception.
-Looking up the documentation for <a href="https://docs.microsoft.com/powershell/module/microsoft.powershell.utility/invoke-webrequest?view=powershell-7.1#example-7--catch-non-success-messages-from-invoke-webrequest">Invoke-WebRequest</a>, Microsoft states</p>
-<blockquote>
-<p>When <code>Invoke-WebRequest</code> encounters a non-success HTTP message (404, 500, etc.), it returns no output and throws a terminating error. To catch the error and view the<strong>StatusCode</strong>you can enclose execution in a <code>try/catch</code> block.</p>
-</blockquote>
-<p>Ok, let&rsquo;s try adding the Try/Catch</p>
-<p><div class=image>
-<figure>
-<a href=Snag_23486006-1024x241.png target=_blank>
-<img src=Snag_23486006-1024x241.png alt=screenshot>
-</a>
-</figure>
-</div>
-Wait, where&rsquo;s the output??</p>
-<p>It looks as though, since the metadata &ldquo;URI&rdquo; doesn&rsquo;t exist on non-Azure VMs, there&rsquo;s no response even sent back to the <code>$Response</code> variable.</p>
-<blockquote>
-<p>To fix this, we can forcibly set <code>Invoke-Webrequest</code> to use Boolean instead, since all we&rsquo;re looking for is a True/False output</p>
-</blockquote>
-<p><div class=image>
-<figure>
-<a href=Snag_234d2101-1024x262.png target=_blank>
-<img src=Snag_234d2101-1024x262.png alt=screenshot>
-</a>
-</figure>
-</div>
-Great! Here&rsquo;s the finished function</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>9</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#000;font-weight:700>FUNCTION</span> <span style=color:#0086b3>Test-IsAzureVM</span> {
-  <span style=color:#000;font-weight:700>TRY</span>{
-    <span style=color:teal>$Output</span> = <span style=color:teal>[bool]</span>(<span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{<span style=color:#d14>&#34;Metadata&#34;</span>=<span style=color:#d14>&#34;true&#34;</span>} -URI <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance/compute?api-version=2017-08-01&#34;</span>)
-  }
-  <span style=color:#000;font-weight:700>CATCH</span>{
-    <span style=color:teal>$Output</span> = <span style=color:teal>$false</span>
-  }
-  <span style=color:teal>$Output</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><h1 id=create-configuration-baseline>Create Configuration Baseline</h1>
-<h2 id=configuration-item>Configuration Item</h2>
-<p>In your ConfigMgr Admin Console, navigate to <code>\Assets and Compliance\Overview\Compliance Settings\Configuration Items</code> and Create a new Configuration Item</p>
-<p><div class=image>
-<figure>
-<a href=Snag_2366eb5c-968x1024.png target=_blank>
-<img src=Snag_2366eb5c-968x1024.png alt=screenshot>
-</a>
-</figure>
-</div></p>
-<ul>
-<li>Setting Type: <code>Script</code></li>
-<li>Data Type: <code>Boolean</code></li>
-<li>Script: Past the Function in the window and <em><strong>don&rsquo;t forget to call the function on the last line!</strong></em><br>
-<div class=image>
-<figure>
-<a href=Snag_23698fff.png target=_blank>
-<img src=Snag_23698fff.png alt=screenshot>
-</a>
-</figure>
-</div></li>
-<li>Values: <code>true</code></li>
-<li>Noncompliance severity: <code>none</code></li>
-<li>This is key so that the non-compliance devices don&rsquo;t throw errors if you add to an existing Configuration Baseline</li>
-</ul>
-<h2 id=configuration-baseline>Configuration Baseline</h2>
-<p>In the console, move down to the Configuration Baseline section and create a new Baseline, adding the Configuration Item we previously created</p>
-<p><div class=image>
-<figure>
-<a href=image-15.png target=_blank>
-<img src=image-15.png alt=screenshot>
-</a>
-</figure>
-</div></p>
-<h2 id=deploy-baseline>Deploy Baseline</h2>
-<p>Now you can Deploy your newly created Baseline to whichever devices you wish. For this example, we&rsquo;re deploying to the <em>All Systems</em> collection and we&rsquo;re only going to run the baseline evaluation once per device, but there&rsquo;s no real harm in having it run every month or so (the data we&rsquo;re looking at is static and shouldn&rsquo;t vary at all).</p>
-<p><div class=image>
-<figure>
-<a href=image-17-1024x640.png target=_blank>
-<img src=image-17-1024x640.png alt=screenshot>
-</a>
-</figure>
-</div></p>
-<h1 id=create-collections>Create Collections</h1>
-<p>The only real &ldquo;required&rdquo; collection to make is based on Compliant devices with the Baseline we deployed. To do that, click the Baseline, then the Deployments tab at the bottom, and right-click the <strong>Deployment</strong> > <strong>Create New Collection</strong> > <strong>Compliant</strong>, and follow the on-screen prompts to finish the Collection</p>
-<p><div class=image>
-<figure>
-<a href=image-18.png target=_blank>
-<img src=image-18.png alt=screenshot>
-</a>
-</figure>
-</div>
-I named my Collection &ldquo;<em>All Systems_Azure</em>&rdquo;</p>
-<p><div class=image>
-<figure>
-<a href=image-19.png target=_blank>
-<img src=image-19.png alt=screenshot>
-</a>
-</figure>
-</div>
-and now you can create collections based on this collection, for example:</p>
-<ul>
-<li><strong>Collection Name</strong>: <em>All Windows Workstations in Azure</em>
-<ul>
-<li><strong>Limiting Collection</strong>: <em>All Systems_Azure</em></li>
-<li><strong>Include Collection</strong>: <em>All Windows Workstations</em></li>
-<li><strong>Result</strong>: Collection of Azure VMs running Windows client OS</li>
-</ul>
-</li>
-<li><strong>Collection Name</strong>: <em>All Windows Servers in Azure</em>
-<ul>
-<li><strong>Limiting Collection</strong>: <em>All Systems_Azure</em></li>
-<li><strong>Include Collection</strong>: <em>All Windows Servers</em></li>
-<li><strong>Result</strong>: Collection of Azure VMs running Windows server OS</li>
-</ul>
-</li>
-</ul>
-<p>Once I completed this, I found 34 additional Azure VMs that weren&rsquo;t showing up in our previous Collection that was querying based on the hostname prefix.</p>
-<img src=/authors/nic/avatar.png alt="Photo of Nic Wendlowsky"><br>
-<strong>Nic Wendlowsky</strong>
-<em>Contributor</em>
-<div>
-<a href=https://twitter.com/wendlowsky><img src=/img/social/twitter.png></a>
-<a href=https://www.linkedin.com/in/nic-wendlowsky><img src=/img/social/linkedin.png></a>
-</div>
-<p>Nic is an IT professional of 12+ years, specializing in ConfigMgr over the last 5 with an MCTS for ConfigMgr 2012r2.</p>
-<hr>
-</div>
-<comments id=comments>
-<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
-</comments>
-</article>
-</div>
-</div>
-</div>
-<footer id=footer>
-<div class=container>
-<div id=footer-copyright>
-<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
-</div>
-</div>
-</footer>
-</div>
-</body>
-</html>
+<button type=submit value=Search></form></div></div><div class=menu id=menu-mobile></div></div></div><header id=header class=noslider><div class=container><div id=logo><h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1></div></div></header><div class=container><div id=content><div id=main class=fullwidth><article class="post type-post status-publish format-standard has-post-thumbnail hentry"><div class=post-header><h1>Finding Azure Virtual Machines in Configuration Manager</h1><p class=p-meta><span class=post-author><a href=/authors/nic>Nic Wendlowsky</a> /</span>
+<span class=post-date>January 6, 2021</span>
+<span class=post-categories>/ Azure</span>
+<span class=post-categories>/ Endpoint Management</span>
+<span class=post-categories>/ MECM/MEMCM/SCCM</span>
+<span class=post-categories>/ Powershell</span>
+<span class=post-categories>/ Windows</span></p></div><div class=post-entry><p>A request came in from my System Admin group to push certain policies only to VMs hosted in Azure. Currently, they had a naming convention being used (well, <em>supposed</em> to be used) to simply prefix the hostname with <code>AZ-</code>, but they came across a couple Domain Controllers that hadn&rsquo;t installed Updates in 7+ months, and of course the names didn&rsquo;t follow the accepted standard.</p><p>So I started looking for ways to identify Azure devices definitively and came across this <a href=https://gallery.technet.microsoft.com/scriptcenter/Detect-Windows-Azure-aed06d51>Detect Windows Azure Virtual Machine</a> post, which led to reading the <a href=https://docs.microsoft.com/azure/virtual-machines/linux/instance-metadata-service>Azure Metadata Service</a> docs, and eventually got me to turn this into a Configuration Item / Configuration Baseline and subsequent Device Collections.</p><h1 id=azure-metadata-service>Azure Metadata Service</h1><p>Officially, the Azure Metadata Service is:</p><p><code>[...] a REST API that's available at a well-known, non-routable IP address (169.254.169.254). You can only access it from within the VM. Communication between the VM and IMDS never leaves the host. Have your HTTP clients bypass web proxies within the VM when querying IMDS, and treat 169.254.169.254 the same as 168.63.129.16.</code></p><p>Basically, it&rsquo;s an internal API using APIPA addressing to ensure that it can only be accessed while logged into the OS (or using <code>Invoke-Command</code> ). It allows us to get information about the guest OS. For our purposes today, we only care if it exists and won&rsquo;t be utilizing the actual data, but you can use this as a starting point for whatever&rsquo;s useful for you.</p><h1 id=detection-script>Detection Script</h1><p>First, let&rsquo;s convert the Azure Metadata Service documentation Curl command from bash/shell:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>curl -H Metadata:true --noproxy <span style=color:#d14>&#34;*&#34;</span> <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance?api-version=2020-09-01&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>to PowerShell:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{<span style=color:#d14>&#34;Metadata&#34;</span>=<span style=color:#d14>&#34;true&#34;</span>} -Uri <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance/compute?api-version=2018-10-01&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Next, we should turn it into a simple Function</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-6>6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-7>7</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#000;font-weight:700>FUNCTION</span> <span style=color:#0086b3>Test-IsAzureVM</span> {
+</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>IF</span>(<span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{<span style=color:#d14>&#34;Metadata&#34;</span>=<span style=color:#d14>&#34;true&#34;</span>} -URI <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance/compute?api-version=2017-08-01&#34;</span>){
+</span></span><span style=display:flex><span>      <span style=color:teal>$true</span>
+</span></span><span style=display:flex><span>    }<span style=color:#000;font-weight:700>ELSE</span>{
+</span></span><span style=display:flex><span>      <span style=color:teal>$false</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>And test on an Azure VM to make sure it works</p><p><div class=image><figure><a href=image-14-1024x332.png target=_blank><img src=image-14-1024x332.png alt=screenshot></a></figure></div>Success!
+Now let&rsquo;s make sure it works on a non-Azure VM</p><p><div class=image><figure><a href=Snag_233efd31-1024x321.png target=_blank><img src=Snag_233efd31-1024x321.png alt=screenshot></a></figure></div>Yikes. Ok, now to handle that error message. We could try adding <code>-Erroraction silentlycontinue</code></p><p><div class=image><figure><a href=Snag_234114b7-1024x276.png target=_blank><img src=Snag_234114b7-1024x276.png alt=screenshot></a></figure></div>Dang, still isn&rsquo;t suppressing that exception.
+Looking up the documentation for <a href="https://docs.microsoft.com/powershell/module/microsoft.powershell.utility/invoke-webrequest?view=powershell-7.1#example-7--catch-non-success-messages-from-invoke-webrequest">Invoke-WebRequest</a>, Microsoft states</p><blockquote><p>When <code>Invoke-WebRequest</code> encounters a non-success HTTP message (404, 500, etc.), it returns no output and throws a terminating error. To catch the error and view the<strong>StatusCode</strong>you can enclose execution in a <code>try/catch</code> block.</p></blockquote><p>Ok, let&rsquo;s try adding the Try/Catch</p><p><div class=image><figure><a href=Snag_23486006-1024x241.png target=_blank><img src=Snag_23486006-1024x241.png alt=screenshot></a></figure></div>Wait, where&rsquo;s the output??</p><p>It looks as though, since the metadata &ldquo;URI&rdquo; doesn&rsquo;t exist on non-Azure VMs, there&rsquo;s no response even sent back to the <code>$Response</code> variable.</p><blockquote><p>To fix this, we can forcibly set <code>Invoke-Webrequest</code> to use Boolean instead, since all we&rsquo;re looking for is a True/False output</p></blockquote><p><div class=image><figure><a href=Snag_234d2101-1024x262.png target=_blank><img src=Snag_234d2101-1024x262.png alt=screenshot></a></figure></div>Great! Here&rsquo;s the finished function</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-6>6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-7>7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-8>8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-9>9</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#000;font-weight:700>FUNCTION</span> <span style=color:#0086b3>Test-IsAzureVM</span> {
+</span></span><span style=display:flex><span>  <span style=color:#000;font-weight:700>TRY</span>{
+</span></span><span style=display:flex><span>    <span style=color:teal>$Output</span> = <span style=color:teal>[bool]</span>(<span style=color:#0086b3>Invoke-RestMethod</span> -Headers @{<span style=color:#d14>&#34;Metadata&#34;</span>=<span style=color:#d14>&#34;true&#34;</span>} -URI <span style=color:#d14>&#34;http://169.254.169.254/metadata/instance/compute?api-version=2017-08-01&#34;</span>)
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#000;font-weight:700>CATCH</span>{
+</span></span><span style=display:flex><span>    <span style=color:teal>$Output</span> = <span style=color:teal>$false</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:teal>$Output</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><h1 id=create-configuration-baseline>Create Configuration Baseline</h1><h2 id=configuration-item>Configuration Item</h2><p>In your ConfigMgr Admin Console, navigate to <code>\Assets and Compliance\Overview\Compliance Settings\Configuration Items</code> and Create a new Configuration Item</p><p><div class=image><figure><a href=Snag_2366eb5c-968x1024.png target=_blank><img src=Snag_2366eb5c-968x1024.png alt=screenshot></a></figure></div></p><ul><li>Setting Type: <code>Script</code></li><li>Data Type: <code>Boolean</code></li><li>Script: Past the Function in the window and <em><strong>don&rsquo;t forget to call the function on the last line!</strong></em><br><div class=image><figure><a href=Snag_23698fff.png target=_blank><img src=Snag_23698fff.png alt=screenshot></a></figure></div></li><li>Values: <code>true</code></li><li>Noncompliance severity: <code>none</code></li><li>This is key so that the non-compliance devices don&rsquo;t throw errors if you add to an existing Configuration Baseline</li></ul><h2 id=configuration-baseline>Configuration Baseline</h2><p>In the console, move down to the Configuration Baseline section and create a new Baseline, adding the Configuration Item we previously created</p><p><div class=image><figure><a href=image-15.png target=_blank><img src=image-15.png alt=screenshot></a></figure></div></p><h2 id=deploy-baseline>Deploy Baseline</h2><p>Now you can Deploy your newly created Baseline to whichever devices you wish. For this example, we&rsquo;re deploying to the <em>All Systems</em> collection and we&rsquo;re only going to run the baseline evaluation once per device, but there&rsquo;s no real harm in having it run every month or so (the data we&rsquo;re looking at is static and shouldn&rsquo;t vary at all).</p><p><div class=image><figure><a href=image-17-1024x640.png target=_blank><img src=image-17-1024x640.png alt=screenshot></a></figure></div></p><h1 id=create-collections>Create Collections</h1><p>The only real &ldquo;required&rdquo; collection to make is based on Compliant devices with the Baseline we deployed. To do that, click the Baseline, then the Deployments tab at the bottom, and right-click the <strong>Deployment</strong> > <strong>Create New Collection</strong> > <strong>Compliant</strong>, and follow the on-screen prompts to finish the Collection</p><p><div class=image><figure><a href=image-18.png target=_blank><img src=image-18.png alt=screenshot></a></figure></div>I named my Collection &ldquo;<em>All Systems_Azure</em>&rdquo;</p><p><div class=image><figure><a href=image-19.png target=_blank><img src=image-19.png alt=screenshot></a></figure></div>and now you can create collections based on this collection, for example:</p><ul><li><strong>Collection Name</strong>: <em>All Windows Workstations in Azure</em><ul><li><strong>Limiting Collection</strong>: <em>All Systems_Azure</em></li><li><strong>Include Collection</strong>: <em>All Windows Workstations</em></li><li><strong>Result</strong>: Collection of Azure VMs running Windows client OS</li></ul></li><li><strong>Collection Name</strong>: <em>All Windows Servers in Azure</em><ul><li><strong>Limiting Collection</strong>: <em>All Systems_Azure</em></li><li><strong>Include Collection</strong>: <em>All Windows Servers</em></li><li><strong>Result</strong>: Collection of Azure VMs running Windows server OS</li></ul></li></ul><p>Once I completed this, I found 34 additional Azure VMs that weren&rsquo;t showing up in our previous Collection that was querying based on the hostname prefix.</p><img src=/authors/nic/avatar.png alt="Photo of Nic Wendlowsky"><br><strong>Nic Wendlowsky</strong>
+<em>Contributor</em><div><a href=https://twitter.com/wendlowsky><img src=/img/social/twitter.png></a>
+<a href=https://www.linkedin.com/in/nic-wendlowsky><img src=/img/social/linkedin.png></a></div><p>Nic is an IT professional of 12+ years, specializing in ConfigMgr over the last 5 with an MCTS for ConfigMgr 2012r2.</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

@@ -1,175 +1,20 @@
-<!doctype html><html lang=en-us>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
-<meta name=viewport content="width=device-width">
-<meta name=description content="A community blog and subsidiary of WinAdmins.io">
-<link rel="shortcut icon" href=/img/favicon.ico>
-<title>Allow OneDrive Syncing on AAD joined Devices-SysManSquad | Systems Management Squad</title>
-<link rel=canonical href=/2020/09/11/allow-onedrive-syncing-on-aad-joined-devices/>
-<link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins"><meta name=viewport content="width=device-width"><meta name=description content="A community blog and subsidiary of WinAdmins.io"><link rel="shortcut icon" href=/img/favicon.ico><title>Allow OneDrive Syncing on AAD joined Devices-SysManSquad | Systems Management Squad</title><link rel=canonical href=/2020/09/11/allow-onedrive-syncing-on-aad-joined-devices/><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css><script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
 <script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
 <script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
 <script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
-<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://blog.sysmansquad.com/83">
-<meta name=twitter:title content="Allow OneDrive Syncing on AAD joined Devices">
-<meta name=twitter:description content="The Problem So I was walking on the beach and noticed that OneDrive wasn&rsquo;t syncing anymore on my AzureAD joined laptop. I later learned that my endpoint administrator, Adam Gross, had enabled Allow syncing only on computers joined to specific domains in the OneDrive admin portal. which effectively blocked my AzureAD device 🙁
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-XXZR1RSQYX",{anonymize_ip:!1})}</script><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.sysmansquad.com/83"><meta name=twitter:title content="Allow OneDrive Syncing on AAD joined Devices"><meta name=twitter:description content="The Problem So I was walking on the beach and noticed that OneDrive wasn&rsquo;t syncing anymore on my AzureAD joined laptop. I later learned that my endpoint administrator, Adam Gross, had enabled Allow syncing only on computers joined to specific domains in the OneDrive admin portal. which effectively blocked my AzureAD device 🙁
    
-Which resulted in this message on my corporate device">
-</head>
-<body class="home blog">
-<div id=asd-container>
-<div id=top-bar>
-<div class=container>
-<div id=nav-wrapper>
-<ul class=menu id=menu-top-menu>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/>Home</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/about/>
-<span>About</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=https://github.com/SysManSquad>
-<span>GitHub</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/jointhesquad/>
-<span>Join the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/meetthesquad/>
-<span>Meet the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=#>
-<span>MORE></span>
-</a>
-<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/contact/>Contact</a>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-<div id=top-search>
-<a href=# class=search><i class="fa fa-search"></i></a>
-<div class=show-search>
-<form role=search method=get action=https://www.google.com/search id=searchform>
-<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+Which resulted in this message on my corporate device"></head><body class="home blog"><div id=asd-container><div id=top-bar><div class=container><div id=nav-wrapper><ul class=menu id=menu-top-menu><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/>Home</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/about/><span>About</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=https://github.com/SysManSquad><span>GitHub</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/jointhesquad/><span>Join the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/meetthesquad/><span>Meet the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=#><span>MORE></span></a><ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/contact/>Contact</a></li></ul></li></ul></div><div id=top-search><a href=# class=search><i class="fa fa-search"></i></a><div class=show-search><form role=search method=get action=https://www.google.com/search id=searchform><input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
 <input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
-<button type=submit value=Search>
-</form>
-</div>
-</div>
-<div class=menu id=menu-mobile></div>
-</div>
-</div>
-<header id=header class=noslider>
-<div class=container>
-<div id=logo>
-<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
-</div>
-</div>
-</header>
-<div class=container>
-<div id=content>
-<div id=main class=fullwidth>
-<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
-<div class=post-header>
-<h1>Allow OneDrive Syncing on AAD joined Devices</h1>
-<p class=p-meta>
-<span class=post-author><a href=/authors/johannes>Jóhannes Geir Kristjánsson</a> / </span>
-<span class=post-date>September 11, 2020 </span>
-<span class=post-categories>/ Endpoint Management </span>
-</p>
-</div>
-<div class=post-entry>
-<h2 id=the-problem>The Problem</h2>
-<p>So I was walking on the beach and noticed that OneDrive wasn&rsquo;t syncing anymore on my AzureAD joined laptop. I later learned that my endpoint administrator, Adam Gross, had enabled <a href=https://docs.microsoft.com/onedrive/allow-syncing-only-on-specific-domains>Allow syncing only on computers joined to specific domains</a> in the OneDrive admin portal. which effectively blocked my AzureAD device 🙁</p>
-<p><div class=image>
-<figure>
-<a href=vmconnect_KUuNJoGAtD.png target=_blank>
-<img src=vmconnect_KUuNJoGAtD.png alt=screenshot>
-</a>
-</figure>
-</div></p>
-<p>Which resulted in this message on my corporate device</p>
-<p><div class=image>
-<figure>
-<a href=Annotation-2020-08-21-200957.png target=_blank>
-<img src=Annotation-2020-08-21-200957.png alt=screenshot>
-</a>
-</figure>
-</div></p>
-<p>Our Legacy AD joined devices were fine, but all of our Azure AD joined devices got the above error.</p>
-<p>Needless to say this was worrying since we were knee deep in migrating all new devices to AzureAD</p>
-<h2 id=the-solution>The Solution</h2>
-<p>But lo and behold, a golden savior appeared on the <a href=https://aka.ms/winadmins>windows admins discord</a>, a swell fellow called Configmatt commented:</p>
-<blockquote>
-<p>Here are instructions for how to add Azure AD Join devices to your OneDrive for Business tenant restrictions.</p>
-<p>• Ensure build 19.192+ of Sync client is installed <strong>(which was released in november 13, 2019)</strong></p>
-<p>• Set the GUID for policy AADJMachineDomainGuid under HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\OneDrive and apply it to the test AADJ machine. GUID can be any string.</p>
-<p>• Add the same GUID to SPOTenantSyncClientRestriction / OneDrive admin center to allow the test machine for SPO</p>
-<p>• Sync a SPO site on the test AADJ machine, the test machine should be able to sync</p>
-<p>I do have to point out that there are security concerns with this reg key: the domain GUID on the device and in the SharePoint service must match, but effectively the device is allowed to create the domain GUID and is allowed to sync if it matches</p>
-</blockquote>
-<p>Now before we celebrate, we need to make a note that ideally you should be using conditional access and compliance policies to control access to corporate data. The method described in this blog post is a nice stop-gap until you can set those up.</p>
-<h2 id=implementation>Implementation</h2>
-<p>While this might sound like a perfect use case for Endpoint analytics Proactive Remediations, you will run into a chicken-egg problem when a user starts up a brand new device, namely that the user has most likely logged into to a new device before the proactive remediation has run.</p>
-<p>To solve this, you should wrap up the script as a win32 app, deploy it as a required app to a relevant device group and <a href=https://docs.microsoft.com/mem/intune/enrollment/windows-enrollment-status#block-access-to-a-device-until-a-specific-application-is-installed>make it required as part of the autopilot ESP</a>.</p>
-<p>Here is a dead simple example code you can use, just change the $DomainGUID to your own</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:teal>$DomainGUID</span> = <span style=color:#d14>&#34;a2936ecb-ea97-4854-a494-82a39a3195be&#34;</span>
-<span style=color:#0086b3>new-item</span> -itemtype directory -path <span style=color:#d14>&#34;hklm:\Software\Policies\Microsoft\OneDrive&#34;</span> -force
-<span style=color:#0086b3>Set-ItemProperty</span> -Path <span style=color:#d14>&#34;hklm:\Software\Policies\Microsoft\OneDrive&#34;</span> -Name <span style=color:#d14>&#34;AADJMachineDomainGuid&#34;</span> -Value <span style=color:teal>$DomainGUID</span> -Force
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=final-words>Final words</h2>
-<p>Now keep in mind that you need to deploy this registry key to your Azure AD joined devices before you restrict the sync in the OneDrive Admin Center - otherwise your users will need to sign in to OneDrive again.</p>
-<img src=/authors/johannes/avatar.png alt="Photo of Jóhannes Geir Kristjánsson"><br>
-<strong>Jóhannes Geir Kristjánsson</strong>
-<em>Contributor</em>
-<div>
-<a href=https://twitter.com/jgkps><img src=/img/social/twitter.png></a>
-</div>
-<p>Jóhannes is one of our contributors.</p>
-<hr>
-</div>
-<comments id=comments>
-<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
-</comments>
-</article>
-</div>
-</div>
-</div>
-<footer id=footer>
-<div class=container>
-<div id=footer-copyright>
-<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
-</div>
-</div>
-</footer>
-</div>
-</body>
-</html>
+<button type=submit value=Search></form></div></div><div class=menu id=menu-mobile></div></div></div><header id=header class=noslider><div class=container><div id=logo><h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1></div></div></header><div class=container><div id=content><div id=main class=fullwidth><article class="post type-post status-publish format-standard has-post-thumbnail hentry"><div class=post-header><h1>Allow OneDrive Syncing on AAD joined Devices</h1><p class=p-meta><span class=post-author><a href=/authors/johannes>Jóhannes Geir Kristjánsson</a> /</span>
+<span class=post-date>September 11, 2020</span>
+<span class=post-categories>/ Endpoint Management</span></p></div><div class=post-entry><h2 id=the-problem>The Problem</h2><p>So I was walking on the beach and noticed that OneDrive wasn&rsquo;t syncing anymore on my AzureAD joined laptop. I later learned that my endpoint administrator, Adam Gross, had enabled <a href=https://docs.microsoft.com/onedrive/allow-syncing-only-on-specific-domains>Allow syncing only on computers joined to specific domains</a> in the OneDrive admin portal. which effectively blocked my AzureAD device 🙁</p><p><div class=image><figure><a href=vmconnect_KUuNJoGAtD.png target=_blank><img src=vmconnect_KUuNJoGAtD.png alt=screenshot></a></figure></div></p><p>Which resulted in this message on my corporate device</p><p><div class=image><figure><a href=Annotation-2020-08-21-200957.png target=_blank><img src=Annotation-2020-08-21-200957.png alt=screenshot></a></figure></div></p><p>Our Legacy AD joined devices were fine, but all of our Azure AD joined devices got the above error.</p><p>Needless to say this was worrying since we were knee deep in migrating all new devices to AzureAD</p><h2 id=the-solution>The Solution</h2><p>But lo and behold, a golden savior appeared on the <a href=https://aka.ms/winadmins>windows admins discord</a>, a swell fellow called Configmatt commented:</p><blockquote><p>Here are instructions for how to add Azure AD Join devices to your OneDrive for Business tenant restrictions.</p><p>• Ensure build 19.192+ of Sync client is installed <strong>(which was released in november 13, 2019)</strong></p><p>• Set the GUID for policy AADJMachineDomainGuid under HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\OneDrive and apply it to the test AADJ machine. GUID can be any string.</p><p>• Add the same GUID to SPOTenantSyncClientRestriction / OneDrive admin center to allow the test machine for SPO</p><p>• Sync a SPO site on the test AADJ machine, the test machine should be able to sync</p><p>I do have to point out that there are security concerns with this reg key: the domain GUID on the device and in the SharePoint service must match, but effectively the device is allowed to create the domain GUID and is allowed to sync if it matches</p></blockquote><p>Now before we celebrate, we need to make a note that ideally you should be using conditional access and compliance policies to control access to corporate data. The method described in this blog post is a nice stop-gap until you can set those up.</p><h2 id=implementation>Implementation</h2><p>While this might sound like a perfect use case for Endpoint analytics Proactive Remediations, you will run into a chicken-egg problem when a user starts up a brand new device, namely that the user has most likely logged into to a new device before the proactive remediation has run.</p><p>To solve this, you should wrap up the script as a win32 app, deploy it as a required app to a relevant device group and <a href=https://docs.microsoft.com/mem/intune/enrollment/windows-enrollment-status#block-access-to-a-device-until-a-specific-application-is-installed>make it required as part of the autopilot ESP</a>.</p><p>Here is a dead simple example code you can use, just change the $DomainGUID to your own</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:teal>$DomainGUID</span> = <span style=color:#d14>&#34;a2936ecb-ea97-4854-a494-82a39a3195be&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>new-item</span> -itemtype directory -path <span style=color:#d14>&#34;hklm:\Software\Policies\Microsoft\OneDrive&#34;</span> -force
+</span></span><span style=display:flex><span><span style=color:#0086b3>Set-ItemProperty</span> -Path <span style=color:#d14>&#34;hklm:\Software\Policies\Microsoft\OneDrive&#34;</span> -Name <span style=color:#d14>&#34;AADJMachineDomainGuid&#34;</span> -Value <span style=color:teal>$DomainGUID</span> -Force
+</span></span></code></pre></td></tr></table></div></div><h2 id=final-words>Final words</h2><p>Now keep in mind that you need to deploy this registry key to your Azure AD joined devices before you restrict the sync in the OneDrive Admin Center - otherwise your users will need to sign in to OneDrive again.</p><img src=/authors/johannes/avatar.png alt="Photo of Jóhannes Geir Kristjánsson"><br><strong>Jóhannes Geir Kristjánsson</strong>
+<em>Contributor</em><div><a href=https://twitter.com/jgkps><img src=/img/social/twitter.png></a></div><p>Microsoft MVP, enterprise mobility, Owner of winadmins discord and stunt guy on http://intune.training</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

@@ -1,238 +1,30 @@
-<!doctype html><html lang=en-us>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
-<meta name=viewport content="width=device-width">
-<meta name=description content="A community blog and subsidiary of WinAdmins.io">
-<link rel="shortcut icon" href=/img/favicon.ico>
-<title>Managing Multiple Office 365 Deployments with ConfigMgr-SysManSquad | Systems Management Squad</title>
-<link rel=canonical href=/2021/02/25/managing-multiple-office-365-deployments-with-configmgr/>
-<link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins"><meta name=viewport content="width=device-width"><meta name=description content="A community blog and subsidiary of WinAdmins.io"><link rel="shortcut icon" href=/img/favicon.ico><title>Managing Multiple Office 365 Deployments with ConfigMgr-SysManSquad | Systems Management Squad</title><link rel=canonical href=/2021/02/25/managing-multiple-office-365-deployments-with-configmgr/><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css><script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
 <script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
 <script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
 <script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
-<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://blog.sysmansquad.com/83">
-<meta name=twitter:title content="Managing Multiple Office 365 Deployments with ConfigMgr">
-<meta name=twitter:description content="At the client I&rsquo;m currently working for, we have FIVE different deployments of Office 365 Client within Microsoft Enterprise Configuration Manager. The business decided that they only wanted users to have exactly what was needed. Essentially, this is the legacy approach to Office deployment in the MSI days where you could fully customise which components were installed and was easy to add bits back in at a later date.
-These are the options they wanted:">
-</head>
-<body class="home blog">
-<div id=asd-container>
-<div id=top-bar>
-<div class=container>
-<div id=nav-wrapper>
-<ul class=menu id=menu-top-menu>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/>Home</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/about/>
-<span>About</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=https://github.com/SysManSquad>
-<span>GitHub</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/jointhesquad/>
-<span>Join the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/meetthesquad/>
-<span>Meet the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=#>
-<span>MORE></span>
-</a>
-<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/contact/>Contact</a>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-<div id=top-search>
-<a href=# class=search><i class="fa fa-search"></i></a>
-<div class=show-search>
-<form role=search method=get action=https://www.google.com/search id=searchform>
-<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-XXZR1RSQYX",{anonymize_ip:!1})}</script><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.sysmansquad.com/83"><meta name=twitter:title content="Managing Multiple Office 365 Deployments with ConfigMgr"><meta name=twitter:description content="At the client I&rsquo;m currently working for, we have FIVE different deployments of Office 365 Client within Microsoft Enterprise Configuration Manager. The business decided that they only wanted users to have exactly what was needed. Essentially, this is the legacy approach to Office deployment in the MSI days where you could fully customise which components were installed and was easy to add bits back in at a later date.
+These are the options they wanted:"></head><body class="home blog"><div id=asd-container><div id=top-bar><div class=container><div id=nav-wrapper><ul class=menu id=menu-top-menu><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/>Home</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/about/><span>About</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=https://github.com/SysManSquad><span>GitHub</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/jointhesquad/><span>Join the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/meetthesquad/><span>Meet the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=#><span>MORE></span></a><ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/contact/>Contact</a></li></ul></li></ul></div><div id=top-search><a href=# class=search><i class="fa fa-search"></i></a><div class=show-search><form role=search method=get action=https://www.google.com/search id=searchform><input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
 <input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
-<button type=submit value=Search>
-</form>
-</div>
-</div>
-<div class=menu id=menu-mobile></div>
-</div>
-</div>
-<header id=header class=noslider>
-<div class=container>
-<div id=logo>
-<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
-</div>
-</div>
-</header>
-<div class=container>
-<div id=content>
-<div id=main class=fullwidth>
-<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
-<div class=post-header>
-<h1>Managing Multiple Office 365 Deployments with ConfigMgr</h1>
-<p class=p-meta>
-<span class=post-author><a href=/authors/grant>Grant Dickins</a> / </span>
-<span class=post-date>February 25, 2020 </span>
-<span class=post-categories>/ Endpoint Management </span>
-<span class=post-categories>/ How-To </span>
-<span class=post-categories>/ MECM/MEMCM/SCCM </span>
-<span class=post-categories>/ Microsoft </span>
-<span class=post-categories>/ Office </span>
-</p>
-</div>
-<div class=post-entry>
-<p>At the client I&rsquo;m currently working for, we have <strong>FIVE</strong> different deployments of Office 365 Client within Microsoft Enterprise Configuration Manager. The business decided that they only wanted users to have exactly what was needed. Essentially, this is the legacy approach to Office deployment in the MSI days where you could fully customise which components were installed and was easy to add bits back in at a later date.<br>
-These are the options they wanted:</p>
-<ol>
-<li>Standard Office: Without Access, Groove, OneNote 2016</li>
-<li>Kiosk Office: Only Word,Excel, and PowerPoint</li>
-<li>Add Access</li>
-<li>Add Visio Online</li>
-<li>Add Project Online</li>
-</ol>
-<p>The reason for excluding Access, as I expect with most companies, is because it&rsquo;s regarded best practice to never give it to users in case they create dirty little database apps, tie them into business processes, then promptly get hit by a bus. Then the business expects IT to support it&mldr; somehow. However, there are circumstances when a user or two <em>may</em> be trusted to use Access without developing some bespoke monstrosity - Though, I&rsquo;d strongly recommend HR/Legal get involved to ensure whatever the user does in Access <strong>never</strong> ends up being an IT problem!</p>
-<p>The Kiosk install, as the name implies, is because there are computers offshore that have generic logins used for Permit-to-work, so having OneDrive or Outlook would be a GDPR nightmare, so it&rsquo;s removed.</p>
-<p>Then we have two separate deployments for Visio and Project. Despite trying to argue that they&rsquo;ll run in Read Only mode if a license isn&rsquo;t applied to the user, it did not matter and I just did what I was instructed like a good obedient contractor.</p>
-<h2 id=configuration-manager-deployment>Configuration Manager Deployment</h2>
-<p>Using the built-in Office 365 configuration builder, we generated config files for each deployment. Apart from Visio and Project, the config was the same with varying &lt;ExcludeApp ID="" /> sections.</p>
-<p><div class=image>
-<figure>
-<a href=image-11.png target=_blank>
-<img src=image-11.png alt="an xml file">
-</a>
-</figure>
-</div></p>
-<p>Visio and Project XML look like this:</p>
-<p><div class=image>
-<figure>
-<a href=image-9.png target=_blank>
-<img src=image-9.png alt="an xml file">
-</a>
-</figure>
-</div></p>
-<p>Initially, the detection method used for Standard Office deployment was only looking in the O365 Configuration Registry <code>HKLM:\SOFTWARE\Microsoft\Office\ClickToRun\Configuration</code> for &ldquo;<code>VersionToReport</code>&rdquo; being Greater Than or Equal to 16.x.x.x.</p>
-<p>However, when I came to do the 2nd application, I needed more than the version to detect the type of install - I opted for the values: &ldquo;<code>VersionToReport</code>&rdquo; and &ldquo;<code>O365ProPlusRetail.ExcludedApps</code>&rdquo;.</p>
-<p>So, in order to make each deployment unique, the detection methods had to be adjusted as follows:</p>
-<ol>
-<li>Standard Office:
-<code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\VersionToReport Greater than or equal to 16.0.11929.20606.</code><br>
-and<br>
-<code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\O365ProPlusRetail.ExcludedApps Equals access,groove,onenote.</code><br>
-<a href=image.png><div class=image>
-<figure>
-<a href=image.png target=_blank>
-<img src=image.png alt="an image showing the detection rule described above">
-</a>
-</figure>
-</div></a></li>
-<li>Kiosk Office
-<code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\VersionToReport Greater than or equal to 16.0.11929.20606.</code> <br>
-And<br>
-<code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\O365ProPlusRetail.ExcludedApps Equals access,groove,lync,onedrive,onenote,outlook,publisher,teams.</code>
-<a href=image-1.png><div class=image>
-<figure>
-<a href=image-1.png target=_blank>
-<img src=image-1.png alt="an image showing the detection rule described above">
-</a>
-</figure>
-</div></a></li>
-<li>Add Access
-<code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\VersionToReport Greater than or equal to 16.0.11929.20606.</code><br>
-And<br>
-<code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\O365ProPlusRetail.ExcludedApps Equals groove,onenote.</code><br>
-<a href=image-2.png><div class=image>
-<figure>
-<a href=image-2.png target=_blank>
-<img src=image-2.png alt="an image showing the detection rule described above">
-</a>
-</figure>
-</div></a>
-<strong>NB</strong>: Visio and Project use a different registry key as they do not appear in <code>O365ProPlusRetail.ExcludedApps</code>.
-This time we have to look in the registry value: <code>ProductReleaseIds</code> if it <strong>contains</strong> <code>VisioProRetail</code> or <code>ProjectProRetail</code> along with the <code>VersionToReport</code>.</li>
-<li>Add Visio
+<button type=submit value=Search></form></div></div><div class=menu id=menu-mobile></div></div></div><header id=header class=noslider><div class=container><div id=logo><h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1></div></div></header><div class=container><div id=content><div id=main class=fullwidth><article class="post type-post status-publish format-standard has-post-thumbnail hentry"><div class=post-header><h1>Managing Multiple Office 365 Deployments with ConfigMgr</h1><p class=p-meta><span class=post-author><a href=/authors/grant>Grant Dickins</a> /</span>
+<span class=post-date>February 25, 2020</span>
+<span class=post-categories>/ Endpoint Management</span>
+<span class=post-categories>/ How-To</span>
+<span class=post-categories>/ MECM/MEMCM/SCCM</span>
+<span class=post-categories>/ Microsoft</span>
+<span class=post-categories>/ Office</span></p></div><div class=post-entry><p>At the client I&rsquo;m currently working for, we have <strong>FIVE</strong> different deployments of Office 365 Client within Microsoft Enterprise Configuration Manager. The business decided that they only wanted users to have exactly what was needed. Essentially, this is the legacy approach to Office deployment in the MSI days where you could fully customise which components were installed and was easy to add bits back in at a later date.<br>These are the options they wanted:</p><ol><li>Standard Office: Without Access, Groove, OneNote 2016</li><li>Kiosk Office: Only Word,Excel, and PowerPoint</li><li>Add Access</li><li>Add Visio Online</li><li>Add Project Online</li></ol><p>The reason for excluding Access, as I expect with most companies, is because it&rsquo;s regarded best practice to never give it to users in case they create dirty little database apps, tie them into business processes, then promptly get hit by a bus. Then the business expects IT to support it&mldr; somehow. However, there are circumstances when a user or two <em>may</em> be trusted to use Access without developing some bespoke monstrosity - Though, I&rsquo;d strongly recommend HR/Legal get involved to ensure whatever the user does in Access <strong>never</strong> ends up being an IT problem!</p><p>The Kiosk install, as the name implies, is because there are computers offshore that have generic logins used for Permit-to-work, so having OneDrive or Outlook would be a GDPR nightmare, so it&rsquo;s removed.</p><p>Then we have two separate deployments for Visio and Project. Despite trying to argue that they&rsquo;ll run in Read Only mode if a license isn&rsquo;t applied to the user, it did not matter and I just did what I was instructed like a good obedient contractor.</p><h2 id=configuration-manager-deployment>Configuration Manager Deployment</h2><p>Using the built-in Office 365 configuration builder, we generated config files for each deployment. Apart from Visio and Project, the config was the same with varying &lt;ExcludeApp ID="" /> sections.</p><p><div class=image><figure><a href=image-11.png target=_blank><img src=image-11.png alt="an xml file"></a></figure></div></p><p>Visio and Project XML look like this:</p><p><div class=image><figure><a href=image-9.png target=_blank><img src=image-9.png alt="an xml file"></a></figure></div></p><p>Initially, the detection method used for Standard Office deployment was only looking in the O365 Configuration Registry <code>HKLM:\SOFTWARE\Microsoft\Office\ClickToRun\Configuration</code> for &ldquo;<code>VersionToReport</code>&rdquo; being Greater Than or Equal to 16.x.x.x.</p><p>However, when I came to do the 2nd application, I needed more than the version to detect the type of install - I opted for the values: &ldquo;<code>VersionToReport</code>&rdquo; and &ldquo;<code>O365ProPlusRetail.ExcludedApps</code>&rdquo;.</p><p>So, in order to make each deployment unique, the detection methods had to be adjusted as follows:</p><ol><li>Standard Office:
+<code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\VersionToReport Greater than or equal to 16.0.11929.20606.</code><br>and<br><code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\O365ProPlusRetail.ExcludedApps Equals access,groove,onenote.</code><br><a href=image.png><div class=image><figure><a href=image.png target=_blank><img src=image.png alt="an image showing the detection rule described above"></a></figure></div></a></li><li>Kiosk Office
+<code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\VersionToReport Greater than or equal to 16.0.11929.20606.</code><br>And<br><code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\O365ProPlusRetail.ExcludedApps Equals access,groove,lync,onedrive,onenote,outlook,publisher,teams.</code>
+<a href=image-1.png><div class=image><figure><a href=image-1.png target=_blank><img src=image-1.png alt="an image showing the detection rule described above"></a></figure></div></a></li><li>Add Access
+<code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\VersionToReport Greater than or equal to 16.0.11929.20606.</code><br>And<br><code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\O365ProPlusRetail.ExcludedApps Equals groove,onenote.</code><br><a href=image-2.png><div class=image><figure><a href=image-2.png target=_blank><img src=image-2.png alt="an image showing the detection rule described above"></a></figure></div></a><strong>NB</strong>: Visio and Project use a different registry key as they do not appear in <code>O365ProPlusRetail.ExcludedApps</code>.
+This time we have to look in the registry value: <code>ProductReleaseIds</code> if it <strong>contains</strong> <code>VisioProRetail</code> or <code>ProjectProRetail</code> along with the <code>VersionToReport</code>.</li><li>Add Visio
 <code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\VersionToReport Greater than or equal to 16.0.11328.20368.</code>
 And
 <code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\ProductReleaseIds Contains ProjectProRetail.</code>
-<a href=image-4.png><div class=image>
-<figure>
-<a href=image-4.png target=_blank>
-<img src=image-4.png alt="an image showing the detection rule described above">
-</a>
-</figure>
-</div></a></li>
-<li>Add Project
+<a href=image-4.png><div class=image><figure><a href=image-4.png target=_blank><img src=image-4.png alt="an image showing the detection rule described above"></a></figure></div></a></li><li>Add Project
 <code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\VersionToReport Greater than or equal to 16.0.11328.20368.</code>
 And
 <code>LocalMachine\SOFTWARE\Microsoft\Office\ClickToRun\Configuration\ProductReleaseIds Contains ProjectProRetail.</code>
-<a href=image-5.png><div class=image>
-<figure>
-<a href=image-5.png target=_blank>
-<img src=image-5.png alt="an image showing the detection rule described above">
-</a>
-</figure>
-</div></a></li>
-</ol>
-<hr>
-<p>The standard Office is included in the OSD Task Sequence, so there is no active deployment of this Application.</p>
-<p>The others are deployed to specific collections which computers get added to via AD groups.<br>
-This allows the whole setup to be modular as requested.</p>
-<p>The downsides of this approach are:</p>
-<ul>
-<li>Each deployment requires the entire Office 365 source to be downloaded to the client each time, which is a cool 2.5GB.</li>
-<li>You really need to start thinking about the detection logic if you want more options.<br>
-During testing, I managed to get a deployment loop of standard & kiosk.</li>
-<li>It&rsquo;s an administration time-sink you probably don&rsquo;t want.</li>
-</ul>
-<p>Having done all this for the client and written about it, it got me wondering if it&rsquo;s perhaps better to install everything and look into AppLocker policies to restrict or allow access to certain Office executables&mldr; To the Lab!</p>
-<img src=/authors/grant/avatar.png alt="Photo of Grant Dickins"><br>
-<strong>Grant Dickins</strong>
-<em>Contributor</em>
-<div>
-<a href=https://twitter.com/_G_rant><img src=/img/social/twitter.png></a>
-</div>
-<p>Grant has worked supporting IT in the Oil & Gas industry for 10 years, has a keen interest in Config Manager and trying to bring the industry kicking and screaming into the modern cloud-based world.</p>
-<hr>
-</div>
-<div class=post-share>
-<div class="post-share-box share-comments">
-hello
-</div>
-</div>
-<comments id=comments>
-<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
-</comments>
-</article>
-</div>
-</div>
-</div>
-<footer id=footer>
-<div class=container>
-<div id=footer-copyright>
-<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
-</div>
-</div>
-</footer>
-</div>
-</body>
-</html>
+<a href=image-5.png><div class=image><figure><a href=image-5.png target=_blank><img src=image-5.png alt="an image showing the detection rule described above"></a></figure></div></a></li></ol><hr><p>The standard Office is included in the OSD Task Sequence, so there is no active deployment of this Application.</p><p>The others are deployed to specific collections which computers get added to via AD groups.<br>This allows the whole setup to be modular as requested.</p><p>The downsides of this approach are:</p><ul><li>Each deployment requires the entire Office 365 source to be downloaded to the client each time, which is a cool 2.5GB.</li><li>You really need to start thinking about the detection logic if you want more options.<br>During testing, I managed to get a deployment loop of standard & kiosk.</li><li>It&rsquo;s an administration time-sink you probably don&rsquo;t want.</li></ul><p>Having done all this for the client and written about it, it got me wondering if it&rsquo;s perhaps better to install everything and look into AppLocker policies to restrict or allow access to certain Office executables&mldr; To the Lab!</p><img src=/authors/grant/avatar.png alt="Photo of Grant Dickins"><br><strong>Grant Dickins</strong>
+<em>Contributor</em><div><a href=https://twitter.com/_G_rant><img src=/img/social/twitter.png></a></div><p>Grant has worked supporting IT in the Oil & Gas industry for 10 years, has a keen interest in Config Manager and trying to bring the industry kicking and screaming into the modern cloud-based world.</p><hr></div><div class=post-share><div class="post-share-box share-comments">hello</div></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

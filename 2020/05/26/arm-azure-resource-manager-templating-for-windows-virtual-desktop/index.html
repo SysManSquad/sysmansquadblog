@@ -1,469 +1,198 @@
-<!doctype html><html lang=en-us>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
-<meta name=viewport content="width=device-width">
-<meta name=description content="A community blog and subsidiary of WinAdmins.io">
-<link rel="shortcut icon" href=/img/favicon.ico>
-<title>ARM (Azure Resource Manager) Templating for Windows Virtual Desktop-SysManSquad | Systems Management Squad</title>
-<link rel=canonical href=/2020/05/26/arm-azure-resource-manager-templating-for-windows-virtual-desktop/>
-<link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins"><meta name=viewport content="width=device-width"><meta name=description content="A community blog and subsidiary of WinAdmins.io"><link rel="shortcut icon" href=/img/favicon.ico><title>ARM (Azure Resource Manager) Templating for Windows Virtual Desktop-SysManSquad | Systems Management Squad</title><link rel=canonical href=/2020/05/26/arm-azure-resource-manager-templating-for-windows-virtual-desktop/><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css><script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
 <script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
 <script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
 <script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
-<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://blog.sysmansquad.com/83">
-<meta name=twitter:title content="ARM (Azure Resource Manager) Templating for Windows Virtual Desktop">
-<meta name=twitter:description content="Why would I use ARM templating, isn&rsquo;t the default Image Gallery fine? Well first off, what is ARM Templating? According to Microsoft &ldquo;You can automate deployments and use the practice of infrastructure as code. In code, you define the infrastructure that needs to be deployed. The infrastructure code becomes part of your project. Just like application code, you store the infrastructure code in a source repository and version it&mldr;&rdquo;
-What does all that mean?">
-</head>
-<body class="home blog">
-<div id=asd-container>
-<div id=top-bar>
-<div class=container>
-<div id=nav-wrapper>
-<ul class=menu id=menu-top-menu>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/>Home</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/about/>
-<span>About</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=https://github.com/SysManSquad>
-<span>GitHub</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/jointhesquad/>
-<span>Join the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/meetthesquad/>
-<span>Meet the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=#>
-<span>MORE></span>
-</a>
-<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/contact/>Contact</a>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-<div id=top-search>
-<a href=# class=search><i class="fa fa-search"></i></a>
-<div class=show-search>
-<form role=search method=get action=https://www.google.com/search id=searchform>
-<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-XXZR1RSQYX",{anonymize_ip:!1})}</script><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.sysmansquad.com/83"><meta name=twitter:title content="ARM (Azure Resource Manager) Templating for Windows Virtual Desktop"><meta name=twitter:description content="Why would I use ARM templating, isn&rsquo;t the default Image Gallery fine? Well first off, what is ARM Templating? According to Microsoft &ldquo;You can automate deployments and use the practice of infrastructure as code. In code, you define the infrastructure that needs to be deployed. The infrastructure code becomes part of your project. Just like application code, you store the infrastructure code in a source repository and version it&mldr;&rdquo;
+What does all that mean?"></head><body class="home blog"><div id=asd-container><div id=top-bar><div class=container><div id=nav-wrapper><ul class=menu id=menu-top-menu><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/>Home</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/about/><span>About</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=https://github.com/SysManSquad><span>GitHub</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/jointhesquad/><span>Join the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/meetthesquad/><span>Meet the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=#><span>MORE></span></a><ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/contact/>Contact</a></li></ul></li></ul></div><div id=top-search><a href=# class=search><i class="fa fa-search"></i></a><div class=show-search><form role=search method=get action=https://www.google.com/search id=searchform><input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
 <input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
-<button type=submit value=Search>
-</form>
-</div>
-</div>
-<div class=menu id=menu-mobile></div>
-</div>
-</div>
-<header id=header class=noslider>
-<div class=container>
-<div id=logo>
-<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
-</div>
-</div>
-</header>
-<div class=container>
-<div id=content>
-<div id=main class=fullwidth>
-<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
-<div class=post-header>
-<h1>ARM (Azure Resource Manager) Templating for Windows Virtual Desktop</h1>
-<p class=p-meta>
-<span class=post-author><a href=/authors/jake>Jake Shackelford</a> / </span>
-<span class=post-date>May 26, 2020 </span>
-<span class=post-categories>/ Azure </span>
-<span class=post-categories>/ How-To </span>
-<span class=post-categories>/ Microsoft </span>
-<span class=post-categories>/ Powershell </span>
-<span class=post-categories>/ Scripting </span>
-<span class=post-categories>/ Windows </span>
-</p>
-</div>
-<div class=post-entry>
-<h3 id=why-would-i-use-arm-templating-isnt-the-default-image-gallery-fine>Why would I use ARM templating, isn&rsquo;t the default Image Gallery fine?</h3>
-<p>Well first off, what is ARM Templating? According to Microsoft &ldquo;<em>You can automate deployments and use the practice of infrastructure as code. In code, you define the infrastructure that needs to be deployed. The infrastructure code becomes part of your project. Just like application code, you store the infrastructure code in a source repository and version it&mldr;</em>&rdquo;</p>
-<p>What does all that mean? You can go through the manual creation process of a resource, then at the end you have an option to create an ARM template based on all the settings you picked. You can then use this template to deploy the exact same resource in the future with the same settings. (Don&rsquo;t worry we can make it more dynamic and less rigid).</p>
-<p>If you want zero customization aside from potential Group Policy, and all your applications will work with MSIX app attach, then the default Windows 10 multi-user image potentially is just fine for your needs!</p>
-<h3 id=my-original-goal>My original goal</h3>
-<p>I have an absolutely <strong>horrible</strong> java based application we have to support for a customer. The installation consists of downloading 5 files (10GB total) from an FTP site and running two installation files with very specific commands and the removal of a line in a properties file (HTTP port so that it can be used in multi-user mode). That all doesn&rsquo;t sound so horrible right? Well did I mention the update process involves uninstalling the program and doing it all over again, every two weeks none the less?</p>
-<p>Well I don&rsquo;t know about you - but creating a new azure VM, downloading the data files, installing the app, setting my customization options, and generalizing the image would take about 2-3 hours of manual work. So I did what any sane person would do, and figured out how to automate it!</p>
-<p>This automation process involves using an ARM Template that deploys a new VM, installs &ldquo;Horrible Java app&rdquo;, sets registry settings, and turns the VM into an image we can use for WVD deployments and then deletes the VM so all you&rsquo;re left with is a ready-to-go image that costs pennies to store!</p>
-<h3 id=lets-get-cracking>Lets get cracking</h3>
-<p><strong>Before we start, I&rsquo;d like to suggest you do this in a lab and not production (like I did)</strong>, and before you ask - this is, in essence, build and capture. Yes I know it&rsquo;s 2020 but sadly this is the reality we live in.</p>
-<p>We are going to have to create a few <strong>resource groups</strong>, a <strong>key vault</strong>, and a <strong>storage account</strong> to store all our info. (I should mention this is going to be a good old step by step with explanations on things scattered throughout)</p>
-<h3 id=creating-our-resource-groups-key-vault-and-storage-account>Creating our resource groups, key vault, and storage account</h3>
-<p>We are going to open Powershell as an Admin and install the required module to connect to Azure. Then we&rsquo;ll create a few resource groups to store our images, our secure passwords in a keyvault, and a storage account for our powershell scripts and other items we may need. Feel free to change the names and location as you see fit (Remember to keep location the same throughout).</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Install-module</span> azaccount -force
-<span style=color:#0086b3>Connect-azaccount</span>
-<span style=color:#998;font-style:italic>#Change to your desired location</span>
-<span style=color:teal>$location</span> = <span style=color:#d14>&#34;centralus&#34;</span>
-<span style=color:#998;font-style:italic>#Change to your desired name</span>
-<span style=color:teal>$storageaccount</span> = <span style=color:#d14>&#34;contosokeystorage&#34;</span>
-<span style=color:teal>$keyVaultName</span>  = (<span style=color:teal>$storageaccount</span> + <span style=color:#d14>&#39; vault&#39;</span>)
-<span style=color:teal>$storageName</span> = (<span style=color:teal>$storageaccount</span> + <span style=color:#d14>&#39; storage&#39;</span>)
-<span style=color:teal>$upn</span> = <span style=color:#0086b3>Read-Host</span> -Prompt <span style=color:#d14>&#34;Enter your user principal name (email address) used to sign in to Azure&#34;</span>
-<span style=color:teal>$secretValue</span> = <span style=color:#0086b3>Read-Host</span> -Prompt <span style=color:#d14>&#34;Enter the desired virtual machine administrator password&#34;</span> -AsSecureString
-<span style=color:teal>$adUserId</span> = (<span style=color:#0086b3>Get-AzADUser</span> -UserPrincipalName <span style=color:teal>$upn</span>).Id
-<span style=color:#998;font-style:italic>#Change to your desired resource group name</span>
-<span style=color:#0086b3>New-AzResourceGroup</span> -Name <span style=color:#d14>&#34;Contoso-MyImages&#34;</span> -Location <span style=color:teal>$location</span>
-<span style=color:#0086b3>New-AzResourceGroup</span> -Name <span style=color:teal>$storageaccount</span> -Location <span style=color:teal>$location</span>
-<span style=color:#998;font-style:italic>#Creation of a storage account, we make this a standard drive as it&#39;s just for storage of files</span>
-<span style=color:#0086b3>New-AzStorageAccount</span> -ResourceGroupName <span style=color:teal>$storageaccount</span> -Name <span style=color:teal>$storagename</span> -Location <span style=color:teal>$location</span> -Kind <span style=color:#d14>&#34;storageV2&#34;</span> -SkuName <span style=color:#d14>&#34;Standard_LRS&#34;</span>
-<span style=color:#998;font-style:italic>#ARM template for creating a keyvault provided by Microsoft</span>
-<span style=color:teal>$templateUri</span> = <span style=color:#d14>&#34;https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/tutorials-use-key-vault/CreateKeyVault.json&#34;</span>
-<span style=color:#998;font-style:italic>#Creates keyvault and stores $secretvalue</span>
-<span style=color:#0086b3>New-AzResourceGroupDeployment</span> -ResourceGroupName <span style=color:teal>$storageaccount</span> -TemplateUri <span style=color:teal>$templateUri</span> -keyVaultName <span style=color:teal>$keyVaultName</span> -adUserId <span style=color:teal>$adUserId</span> -secretValue <span style=color:teal>$secretValue</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>After the last line you should see some output, you&rsquo;ll want to copy the value called <em>keyVaultId</em> for later, it should look similar to this:</p>
-<p><code>/subscriptions/&lt;SubscriptionID>/resourceGroups/mykeyvaultdeploymentrg/providers/Microsoft.KeyVault/vaults/&lt;KeyVaultName></code></p>
-<h3 id=adding-files-to-our-storage-account>Adding files to our storage account</h3>
-<p>You might be wondering what we need a storage account for. We are going to be storing our powershell scripts in a secure fashion so they can be accessed during our deployment and we do that via a <strong>SAS token</strong>.</p>
-<p>At this point you&rsquo;ll want to have your powershell scripts that you want to execute ready. You will need at least two, the first one is specifically for installing the modules you&rsquo;ll need. Why can&rsquo;t you just put it all into one script you might ask? During the process the machine will parse your entire script and verify it has all the resources and even though your first line has Install-Module &ldquo;somemodule&rdquo; it&rsquo;ll see farther down your script you have Something-somemodule &ldquo;Do something&rdquo; and say that it won&rsquo;t execute and fail.</p>
-<p>Below is an example of the module install script I have.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Install-PackageProvider</span> -Name NuGet -MinimumVersion 2.8.5.201 -Force
-<span style=color:#0086b3>Install-Module</span> -Name PSFTP -Force
-
-./config.ps1
-</code></pre></td></tr></table>
-</div>
-</div><p>The next script is an example of my configuration script.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#000;font-weight:700>Try</span>{
-<span style=color:#998;font-style:italic>#DO ALL THE FANCY THINGS here like your reg changes, or whatever else.</span>
-<span style=color:#998;font-style:italic>#You can upload the FSLogix.exe to the storage account which we will go over below</span>
-<span style=color:#998;font-style:italic>#Start-Process -Wait -FilePath ./FSLogixAppsSetup.exe -ArgumentList &#34;/quiet&#34; -PassThru</span>
-<span style=color:#998;font-style:italic>#Reg add &#34;HKLM\Software\FSLogix\Profiles&#34; /v Enabled /t REG_DWORD /d 1 </span>
-<span style=color:#998;font-style:italic>#Reg add &#34;HKLM\Software\FSLogix\Profiles&#34; /v VHDLocations /t REG_MULTI_SZ /d \\server\share</span>
-
-}
-<span style=color:#000;font-weight:700>catch</span> {
-    <span style=color:teal>$ErrorMessage</span> = <span style=color:teal>$_</span>.Exception.Message | <span style=color:#0086b3>Out-File</span> -FilePath .\ErrorMessage.txt -NoClobber
-    <span style=color:teal>$FailedItem</span> = <span style=color:teal>$_</span>.Exception.ItemName | <span style=color:#0086b3>Out-File</span> -FilePath .\FailedItem.txt -NoClobber
-}
-<span style=color:#000;font-weight:700>finally</span> {
-    <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;Success?&#34;</span>
-}
-<span style=color:#998;font-style:italic>#This will sysprep the machine, make sure it&#39;s the last step</span>
-<span style=color:#0086b3>Start-Process</span> -FilePath C:\Windows\System32\Sysprep\Sysprep.exe -ArgumentList <span style=color:#d14>&#39;/generalize /oobe /quiet /quit&#39;</span>  -Wait 
-<span style=color:#0086b3>Stop-Computer</span> -ComputerName localhost -Force
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=using-the-storage-account>Using the storage account</h3>
-<p>Now that our two scripts are ready lets upload them! Navigate to the resource group we created earlier in this case &ldquo;Contoso-Key-Storage&rdquo;</p>
-<ol>
-<li>Select the storage account</li>
-<li>Select <strong>Containers</strong><br>
-****<div class=image>
-<figure>
-<a href=msedge_uFT7VQv2mm.png target=_blank>
-<img src=msedge_uFT7VQv2mm.png alt=screenshot>
-</a>
-</figure>
-</div></li>
-<li>Select <strong>+ Container</strong></li>
-<li>Give your Container a name</li>
-<li>Leave Public access as Private</li>
-<li>Select <strong>Create</strong></li>
-<li>Go into your new container</li>
-<li>Select <strong>Upload</strong></li>
-<li>Select your two script files</li>
-<li>Select <strong>Upload</strong></li>
-<li>Select the first file you uploaded</li>
-<li>Select <strong>Generate SAS</strong></li>
-<li>For testing purposes I set an Expiry date a year from the current date</li>
-<li>Select <strong>Generate SAS token and URL</strong></li>
-<li><strong>Blob SAS URL</strong> will appear below, copy this for later</li>
-<li>Repeat starting from Step 11 on the other file and any other files you might need such as FSLogix install exe</li>
-</ol>
-<h3 id=creating-our-arm-template>Creating our ARM Template</h3>
-<ol>
-<li>Login to <a href=https://portal.azure.com/>https://portal.azure.com/</a></li>
-<li>Select a desired resource group or create a new one (Note nothing will actually get created in the group)</li>
-<li>Select <strong>Add</strong><div class=image>
-<figure>
-<a href=msedge_MCoWS09HuE.png target=_blank>
-<img src=msedge_MCoWS09HuE.png alt=screenshot>
-</a>
-</figure>
-</div></li>
-<li>Type in &ldquo;<strong>Windows 10</strong>&rdquo; and select <strong>Microsoft Windows 10 + Office 365 ProPlus</strong><div class=image>
-<figure>
-<a href=msedge_sl8U6dkdIm.png target=_blank>
-<img src=msedge_sl8U6dkdIm.png alt=screenshot>
-</a>
-</figure>
-</div></li>
-<li>Select <strong>Create</strong><div class=image>
-<figure>
-<a href=msedge_CxaaJwZiAP.png target=_blank>
-<img src=msedge_CxaaJwZiAP.png alt=screenshot>
-</a>
-</figure>
-</div></li>
-<li>Add a <strong>Virtual Machine Name</strong></li>
-<li>Change <strong>size</strong> to desired VM (I recommend <strong>Standard B2ms</strong>)</li>
-<li>Add <strong>Username, Password, Confirm Password</strong></li>
-<li>Change &ldquo;Already have a Windows 10 Enterprise E3/E5 license or Window Virtual Desktop license?&rdquo; to <strong>Yes</strong></li>
-<li>Tick off the checkbox that appears</li>
-<li>Select <strong>Next : Disks ></strong></li>
-<li>Select <strong>Next : Networking ></strong></li>
-<li>This section can be adjusted as you see fit. I apply a Network Security Group but it&rsquo;s not necessary</li>
-<li>Select <strong>Next : Management ></strong></li>
-<li>Change Boot Diagnostics to <strong>Off</strong></li>
-<li>Select <strong>Review + Create</strong></li>
-<li>Select <strong>Download a template for automation</strong><div class=image>
-<figure>
-<a href=msedge_TyKXYqsKI6.png target=_blank>
-<img src=msedge_TyKXYqsKI6.png alt=screenshot>
-</a>
-</figure>
-</div></li>
-<li>Select <strong>Download</strong> in the top left</li>
-</ol>
-<p>You should now have a template.zip with two files named parameters.json and tempalte.json you will want to extract these to a folder and open them both with a text editor. I recommend Visual Studio Code.</p>
-<h3 id=editing-the-template-and-adding-powershell-functionality>Editing the template and adding PowerShell functionality</h3>
-<p>Now we are going to add all the extras to this template that let us dynamically change values and run powershell scripts from our storage account as well as pull our password from keyvault.</p>
-<ol>
-<li>Open both parameters.json and template.json</li>
-<li>In parameters.json change the &ldquo;adminPassword&rdquo; from<br>
-<code>"adminPassword":{"value":null}</code><br>
-to<br>
-<code>"adminPassword": {br>"reference": {br>"keyVault": {br>"id": "THE KEYVAULTID ID YOU COPIED EARLIER"br>},br>"secretName": "vmAdminPassword"br>}</code></li>
-<li>Change the id to the KeyVaultID you copied earlier</li>
-<li>The rest of parameters.json can be left as is, you can override these values later in our execution script if desired</li>
-<li>Open template.json</li>
-<li>Do a search for <strong>enableAutomaticUpdates</strong> change the value to <strong>false</strong><br>
-<code>"enableAutomaticUpdates":false,</code></li>
-<li>A few lines down you will see <code>"licenseType":"Windows_Client"</code><br>
-<code>}</code><br>
-add the following after (Make sure it&rsquo;s after the bracket)</li>
-</ol>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>        },
-        {
-  <span style=color:#d14>&#34;type&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;Microsoft.Compute/virtualMachines/extensions&#34;</span>,
-  <span style=color:#d14>&#34;apiVersion&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;2019-12-01&#34;</span>,
-  <span style=color:#d14>&#34;name&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;[concat(parameters(&#39;virtualMachineName&#39;),&#39;/&#39;, &#39;InstallNavigate&#39;)]&#34;</span>,
-  <span style=color:#d14>&#34;location&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;[parameters(&#39;location&#39;)]&#34;</span>,
-  <span style=color:#d14>&#34;dependsOn&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> [
-      <span style=color:#d14>&#34;[concat(&#39;Microsoft.Compute/virtualMachines/&#39;,parameters(&#39;virtualMachineName&#39;))]&#34;</span>
-  ],
-  <span style=color:#d14>&#34;properties&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> {
-      <span style=color:#d14>&#34;publisher&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;Microsoft.Compute&#34;</span>,
-      <span style=color:#d14>&#34;type&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;CustomScriptExtension&#34;</span>,
-      <span style=color:#d14>&#34;typeHandlerVersion&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;1.7&#34;</span>,
-      <span style=color:#d14>&#34;autoUpgradeMinorVersion&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span>true,
-      <span style=color:#d14>&#34;settings&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> {
-        <span style=color:#d14>&#34;fileUris&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> [
-          <span style=color:#d14>&#34;URLTOCHANGELATER&#34;</span>,
-          <span style=color:#d14>&#34;URLTOCHANGELATER2&#34;</span>
-        ],
-        <span style=color:#d14>&#34;commandToExecute&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;powershell.exe -ExecutionPolicy Unrestricted -File moduleinstall.ps1&#34;</span>
-      }
-  }
-</code></pre></td></tr></table>
-</div>
-</div><p>You will notice under fileUris we have two URLTOCHANGELATER items on lines 17 and 18, we are going to change that to the two SAS token URLs you copied earlier. You can add more URLs with a comma for things like the FSLogix installation exe. On line 20 you will want to change the -File to match the name of your moduleinstall script.</p>
-<p>So what exactly does adding those URLs do? Well they download the files from the respective URL. In this case we are downloading the moduleInstall.ps1 and config.ps1. After that we are executing a command to run moduleInstall.ps1.</p>
-<h3 id=lets-recap>Lets recap</h3>
-<p>I want you to take a deep breathe as you&rsquo;ve done a lot so far.<div class=image>
-<figure>
-<a href=giphy.gif target=_blank>
-<img src=giphy.gif alt=screenshot>
-</a>
-</figure>
-</div></p>
-<p>You created a few resource groups, a key vault, storage account, an ARM template file, and two powershell scripts and that&rsquo;s awesome!</p>
-<h3 id=making-the-magic-happen>Making the magic happen</h3>
-<p>Below I will be posting the script I use to make the magic happen. It will connect to azure, ask you for an image name, the destination resourcegroup which in this case is &ldquo;Contoso-MyImages&rdquo; if you&rsquo;ve copied word for word. The script creates a temporary resource group, creates our VM, converts it to an image, and cleans up the temporary resource group which includes our VM. The result is a new Image located in Contoso-MyImages. You can then use this image to create a WVD Host Pool.</p>
-<p>This can be changed to meet your preferences. You&rsquo;ll notice on lines 16-18 I specified a virtualMachineName, networkInferfaceName, publicIpAddressName, all three of these items have a default, and can be found in our parameters.json - however by defining them in our script I&rsquo;m overwriting the default values to give us a bit more flexibility.</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#0086b3>Connect-azaccount</span>
-<span style=color:teal>$vmName</span> = <span style=color:#d14>&#34;TempMachine&#34;</span>
-<span style=color:teal>$imagename</span> = <span style=color:#0086b3>Read-Host</span> -Prompt <span style=color:#d14>&#39;Input a unique image name&#39;</span>
-<span style=color:#000;font-weight:700>Do</span> {
-  <span style=color:teal>$imageLocation</span> = <span style=color:#0086b3>Read-Host</span> -Prompt <span style=color:#d14>&#39;Input the destination resourcegroup NOTE: must exist&#39;</span>
-}
-<span style=color:#000;font-weight:700>Until</span> (<span style=color:#0086b3>Get-AzResourceGroup</span> -Name <span style=color:teal>$imageLocation</span>)
-<span style=color:teal>$location</span> = <span style=color:#d14>&#34;centralus&#34;</span>
-<span style=color:teal>$resourceGroupName</span> = <span style=color:#d14>&#34;TempResourceGroup&#34;</span>
-<span style=color:#0086b3>New-AzResourceGroup</span> -Name <span style=color:teal>$resourceGroupName</span> -Location <span style=color:teal>$location</span>
-<span style=color:teal>$filePath</span> = <span style=color:#d14>&#34;CHANGE TO YOUR PATH THAT CONTAINS THE TEMPLATE AND PARAMETERS FILE&#34;</span>
-<span style=color:#0086b3>New-AzResourceGroupDeployment</span> `
-    -ResourceGroupName <span style=color:teal>$resourceGroupName</span> `
-    -TemplateFile <span style=color:#d14>&#34;$filePath\template.json&#34;</span> `
-    -TemplateParameterFile <span style=color:#d14>&#34;$filePath\parameters.json&#34;</span> `
-    -virtualMachineName <span style=color:teal>$vmName</span> `
-    -networkInterfaceName (<span style=color:teal>$vmName</span> + <span style=color:#d14>&#39;Nic&#39;</span>) `
-    -publicIpAddressName (<span style=color:teal>$vmName</span> + <span style=color:#d14>&#39;ip&#39;</span>)
-
-<span style=color:teal>$vm</span> = <span style=color:#0086b3>Get-AzVM</span> -ResourceGroupName <span style=color:teal>$resourceGroupName</span>
-<span style=color:#0086b3>Stop-AzVM</span> -ResourceGroupName <span style=color:teal>$resourceGroupName</span> -Name <span style=color:teal>$vm</span>.name -Force
-<span style=color:#0086b3>Set-AzVM</span>  -ResourceGroupName <span style=color:teal>$resourceGroupName</span> -Name <span style=color:teal>$vm</span>.name -Generalized
-<span style=color:teal>$image</span> = <span style=color:#0086b3>New-AzImageConfig</span> -Location <span style=color:teal>$location</span> -SourceVirtualMachineId <span style=color:teal>$vm</span>.Id
-<span style=color:#0086b3>New-AzImage</span> -Image <span style=color:teal>$image</span> -ImageName <span style=color:teal>$imagename</span> -ResourceGroupName <span style=color:teal>$imageLocation</span>
-
-<span style=color:#0086b3>Get-AzResourceGroup</span> -Name <span style=color:teal>$resourceGroupName</span> | <span style=color:#0086b3>Remove-AzResourceGroup</span>  -Force
-</code></pre></td></tr></table>
-</div>
-</div><p>Resources:<br>
-<a href=https://docs.microsoft.com/azure/azure-resource-manager/templates/template-tutorial-use-key-vault>https://docs.microsoft.com/azure/azure-resource-manager/templates/template-tutorial-use-key-vault</a><br>
-<a href="https://docs.microsoft.com/azure/storage/common/storage-account-create?tabs=azure-powershell">https://docs.microsoft.com/azure/storage/common/storage-account-create?tabs=azure-powershell</a><br>
-<a href=https://docs.microsoft.com/fslogix/install-ht>https://docs.microsoft.com/fslogix/install-ht</a></p>
-<img src=/authors/jake/avatar.png alt="Photo of Jake Shackelford"><br>
-<strong>Jake Shackelford</strong>
-<em>Admin/Contributor</em>
-<div>
-<a href=https://twitter.com/shackelfjaco><img src=/img/social/twitter.png></a>
-</div>
-<p>Jake is one of our Admins but also our inaugural author and the main reason SysManSquad exists today.</p>
-<hr>
-</div>
-<comments id=comments>
-<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
-</comments>
-</article>
-</div>
-</div>
-</div>
-<footer id=footer>
-<div class=container>
-<div id=footer-copyright>
-<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
-</div>
-</div>
-</footer>
-</div>
-</body>
-</html>
+<button type=submit value=Search></form></div></div><div class=menu id=menu-mobile></div></div></div><header id=header class=noslider><div class=container><div id=logo><h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1></div></div></header><div class=container><div id=content><div id=main class=fullwidth><article class="post type-post status-publish format-standard has-post-thumbnail hentry"><div class=post-header><h1>ARM (Azure Resource Manager) Templating for Windows Virtual Desktop</h1><p class=p-meta><span class=post-author><a href=/authors/jake>Jake Shackelford</a> /</span>
+<span class=post-date>May 26, 2020</span>
+<span class=post-categories>/ Azure</span>
+<span class=post-categories>/ How-To</span>
+<span class=post-categories>/ Microsoft</span>
+<span class=post-categories>/ Powershell</span>
+<span class=post-categories>/ Scripting</span>
+<span class=post-categories>/ Windows</span></p></div><div class=post-entry><h3 id=why-would-i-use-arm-templating-isnt-the-default-image-gallery-fine>Why would I use ARM templating, isn&rsquo;t the default Image Gallery fine?</h3><p>Well first off, what is ARM Templating? According to Microsoft &ldquo;<em>You can automate deployments and use the practice of infrastructure as code. In code, you define the infrastructure that needs to be deployed. The infrastructure code becomes part of your project. Just like application code, you store the infrastructure code in a source repository and version it&mldr;</em>&rdquo;</p><p>What does all that mean? You can go through the manual creation process of a resource, then at the end you have an option to create an ARM template based on all the settings you picked. You can then use this template to deploy the exact same resource in the future with the same settings. (Don&rsquo;t worry we can make it more dynamic and less rigid).</p><p>If you want zero customization aside from potential Group Policy, and all your applications will work with MSIX app attach, then the default Windows 10 multi-user image potentially is just fine for your needs!</p><h3 id=my-original-goal>My original goal</h3><p>I have an absolutely <strong>horrible</strong> java based application we have to support for a customer. The installation consists of downloading 5 files (10GB total) from an FTP site and running two installation files with very specific commands and the removal of a line in a properties file (HTTP port so that it can be used in multi-user mode). That all doesn&rsquo;t sound so horrible right? Well did I mention the update process involves uninstalling the program and doing it all over again, every two weeks none the less?</p><p>Well I don&rsquo;t know about you - but creating a new azure VM, downloading the data files, installing the app, setting my customization options, and generalizing the image would take about 2-3 hours of manual work. So I did what any sane person would do, and figured out how to automate it!</p><p>This automation process involves using an ARM Template that deploys a new VM, installs &ldquo;Horrible Java app&rdquo;, sets registry settings, and turns the VM into an image we can use for WVD deployments and then deletes the VM so all you&rsquo;re left with is a ready-to-go image that costs pennies to store!</p><h3 id=lets-get-cracking>Lets get cracking</h3><p><strong>Before we start, I&rsquo;d like to suggest you do this in a lab and not production (like I did)</strong>, and before you ask - this is, in essence, build and capture. Yes I know it&rsquo;s 2020 but sadly this is the reality we live in.</p><p>We are going to have to create a few <strong>resource groups</strong>, a <strong>key vault</strong>, and a <strong>storage account</strong> to store all our info. (I should mention this is going to be a good old step by step with explanations on things scattered throughout)</p><h3 id=creating-our-resource-groups-key-vault-and-storage-account>Creating our resource groups, key vault, and storage account</h3><p>We are going to open Powershell as an Admin and install the required module to connect to Azure. Then we&rsquo;ll create a few resource groups to store our images, our secure passwords in a keyvault, and a storage account for our powershell scripts and other items we may need. Feel free to change the names and location as you see fit (Remember to keep location the same throughout).</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-20>20</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#0086b3>Install-module</span> azaccount -force
+</span></span><span style=display:flex><span><span style=color:#0086b3>Connect-azaccount</span>
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#Change to your desired location</span>
+</span></span><span style=display:flex><span><span style=color:teal>$location</span> = <span style=color:#d14>&#34;centralus&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#Change to your desired name</span>
+</span></span><span style=display:flex><span><span style=color:teal>$storageaccount</span> = <span style=color:#d14>&#34;contosokeystorage&#34;</span>
+</span></span><span style=display:flex><span><span style=color:teal>$keyVaultName</span>  = (<span style=color:teal>$storageaccount</span> + <span style=color:#d14>&#39; vault&#39;</span>)
+</span></span><span style=display:flex><span><span style=color:teal>$storageName</span> = (<span style=color:teal>$storageaccount</span> + <span style=color:#d14>&#39; storage&#39;</span>)
+</span></span><span style=display:flex><span><span style=color:teal>$upn</span> = <span style=color:#0086b3>Read-Host</span> -Prompt <span style=color:#d14>&#34;Enter your user principal name (email address) used to sign in to Azure&#34;</span>
+</span></span><span style=display:flex><span><span style=color:teal>$secretValue</span> = <span style=color:#0086b3>Read-Host</span> -Prompt <span style=color:#d14>&#34;Enter the desired virtual machine administrator password&#34;</span> -AsSecureString
+</span></span><span style=display:flex><span><span style=color:teal>$adUserId</span> = (<span style=color:#0086b3>Get-AzADUser</span> -UserPrincipalName <span style=color:teal>$upn</span>).Id
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#Change to your desired resource group name</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>New-AzResourceGroup</span> -Name <span style=color:#d14>&#34;Contoso-MyImages&#34;</span> -Location <span style=color:teal>$location</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>New-AzResourceGroup</span> -Name <span style=color:teal>$storageaccount</span> -Location <span style=color:teal>$location</span>
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#Creation of a storage account, we make this a standard drive as it&#39;s just for storage of files</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>New-AzStorageAccount</span> -ResourceGroupName <span style=color:teal>$storageaccount</span> -Name <span style=color:teal>$storagename</span> -Location <span style=color:teal>$location</span> -Kind <span style=color:#d14>&#34;storageV2&#34;</span> -SkuName <span style=color:#d14>&#34;Standard_LRS&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#ARM template for creating a keyvault provided by Microsoft</span>
+</span></span><span style=display:flex><span><span style=color:teal>$templateUri</span> = <span style=color:#d14>&#34;https://raw.githubusercontent.com/Azure/azure-docs-json-samples/master/tutorials-use-key-vault/CreateKeyVault.json&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#Creates keyvault and stores $secretvalue</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>New-AzResourceGroupDeployment</span> -ResourceGroupName <span style=color:teal>$storageaccount</span> -TemplateUri <span style=color:teal>$templateUri</span> -keyVaultName <span style=color:teal>$keyVaultName</span> -adUserId <span style=color:teal>$adUserId</span> -secretValue <span style=color:teal>$secretValue</span>
+</span></span></code></pre></td></tr></table></div></div><p>After the last line you should see some output, you&rsquo;ll want to copy the value called <em>keyVaultId</em> for later, it should look similar to this:</p><p><code>/subscriptions/&lt;SubscriptionID>/resourceGroups/mykeyvaultdeploymentrg/providers/Microsoft.KeyVault/vaults/&lt;KeyVaultName></code></p><h3 id=adding-files-to-our-storage-account>Adding files to our storage account</h3><p>You might be wondering what we need a storage account for. We are going to be storing our powershell scripts in a secure fashion so they can be accessed during our deployment and we do that via a <strong>SAS token</strong>.</p><p>At this point you&rsquo;ll want to have your powershell scripts that you want to execute ready. You will need at least two, the first one is specifically for installing the modules you&rsquo;ll need. Why can&rsquo;t you just put it all into one script you might ask? During the process the machine will parse your entire script and verify it has all the resources and even though your first line has Install-Module &ldquo;somemodule&rdquo; it&rsquo;ll see farther down your script you have Something-somemodule &ldquo;Do something&rdquo; and say that it won&rsquo;t execute and fail.</p><p>Below is an example of the module install script I have.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#0086b3>Install-PackageProvider</span> -Name NuGet -MinimumVersion 2.8.5.201 -Force
+</span></span><span style=display:flex><span><span style=color:#0086b3>Install-Module</span> -Name PSFTP -Force
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>./config.ps1
+</span></span></code></pre></td></tr></table></div></div><p>The next script is an example of my configuration script.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-18>18</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#000;font-weight:700>Try</span>{
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#DO ALL THE FANCY THINGS here like your reg changes, or whatever else.</span>
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#You can upload the FSLogix.exe to the storage account which we will go over below</span>
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#Start-Process -Wait -FilePath ./FSLogixAppsSetup.exe -ArgumentList &#34;/quiet&#34; -PassThru</span>
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#Reg add &#34;HKLM\Software\FSLogix\Profiles&#34; /v Enabled /t REG_DWORD /d 1 </span>
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#Reg add &#34;HKLM\Software\FSLogix\Profiles&#34; /v VHDLocations /t REG_MULTI_SZ /d \\server\share</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>catch</span> {
+</span></span><span style=display:flex><span>    <span style=color:teal>$ErrorMessage</span> = <span style=color:teal>$_</span>.Exception.Message | <span style=color:#0086b3>Out-File</span> -FilePath .\ErrorMessage.txt -NoClobber
+</span></span><span style=display:flex><span>    <span style=color:teal>$FailedItem</span> = <span style=color:teal>$_</span>.Exception.ItemName | <span style=color:#0086b3>Out-File</span> -FilePath .\FailedItem.txt -NoClobber
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>finally</span> {
+</span></span><span style=display:flex><span>    <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;Success?&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#This will sysprep the machine, make sure it&#39;s the last step</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>Start-Process</span> -FilePath C:\Windows\System32\Sysprep\Sysprep.exe -ArgumentList <span style=color:#d14>&#39;/generalize /oobe /quiet /quit&#39;</span>  -Wait 
+</span></span><span style=display:flex><span><span style=color:#0086b3>Stop-Computer</span> -ComputerName localhost -Force
+</span></span></code></pre></td></tr></table></div></div><h3 id=using-the-storage-account>Using the storage account</h3><p>Now that our two scripts are ready lets upload them! Navigate to the resource group we created earlier in this case &ldquo;Contoso-Key-Storage&rdquo;</p><ol><li>Select the storage account</li><li>Select <strong>Containers</strong><br>****<div class=image><figure><a href=msedge_uFT7VQv2mm.png target=_blank><img src=msedge_uFT7VQv2mm.png alt=screenshot></a></figure></div></li><li>Select <strong>+ Container</strong></li><li>Give your Container a name</li><li>Leave Public access as Private</li><li>Select <strong>Create</strong></li><li>Go into your new container</li><li>Select <strong>Upload</strong></li><li>Select your two script files</li><li>Select <strong>Upload</strong></li><li>Select the first file you uploaded</li><li>Select <strong>Generate SAS</strong></li><li>For testing purposes I set an Expiry date a year from the current date</li><li>Select <strong>Generate SAS token and URL</strong></li><li><strong>Blob SAS URL</strong> will appear below, copy this for later</li><li>Repeat starting from Step 11 on the other file and any other files you might need such as FSLogix install exe</li></ol><h3 id=creating-our-arm-template>Creating our ARM Template</h3><ol><li>Login to <a href=https://portal.azure.com/>https://portal.azure.com/</a></li><li>Select a desired resource group or create a new one (Note nothing will actually get created in the group)</li><li>Select <strong>Add</strong><div class=image><figure><a href=msedge_MCoWS09HuE.png target=_blank><img src=msedge_MCoWS09HuE.png alt=screenshot></a></figure></div></li><li>Type in &ldquo;<strong>Windows 10</strong>&rdquo; and select <strong>Microsoft Windows 10 + Office 365 ProPlus</strong><div class=image><figure><a href=msedge_sl8U6dkdIm.png target=_blank><img src=msedge_sl8U6dkdIm.png alt=screenshot></a></figure></div></li><li>Select <strong>Create</strong><div class=image><figure><a href=msedge_CxaaJwZiAP.png target=_blank><img src=msedge_CxaaJwZiAP.png alt=screenshot></a></figure></div></li><li>Add a <strong>Virtual Machine Name</strong></li><li>Change <strong>size</strong> to desired VM (I recommend <strong>Standard B2ms</strong>)</li><li>Add <strong>Username, Password, Confirm Password</strong></li><li>Change &ldquo;Already have a Windows 10 Enterprise E3/E5 license or Window Virtual Desktop license?&rdquo; to <strong>Yes</strong></li><li>Tick off the checkbox that appears</li><li>Select <strong>Next : Disks ></strong></li><li>Select <strong>Next : Networking ></strong></li><li>This section can be adjusted as you see fit. I apply a Network Security Group but it&rsquo;s not necessary</li><li>Select <strong>Next : Management ></strong></li><li>Change Boot Diagnostics to <strong>Off</strong></li><li>Select <strong>Review + Create</strong></li><li>Select <strong>Download a template for automation</strong><div class=image><figure><a href=msedge_TyKXYqsKI6.png target=_blank><img src=msedge_TyKXYqsKI6.png alt=screenshot></a></figure></div></li><li>Select <strong>Download</strong> in the top left</li></ol><p>You should now have a template.zip with two files named parameters.json and tempalte.json you will want to extract these to a folder and open them both with a text editor. I recommend Visual Studio Code.</p><h3 id=editing-the-template-and-adding-powershell-functionality>Editing the template and adding PowerShell functionality</h3><p>Now we are going to add all the extras to this template that let us dynamically change values and run powershell scripts from our storage account as well as pull our password from keyvault.</p><ol><li>Open both parameters.json and template.json</li><li>In parameters.json change the &ldquo;adminPassword&rdquo; from<br><code>"adminPassword":{"value":null}</code><br>to<br><code>"adminPassword": {br>"reference": {br>"keyVault": {br>"id": "THE KEYVAULTID ID YOU COPIED EARLIER"br>},br>"secretName": "vmAdminPassword"br>}</code></li><li>Change the id to the KeyVaultID you copied earlier</li><li>The rest of parameters.json can be left as is, you can override these values later in our execution script if desired</li><li>Open template.json</li><li>Do a search for <strong>enableAutomaticUpdates</strong> change the value to <strong>false</strong><br><code>"enableAutomaticUpdates":false,</code></li><li>A few lines down you will see <code>"licenseType":"Windows_Client"</code><br><code>}</code><br>add the following after (Make sure it&rsquo;s after the bracket)</li></ol><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-22>22</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        {
+</span></span><span style=display:flex><span>  <span style=color:#d14>&#34;type&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;Microsoft.Compute/virtualMachines/extensions&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#d14>&#34;apiVersion&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;2019-12-01&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#d14>&#34;name&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;[concat(parameters(&#39;virtualMachineName&#39;),&#39;/&#39;, &#39;InstallNavigate&#39;)]&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#d14>&#34;location&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;[parameters(&#39;location&#39;)]&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#d14>&#34;dependsOn&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> [
+</span></span><span style=display:flex><span>      <span style=color:#d14>&#34;[concat(&#39;Microsoft.Compute/virtualMachines/&#39;,parameters(&#39;virtualMachineName&#39;))]&#34;</span>
+</span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>  <span style=color:#d14>&#34;properties&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#d14>&#34;publisher&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;Microsoft.Compute&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#d14>&#34;type&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;CustomScriptExtension&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#d14>&#34;typeHandlerVersion&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;1.7&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#d14>&#34;autoUpgradeMinorVersion&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span>true,
+</span></span><span style=display:flex><span>      <span style=color:#d14>&#34;settings&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> {
+</span></span><span style=display:flex><span>        <span style=color:#d14>&#34;fileUris&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> [
+</span></span><span style=display:flex><span>          <span style=color:#d14>&#34;URLTOCHANGELATER&#34;</span>,
+</span></span><span style=display:flex><span>          <span style=color:#d14>&#34;URLTOCHANGELATER2&#34;</span>
+</span></span><span style=display:flex><span>        ],
+</span></span><span style=display:flex><span>        <span style=color:#d14>&#34;commandToExecute&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> <span style=color:#d14>&#34;powershell.exe -ExecutionPolicy Unrestricted -File moduleinstall.ps1&#34;</span>
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>  }
+</span></span></code></pre></td></tr></table></div></div><p>You will notice under fileUris we have two URLTOCHANGELATER items on lines 17 and 18, we are going to change that to the two SAS token URLs you copied earlier. You can add more URLs with a comma for things like the FSLogix installation exe. On line 20 you will want to change the -File to match the name of your moduleinstall script.</p><p>So what exactly does adding those URLs do? Well they download the files from the respective URL. In this case we are downloading the moduleInstall.ps1 and config.ps1. After that we are executing a command to run moduleInstall.ps1.</p><h3 id=lets-recap>Lets recap</h3><p>I want you to take a deep breathe as you&rsquo;ve done a lot so far.<div class=image><figure><a href=giphy.gif target=_blank><img src=giphy.gif alt=screenshot></a></figure></div></p><p>You created a few resource groups, a key vault, storage account, an ARM template file, and two powershell scripts and that&rsquo;s awesome!</p><h3 id=making-the-magic-happen>Making the magic happen</h3><p>Below I will be posting the script I use to make the magic happen. It will connect to azure, ask you for an image name, the destination resourcegroup which in this case is &ldquo;Contoso-MyImages&rdquo; if you&rsquo;ve copied word for word. The script creates a temporary resource group, creates our VM, converts it to an image, and cleans up the temporary resource group which includes our VM. The result is a new Image located in Contoso-MyImages. You can then use this image to create a WVD Host Pool.</p><p>This can be changed to meet your preferences. You&rsquo;ll notice on lines 16-18 I specified a virtualMachineName, networkInferfaceName, publicIpAddressName, all three of these items have a default, and can be found in our parameters.json - however by defining them in our script I&rsquo;m overwriting the default values to give us a bit more flexibility.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-26>26</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#0086b3>Connect-azaccount</span>
+</span></span><span style=display:flex><span><span style=color:teal>$vmName</span> = <span style=color:#d14>&#34;TempMachine&#34;</span>
+</span></span><span style=display:flex><span><span style=color:teal>$imagename</span> = <span style=color:#0086b3>Read-Host</span> -Prompt <span style=color:#d14>&#39;Input a unique image name&#39;</span>
+</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>Do</span> {
+</span></span><span style=display:flex><span>  <span style=color:teal>$imageLocation</span> = <span style=color:#0086b3>Read-Host</span> -Prompt <span style=color:#d14>&#39;Input the destination resourcegroup NOTE: must exist&#39;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>Until</span> (<span style=color:#0086b3>Get-AzResourceGroup</span> -Name <span style=color:teal>$imageLocation</span>)
+</span></span><span style=display:flex><span><span style=color:teal>$location</span> = <span style=color:#d14>&#34;centralus&#34;</span>
+</span></span><span style=display:flex><span><span style=color:teal>$resourceGroupName</span> = <span style=color:#d14>&#34;TempResourceGroup&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>New-AzResourceGroup</span> -Name <span style=color:teal>$resourceGroupName</span> -Location <span style=color:teal>$location</span>
+</span></span><span style=display:flex><span><span style=color:teal>$filePath</span> = <span style=color:#d14>&#34;CHANGE TO YOUR PATH THAT CONTAINS THE TEMPLATE AND PARAMETERS FILE&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>New-AzResourceGroupDeployment</span> `
+</span></span><span style=display:flex><span>    -ResourceGroupName <span style=color:teal>$resourceGroupName</span> `
+</span></span><span style=display:flex><span>    -TemplateFile <span style=color:#d14>&#34;$filePath\template.json&#34;</span> `
+</span></span><span style=display:flex><span>    -TemplateParameterFile <span style=color:#d14>&#34;$filePath\parameters.json&#34;</span> `
+</span></span><span style=display:flex><span>    -virtualMachineName <span style=color:teal>$vmName</span> `
+</span></span><span style=display:flex><span>    -networkInterfaceName (<span style=color:teal>$vmName</span> + <span style=color:#d14>&#39;Nic&#39;</span>) `
+</span></span><span style=display:flex><span>    -publicIpAddressName (<span style=color:teal>$vmName</span> + <span style=color:#d14>&#39;ip&#39;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:teal>$vm</span> = <span style=color:#0086b3>Get-AzVM</span> -ResourceGroupName <span style=color:teal>$resourceGroupName</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>Stop-AzVM</span> -ResourceGroupName <span style=color:teal>$resourceGroupName</span> -Name <span style=color:teal>$vm</span>.name -Force
+</span></span><span style=display:flex><span><span style=color:#0086b3>Set-AzVM</span>  -ResourceGroupName <span style=color:teal>$resourceGroupName</span> -Name <span style=color:teal>$vm</span>.name -Generalized
+</span></span><span style=display:flex><span><span style=color:teal>$image</span> = <span style=color:#0086b3>New-AzImageConfig</span> -Location <span style=color:teal>$location</span> -SourceVirtualMachineId <span style=color:teal>$vm</span>.Id
+</span></span><span style=display:flex><span><span style=color:#0086b3>New-AzImage</span> -Image <span style=color:teal>$image</span> -ImageName <span style=color:teal>$imagename</span> -ResourceGroupName <span style=color:teal>$imageLocation</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>Get-AzResourceGroup</span> -Name <span style=color:teal>$resourceGroupName</span> | <span style=color:#0086b3>Remove-AzResourceGroup</span>  -Force
+</span></span></code></pre></td></tr></table></div></div><p>Resources:<br><a href=https://docs.microsoft.com/azure/azure-resource-manager/templates/template-tutorial-use-key-vault>https://docs.microsoft.com/azure/azure-resource-manager/templates/template-tutorial-use-key-vault</a><br><a href="https://docs.microsoft.com/azure/storage/common/storage-account-create?tabs=azure-powershell">https://docs.microsoft.com/azure/storage/common/storage-account-create?tabs=azure-powershell</a><br><a href=https://docs.microsoft.com/fslogix/install-ht>https://docs.microsoft.com/fslogix/install-ht</a></p><img src=/authors/jake/avatar.png alt="Photo of Jake Shackelford"><br><strong>Jake Shackelford</strong>
+<em>Admin/Contributor</em><div><a href=https://twitter.com/shackelfjaco><img src=/img/social/twitter.png></a></div><p>Jake is one of our Admins but also our inaugural author and the main reason SysManSquad exists today.</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

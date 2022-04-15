@@ -1,440 +1,228 @@
-<!doctype html><html lang=en-us>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins">
-<meta name=viewport content="width=device-width">
-<meta name=description content="A community blog and subsidiary of WinAdmins.io">
-<link rel="shortcut icon" href=/img/favicon.ico>
-<title>Getting Reboot History and Optimizing Legacy Functions-SysManSquad | Systems Management Squad</title>
-<link rel=canonical href=/2020/08/28/getting-reboot-history-and-optimizing-legacy-functions/>
-<link rel=stylesheet href=/css/style.css>
-<link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=keyword content="ConfigMgr Microsoft Intune Windows WinAdmins"><meta name=viewport content="width=device-width"><meta name=description content="A community blog and subsidiary of WinAdmins.io"><link rel="shortcut icon" href=/img/favicon.ico><title>Getting Reboot History and Optimizing Legacy Functions-SysManSquad | Systems Management Squad</title><link rel=canonical href=/2020/08/28/getting-reboot-history-and-optimizing-legacy-functions/><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=https://blog.sysmansquad.com/css/custom.css><script src=https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js></script>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js></script>
 <script src=https://blog.sysmansquad.com/js/jquery.slicknav.js></script>
 <script src=https://blog.sysmansquad.com/js/asd_SlickNav_Mobile.js></script>
 <script src=https://blog.sysmansquad.com/js/custom.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXZR1RSQYX"></script>
-<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-XXZR1RSQYX',{anonymize_ip:!1})}</script>
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://blog.sysmansquad.com/83">
-<meta name=twitter:title content="Getting Reboot History and Optimizing Legacy Functions">
-<meta name=twitter:description content="The other day, I logged on to a jump server and, while investigating an unrelated issue, I noticed the BG Info background showed the Last Reboot as March 1st, 2020. &ldquo;That can&rsquo;t be right,&rdquo; I thought. &ldquo;We have weekly maintenance windows to reboot these servers.&rdquo;
-As I opened an old stand-by function from my stash (originally posted here: https://gallery.technet.microsoft.com/scriptcenter/Get-RebootHistory-bc804819 in 2015) and ran it, I was a bit annoyed at how SLOW it was.">
-</head>
-<body class="home blog">
-<div id=asd-container>
-<div id=top-bar>
-<div class=container>
-<div id=nav-wrapper>
-<ul class=menu id=menu-top-menu>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/>Home</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/about/>
-<span>About</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=https://github.com/SysManSquad>
-<span>GitHub</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/jointhesquad/>
-<span>Join the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/meetthesquad/>
-<span>Meet the Squad</span>
-</a>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=#>
-<span>MORE></span>
-</a>
-<ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home">
-<a href=/contact/>Contact</a>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-<div id=top-search>
-<a href=# class=search><i class="fa fa-search"></i></a>
-<div class=show-search>
-<form role=search method=get action=https://www.google.com/search id=searchform>
-<input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-XXZR1RSQYX",{anonymize_ip:!1})}</script><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.sysmansquad.com/83"><meta name=twitter:title content="Getting Reboot History and Optimizing Legacy Functions"><meta name=twitter:description content="The other day, I logged on to a jump server and, while investigating an unrelated issue, I noticed the BG Info background showed the Last Reboot as March 1st, 2020. &ldquo;That can&rsquo;t be right,&rdquo; I thought. &ldquo;We have weekly maintenance windows to reboot these servers.&rdquo;
+As I opened an old stand-by function from my stash (originally posted here: https://gallery.technet.microsoft.com/scriptcenter/Get-RebootHistory-bc804819 in 2015) and ran it, I was a bit annoyed at how SLOW it was."></head><body class="home blog"><div id=asd-container><div id=top-bar><div class=container><div id=nav-wrapper><ul class=menu id=menu-top-menu><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/>Home</a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/about/><span>About</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=https://github.com/SysManSquad><span>GitHub</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/jointhesquad/><span>Join the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/meetthesquad/><span>Meet the Squad</span></a></li><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=#><span>MORE></span></a><ul class="sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home"><a href=/contact/>Contact</a></li></ul></li></ul></div><div id=top-search><a href=# class=search><i class="fa fa-search"></i></a><div class=show-search><form role=search method=get action=https://www.google.com/search id=searchform><input type=search placeholder="Search and hit enter..." name=q id=q title="Search and hit enter...">
 <input type=hidden name=sitesearch value=https://blog.sysmansquad.com>
-<button type=submit value=Search>
-</form>
-</div>
-</div>
-<div class=menu id=menu-mobile></div>
-</div>
-</div>
-<header id=header class=noslider>
-<div class=container>
-<div id=logo>
-<h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1>
-</div>
-</div>
-</header>
-<div class=container>
-<div id=content>
-<div id=main class=fullwidth>
-<article class="post type-post status-publish format-standard has-post-thumbnail hentry">
-<div class=post-header>
-<h1>Getting Reboot History and Optimizing Legacy Functions</h1>
-<p class=p-meta>
-<span class=post-author><a href=/authors/nic>Nic Wendlowsky</a> / </span>
-<span class=post-date>August 28, 2020 </span>
-<span class=post-categories>/ Endpoint Management </span>
-<span class=post-categories>/ MECM/MEMCM/SCCM </span>
-<span class=post-categories>/ Powershell </span>
-</p>
-</div>
-<div class=post-entry>
-<p>The other day, I logged on to a jump server and, while investigating an unrelated issue, I noticed the BG Info background showed the Last Reboot as March 1st, 2020. &ldquo;That can&rsquo;t be right,&rdquo; I thought. &ldquo;We have weekly maintenance windows to reboot these servers.&rdquo;</p>
-<p>As I opened an old stand-by function from my stash (originally posted here: <a href=https://gallery.technet.microsoft.com/scriptcenter/Get-RebootHistory-bc804819>https://gallery.technet.microsoft.com/scriptcenter/Get-RebootHistory-bc804819</a> in 2015) and ran it, I was a bit annoyed at how SLOW it was. I decide to open the function and was saddened to see that it wasn&rsquo;t even using Get-Event&mldr; It was using WMI to comb Event Logs. So, I deviated from my original task and set out fixing it. Here&rsquo;s how:</p>
-<p>The first thing I needed to do was identify how to get the same information in a faster manner. Since this function is using <code>Get-WMIObject</code> to search Event Logs, we already know improvements can be made with using <code>Get-EventLog</code> or <code>Get-WinEvent</code>. And we can test each with <code>Measure-Object</code> to determine the winner:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#d14>&#39;Get-WinEvent takes {0} milliseconds to find {1} events&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:#0086b3>Measure-Command</span> -Expression {
-    <span style=color:teal>$Params</span> = @{ 
-      FilterHashtable = @{Logname = <span style=color:#d14>&#39;System&#39;</span>;ID = <span style=color:#d14>&#34;1074&#34;</span>,<span style=color:#d14>&#34;6008&#34;</span>,<span style=color:#d14>&#34;6009&#34;</span>}
-    }   
-    <span style=color:teal>$Count</span> = (<span style=color:#0086b3>Get-WinEvent</span> <span style=color:teal>@Params</span>).count
-}).TotalMilliseconds,<span style=color:teal>$Count</span>
-<span style=color:#0086b3>Remove-Variable</span> Params,count
-
-<span style=color:#d14>&#39;Get-EventLog takes {0} milliseconds to find {1} events&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:#0086b3>Measure-Command</span> -Expression {
-    <span style=color:teal>$Params</span> = @{ 
-      Logname = <span style=color:#d14>&#39;System&#39;</span>
-      InstanceId = <span style=color:#d14>&#34;2147484722&#34;</span>,<span style=color:#d14>&#34;2147489656&#34;</span>,<span style=color:#d14>&#34;2147489657&#34;</span>
-    }   
-    <span style=color:teal>$Count</span> = (<span style=color:#0086b3>Get-EventLog</span> <span style=color:teal>@Params</span>).count
-}).TotalMilliseconds,<span style=color:teal>$Count</span>
-<span style=color:#0086b3>Remove-Variable</span> Params,count
-
-<span style=color:#d14>&#39;Get-WMIObject takes {0} milliseconds to find {1} events&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:#0086b3>Measure-Command</span> -Expression {
-    <span style=color:teal>$Params</span> = @{ 
-      Class  = <span style=color:#d14>&#39;Win32_NTLogEvent&#39;</span> 
-      <span style=color:#000;font-weight:700>Filter</span>  = <span style=color:#d14>&#34;LogFile = &#39;System&#39; and EventCode = 6009 or EventCode = 6008 or EventCode = 1074&#34;</span> 
-    }    
-    <span style=color:teal>$Count</span> = (<span style=color:#0086b3>Get-WmiObject</span> <span style=color:teal>@Params</span>).count
-}).TotalMilliseconds,<span style=color:teal>$Count</span>
-<span style=color:#0086b3>Remove-Variable</span> Params,count
-</code></pre></td></tr></table>
-</div>
-</div><p>Note: <strong>Get-EventLog InstanceID</strong></p>
-<blockquote>
-<p>Even though it&rsquo;s not used in the script, I wanted to point out that <code>Get-EventLog</code>&rsquo;s InstanceID value does not correspond to the Event ID used in the other cmdlets. I used this <a href=https://community.idera.com/database-tools/powershell/powertips/b/tips/posts/translate-eventid-to-instanceid>ConvertTo-InstanceID</a> function to get the corresponding InstanceID for each Event ID.</p>
-</blockquote>
-<p>Which resulted in the following times:</p>
-<p><div class=image>
-<figure>
-<a href=Snag_21a99dae.png target=_blank>
-<img src=Snag_21a99dae.png alt="Measure cmdlets to search Event Logs">
-</a>
-</figure>
-</div> A 99.78% decrease in time!</p>
-<p>Wow, I knew WMI cmdlets were a bit slow, but I didn&rsquo;t expect to see such a drastic improvement by using <code>Get-WinEvent</code>. It&rsquo;s safe to say this is how we&rsquo;ll move forward.</p>
-<p>I like the information that <code>Get-RebootHistory</code> outputs, so I want to keep the same data while using the more efficient command. Let&rsquo;s dig through the function to find out what we&rsquo;re modifying.</p>
-<p>Identify the main, slow command:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#000;font-weight:700>Try</span> {  
-   <span style=color:teal>$d</span> = 0 
-   <span style=color:teal>$Events</span> = <span style=color:#0086b3>Get-WmiObject</span> <span style=color:teal>@Params</span> 
-   
-   <span style=color:#000;font-weight:700>ForEach</span> (<span style=color:teal>$Event</span> <span style=color:#000;font-weight:700>In</span> <span style=color:teal>$Events</span>) {..}
-</code></pre></td></tr></table>
-</div>
-</div><p>And Since it&rsquo;s using splatting, we need to find the variable holding the values:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Arguments to be passed to our WMI call.  </span>
-<span style=color:teal>$Params</span> = @{ 
-   ErrorAction  = <span style=color:#d14>&#39;Stop&#39;</span> 
-   ComputerName = <span style=color:teal>$Computer</span> 
-   Credential   = <span style=color:teal>$Credential</span> 
-   Class        = <span style=color:#d14>&#39;Win32_NTLogEvent&#39;</span> 
-   <span style=color:#000;font-weight:700>Filter</span>       = <span style=color:#d14>&#34;LogFile = &#39;System&#39; and EventCode = 6009 or EventCode = 6008 or EventCode = 1074&#34;</span> 
-} 
-</code></pre></td></tr></table>
-</div>
-</div><p>Now we need to replace <code>Get-WMIObject</code> with <code>Get-WinEvent</code> and compare the outputs. Referencing good ol' <a href=https://devblogs.microsoft.com/scripting/use-filterhashtable-to-filter-event-log-with-powershell/>Dr. Scripto&rsquo;s blog on the FilterHashtable param</a>, we replace the WMI splat and the <code>$Events</code> line with:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:teal>$Params</span> = @{ 
-            ErrorAction  = <span style=color:#d14>&#39;Stop&#39;</span> 
-            ComputerName = <span style=color:teal>$Computer</span> 
-            Credential   = <span style=color:teal>$Credential</span> 
-            FilterHashtable = @{Logname = <span style=color:#d14>&#39;System&#39;</span>;ID = <span style=color:#d14>&#34;1074&#34;</span>,<span style=color:#d14>&#34;6008&#34;</span>,<span style=color:#d14>&#34;6009&#34;</span>}
-        }
-..
-<span style=color:teal>$Events</span> = <span style=color:#0086b3>Get-WinEvent</span> <span style=color:teal>@Params</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Next we&rsquo;ll need to verify the integrity of this <code>Switch</code> statement</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Record the relevant details for the shutdown event. </span>
-<span style=color:#000;font-weight:700>Switch</span> (<span style=color:teal>$Event</span>.EventCode) {
-   6009 { <span style=color:teal>$BootHistory</span> += (<span style=color:#0086b3>Get-Date</span>((<span style=color:teal>[WMI]</span><span style=color:#d14>&#39;&#39;</span>).ConvertToDateTime(<span style=color:teal>$Event</span>.TimeGenerated)) -Format g)}
-   6008 { <span style=color:teal>$UnexpectedShutdowns</span> += (<span style=color:#d14>&#39;{0} {1}&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:teal>$Event</span>.InsertionStrings[1], <span style=color:teal>$Event</span>.InsertionStrings[0]))}
-   1074 { <span style=color:teal>$ShutdownDetail</span> += <span style=color:teal>$Event</span> }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Testing the output of our new <code>$Events</code> variable, we see the properties of the first element do not have the same property names. Most are easy enough to match up, save for the <code>InsertionStrings</code> property<br>
-<div class=image>
-<figure>
-<a href=Snag_2180a815.png target=_blank>
-<img src=Snag_2180a815.png alt="Event property compare">
-</a>
-</figure>
-</div><br>
-For the <code>InsertionStrings</code> property, I just went exploring and tried this, which had the corresponding values:<br>
-<div class=image>
-<figure>
-<a href=Snag_2184b929.png target=_blank>
-<img src=Snag_2184b929.png alt="6008 properties">
-</a>
-</figure>
-</div><br>
-and led to the new Switch statement:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Record the relevant details for the shutdown event. </span>
-<span style=color:#000;font-weight:700>Switch</span> (<span style=color:teal>$Event</span>.Id) {  
-   6009 { <span style=color:teal>$BootHistory</span> += <span style=color:teal>$Event</span>.TimeCreated | <span style=color:#0086b3>Get-Date</span> -Format g } 
-   6008 { <span style=color:teal>$UnexpectedShutdowns</span> += (<span style=color:#d14>&#39;{0} {1}&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:teal>$Event</span>.Properties[1].Value, <span style=color:teal>$Event</span>.Properties[0].Value)) } 
-   1074 { <span style=color:teal>$ShutdownDetail</span> += <span style=color:teal>$Event</span> } 
-} 
-</code></pre></td></tr></table>
-</div>
-</div><p>Finally, we validate the <code>$ShutdownDetail</code> values:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Grab details about the last clean shutdown and generate our return object. </span>
-<span style=color:teal>$ShutdownDetail</span> | <span style=color:#0086b3>Select </span>-First 1 | <span style=color:#0086b3>ForEach-Object</span> {  
-  <span style=color:#0086b3>New-Object</span> -TypeName PSObject -Property @{ 
-    Computer = <span style=color:teal>$Computer</span> 
-    BootHistory = <span style=color:teal>$BootHistory</span>  
-    RecentUnexpected = <span style=color:teal>$RecentUnexpected</span> 
-    LastShutdownUser = <span style=color:teal>$_</span>.InsertionStrings[6] 
-    UnexpectedShutdowns = <span style=color:teal>$UnexpectedShutdowns</span> 
-    LastShutdownProcess = <span style=color:teal>$_</span>.InsertionStrings[0] 
-    PercentDirty = <span style=color:#d14>&#39;{0:P0}&#39;</span> <span style=color:#000;font-weight:700>-f</span> ((<span style=color:teal>$UnexpectedShutdowns</span>.Count/<span style=color:teal>$BootHistory</span>.Count)) 
-    LastShutdownType = (<span style=color:#0086b3>Get-Culture</span>).TextInfo.ToTitleCase(<span style=color:teal>$_</span>.InsertionStrings[4]) 
-    LastShutdown = (<span style=color:#0086b3>Get-Date</span>((<span style=color:teal>[WMI]</span><span style=color:#d14>&#39;&#39;</span>).ConvertToDateTime(<span style=color:teal>$_</span>.TimeGenerated)) -Format g) 
-    RecentShutdowns = (<span style=color:teal>$BootHistory</span> | ? { ((<span style=color:#0086b3>Get-Date</span>)-(<span style=color:#0086b3>Get-Date</span> <span style=color:teal>$_</span>)).TotalDays <span style=color:#000;font-weight:700>-le</span> 30 }).Count 
-    LastShutdownReason = <span style=color:#d14>&#39;Reason Code: {0}, Reason: {1}&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:teal>$_</span>.InsertionStrings[3], <span style=color:teal>$_</span>.InsertionStrings[2]) 
-  } | <span style=color:#0086b3>Select </span><span style=color:teal>$BootInformation</span>     
-}   
-</code></pre></td></tr></table>
-</div>
-</div><p>Once again, there are values to modify by comparing the output of the WMI event object to the new object, but I came across one property that didn&rsquo;t translate well, the <code>LastShutdownUser</code> property. With WMI, the readable User Name was placed in the <code>$Events[0].InsertionStrings</code> property, but <code>Get-WinEvent</code> provides just the SID. I put together a quick CIM function to grab the User name:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#000;font-weight:700>FUNCTION</span> <span style=color:#0086b3>Get-UserFromRegistry</span>{
-  <span style=color:#000;font-weight:700>PARAM</span>(
-    <span style=color:teal>$SID</span>
-  )
-    <span style=color:teal>$ProfileList</span> = <span style=color:#0086b3>Get-CimInstance</span> -ClassName win32_userprofile | <span style=color:#0086b3>Select-Object</span> @{L=<span style=color:#d14>&#34;User&#34;</span>;E={(<span style=color:teal>$_</span>.localpath -split <span style=color:#d14>&#39;\\&#39;</span>)[-1]}},*
-    <span style=color:#000;font-weight:700>try</span>
-    {
-      <span style=color:teal>$ProfileList</span> | <span style=color:#0086b3>Where-Object</span> {<span style=color:teal>$_</span>.SID <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$SID</span>} | <span style=color:#0086b3>select </span>User,SID,LocalPath
-    }
-    <span style=color:#000;font-weight:700>catch</span>
-    {
-      <span style=color:#d14>&#34;Error was $_&#34;</span>
-      <span style=color:teal>$line</span> = <span style=color:teal>$_</span>.InvocationInfo.ScriptLineNumber
-      <span style=color:#d14>&#34;Error was in Line $line&#34;</span>
-    }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>Now I can call that function for the <code>LastShutdownUser</code> property and replicate the output from the original <code>Get-RebootHistory</code> function in the output object.<br>
-Additionally, we can once again replace the <code>InsertionStrings</code> and simplify the <code>LastShutdownUser</code>, <code>LastShutdownProcess</code>, <code>LastShutdown</code>, and <code>LastShutdownReason</code> since <code>Get-WinEvent</code> also provides more readily readable values:</p>
-<div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=color:#998;font-style:italic># Grab details about the last clean shutdown and generate our return object. </span>
-<span style=color:teal>$ShutdownDetail</span> | <span style=color:#0086b3>Select </span>-First 1 | <span style=color:#0086b3>ForEach-Object</span> {  
-  <span style=color:#0086b3>New-Object</span> -TypeName PSObject -Property @{
-    Computer = <span style=color:teal>$_</span>.MachineName 
-    BootHistory = <span style=color:teal>$BootHistory</span>  
-    RecentUnexpected = <span style=color:teal>$RecentUnexpected</span> 
-    LastShutdownUser = (<span style=color:#0086b3>Get-UserFromRegistry</span> -SID <span style=color:teal>$_</span>.UserId).User
-    UnexpectedShutdowns = <span style=color:teal>$UnexpectedShutdowns</span> 
-    LastShutdownProcess = <span style=color:teal>$_</span>.Properties[0].Value
-    PercentDirty = <span style=color:#d14>&#39;{0:P0}&#39;</span> <span style=color:#000;font-weight:700>-f</span> ((<span style=color:teal>$UnexpectedShutdowns</span>.Count/<span style=color:teal>$BootHistory</span>.Count)) 
-    LastShutdownType = (<span style=color:#0086b3>Get-Culture</span>).TextInfo.ToTitleCase(<span style=color:teal>$_</span>.Properties[4].Value)
-    LastShutdown = (<span style=color:teal>$_</span>.TimeCreated | <span style=color:#0086b3>Get-Date</span> -Format g)
-    RecentShutdowns = (<span style=color:teal>$BootHistory</span> | ? { ((<span style=color:#0086b3>Get-Date</span>)-(<span style=color:#0086b3>Get-Date</span> <span style=color:teal>$_</span>)).TotalDays <span style=color:#000;font-weight:700>-le</span> 30 }).Count 
-    LastShutdownReason = <span style=color:#d14>&#39;Reason Code: {0}, Reason: {1}&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:teal>$_</span>.Properties[3].Value, <span style=color:teal>$_</span>.Properties[2].Value) 
-  } | <span style=color:#0086b3>Select </span><span style=color:teal>$BootInformation</span>     
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>All of that leads to the finished product, which I&rsquo;ve put in a gist on GitHub.<br>
-Enjoy!</p>
-<p><a href=https://gist.github.com/hkystar35/12b5f54401edfb9077346da7fe938e4e>https://gist.github.com/hkystar35/12b5f54401edfb9077346da7fe938e4e</a></p>
-<img src=/authors/nic/avatar.png alt="Photo of Nic Wendlowsky"><br>
-<strong>Nic Wendlowsky</strong>
-<em>Contributor</em>
-<div>
-<a href=https://twitter.com/wendlowsky><img src=/img/social/twitter.png></a>
-<a href=https://www.linkedin.com/in/nic-wendlowsky><img src=/img/social/linkedin.png></a>
-</div>
-<p>Nic is an IT professional of 12+ years, specializing in ConfigMgr over the last 5 with an MCTS for ConfigMgr 2012r2.</p>
-<hr>
-</div>
-<comments id=comments>
-<script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script>
-</comments>
-</article>
-</div>
-</div>
-</div>
-<footer id=footer>
-<div class=container>
-<div id=footer-copyright>
-<p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p>
-</div>
-</div>
-</footer>
-</div>
-</body>
-</html>
+<button type=submit value=Search></form></div></div><div class=menu id=menu-mobile></div></div></div><header id=header class=noslider><div class=container><div id=logo><h1><a href=https://blog.sysmansquad.com><img src=/img/SysManSquad-HorizontalColor-Logo.png alt="Systems Management Squad"></a></h1></div></div></header><div class=container><div id=content><div id=main class=fullwidth><article class="post type-post status-publish format-standard has-post-thumbnail hentry"><div class=post-header><h1>Getting Reboot History and Optimizing Legacy Functions</h1><p class=p-meta><span class=post-author><a href=/authors/nic>Nic Wendlowsky</a> /</span>
+<span class=post-date>August 28, 2020</span>
+<span class=post-categories>/ Endpoint Management</span>
+<span class=post-categories>/ MECM/MEMCM/SCCM</span>
+<span class=post-categories>/ Powershell</span></p></div><div class=post-entry><p>The other day, I logged on to a jump server and, while investigating an unrelated issue, I noticed the BG Info background showed the Last Reboot as March 1st, 2020. &ldquo;That can&rsquo;t be right,&rdquo; I thought. &ldquo;We have weekly maintenance windows to reboot these servers.&rdquo;</p><p>As I opened an old stand-by function from my stash (originally posted here: <a href=https://gallery.technet.microsoft.com/scriptcenter/Get-RebootHistory-bc804819>https://gallery.technet.microsoft.com/scriptcenter/Get-RebootHistory-bc804819</a> in 2015) and ran it, I was a bit annoyed at how SLOW it was. I decide to open the function and was saddened to see that it wasn&rsquo;t even using Get-Event&mldr; It was using WMI to comb Event Logs. So, I deviated from my original task and set out fixing it. Here&rsquo;s how:</p><p>The first thing I needed to do was identify how to get the same information in a faster manner. Since this function is using <code>Get-WMIObject</code> to search Event Logs, we already know improvements can be made with using <code>Get-EventLog</code> or <code>Get-WinEvent</code>. And we can test each with <code>Measure-Object</code> to determine the winner:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-25>25</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#d14>&#39;Get-WinEvent takes {0} milliseconds to find {1} events&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:#0086b3>Measure-Command</span> -Expression {
+</span></span><span style=display:flex><span>    <span style=color:teal>$Params</span> = @{ 
+</span></span><span style=display:flex><span>      FilterHashtable = @{Logname = <span style=color:#d14>&#39;System&#39;</span>;ID = <span style=color:#d14>&#34;1074&#34;</span>,<span style=color:#d14>&#34;6008&#34;</span>,<span style=color:#d14>&#34;6009&#34;</span>}
+</span></span><span style=display:flex><span>    }   
+</span></span><span style=display:flex><span>    <span style=color:teal>$Count</span> = (<span style=color:#0086b3>Get-WinEvent</span> <span style=color:teal>@Params</span>).count
+</span></span><span style=display:flex><span>}).TotalMilliseconds,<span style=color:teal>$Count</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>Remove-Variable</span> Params,count
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#d14>&#39;Get-EventLog takes {0} milliseconds to find {1} events&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:#0086b3>Measure-Command</span> -Expression {
+</span></span><span style=display:flex><span>    <span style=color:teal>$Params</span> = @{ 
+</span></span><span style=display:flex><span>      Logname = <span style=color:#d14>&#39;System&#39;</span>
+</span></span><span style=display:flex><span>      InstanceId = <span style=color:#d14>&#34;2147484722&#34;</span>,<span style=color:#d14>&#34;2147489656&#34;</span>,<span style=color:#d14>&#34;2147489657&#34;</span>
+</span></span><span style=display:flex><span>    }   
+</span></span><span style=display:flex><span>    <span style=color:teal>$Count</span> = (<span style=color:#0086b3>Get-EventLog</span> <span style=color:teal>@Params</span>).count
+</span></span><span style=display:flex><span>}).TotalMilliseconds,<span style=color:teal>$Count</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>Remove-Variable</span> Params,count
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#d14>&#39;Get-WMIObject takes {0} milliseconds to find {1} events&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:#0086b3>Measure-Command</span> -Expression {
+</span></span><span style=display:flex><span>    <span style=color:teal>$Params</span> = @{ 
+</span></span><span style=display:flex><span>      Class  = <span style=color:#d14>&#39;Win32_NTLogEvent&#39;</span> 
+</span></span><span style=display:flex><span>      <span style=color:#000;font-weight:700>Filter</span>  = <span style=color:#d14>&#34;LogFile = &#39;System&#39; and EventCode = 6009 or EventCode = 6008 or EventCode = 1074&#34;</span> 
+</span></span><span style=display:flex><span>    }    
+</span></span><span style=display:flex><span>    <span style=color:teal>$Count</span> = (<span style=color:#0086b3>Get-WmiObject</span> <span style=color:teal>@Params</span>).count
+</span></span><span style=display:flex><span>}).TotalMilliseconds,<span style=color:teal>$Count</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>Remove-Variable</span> Params,count
+</span></span></code></pre></td></tr></table></div></div><p>Note: <strong>Get-EventLog InstanceID</strong></p><blockquote><p>Even though it&rsquo;s not used in the script, I wanted to point out that <code>Get-EventLog</code>&rsquo;s InstanceID value does not correspond to the Event ID used in the other cmdlets. I used this <a href=https://community.idera.com/database-tools/powershell/powertips/b/tips/posts/translate-eventid-to-instanceid>ConvertTo-InstanceID</a> function to get the corresponding InstanceID for each Event ID.</p></blockquote><p>Which resulted in the following times:</p><p><div class=image><figure><a href=Snag_21a99dae.png target=_blank><img src=Snag_21a99dae.png alt="Measure cmdlets to search Event Logs"></a></figure></div>A 99.78% decrease in time!</p><p>Wow, I knew WMI cmdlets were a bit slow, but I didn&rsquo;t expect to see such a drastic improvement by using <code>Get-WinEvent</code>. It&rsquo;s safe to say this is how we&rsquo;ll move forward.</p><p>I like the information that <code>Get-RebootHistory</code> outputs, so I want to keep the same data while using the more efficient command. Let&rsquo;s dig through the function to find out what we&rsquo;re modifying.</p><p>Identify the main, slow command:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-5>5</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#000;font-weight:700>Try</span> {  
+</span></span><span style=display:flex><span>   <span style=color:teal>$d</span> = 0 
+</span></span><span style=display:flex><span>   <span style=color:teal>$Events</span> = <span style=color:#0086b3>Get-WmiObject</span> <span style=color:teal>@Params</span> 
+</span></span><span style=display:flex><span>   
+</span></span><span style=display:flex><span>   <span style=color:#000;font-weight:700>ForEach</span> (<span style=color:teal>$Event</span> <span style=color:#000;font-weight:700>In</span> <span style=color:teal>$Events</span>) {..}
+</span></span></code></pre></td></tr></table></div></div><p>And Since it&rsquo;s using splatting, we need to find the variable holding the values:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-6>6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-7>7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-8>8</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#998;font-style:italic># Arguments to be passed to our WMI call.  </span>
+</span></span><span style=display:flex><span><span style=color:teal>$Params</span> = @{ 
+</span></span><span style=display:flex><span>   ErrorAction  = <span style=color:#d14>&#39;Stop&#39;</span> 
+</span></span><span style=display:flex><span>   ComputerName = <span style=color:teal>$Computer</span> 
+</span></span><span style=display:flex><span>   Credential   = <span style=color:teal>$Credential</span> 
+</span></span><span style=display:flex><span>   Class        = <span style=color:#d14>&#39;Win32_NTLogEvent&#39;</span> 
+</span></span><span style=display:flex><span>   <span style=color:#000;font-weight:700>Filter</span>       = <span style=color:#d14>&#34;LogFile = &#39;System&#39; and EventCode = 6009 or EventCode = 6008 or EventCode = 1074&#34;</span> 
+</span></span><span style=display:flex><span>} 
+</span></span></code></pre></td></tr></table></div></div><p>Now we need to replace <code>Get-WMIObject</code> with <code>Get-WinEvent</code> and compare the outputs. Referencing good ol&rsquo; <a href=https://devblogs.microsoft.com/scripting/use-filterhashtable-to-filter-event-log-with-powershell/>Dr. Scripto&rsquo;s blog on the FilterHashtable param</a>, we replace the WMI splat and the <code>$Events</code> line with:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-6>6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-7>7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-8>8</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:teal>$Params</span> = @{ 
+</span></span><span style=display:flex><span>            ErrorAction  = <span style=color:#d14>&#39;Stop&#39;</span> 
+</span></span><span style=display:flex><span>            ComputerName = <span style=color:teal>$Computer</span> 
+</span></span><span style=display:flex><span>            Credential   = <span style=color:teal>$Credential</span> 
+</span></span><span style=display:flex><span>            FilterHashtable = @{Logname = <span style=color:#d14>&#39;System&#39;</span>;ID = <span style=color:#d14>&#34;1074&#34;</span>,<span style=color:#d14>&#34;6008&#34;</span>,<span style=color:#d14>&#34;6009&#34;</span>}
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>..
+</span></span><span style=display:flex><span><span style=color:teal>$Events</span> = <span style=color:#0086b3>Get-WinEvent</span> <span style=color:teal>@Params</span>
+</span></span></code></pre></td></tr></table></div></div><p>Next we&rsquo;ll need to verify the integrity of this <code>Switch</code> statement</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-6>6</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#998;font-style:italic># Record the relevant details for the shutdown event. </span>
+</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>Switch</span> (<span style=color:teal>$Event</span>.EventCode) {
+</span></span><span style=display:flex><span>   6009 { <span style=color:teal>$BootHistory</span> += (<span style=color:#0086b3>Get-Date</span>((<span style=color:teal>[WMI]</span><span style=color:#d14>&#39;&#39;</span>).ConvertToDateTime(<span style=color:teal>$Event</span>.TimeGenerated)) -Format g)}
+</span></span><span style=display:flex><span>   6008 { <span style=color:teal>$UnexpectedShutdowns</span> += (<span style=color:#d14>&#39;{0} {1}&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:teal>$Event</span>.InsertionStrings[1], <span style=color:teal>$Event</span>.InsertionStrings[0]))}
+</span></span><span style=display:flex><span>   1074 { <span style=color:teal>$ShutdownDetail</span> += <span style=color:teal>$Event</span> }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>Testing the output of our new <code>$Events</code> variable, we see the properties of the first element do not have the same property names. Most are easy enough to match up, save for the <code>InsertionStrings</code> property<br><div class=image><figure><a href=Snag_2180a815.png target=_blank><img src=Snag_2180a815.png alt="Event property compare"></a></figure></div><br>For the <code>InsertionStrings</code> property, I just went exploring and tried this, which had the corresponding values:<br><div class=image><figure><a href=Snag_2184b929.png target=_blank><img src=Snag_2184b929.png alt="6008 properties"></a></figure></div><br>and led to the new Switch statement:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-6>6</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#998;font-style:italic># Record the relevant details for the shutdown event. </span>
+</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>Switch</span> (<span style=color:teal>$Event</span>.Id) {  
+</span></span><span style=display:flex><span>   6009 { <span style=color:teal>$BootHistory</span> += <span style=color:teal>$Event</span>.TimeCreated | <span style=color:#0086b3>Get-Date</span> -Format g } 
+</span></span><span style=display:flex><span>   6008 { <span style=color:teal>$UnexpectedShutdowns</span> += (<span style=color:#d14>&#39;{0} {1}&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:teal>$Event</span>.Properties[1].Value, <span style=color:teal>$Event</span>.Properties[0].Value)) } 
+</span></span><span style=display:flex><span>   1074 { <span style=color:teal>$ShutdownDetail</span> += <span style=color:teal>$Event</span> } 
+</span></span><span style=display:flex><span>} 
+</span></span></code></pre></td></tr></table></div></div><p>Finally, we validate the <code>$ShutdownDetail</code> values:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-16>16</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#998;font-style:italic># Grab details about the last clean shutdown and generate our return object. </span>
+</span></span><span style=display:flex><span><span style=color:teal>$ShutdownDetail</span> | <span style=color:#0086b3>Select </span>-First 1 | <span style=color:#0086b3>ForEach-Object</span> {  
+</span></span><span style=display:flex><span>  <span style=color:#0086b3>New-Object</span> -TypeName PSObject -Property @{ 
+</span></span><span style=display:flex><span>    Computer = <span style=color:teal>$Computer</span> 
+</span></span><span style=display:flex><span>    BootHistory = <span style=color:teal>$BootHistory</span>  
+</span></span><span style=display:flex><span>    RecentUnexpected = <span style=color:teal>$RecentUnexpected</span> 
+</span></span><span style=display:flex><span>    LastShutdownUser = <span style=color:teal>$_</span>.InsertionStrings[6] 
+</span></span><span style=display:flex><span>    UnexpectedShutdowns = <span style=color:teal>$UnexpectedShutdowns</span> 
+</span></span><span style=display:flex><span>    LastShutdownProcess = <span style=color:teal>$_</span>.InsertionStrings[0] 
+</span></span><span style=display:flex><span>    PercentDirty = <span style=color:#d14>&#39;{0:P0}&#39;</span> <span style=color:#000;font-weight:700>-f</span> ((<span style=color:teal>$UnexpectedShutdowns</span>.Count/<span style=color:teal>$BootHistory</span>.Count)) 
+</span></span><span style=display:flex><span>    LastShutdownType = (<span style=color:#0086b3>Get-Culture</span>).TextInfo.ToTitleCase(<span style=color:teal>$_</span>.InsertionStrings[4]) 
+</span></span><span style=display:flex><span>    LastShutdown = (<span style=color:#0086b3>Get-Date</span>((<span style=color:teal>[WMI]</span><span style=color:#d14>&#39;&#39;</span>).ConvertToDateTime(<span style=color:teal>$_</span>.TimeGenerated)) -Format g) 
+</span></span><span style=display:flex><span>    RecentShutdowns = (<span style=color:teal>$BootHistory</span> | ? { ((<span style=color:#0086b3>Get-Date</span>)-(<span style=color:#0086b3>Get-Date</span> <span style=color:teal>$_</span>)).TotalDays <span style=color:#000;font-weight:700>-le</span> 30 }).Count 
+</span></span><span style=display:flex><span>    LastShutdownReason = <span style=color:#d14>&#39;Reason Code: {0}, Reason: {1}&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:teal>$_</span>.InsertionStrings[3], <span style=color:teal>$_</span>.InsertionStrings[2]) 
+</span></span><span style=display:flex><span>  } | <span style=color:#0086b3>Select </span><span style=color:teal>$BootInformation</span>     
+</span></span><span style=display:flex><span>}   
+</span></span></code></pre></td></tr></table></div></div><p>Once again, there are values to modify by comparing the output of the WMI event object to the new object, but I came across one property that didn&rsquo;t translate well, the <code>LastShutdownUser</code> property. With WMI, the readable User Name was placed in the <code>$Events[0].InsertionStrings</code> property, but <code>Get-WinEvent</code> provides just the SID. I put together a quick CIM function to grab the User name:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-16>16</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#000;font-weight:700>FUNCTION</span> <span style=color:#0086b3>Get-UserFromRegistry</span>{
+</span></span><span style=display:flex><span>  <span style=color:#000;font-weight:700>PARAM</span>(
+</span></span><span style=display:flex><span>    <span style=color:teal>$SID</span>
+</span></span><span style=display:flex><span>  )
+</span></span><span style=display:flex><span>    <span style=color:teal>$ProfileList</span> = <span style=color:#0086b3>Get-CimInstance</span> -ClassName win32_userprofile | <span style=color:#0086b3>Select-Object</span> @{L=<span style=color:#d14>&#34;User&#34;</span>;E={(<span style=color:teal>$_</span>.localpath -split <span style=color:#d14>&#39;\\&#39;</span>)[-1]}},*
+</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>try</span>
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:teal>$ProfileList</span> | <span style=color:#0086b3>Where-Object</span> {<span style=color:teal>$_</span>.SID <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$SID</span>} | <span style=color:#0086b3>select </span>User,SID,LocalPath
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>catch</span>
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#d14>&#34;Error was $_&#34;</span>
+</span></span><span style=display:flex><span>      <span style=color:teal>$line</span> = <span style=color:teal>$_</span>.InvocationInfo.ScriptLineNumber
+</span></span><span style=display:flex><span>      <span style=color:#d14>&#34;Error was in Line $line&#34;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>Now I can call that function for the <code>LastShutdownUser</code> property and replicate the output from the original <code>Get-RebootHistory</code> function in the output object.<br>Additionally, we can once again replace the <code>InsertionStrings</code> and simplify the <code>LastShutdownUser</code>, <code>LastShutdownProcess</code>, <code>LastShutdown</code>, and <code>LastShutdownReason</code> since <code>Get-WinEvent</code> also provides more readily readable values:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-16>16</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#998;font-style:italic># Grab details about the last clean shutdown and generate our return object. </span>
+</span></span><span style=display:flex><span><span style=color:teal>$ShutdownDetail</span> | <span style=color:#0086b3>Select </span>-First 1 | <span style=color:#0086b3>ForEach-Object</span> {  
+</span></span><span style=display:flex><span>  <span style=color:#0086b3>New-Object</span> -TypeName PSObject -Property @{
+</span></span><span style=display:flex><span>    Computer = <span style=color:teal>$_</span>.MachineName 
+</span></span><span style=display:flex><span>    BootHistory = <span style=color:teal>$BootHistory</span>  
+</span></span><span style=display:flex><span>    RecentUnexpected = <span style=color:teal>$RecentUnexpected</span> 
+</span></span><span style=display:flex><span>    LastShutdownUser = (<span style=color:#0086b3>Get-UserFromRegistry</span> -SID <span style=color:teal>$_</span>.UserId).User
+</span></span><span style=display:flex><span>    UnexpectedShutdowns = <span style=color:teal>$UnexpectedShutdowns</span> 
+</span></span><span style=display:flex><span>    LastShutdownProcess = <span style=color:teal>$_</span>.Properties[0].Value
+</span></span><span style=display:flex><span>    PercentDirty = <span style=color:#d14>&#39;{0:P0}&#39;</span> <span style=color:#000;font-weight:700>-f</span> ((<span style=color:teal>$UnexpectedShutdowns</span>.Count/<span style=color:teal>$BootHistory</span>.Count)) 
+</span></span><span style=display:flex><span>    LastShutdownType = (<span style=color:#0086b3>Get-Culture</span>).TextInfo.ToTitleCase(<span style=color:teal>$_</span>.Properties[4].Value)
+</span></span><span style=display:flex><span>    LastShutdown = (<span style=color:teal>$_</span>.TimeCreated | <span style=color:#0086b3>Get-Date</span> -Format g)
+</span></span><span style=display:flex><span>    RecentShutdowns = (<span style=color:teal>$BootHistory</span> | ? { ((<span style=color:#0086b3>Get-Date</span>)-(<span style=color:#0086b3>Get-Date</span> <span style=color:teal>$_</span>)).TotalDays <span style=color:#000;font-weight:700>-le</span> 30 }).Count 
+</span></span><span style=display:flex><span>    LastShutdownReason = <span style=color:#d14>&#39;Reason Code: {0}, Reason: {1}&#39;</span> <span style=color:#000;font-weight:700>-f</span> (<span style=color:teal>$_</span>.Properties[3].Value, <span style=color:teal>$_</span>.Properties[2].Value) 
+</span></span><span style=display:flex><span>  } | <span style=color:#0086b3>Select </span><span style=color:teal>$BootInformation</span>     
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>All of that leads to the finished product, which I&rsquo;ve put in a gist on GitHub.<br>Enjoy!</p><p><a href=https://gist.github.com/hkystar35/12b5f54401edfb9077346da7fe938e4e>https://gist.github.com/hkystar35/12b5f54401edfb9077346da7fe938e4e</a></p><img src=/authors/nic/avatar.png alt="Photo of Nic Wendlowsky"><br><strong>Nic Wendlowsky</strong>
+<em>Contributor</em><div><a href=https://twitter.com/wendlowsky><img src=/img/social/twitter.png></a>
+<a href=https://www.linkedin.com/in/nic-wendlowsky><img src=/img/social/linkedin.png></a></div><p>Nic is an IT professional of 12+ years, specializing in ConfigMgr over the last 5 with an MCTS for ConfigMgr 2012r2.</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://blog.sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>
