@@ -1014,6 +1014,7 @@ a.more-link:hover {
 }
 .list-item .post-header h2 {
 	max-width:100%;
+	margin:0px;
 }
 .list-item .post-header h2 a {
 	font-size:18px;
@@ -1023,9 +1024,10 @@ a.more-link:hover {
 	margin:0 8px 2px 0;
 }
 .list-item .post-header  {
-	margin-bottom:14px;
+	margin-bottom:0px;
 }
 .list-item .post-entry p {
+	margin-top:11px;
 	margin-bottom:11px;
 }
 .list-title-divider {
@@ -1034,6 +1036,9 @@ a.more-link:hover {
 	max-width: 40px;
 	margin: 0 0 14px;
 	color: #161616;
+}
+.list-meta {
+	font-size:15px;
 }
 
 
