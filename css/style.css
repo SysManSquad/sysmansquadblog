@@ -5,15 +5,13 @@ fieldset, img { border:0 }
 address, caption, cite, dfn, em, strong, th, var { font-style:normal; font-weight:normal }
 ol, ul, li { list-style:none }
 caption, th { text-align:left }
-h1, h2, h3, h4, h5, h6 { font-size:100%; font-weight:normal }
+h1, h2, h3, h4, h5, h6 { 
+	font-weight:normal 
+}
 q:before, q:after { content:''}
 strong { font-weight: bold }
 em { font-style: italic }
 a img { border:none }
-
-html {
-	font-size: 1.2em;
-}
 
 body {
 	font-family: "Lato",sans-serif;
@@ -29,7 +27,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 p {
-	line-height: 1.8em;
+	line-height: 1.5em;
 }
 
 a {
@@ -101,13 +99,16 @@ figcaption {
     caption-side: bottom;
 }
 
+.searchbutton {
+	visibility: hidden;
+}
 
 /****************************************/
 /* code
 /****************************************/
 .highlight {
     display: block !important;
-    padding: 1em !important;
+    padding: .5em !important;
     border-width: 1px !important;
     border-style: solid !important;
     border-color: #e8e8e8 !important;
@@ -119,14 +120,18 @@ figcaption {
 
   .highlight code {
     display: block;
+	white-space: pre;
   }
 
   .highlight pre {
     display: block !important;
     background-color: #e8e8e8 !important;
+	white-space: pre;
+	font-size: 95%;
+
   }
 
-
+  
 /****************************************/
 /* Top Bar
 /****************************************/
@@ -563,11 +568,9 @@ figcaption {
     margin-bottom: 10px;
     display: block;
     max-width: 80%;
-	font-size: 1.2em;
 }
 
 .post-header h2 a, .post-header h1 {
-	font-size: 1.2em;
 	letter-spacing:2.75px;
 	color:#131313;
 	font-weight:600;
@@ -607,7 +610,6 @@ figcaption {
 /* Post Entry **********/
 .post-entry p, .post-entry hr {
     margin-bottom:20px;
-	font-size: 1rem;
 }
 .post-entry h1, .post-entry h2, .post-entry h3, .post-entry h4, .post-entry h5, .post-entry h6 {
 	color:#000;
@@ -1910,9 +1912,7 @@ div.wpcf7 {
 
 @media only screen and (min-width: 942px) and (max-width: 1170px) {
 	
-	.container { width:940px; }
-	#main { width:610px; }
-	
+	.container { width:90%; }
 	
 	/* Featured slider */
 	.feat-item {
@@ -1924,7 +1924,9 @@ div.wpcf7 {
 		width:293px;
 		height:172px;
 	}
-	
+	.searchbutton {
+		visibility: hidden;
+	}
 	
 	/* Grid Layout */
 	.sp-grid > li {
@@ -1956,9 +1958,7 @@ div.wpcf7 {
 
 @media only screen and (min-width: 768px) and (max-width: 960px) {
 	
-	.container { width:726px; }
-	
-	#main { width:100%; }
+	.container { width:90%; }
 	
 	#sidebar {
 		width:480px;
@@ -1966,7 +1966,9 @@ div.wpcf7 {
 		float:none;
 		overflow:hidden;
 	}
-	
+	.searchbutton {
+		visibility: hidden;
+	}
 	#nav-wrapper {
 		display:none;
 	}
@@ -2022,15 +2024,16 @@ div.wpcf7 {
 
 @media only screen and (max-width: 767px) {
 	
-	.container { width:300px; }
-	#main { width:100%; }
+	.container { width:90%; }
 	#sidebar {
 		width:100%;
 	}
 	#logo img {
 		max-width:100%;
 	}
-	
+	.searchbutton {
+		visibility: hidden;
+	}
 	#nav-wrapper {
 		display:none;
 	}
@@ -2148,14 +2151,15 @@ div.wpcf7 {
 
 @media only screen and (min-width: 480px) and (max-width: 768px) {
 	
-	.container { width:480px; }
-	
+	.container { width:90%; }
 	/* grid item */
 	.sp-grid > li, #main.fullwidth .sp-grid > li {
 		width:225px;
 		margin-right:26px;
 	}
-	
+	.searchbutton {
+		visibility: hidden;
+	}
 	/* List layout */
 	.list-item .post-img img { max-width:150px; }
 	.list-item .post-img { margin-right:22px; }
