@@ -112,6 +112,7 @@ figcaption {
     border-width: 1px !important;
     border-style: solid !important;
     border-color: #e8e8e8 !important;
+	overflow: scroll;
   }
   
   code {
