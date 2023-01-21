@@ -65,16 +65,16 @@ Starting in Windows 10 1803, deprovisioned apps will NOT be reinstalled during a
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-49><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-49>49</a>
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-50><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-50>50</a>
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-51><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-51>51</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#000;font-weight:700>function</span> <span style=color:#0086b3>Get-DeprovisionedAppX</span> {
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#000;font-weight:700>function</span><span style=color:#bbb> </span><span style=color:#0086b3>Get-DeprovisionedAppX</span> {
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic>#</span>
 </span></span><span style=display:flex><span>    .SYNOPSIS
 </span></span><span style=display:flex><span>        Returns an array of apps that are deprovisioned
 </span></span><span style=display:flex><span>    .DESCRIPTION
-</span></span><span style=display:flex><span>        This <span style=color:#000;font-weight:700>function</span> returns an array of all the apps that are deprovisioned on the local computer.
+</span></span><span style=display:flex><span>        This <span style=color:#000;font-weight:700>function</span><span style=color:#bbb> </span><span style=color:#0086b3>returns</span> an array of all the apps that are deprovisioned on the local computer.
 </span></span><span style=display:flex><span>        Deprovisioned apps will show up <span style=color:#000;font-weight:700>in</span> the registry <span style=color:#000;font-weight:700>if</span> they were removed <span style=color:#000;font-weight:700>while</span> Windows was offline, or
 </span></span><span style=display:flex><span>        with the PowerShell cmdlets <span style=color:#000;font-weight:700>for</span> removing AppX Packages.
-</span></span><span style=display:flex><span>    .<span style=color:#000;font-weight:700>PARAMETER</span> <span style=color:#000;font-weight:700>Filter</span>
-</span></span><span style=display:flex><span>        Option <span style=color:#000;font-weight:700>filter</span> that will be ran through as a <span style=color:#d14>&#39;-match&#39;</span> so that regex can be used
+</span></span><span style=display:flex><span>    .<span style=color:#0086b3>PARAMETER</span> <span style=color:#000;font-weight:700>Filter</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span><span style=color:#0086b3>Option</span> <span style=color:#000;font-weight:700>filter</span><span style=color:#bbb> </span><span style=color:#0086b3>that</span> will be ran through as a <span style=color:#d14>&#39;-match&#39;</span> so that regex can be used
 </span></span><span style=display:flex><span>        Accepts an array of strings, which can be a regex string <span style=color:#000;font-weight:700>if</span> you wish
 </span></span><span style=display:flex><span>    .EXAMPLE
 </span></span><span style=display:flex><span>        <span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Get-DeprovisionedAppX</span>
@@ -84,33 +84,33 @@ Starting in Windows 10 1803, deprovisioned apps will NOT be reinstalled during a
 </span></span><span style=display:flex><span>        <span style=color:#000;font-weight:700>Return</span> all deprovisioned apps on the local computers that match the <span style=color:#000;font-weight:700>filter</span> <span style=color:#d14>&#39;Store&#39;</span>
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic>#&gt;</span>
 </span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>param</span> (
-</span></span><span style=display:flex><span>        [<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$false</span>)]
-</span></span><span style=display:flex><span>        <span style=color:teal>[string[]]</span><span style=color:teal>$Filter</span>
+</span></span><span style=display:flex><span>        [<span style=color:#0086b3>parameter</span>(<span style=color:teal>Mandatory</span> = $false)]
+</span></span><span style=display:flex><span>        [<span style=color:teal>string[]</span>]<span style=color:teal>$Filter</span>
 </span></span><span style=display:flex><span>    )
 </span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>begin</span> {
 </span></span><span style=display:flex><span>        <span style=color:teal>$DeprovisionRoot</span> = <span style=color:#d14>&#34;registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned&#34;</span>
 </span></span><span style=display:flex><span>        <span style=color:teal>$AllDeprovisionedApps</span> = <span style=color:#0086b3>Get-ChildItem</span> -Path <span style=color:teal>$DeprovisionRoot</span> | <span style=color:#0086b3>Select-Object</span> -Property @{ Name = <span style=color:#d14>&#39;DeprovisionedApp&#39;</span>; Expression = { <span style=color:teal>$_</span>.PSChildName } }
-</span></span><span style=display:flex><span>        <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$null</span> <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$AllDeprovisionedApps</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#000;font-weight:700>if</span> ($null <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$AllDeprovisionedApps</span>) {
 </span></span><span style=display:flex><span>            <span style=color:#0086b3>Write-Warning</span> <span style=color:#d14>&#34;There are no deprovisioned apps&#34;</span>
 </span></span><span style=display:flex><span>        }
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>process</span> {
 </span></span><span style=display:flex><span>        <span style=color:#000;font-weight:700>switch</span> (<span style=color:teal>$PSBoundParameters</span>.ContainsKey(<span style=color:#d14>&#39;Filter&#39;</span>)) {
-</span></span><span style=display:flex><span>            <span style=color:teal>$true</span> {
+</span></span><span style=display:flex><span>            $true {
 </span></span><span style=display:flex><span>                <span style=color:#000;font-weight:700>foreach</span> (<span style=color:teal>$SearchString</span> <span style=color:#000;font-weight:700>in</span> <span style=color:teal>$Filter</span>) {
 </span></span><span style=display:flex><span>                    <span style=color:#000;font-weight:700>switch</span> <span style=color:#000;font-weight:700>-regex</span> (<span style=color:teal>$AllDeprovisionedApps</span>.DeprovisionedApp) {
 </span></span><span style=display:flex><span>                        <span style=color:teal>$SearchString</span> {
-</span></span><span style=display:flex><span>                            <span style=color:teal>[PSCustomObject]</span>@{ 
+</span></span><span style=display:flex><span>                            [<span style=color:teal>PSCustomObject</span>]@{ 
 </span></span><span style=display:flex><span>                                <span style=color:#d14>&#39;DeprovisionedApp&#39;</span> = <span style=color:teal>$PSItem</span>
 </span></span><span style=display:flex><span>                            }
 </span></span><span style=display:flex><span>                        }
 </span></span><span style=display:flex><span>                        <span style=color:#000;font-weight:700>default</span> {
-</span></span><span style=display:flex><span>                            <span style=color:#0086b3>Write-Verbose</span> <span style=color:#d14>&#34;$PSItem does not match the filter </span><span style=color:#d14>`&#39;</span><span style=color:#d14>$SearchString</span><span style=color:#d14>`&#34;</span><span style=color:#d14>&#34;</span>
+</span></span><span style=display:flex><span>                            <span style=color:#0086b3>Write-Verbose</span> <span style=color:#d14>&#34;</span><span style=color:teal>$PSItem</span><span style=color:#d14> does not match the filter </span><span style=color:#d14>`&#39;</span><span style=color:teal>$SearchString</span><span style=color:#d14>`&#34;</span><span style=color:#d14>&#34;</span>
 </span></span><span style=display:flex><span>                        }
 </span></span><span style=display:flex><span>                    }
 </span></span><span style=display:flex><span>                }
 </span></span><span style=display:flex><span>            }
-</span></span><span style=display:flex><span>            <span style=color:teal>$false</span> {
+</span></span><span style=display:flex><span>            $false {
 </span></span><span style=display:flex><span>                <span style=color:#0086b3>Write-Output</span> <span style=color:teal>$AllDeprovisionedApps</span>
 </span></span><span style=display:flex><span>            }
 </span></span><span style=display:flex><span>        }
@@ -164,36 +164,36 @@ Starting in Windows 10 1803, deprovisioned apps will NOT be reinstalled during a
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-46><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-46>46</a>
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-47><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-47>47</a>
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-48><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-48>48</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#000;font-weight:700>function</span> <span style=color:#0086b3>Reprovision-AppX</span> {
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#000;font-weight:700>function</span><span style=color:#bbb> </span><span style=color:#0086b3>Reprovision-AppX</span> {
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic>#</span>
 </span></span><span style=display:flex><span>    .SYNOPSIS
 </span></span><span style=display:flex><span>        <span style=color:#d14>&#39;Reprovision&#39;</span> apps by removing the registry key that prevents app reinstall
 </span></span><span style=display:flex><span>    .DESCRIPTION
-</span></span><span style=display:flex><span>        Starting <span style=color:#000;font-weight:700>in</span> Windows 10 1803, a registry key is <span style=color:#0086b3>set </span><span style=color:#000;font-weight:700>for</span> every deprovisioned app. As long as this registry key
+</span></span><span style=display:flex><span>        Starting <span style=color:#000;font-weight:700>in</span> Windows <span style=color:#099>10</span> <span style=color:#099>1803</span>, a registry key is <span style=color:#0086b3>set </span><span style=color:#000;font-weight:700>for</span> every deprovisioned app. As long as this registry key
 </span></span><span style=display:flex><span>        is <span style=color:#000;font-weight:700>in</span> place, a deprovisioned application will not be reinstalled during a feature update. By removing these
 </span></span><span style=display:flex><span>        registry keys, we can ensure that deprovisioned apps, such as the windows store are able to be reinstalled.
-</span></span><span style=display:flex><span>    .<span style=color:#000;font-weight:700>PARAMETER</span> DeprovisionedApp
+</span></span><span style=display:flex><span>    .<span style=color:#0086b3>PARAMETER</span> DeprovisionedApp
 </span></span><span style=display:flex><span>        The full name of the app to reprovision, as it appears <span style=color:#000;font-weight:700>in</span> the registry. You can easily get this name using
-</span></span><span style=display:flex><span>        the <span style=color:#0086b3>Get-DeprovisionedApp</span> <span style=color:#000;font-weight:700>function</span>. 
+</span></span><span style=display:flex><span>        the <span style=color:#0086b3>Get-DeprovisionedApp</span> function. 
 </span></span><span style=display:flex><span>    .EXAMPLE
 </span></span><span style=display:flex><span>        <span style=color:#0086b3>PS </span>C:\&gt; <span style=color:#0086b3>Reprovision-AppX</span> -DeprovisionedApp <span style=color:#d14>&#39;Microsoft.WindowsAlarms_8wekyb3d8bbwe&#39;</span>
 </span></span><span style=display:flex><span>        Removes the registry key <span style=color:#000;font-weight:700>for</span> the deprovisioned WindowsAlarms app. The app will <span style=color:#000;font-weight:700>return</span> after the next
 </span></span><span style=display:flex><span>        feature update.
 </span></span><span style=display:flex><span>    .INPUTS
-</span></span><span style=display:flex><span>        <span style=color:teal>[string[]]</span>
+</span></span><span style=display:flex><span>        [<span style=color:teal>string[]</span>]
 </span></span><span style=display:flex><span>    .NOTES
 </span></span><span style=display:flex><span>        You must provide the exact name of the app as it appears <span style=color:#000;font-weight:700>in</span> the registry. This is the full app <span style=color:#d14>&#39;name&#39;</span> - It is 
-</span></span><span style=display:flex><span>        recommended to first use the <span style=color:#0086b3>Get-DeprovisionApp</span> <span style=color:#000;font-weight:700>function</span> to find apps that can be reprovisioned.
+</span></span><span style=display:flex><span>        recommended to first use the <span style=color:#0086b3>Get-DeprovisionApp</span> <span style=color:#000;font-weight:700>function</span><span style=color:#bbb> </span><span style=color:#0086b3>to</span> find apps that can be reprovisioned.
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic>#&gt;</span>
-</span></span><span style=display:flex><span>    [<span style=color:#000;font-weight:700>CmdletBinding</span>(SupportsShouldProcess)]
+</span></span><span style=display:flex><span>    [<span style=color:#0086b3>CmdletBinding</span>(<span style=color:teal>SupportsShouldProcess</span>)]
 </span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>param</span>(
-</span></span><span style=display:flex><span>        [<span style=color:#000;font-weight:700>parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$true</span>, <span style=color:#000;font-weight:700>ValueFromPipelineByPropertyName</span> = <span style=color:teal>$true</span>)]
-</span></span><span style=display:flex><span>        <span style=color:teal>[string[]]</span><span style=color:teal>$DeprovisionedApp</span>
+</span></span><span style=display:flex><span>        [<span style=color:#0086b3>parameter</span>(<span style=color:teal>Mandatory</span> = $true, <span style=color:teal>ValueFromPipelineByPropertyName</span> = $true)]
+</span></span><span style=display:flex><span>        [<span style=color:teal>string[]</span>]<span style=color:teal>$DeprovisionedApp</span>
 </span></span><span style=display:flex><span>    )
 </span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>begin</span> {
 </span></span><span style=display:flex><span>        <span style=color:teal>$DeprovisionRoot</span> = <span style=color:#d14>&#34;registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned&#34;</span>
 </span></span><span style=display:flex><span>        <span style=color:teal>$AllDeprovisionedApps</span> = <span style=color:#0086b3>Get-ChildItem</span> -Path <span style=color:teal>$DeprovisionRoot</span>
-</span></span><span style=display:flex><span>        <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$null</span> <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$AllDeprovisionedApps</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#000;font-weight:700>if</span> ($null <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$AllDeprovisionedApps</span>) {
 </span></span><span style=display:flex><span>            <span style=color:#0086b3>Write-Warning</span> <span style=color:#d14>&#34;There are no deprovisioned apps&#34;</span>
 </span></span><span style=display:flex><span>        }
 </span></span><span style=display:flex><span>    }
@@ -202,11 +202,11 @@ Starting in Windows 10 1803, deprovisioned apps will NOT be reinstalled during a
 </span></span><span style=display:flex><span>            <span style=color:teal>$DeprovisionedAppPath</span> = <span style=color:#0086b3>Join-Path</span> -Path <span style=color:teal>$DeprovisionRoot</span> -ChildPath <span style=color:teal>$App</span>
 </span></span><span style=display:flex><span>            <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$PSCmdlet</span>.ShouldProcess(<span style=color:teal>$App</span>, <span style=color:#d14>&#34;Reprovision-App&#34;</span>)) {
 </span></span><span style=display:flex><span>                <span style=color:teal>$AppPath</span> = <span style=color:#0086b3>Resolve-Path</span> -Path <span style=color:teal>$DeprovisionedAppPath</span> -ErrorAction Ignore
-</span></span><span style=display:flex><span>                <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$null</span> <span style=color:#000;font-weight:700>-ne</span> <span style=color:teal>$AppPath</span>) {
+</span></span><span style=display:flex><span>                <span style=color:#000;font-weight:700>if</span> ($null <span style=color:#000;font-weight:700>-ne</span> <span style=color:teal>$AppPath</span>) {
 </span></span><span style=display:flex><span>                    <span style=color:#0086b3>Remove-Item</span> -Path <span style=color:teal>$AppPath</span>.Path -Force
 </span></span><span style=display:flex><span>                }
 </span></span><span style=display:flex><span>                <span style=color:#000;font-weight:700>else</span> {
-</span></span><span style=display:flex><span>                    <span style=color:#0086b3>Write-Warning</span> <span style=color:#d14>&#34;App $App was not found to be deprovisioned&#34;</span>
+</span></span><span style=display:flex><span>                    <span style=color:#0086b3>Write-Warning</span> <span style=color:#d14>&#34;App </span><span style=color:teal>$App</span><span style=color:#d14> was not found to be deprovisioned&#34;</span>
 </span></span><span style=display:flex><span>                }
 </span></span><span style=display:flex><span>            }
 </span></span><span style=display:flex><span>        }
@@ -216,4 +216,4 @@ Starting in Windows 10 1803, deprovisioned apps will NOT be reinstalled during a
 </span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#0086b3>Get-DeprovisionedAppX</span> -Filter <span style=color:#d14>&#39;Store&#39;</span> | <span style=color:#0086b3>Reprovision-AppX</span>
 </span></span></code></pre></td></tr></table></div></div><p>That&rsquo;s pretty cool!</p><p><strong>[CmdletBinding(SupportsShouldProcess)]</strong> - At the top of the function this snippet allows the implementation of WhatIf support. To finish the implementation we have to use <strong>$PSCmdlet.ShouldProcess</strong> where it is fitting. This function has it at line 37, just before the action happens.</p><h4 id=last-step>Last step</h4><p>Once the deprovisioned apps have been identified, and &lsquo;reprovisioned&rsquo; by removing the registry keys, there is one last step. You have to do a feature update! It is always good to &lsquo;Get current and stay current&rsquo; anyway, but this gives you another reason to update Windows 10.</p><h4 id=a-good-start>A good start</h4><p>In this post I&rsquo;ve outlined the mechanism that ensures a deprovisioned AppX Package stays removed. Knowing how this works, we can leverage functions that help identify deprovisoned apps, and &lsquo;reprovision&rsquo; them.</p><p>I hope this helps someone get their environment back in working order by restoring the Windows Store! Or maybe just Solitaire&mldr; Let them play cards guys.</p><p><a href=https://twitter.com/CodyMathis123>@CodyMathis123</a></p><img src=/authors/cody/avatar.png alt="Photo of Cody Mathis"><br><strong>Cody Mathis</strong>
 <em>Contributor</em><div><a href=https://twitter.com/CodyMathis123><img src=/img/social/twitter.png></a>
-<a href=https://www.linkedin.com/in/cody-mathis-22a717136><img src=/img/social/linkedin.png></a></div><p>Cody has 10 years of ConfigMgr, PowerShell, and automation experience focusing on streamlining processes</p><hr></div><div class=post-share><div class="post-share-box share-comments"></div></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>
+<a href=https://www.linkedin.com/in/cody-mathis-22a717136><img src=/img/social/linkedin.png></a></div><p>Cody has 10 years of ConfigMgr, PowerShell, and automation experience focusing on streamlining processes</p><hr></div><div class=post-share><div class="post-share-box share-comments"></div></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2023 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

@@ -73,23 +73,23 @@
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>  <span style=color:#998;font-style:italic>#region test if the namespace exists, and create it if it does not</span>
 </span></span><span style=display:flex><span>  <span style=color:#000;font-weight:700>try</span> {
-</span></span><span style=display:flex><span>      <span style=color:teal>$null</span> = <span style=color:teal>[wmiclass]</span><span style=color:#d14>&#34;$HinvNamespace`:__NameSpace&#34;</span>
+</span></span><span style=display:flex><span>      $null = [<span style=color:teal>wmiclass</span>]<span style=color:#d14>&#34;</span><span style=color:teal>$HinvNamespace</span><span style=color:#d14>`:__NameSpace&#34;</span>
 </span></span><span style=display:flex><span>  }
 </span></span><span style=display:flex><span>  <span style=color:#000;font-weight:700>catch</span> {
 </span></span><span style=display:flex><span>      <span style=color:teal>$HinvNamespaceSplit</span> = <span style=color:teal>$HinvNamespace</span> -split <span style=color:#d14>&#39;\\&#39;</span>
-</span></span><span style=display:flex><span>      <span style=color:teal>$PathToTest</span> = <span style=color:teal>$HinvNamespaceSplit</span>[0]
-</span></span><span style=display:flex><span>      <span style=color:#000;font-weight:700>for</span> (${i} = 1; ${i} <span style=color:#000;font-weight:700>-lt</span> $(<span style=color:teal>$HinvNamespaceSplit</span>.Count); ${i}++) {
-</span></span><span style=display:flex><span>          <span style=color:teal>$PathToTest</span> = <span style=color:teal>[string]</span>::Join(<span style=color:#d14>&#39;\&#39;</span>, @(<span style=color:teal>$PathToTest</span>, <span style=color:teal>$HinvNamespaceSplit</span>[<span style=color:teal>$i</span>]))
+</span></span><span style=display:flex><span>      <span style=color:teal>$PathToTest</span> = <span style=color:teal>$HinvNamespaceSplit</span>[<span style=color:#099>0</span>]
+</span></span><span style=display:flex><span>      <span style=color:#000;font-weight:700>for</span> (${i} = <span style=color:#099>1</span>; ${i} <span style=color:#000;font-weight:700>-lt</span> $(<span style=color:teal>$HinvNamespaceSplit</span>.Count); ${i}++) {
+</span></span><span style=display:flex><span>          <span style=color:teal>$PathToTest</span> = [<span style=color:teal>string</span>]::Join(<span style=color:#d14>&#39;\&#39;</span>, @(<span style=color:teal>$PathToTest</span>, <span style=color:teal>$HinvNamespaceSplit</span>[<span style=color:teal>$i</span>]))
 </span></span><span style=display:flex><span>          <span style=color:#000;font-weight:700>try</span> {
-</span></span><span style=display:flex><span>              <span style=color:teal>$null</span> = <span style=color:teal>[wmiclass]</span><span style=color:#d14>&#34;$PathToTest`:__NameSpace&#34;</span>
+</span></span><span style=display:flex><span>              $null = [<span style=color:teal>wmiclass</span>]<span style=color:#d14>&#34;</span><span style=color:teal>$PathToTest</span><span style=color:#d14>`:__NameSpace&#34;</span>
 </span></span><span style=display:flex><span>          }
 </span></span><span style=display:flex><span>          <span style=color:#000;font-weight:700>catch</span> {
 </span></span><span style=display:flex><span>              <span style=color:teal>$PathToTestParent</span> = <span style=color:#0086b3>Split-Path</span> -Path <span style=color:teal>$PathToTest</span> -Parent
 </span></span><span style=display:flex><span>              <span style=color:teal>$PathToTestName</span> = <span style=color:#0086b3>Split-Path</span> -Path <span style=color:teal>$PathToTest</span> -Leaf
-</span></span><span style=display:flex><span>              <span style=color:teal>$NewNamespace</span> = <span style=color:teal>[wmiclass]</span><span style=color:#d14>&#34;$PathToTestParent`:__NameSpace&#34;</span>
+</span></span><span style=display:flex><span>              <span style=color:teal>$NewNamespace</span> = [<span style=color:teal>wmiclass</span>]<span style=color:#d14>&#34;</span><span style=color:teal>$PathToTestParent</span><span style=color:#d14>`:__NameSpace&#34;</span>
 </span></span><span style=display:flex><span>              <span style=color:teal>$NamespaceCreation</span> = <span style=color:teal>$NewNamespace</span>.CreateInstance()
 </span></span><span style=display:flex><span>              <span style=color:teal>$NamespaceCreation</span>.Name = <span style=color:teal>$PathToTestName</span>
-</span></span><span style=display:flex><span>              <span style=color:teal>$null</span> = <span style=color:teal>$NamespaceCreation</span>.Put()
+</span></span><span style=display:flex><span>              $null = <span style=color:teal>$NamespaceCreation</span>.Put()
 </span></span><span style=display:flex><span>          }
 </span></span><span style=display:flex><span>      }
 </span></span><span style=display:flex><span>  }
@@ -100,19 +100,19 @@
 </span></span><span style=display:flex><span>  <span style=color:#998;font-style:italic>#endregion clear our class from the namespace if it exists</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>  <span style=color:#998;font-style:italic>#region create the WMI class, and set the properties to be inventoried</span>
-</span></span><span style=display:flex><span>  <span style=color:teal>$HinvClass</span> = <span style=color:teal>[System.Management.ManagementClass]</span>::new(<span style=color:teal>$HinvNamespace</span>, <span style=color:teal>[string]</span>::Empty, <span style=color:teal>$null</span>)
+</span></span><span style=display:flex><span>  <span style=color:teal>$HinvClass</span> = [<span style=color:teal>System.Management.ManagementClass</span>]::new(<span style=color:teal>$HinvNamespace</span>, [<span style=color:teal>string</span>]::Empty, $null)
 </span></span><span style=display:flex><span>  <span style=color:teal>$HinvClass</span>[<span style=color:#d14>&#34;__CLASS&#34;</span>] = <span style=color:teal>$HinvClassName</span>
-</span></span><span style=display:flex><span>  <span style=color:teal>$HinvClass</span>.Qualifiers.Add(<span style=color:#d14>&#34;Static&#34;</span>, <span style=color:teal>$true</span>)
-</span></span><span style=display:flex><span>  <span style=color:teal>$HinvClass</span>.Properties.Add(<span style=color:#d14>&#34;DeprovisionedApp&#34;</span>, <span style=color:teal>[System.Management.CimType]</span>::String, <span style=color:teal>$false</span>)
-</span></span><span style=display:flex><span>  <span style=color:teal>$HinvClass</span>.Properties[<span style=color:#d14>&#34;DeprovisionedApp&#34;</span>].Qualifiers.Add(<span style=color:#d14>&#34;Key&#34;</span>, <span style=color:teal>$true</span>)
-</span></span><span style=display:flex><span>  <span style=color:teal>$null</span> = <span style=color:teal>$HinvClass</span>.Put()
+</span></span><span style=display:flex><span>  <span style=color:teal>$HinvClass</span>.Qualifiers.Add(<span style=color:#d14>&#34;Static&#34;</span>, $true)
+</span></span><span style=display:flex><span>  <span style=color:teal>$HinvClass</span>.Properties.Add(<span style=color:#d14>&#34;DeprovisionedApp&#34;</span>, [<span style=color:teal>System.Management.CimType</span>]::String, $false)
+</span></span><span style=display:flex><span>  <span style=color:teal>$HinvClass</span>.Properties[<span style=color:#d14>&#34;DeprovisionedApp&#34;</span>].Qualifiers.Add(<span style=color:#d14>&#34;Key&#34;</span>, $true)
+</span></span><span style=display:flex><span>  $null = <span style=color:teal>$HinvClass</span>.Put()
 </span></span><span style=display:flex><span>  <span style=color:#998;font-style:italic>#endregion create the WMI class, and set the properties to be inventoried</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>  <span style=color:teal>$DeprovisionRoot</span> = <span style=color:#d14>&#34;registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned&#34;</span>
 </span></span><span style=display:flex><span>  <span style=color:teal>$AllDeprovisionedApps</span> = <span style=color:#0086b3>Get-ChildItem</span> -Path <span style=color:teal>$DeprovisionRoot</span> | <span style=color:#0086b3>Select-Object</span> -ExpandProperty PSChildName
-</span></span><span style=display:flex><span>  <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$null</span> <span style=color:#000;font-weight:700>-ne</span> <span style=color:teal>$AllDeprovisionedApps</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#000;font-weight:700>if</span> ($null <span style=color:#000;font-weight:700>-ne</span> <span style=color:teal>$AllDeprovisionedApps</span>) {
 </span></span><span style=display:flex><span>      <span style=color:#000;font-weight:700>foreach</span> (<span style=color:teal>$App</span> <span style=color:#000;font-weight:700>in</span> <span style=color:teal>$AllDeprovisionedApps</span>) {
-</span></span><span style=display:flex><span>          <span style=color:teal>$null</span> = <span style=color:#0086b3>Set-WmiInstance</span> -Namespace <span style=color:teal>$HinvNamespace</span> -Class <span style=color:teal>$HinvClassName</span> -ErrorAction SilentlyContinue -Arguments @{
+</span></span><span style=display:flex><span>          $null = <span style=color:#0086b3>Set-WmiInstance</span> -Namespace <span style=color:teal>$HinvNamespace</span> -Class <span style=color:teal>$HinvClassName</span> -ErrorAction SilentlyContinue -Arguments @{
 </span></span><span style=display:flex><span>              DeprovisionedApp = <span style=color:teal>$App</span>
 </span></span><span style=display:flex><span>          }
 </span></span><span style=display:flex><span>      }
@@ -136,4 +136,4 @@
 </span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#000;font-weight:700>ORDER</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>BY</span><span style=color:#bbb> </span><span style=color:#099>2</span><span style=color:#bbb> </span><span style=color:#000;font-weight:700>DESC</span><span style=color:#bbb>
 </span></span></span></code></pre></td></tr></table></div></div><p><div class=image><figure><a href=CustomHINV-CountDB.png target=_blank><img src=CustomHINV-CountDB.png alt=screenshot></a></figure></div></p><p>Join us next time, when decisions, and actions are made with our new found data!</p><p><a href=https://twitter.com/CodyMathis123>@CodyMathis123</a></p><img src=/authors/cody/avatar.png alt="Photo of Cody Mathis"><br><strong>Cody Mathis</strong>
 <em>Contributor</em><div><a href=https://twitter.com/CodyMathis123><img src=/img/social/twitter.png></a>
-<a href=https://www.linkedin.com/in/cody-mathis-22a717136><img src=/img/social/linkedin.png></a></div><p>Cody has 10 years of ConfigMgr, PowerShell, and automation experience focusing on streamlining processes</p><hr></div><div class=post-share><div class="post-share-box share-comments"></div></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>
+<a href=https://www.linkedin.com/in/cody-mathis-22a717136><img src=/img/social/linkedin.png></a></div><p>Cody has 10 years of ConfigMgr, PowerShell, and automation experience focusing on streamlining processes</p><hr></div><div class=post-share><div class="post-share-box share-comments"></div></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2023 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

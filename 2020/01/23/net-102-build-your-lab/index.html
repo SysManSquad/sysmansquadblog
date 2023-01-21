@@ -58,7 +58,7 @@ Fill in the <strong>subnet prefix length</strong>, <strong>default gateway</stro
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># These bits will be gathered by powershell</span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Get information about the only network adapter (or the first network adapter if you have more than one), save it in a variable.</span>
-</span></span><span style=display:flex><span><span style=color:teal>$Adapter</span>=(<span style=color:#0086b3>Get-NetAdapter</span>)[0]
+</span></span><span style=display:flex><span><span style=color:teal>$Adapter</span>=(<span style=color:#0086b3>Get-NetAdapter</span>)[<span style=color:#099>0</span>]
 </span></span><span style=display:flex><span><span style=color:#0086b3>Set-DnsClient</span> -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex -ConnectionSpecificSuffix <span style=color:teal>$FQDN</span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Figure out what the already-set IPv4 address is of this machine.</span>
 </span></span><span style=display:flex><span><span style=color:teal>$IPv4Address</span>=(<span style=color:#0086b3>Get-NetIPAddress</span> -ifIndex <span style=color:teal>$Adapter</span>.ifIndex -AddressFamily IPv4).IPAddress
@@ -109,7 +109,7 @@ Fill in the <strong>subnet prefix length</strong>, <strong>default gateway</stro
 </span></span><span style=display:flex><span><span style=color:teal>$IPv6ReverseName</span>=<span style=color:#d14>&#39;0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa.dns&#39;</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Add the zone main forward zone</span>
-</span></span><span style=display:flex><span><span style=color:#0086b3>Add-DnsServerPrimaryZone</span> -Name <span style=color:teal>$ZoneFQDN</span> -ZoneFile <span style=color:#d14>&#34;$ZoneFQDN.dns&#34;</span> -ComputerName <span style=color:teal>$env:COMPUTERNAME</span>
+</span></span><span style=display:flex><span><span style=color:#0086b3>Add-DnsServerPrimaryZone</span> -Name <span style=color:teal>$ZoneFQDN</span> -ZoneFile <span style=color:#d14>&#34;</span><span style=color:teal>$ZoneFQDN</span><span style=color:#d14>.dns&#34;</span> -ComputerName <span style=color:teal>$env:COMPUTERNAME</span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Add the appropriate reverse zones</span>
 </span></span><span style=display:flex><span><span style=color:#0086b3>Add-DnsServerPrimaryZone</span> -NetworkId <span style=color:teal>$IPv4NetworkID</span> -ZoneFile <span style=color:teal>$IPv4ReverseName</span>
 </span></span><span style=display:flex><span><span style=color:#0086b3>Add-DnsServerPrimaryZone</span> -NetworkId <span style=color:teal>$IPv6NetworkID</span> -ZoneFile <span style=color:teal>$IPv6ReverseName</span>
@@ -147,11 +147,11 @@ Fill in the <strong>subnet prefix length</strong>, <strong>default gateway</stro
 </span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#0086b3>PS </span>C:\Users\Administrator&gt; <span style=color:#0086b3>Get-DnsServerZone</span>|<span style=color:#0086b3>select </span>ZoneName
 </span></span><span style=display:flex><span>ZoneName
 </span></span><span style=display:flex><span>--------
-</span></span><span style=display:flex><span>0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa
-</span></span><span style=display:flex><span>0.<span style=color:#0086b3>in-addr</span>.arpa
-</span></span><span style=display:flex><span>100.248.10.<span style=color:#0086b3>in-addr</span>.arpa
-</span></span><span style=display:flex><span>127.<span style=color:#0086b3>in-addr</span>.arpa
-</span></span><span style=display:flex><span>255.<span style=color:#0086b3>in-addr</span>.arpa
+</span></span><span style=display:flex><span><span style=color:#099>0.0</span>.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa
+</span></span><span style=display:flex><span><span style=color:#099>0</span>.<span style=color:#0086b3>in-addr</span>.arpa
+</span></span><span style=display:flex><span><span style=color:#099>100.248</span>.10.<span style=color:#0086b3>in-addr</span>.arpa
+</span></span><span style=display:flex><span><span style=color:#099>127</span>.<span style=color:#0086b3>in-addr</span>.arpa
+</span></span><span style=display:flex><span><span style=color:#099>255</span>.<span style=color:#0086b3>in-addr</span>.arpa
 </span></span><span style=display:flex><span>lab.test
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#0086b3>PS </span>C:\Users\Administrator&gt; <span style=color:#0086b3>Get-ChildItem</span> C:\Windows\System32\dns\
@@ -160,13 +160,13 @@ Fill in the <strong>subnet prefix length</strong>, <strong>default gateway</stro
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>Mode                LastWriteTime         Length Name
 </span></span><span style=display:flex><span>----                -------------         ------ ----
-</span></span><span style=display:flex><span>d-----       12/26/2019   7<span style=color:#a61717;background-color:#e3d2d2>:</span>25 PM                backup
-</span></span><span style=display:flex><span>d-----       12/26/2019   6<span style=color:#a61717;background-color:#e3d2d2>:</span>58 PM                samples
-</span></span><span style=display:flex><span>-a----       12/26/2019   8<span style=color:#a61717;background-color:#e3d2d2>:</span>58 PM            632 0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa.dns
-</span></span><span style=display:flex><span>-a----       12/26/2019   8<span style=color:#a61717;background-color:#e3d2d2>:</span>58 PM            538 0.3.10.<span style=color:#0086b3>in-addr</span>.arpa.dns
-</span></span><span style=display:flex><span>-a----       12/26/2019   6<span style=color:#a61717;background-color:#e3d2d2>:</span>58 PM           3864 CACHE.DNS
-</span></span><span style=display:flex><span>-a----       12/26/2019   7<span style=color:#a61717;background-color:#e3d2d2>:</span>25 PM              0 dns.log
-</span></span><span style=display:flex><span>-a----       12/26/2019   8<span style=color:#a61717;background-color:#e3d2d2>:</span>48 PM            513 lab.test.dns
+</span></span><span style=display:flex><span>d-----       <span style=color:#099>12</span>/<span style=color:#099>26</span>/<span style=color:#099>2019</span>   <span style=color:#099>7</span><span style=color:#a61717;background-color:#e3d2d2>:</span><span style=color:#099>25</span> PM                backup
+</span></span><span style=display:flex><span>d-----       <span style=color:#099>12</span>/<span style=color:#099>26</span>/<span style=color:#099>2019</span>   <span style=color:#099>6</span><span style=color:#a61717;background-color:#e3d2d2>:</span><span style=color:#099>58</span> PM                samples
+</span></span><span style=display:flex><span>-a----       <span style=color:#099>12</span>/<span style=color:#099>26</span>/<span style=color:#099>2019</span>   <span style=color:#099>8</span><span style=color:#a61717;background-color:#e3d2d2>:</span><span style=color:#099>58</span> PM            <span style=color:#099>632</span> <span style=color:#099>0.0</span>.0.0.0.0.0.0.0.0.0.0.0.0.6.e.1.f.2.a.5.f.4.d.6.f.a.d.d.f.ip6.arpa.dns
+</span></span><span style=display:flex><span>-a----       <span style=color:#099>12</span>/<span style=color:#099>26</span>/<span style=color:#099>2019</span>   <span style=color:#099>8</span><span style=color:#a61717;background-color:#e3d2d2>:</span><span style=color:#099>58</span> PM            <span style=color:#099>538</span> <span style=color:#099>0.3</span>.10.<span style=color:#0086b3>in-addr</span>.arpa.dns
+</span></span><span style=display:flex><span>-a----       <span style=color:#099>12</span>/<span style=color:#099>26</span>/<span style=color:#099>2019</span>   <span style=color:#099>6</span><span style=color:#a61717;background-color:#e3d2d2>:</span><span style=color:#099>58</span> PM           <span style=color:#099>3864</span> CACHE.DNS
+</span></span><span style=display:flex><span>-a----       <span style=color:#099>12</span>/<span style=color:#099>26</span>/<span style=color:#099>2019</span>   <span style=color:#099>7</span><span style=color:#a61717;background-color:#e3d2d2>:</span><span style=color:#099>25</span> PM              <span style=color:#099>0</span> dns.log
+</span></span><span style=display:flex><span>-a----       <span style=color:#099>12</span>/<span style=color:#099>26</span>/<span style=color:#099>2019</span>   <span style=color:#099>8</span><span style=color:#a61717;background-color:#e3d2d2>:</span><span style=color:#099>48</span> PM            <span style=color:#099>513</span> lab.test.dns
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#0086b3>PS </span>C:\Users\Administrator&gt; <span style=color:#0086b3>Get-DnsServerResourceRecord</span> -ZoneName lab.test|<span style=color:#0086b3>select </span>Hostname,RecordType,RecordData
@@ -240,7 +240,7 @@ Fill in the <strong>subnet prefix length</strong>, <strong>default gateway</stro
 </span></span><span style=display:flex><span><span style=color:teal>$DnsServerAddresses</span>=(<span style=color:teal>$IPv4DNSServer</span>,<span style=color:teal>$IPv4Gateway</span>,<span style=color:teal>$IPv6DNSServer</span>,<span style=color:teal>$IPv6Gateway</span>)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Get the adapter</span>
-</span></span><span style=display:flex><span><span style=color:teal>$Adapter</span>=(<span style=color:#0086b3>Get-NetAdapter</span>)[0]
+</span></span><span style=display:flex><span><span style=color:teal>$Adapter</span>=(<span style=color:#0086b3>Get-NetAdapter</span>)[<span style=color:#099>0</span>]
 </span></span><span style=display:flex><span><span style=color:#0086b3>Set-DnsClient</span> -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex -ConnectionSpecificSuffix <span style=color:teal>$FQDN</span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># turn off DHCP</span>
 </span></span><span style=display:flex><span><span style=color:#0086b3>Set-NetIPInterface</span> -Dhcp Disabled -InterfaceIndex <span style=color:teal>$Adapter</span>.ifIndex
@@ -348,4 +348,4 @@ Fill in the <strong>subnet prefix length</strong>, <strong>default gateway</stro
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># We&#39;re not setting a router address - IPv6 includes an automatic address all routers listen on. Also router advertisements are a thing.</span>
 </span></span></code></pre></td></tr></table></div></div><h2 id=conclusion--testing>Conclusion & Testing</h2><p>At this point, install some workstation class OS on a new vm and see whether you get a usable workstation out of the box without configuring any IP addressing. Try resolving some DNS names and see if they resolve properly. Be sure and check both A and AAAA records, as well as browsing the internet. At this point your workstation should be fully functional.</p><p>Next article we&rsquo;ll cover layering in identity management in the form of Active Directory.</p><img src=/authors/aaron/avatar.png alt="Photo of Aaron Glenn"><br><strong>Aaron Glenn</strong>
-<em>Admin/Mentor</em><div><a href=https://www.linkedin.com/in/aaron-g-961b5359><img src=/img/social/linkedin.png></a></div><p>Aaron is a Sr. Systems Administrator from Tulsa, specializing in Microsoft technologies, with an emphasis on powershell.</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>
+<em>Admin/Mentor</em><div><a href=https://www.linkedin.com/in/aaron-g-961b5359><img src=/img/social/linkedin.png></a></div><p>Aaron is a Sr. Systems Administrator from Tulsa, specializing in Microsoft technologies, with an emphasis on powershell.</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2023 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

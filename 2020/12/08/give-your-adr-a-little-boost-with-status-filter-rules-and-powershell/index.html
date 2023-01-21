@@ -46,17 +46,17 @@ Among them, there are Automatic Deployment Rules (ADR) that let you automate pat
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-33>33</a>
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-34>34</a>
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-35><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-35>35</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span>[<span style=color:#000;font-weight:700>CmdletBinding</span>()]
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span>[<span style=color:#0086b3>CmdletBinding</span>()]
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>param</span>(
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Name of the site server returned by the Status Filter Rule</span>
-</span></span><span style=display:flex><span>[<span style=color:#000;font-weight:700>Parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$true</span>)]
-</span></span><span style=display:flex><span><span style=color:teal>[String]</span> <span style=color:teal>$SiteServer</span>,
+</span></span><span style=display:flex><span>[<span style=color:#0086b3>Parameter</span>(<span style=color:teal>Mandatory</span> = $true)]
+</span></span><span style=display:flex><span>[<span style=color:teal>String</span>] <span style=color:teal>$SiteServer</span>,
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Site code returned by the Status Filter Rule</span>
-</span></span><span style=display:flex><span>[<span style=color:#000;font-weight:700>Parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$true</span>)]
-</span></span><span style=display:flex><span><span style=color:teal>[String]</span> <span style=color:teal>$SiteCode</span>,
+</span></span><span style=display:flex><span>[<span style=color:#0086b3>Parameter</span>(<span style=color:teal>Mandatory</span> = $true)]
+</span></span><span style=display:flex><span>[<span style=color:teal>String</span>] <span style=color:teal>$SiteCode</span>,
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Description of the Status Message returned by the Status Filter Rule</span>
-</span></span><span style=display:flex><span>[<span style=color:#000;font-weight:700>Parameter</span>(<span style=color:#000;font-weight:700>Mandatory</span> = <span style=color:teal>$true</span>)]
-</span></span><span style=display:flex><span><span style=color:teal>[String]</span> <span style=color:teal>$Description</span>
+</span></span><span style=display:flex><span>[<span style=color:#0086b3>Parameter</span>(<span style=color:teal>Mandatory</span> = $true)]
+</span></span><span style=display:flex><span>[<span style=color:teal>String</span>] <span style=color:teal>$Description</span>
 </span></span><span style=display:flex><span>)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Import the ConfigurationManager.psd1 module</span>
@@ -65,7 +65,7 @@ Among them, there are Automatic Deployment Rules (ADR) that let you automate pat
 </span></span><span style=display:flex><span><span style=color:#0086b3>Import-Module</span> (<span style=color:#d14>&#34;{0}\..\ConfigurationManager.psd1&#34;</span> <span style=color:#000;font-weight:700>-f</span> <span style=color:teal>$ENV:SMS_ADMIN_UI_PATH</span>)
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>catch</span> {
-</span></span><span style=display:flex><span>Exit 1
+</span></span><span style=display:flex><span>Exit <span style=color:#099>1</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
@@ -75,7 +75,7 @@ Among them, there are Automatic Deployment Rules (ADR) that let you automate pat
 </span></span><span style=display:flex><span><span style=color:#0086b3>New-PSDrive</span> -Name <span style=color:teal>$SiteCode</span> -PSProvider <span style=color:#d14>&#34;AdminUI.PS.Provider\CMSite&#34;</span> -Root <span style=color:teal>$SiteServer</span> | <span style=color:#0086b3>Out-Null</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>catch</span> {
-</span></span><span style=display:flex><span>Exit 1
+</span></span><span style=display:flex><span>Exit <span style=color:#099>1</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
@@ -108,12 +108,12 @@ Among them, there are Automatic Deployment Rules (ADR) that let you automate pat
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-25>25</a>
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-26>26</a>
 </span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style=display:flex><span><span style=color:#998;font-style:italic># Regex to capture the name of the created SUG and the creation date</span>
-</span></span><span style=display:flex><span><span style=color:teal>[regex]</span><span style=color:teal>$Regex</span> = <span style=color:#d14>&#34;CI Assignment Manager successfully processed new CI Assignment\s+(?Name&gt;.*)\s(?Date&gt;\d{4}-\d{2}-\d{2})&#34;</span>
+</span></span><span style=display:flex><span>[<span style=color:teal>regex</span>]<span style=color:teal>$Regex</span> = <span style=color:#d14>&#34;CI Assignment Manager successfully processed new CI Assignment\s+(?Name&gt;.*)\s(?Date&gt;\d{4}-\d{2}-\d{2})&#34;</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Use the Regex on the Description variable to extract the SUG&#39;s name and creation date. Store the values in variables</span>
 </span></span><span style=display:flex><span><span style=color:teal>$Description</span> | <span style=color:#0086b3>Select-String</span> -Pattern <span style=color:teal>$Regex</span> -AllMatches | <span style=color:#0086b3>ForEach-Object</span> {
-</span></span><span style=display:flex><span><span style=color:teal>[string]</span><span style=color:teal>$DeploymentName</span> = <span style=color:teal>$_</span>.Matches.Groups[<span style=color:teal>$Regex</span>.GroupNumberFromName(<span style=color:#d14>&#34;Name&#34;</span>)].Value
-</span></span><span style=display:flex><span><span style=color:teal>[string]</span><span style=color:teal>$DeploymentDate</span> = <span style=color:teal>$_</span>.Matches.Groups[<span style=color:teal>$Regex</span>.GroupNumberFromName(<span style=color:#d14>&#34;Date&#34;</span>)].Value
+</span></span><span style=display:flex><span>[<span style=color:teal>string</span>]<span style=color:teal>$DeploymentName</span> = <span style=color:teal>$_</span>.Matches.Groups[<span style=color:teal>$Regex</span>.GroupNumberFromName(<span style=color:#d14>&#34;Name&#34;</span>)].Value
+</span></span><span style=display:flex><span>[<span style=color:teal>string</span>]<span style=color:teal>$DeploymentDate</span> = <span style=color:teal>$_</span>.Matches.Groups[<span style=color:teal>$Regex</span>.GroupNumberFromName(<span style=color:#d14>&#34;Date&#34;</span>)].Value
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Check the SUG name. If it contains the word &#34;Definition&#34;, it is a SUG containing the Windows Defender definitionsso the script stops</span>
@@ -122,13 +122,13 @@ Among them, there are Automatic Deployment Rules (ADR) that let you automate pat
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Look for a SUG with the same name and creation date. If it exists, the script continues. Otherwise, it stops.</span>
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>If</span> (<span style=color:teal>$SUG</span> = <span style=color:#0086b3>Get-CMSoftwareUpdateGroup</span> -Name <span style=color:#d14>&#34;</span>$(<span style=color:teal>$DeploymentName</span>)<span style=color:#d14>*&#34;</span> | <span style=color:#0086b3>Where-Object</span> {(<span style=color:#0086b3>Get-Date</span> <span style=color:teal>$_</span>.DateCreated -Format <span style=color:#d14>&#39;yyyy-MM-dd&#39;</span>) <span style=color:#000;font-weight:700>-eq</span> (<span style=color:#0086b3>Get-Date</span> <span style=color:teal>$DeploymentDate</span> -Format <span style=color:#d14>&#39;yyyy-MM-dd&#39;</span>)}) {
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Create a new name without the SUG&#39;s creation time, keeping only the name and creation date. Then, rename the SUG</span>
-</span></span><span style=display:flex><span><span style=color:teal>$NewSUGName</span> = <span style=color:#d14>&#34;$DeploymentName $DeploymentDate&#34;</span>
+</span></span><span style=display:flex><span><span style=color:teal>$NewSUGName</span> = <span style=color:#d14>&#34;</span><span style=color:teal>$DeploymentName</span><span style=color:#d14> </span><span style=color:teal>$DeploymentDate</span><span style=color:#d14>&#34;</span>
 </span></span><span style=display:flex><span><span style=color:#0086b3>Set-CMSoftwareUpdateGroup</span> -InputObject <span style=color:teal>$SUG</span> -NewName <span style=color:teal>$NewSUGName</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># If the SUG name matches a specific name, set the maximum execution time of each updates in the SUG to 120 minutes</span>
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>If</span>(<span style=color:teal>$DeploymentName</span> <span style=color:#000;font-weight:700>-match</span> <span style=color:#d14>&#39;^ADR_WinServ&#39;</span>) {
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>ForEach</span> (<span style=color:teal>$Update</span> <span style=color:#000;font-weight:700>in</span> (<span style=color:#0086b3>Get-CMSoftwareUpdate</span> -UpdateGroupID <span style=color:teal>$SUG</span>.CI_ID -Fast)) {
-</span></span><span style=display:flex><span><span style=color:#0086b3>Set-CMSoftwareUpdate</span> -InputObject <span style=color:teal>$Update</span> -MaximumExecutionMins 120
+</span></span><span style=display:flex><span><span style=color:#0086b3>Set-CMSoftwareUpdate</span> -InputObject <span style=color:teal>$Update</span> -MaximumExecutionMins <span style=color:#099>120</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>}
@@ -229,24 +229,24 @@ Among them, there are Automatic Deployment Rules (ADR) that let you automate pat
 </span></span><span style=display:flex><span><span style=color:teal>$PreContent</span> = <span style=color:#d14>@&#34;
 </span></span></span><span style=display:flex><span><span style=color:#d14>Hello, br/&gt;br/&gt;
 </span></span></span><span style=display:flex><span><span style=color:#d14>
-</span></span></span><span style=display:flex><span><span style=color:#d14>The $NewSUGName Software Update Group has been created. It contains the following updates:br/&gt;br/&gt;
+</span></span></span><span style=display:flex><span><span style=color:#d14>The </span><span style=color:teal>$NewSUGName</span><span style=color:#d14> Software Update Group has been created. It contains the following updates:br/&gt;br/&gt;
 </span></span></span><span style=display:flex><span><span style=color:#d14>&#34;@</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Build an array of PS Objects each containing the KB ID, KB Name and execution time</span>
 </span></span><span style=display:flex><span><span style=color:teal>$Info</span> = @()
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>ForEach</span> (<span style=color:teal>$Update</span> <span style=color:#000;font-weight:700>in</span> (<span style=color:#0086b3>Get-CMSoftwareUpdate</span> -UpdateGroupID <span style=color:teal>$SUG</span>.CI_ID -Fast))
 </span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span><span style=color:teal>$UpdateProperties</span> = <span style=color:teal>[PSCustomObject]</span>@{
+</span></span><span style=display:flex><span><span style=color:teal>$UpdateProperties</span> = [<span style=color:teal>PSCustomObject</span>]@{
 </span></span><span style=display:flex><span>KB = <span style=color:teal>$Update</span>.ArticleID
 </span></span><span style=display:flex><span>Titre = <span style=color:teal>$Update</span>.LocalizedDisplayName
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Though it&#39;s set in minutes, the execution time is stored in seconds so we need to divide it by 60 to display the value in minutes</span>
-</span></span><span style=display:flex><span><span style=color:#d14>&#34;Max execution time (mins)&#34;</span> = <span style=color:teal>$Update</span>.MaxExecutionTime / 60
+</span></span><span style=display:flex><span><span style=color:#d14>&#34;Max execution time (mins)&#34;</span> = <span style=color:teal>$Update</span>.MaxExecutionTime / <span style=color:#099>60</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span><span style=color:teal>$Info</span> += <span style=color:teal>$UpdateProperties</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Build an HTML table out of the previous array and add the header and precontent text</span>
-</span></span><span style=display:flex><span><span style=color:teal>$Info</span> | <span style=color:#0086b3>ConvertTo-Html</span> <span style=color:#000;font-weight:700>-As</span> Table -PreContent <span style=color:teal>$PreContent</span> -Head <span style=color:teal>$HtmlHeader</span> | <span style=color:#0086b3>Out-File</span> <span style=color:#d14>&#34;C:\Temp\$NewSUGName.html&#34;</span>
+</span></span><span style=display:flex><span><span style=color:teal>$Info</span> | <span style=color:#0086b3>ConvertTo-Html</span> <span style=color:#000;font-weight:700>-As</span> Table -PreContent <span style=color:teal>$PreContent</span> -Head <span style=color:teal>$HtmlHeader</span> | <span style=color:#0086b3>Out-File</span> <span style=color:#d14>&#34;C:\Temp\</span><span style=color:teal>$NewSUGName</span><span style=color:#d14>.html&#34;</span>
 </span></span></code></pre></td></tr></table></div></div><h2 id=using-status-filter-rule-to-execute-the-script-automatically>Using Status Filter Rule to execute the script automatically</h2><p>Now that the script is ready, let&rsquo;s hook it to a Status Filter Rule to automate its execution. Let&rsquo;s go back to <strong>Administration > Overview > Site Configuration > Sites</strong> and right click on the desired site where the Status Filter Rule should be created.</p><p>In the new window, follow this steps:</p><ul><li>Click the <strong>Create</strong> button and chose a name for your rule;</li><li>Check the <strong>Message ID</strong> box and type <strong>5800</strong> in the field next to it;</li><li>Click on the <strong>Next</strong> button.</li></ul><p>That&rsquo;s it for the filter, we don&rsquo;t need anything else. On the <strong>Actions</strong> page, check the <strong>Run a program</strong> checkbox and enter the following command line (See below). Then click <strong>Next</strong> to review your Status Filter Rule and complete the wizard.</p><p>This command line will call the PowerShell script with three parameters. As you can see, they are Status Filter Rules variables.</p><p><code>C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -NoProfile -WindowStyle Hidden -File C:\Scripts\OnADRCompletion.ps1 -SiteServer %sitesvr -SiteCode %sc -Description "%msgdesc"</code></p><p><a href=SFR-Creation_Part-1.png><div class=image><figure><a href=SFR-Creation_Part-1.png target=_blank><img src=SFR-Creation_Part-1.png alt=screenshot></a></figure></div></a>Selecting filters
 <a href=SFR-Creation_Part-2.png><div class=image><figure><a href=SFR-Creation_Part-2.png target=_blank><img src=SFR-Creation_Part-2.png alt=screenshot></a></figure></div></a>Setting actions</p><p>Your Status Filter Rule is now ready to work. All you have to do is to wait for your ADR to hit the next scheduled execution and see the result. Or if you don&rsquo;t want to wait, you can force one of your ADR to run.</p><h2 id=final-verification>Final verification</h2><p>Once it&rsquo;s completed, the Status Filter Rule should trap the status message corresponding to the Software Update Group creation and start the PowerShell script.</p><p>To check if anything was wrong, you can take a look at the <strong>statmgr.log</strong>. There should be a log line stating that the PowerShell process has been started with the arguments that you have set in the Status Filter Rule.</p><p><div class=image><figure><a href=statmgr.log_.png target=_blank><img src=statmgr.log_.png alt=screenshot></a></figure></div></p><img src=/authors/michael-de-bona/avatar.png alt="Photo of Michaël De Bona"><br><strong>Michaël De Bona</strong>
-<em>Contributor</em><div></div><p>Michaël is a Windows and ConfigMgr admin who likes to automate all the things.</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>
+<em>Contributor</em><div></div><p>Michaël is a Windows and ConfigMgr admin who likes to automate all the things.</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2023 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

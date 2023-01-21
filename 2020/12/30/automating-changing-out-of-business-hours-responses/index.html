@@ -95,7 +95,7 @@ Our customer will be moving to Azure later so we will probably revisit this as A
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#region Create Certificate</span>
 </span></span><span style=display:flex><span><span style=color:teal>$certStoreLocation</span> = <span style=color:#d14>&#34;cert:\CurrentUser\My&#34;</span>
-</span></span><span style=display:flex><span><span style=color:teal>$certificate</span> = <span style=color:#0086b3>New-SelfSignedCertificate</span> -Subject <span style=color:teal>$appName</span>  -CertStoreLocation <span style=color:teal>$certStoreLocation</span> -NotBefore (<span style=color:#0086b3>Get-Date</span>).AddDays(-1) -NotAfter (<span style=color:#0086b3>Get-Date</span>).AddYears(10) -KeyExportPolicy Exportable -KeySpec Signature
+</span></span><span style=display:flex><span><span style=color:teal>$certificate</span> = <span style=color:#0086b3>New-SelfSignedCertificate</span> -Subject <span style=color:teal>$appName</span>  -CertStoreLocation <span style=color:teal>$certStoreLocation</span> -NotBefore (<span style=color:#0086b3>Get-Date</span>).AddDays(<span style=color:#099>-1</span>) -NotAfter (<span style=color:#0086b3>Get-Date</span>).AddYears(<span style=color:#099>10</span>) -KeyExportPolicy Exportable -KeySpec Signature
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:teal>$certificatePath</span> = <span style=color:teal>$certStoreLocation</span> + <span style=color:#d14>&#39;\&#39;</span> + <span style=color:teal>$certificate</span>.Thumbprint
 </span></span><span style=display:flex><span><span style=color:teal>$filePath</span> = <span style=color:teal>$folderPath</span> + <span style=color:#d14>&#39;\&#39;</span> + <span style=color:teal>$appName</span>
@@ -237,13 +237,13 @@ Our customer will be moving to Azure later so we will probably revisit this as A
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#Function to Assemble Error into text and send it to a Teams Channel for alerting on errors</span>
-</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>function</span> Fail() { 
+</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>function</span><span style=color:#bbb> </span><span style=color:#0086b3>Fail</span>() { 
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>param</span> (
 </span></span><span style=display:flex><span>    <span style=color:teal>$ErrorRecord</span>,
 </span></span><span style=display:flex><span>    <span style=color:teal>$WebHookUrl</span>
 </span></span><span style=display:flex><span>)
 </span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:teal>$body</span> = <span style=color:#0086b3>ConvertTo-JSON</span> -Depth 2 @{
+</span></span><span style=display:flex><span>    <span style=color:teal>$body</span> = <span style=color:#0086b3>ConvertTo-JSON</span> -Depth <span style=color:#099>2</span> @{
 </span></span><span style=display:flex><span>        title = <span style=color:#d14>&#34;Mailbox Auto Reply Maintenance Failed&#34;</span>
 </span></span><span style=display:flex><span>        text  =  <span style=color:teal>$ErrorRecord</span> | <span style=color:#0086b3>Out-String</span>
 </span></span><span style=display:flex><span>    }
@@ -264,19 +264,19 @@ Our customer will be moving to Azure later so we will probably revisit this as A
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#format today to normal date</span>
 </span></span><span style=display:flex><span><span style=color:teal>$sTime</span> = <span style=color:teal>$Today</span>.ToString(<span style=color:#d14>&#39;MM/dd/yyyy&#39;</span>)
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#format tomorrow to normal date</span>
-</span></span><span style=display:flex><span><span style=color:teal>$eTime</span> = <span style=color:teal>$Today</span>.AddDays(1).ToString(<span style=color:#d14>&#39;MM/dd/yyyy&#39;</span>)
+</span></span><span style=display:flex><span><span style=color:teal>$eTime</span> = <span style=color:teal>$Today</span>.AddDays(<span style=color:#099>1</span>).ToString(<span style=color:#d14>&#39;MM/dd/yyyy&#39;</span>)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#combine date and time to start reply</span>
-</span></span><span style=display:flex><span><span style=color:teal>$StartTime</span> = <span style=color:#d14>&#34;$sTime 17:00:00&#34;</span>
+</span></span><span style=display:flex><span><span style=color:teal>$StartTime</span> = <span style=color:#d14>&#34;</span><span style=color:teal>$sTime</span><span style=color:#d14> 17:00:00&#34;</span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#combine date and time to end reply </span>
-</span></span><span style=display:flex><span><span style=color:teal>$EndTime</span> = <span style=color:#d14>&#34;$eTime 08:00:00&#34;</span>
+</span></span><span style=display:flex><span><span style=color:teal>$EndTime</span> = <span style=color:#d14>&#34;</span><span style=color:teal>$eTime</span><span style=color:#d14> 08:00:00&#34;</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#if Friday set from Friday 5pm to Monday 8am</span>
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$Day</span> <span style=color:#000;font-weight:700>-eq</span> <span style=color:#d14>&#34;Friday&#34;</span>) {
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic>#format weekend dates </span>
-</span></span><span style=display:flex><span>    <span style=color:teal>$wTime</span> = <span style=color:teal>$Today</span>.AddDays(3).ToString(<span style=color:#d14>&#39;MM/dd/yyyy&#39;</span>)
+</span></span><span style=display:flex><span>    <span style=color:teal>$wTime</span> = <span style=color:teal>$Today</span>.AddDays(<span style=color:#099>3</span>).ToString(<span style=color:#d14>&#39;MM/dd/yyyy&#39;</span>)
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic>#combine weekend and time </span>
-</span></span><span style=display:flex><span>    <span style=color:teal>$weekendTime</span> = <span style=color:#d14>&#34;$wTime 08:00:00&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:teal>$weekendTime</span> = <span style=color:#d14>&#34;</span><span style=color:teal>$wTime</span><span style=color:#d14> 08:00:00&#34;</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
@@ -285,8 +285,8 @@ Our customer will be moving to Azure later so we will probably revisit this as A
 </span></span></span><span style=display:flex><span><span style=color:#d14>    &#34;automaticRepliesSetting&#34;: {
 </span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;status&#34;: &#34;Scheduled&#34;,
 </span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;externalAudience&#34;: &#34;all&#34;,
-</span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;internalReplyMessage&#34;: &#34;$Message&#34;,
-</span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;externalReplyMessage&#34;: &#34;$Message&#34;,
+</span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;internalReplyMessage&#34;: &#34;</span><span style=color:teal>$Message</span><span style=color:#d14>&#34;,
+</span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;externalReplyMessage&#34;: &#34;</span><span style=color:teal>$Message</span><span style=color:#d14>&#34;,
 </span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;scheduledStartDateTime&#34;: {
 </span></span></span><span style=display:flex><span><span style=color:#d14>            &#34;dateTime&#34;: &#34;</span>$(<span style=color:teal>$StartTime</span>.ToUniversalTime().ToString(<span style=color:#d14>&#34;s&#34;</span>))<span style=color:#d14>&#34;,
 </span></span></span><span style=display:flex><span><span style=color:#d14>            &#34;timeZone&#34;: &#34;UTC&#34;
@@ -308,4 +308,4 @@ Our customer will be moving to Azure later so we will probably revisit this as A
 </span></span><span style=display:flex><span>    Fail -ErrorRecord <span style=color:teal>$_</span> -WebHookUrl <span style=color:teal>$WebHookUrl</span>
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></td></tr></table></div></div><h2 id=scheduling-the-script>Scheduling the Script</h2><p>Since this script is scheduling the out-of-office messages, but not setting them directly, it can run any time after the previous out-of-office scheduled time has finished.</p><p>Since my schedule was 5PM to 8AM Monday-Friday, I made a scheduled task and set it up to run Weekly - Monday-Friday at 9AM.</p><p><div class=image><figure><a href=image-12.png target=_blank><img src=image-12.png alt=screenshot></a></figure></div>In my testing, since it was only accessing the Current User&rsquo;s profile, and did not need access to other networked resources, you can skip storing the password to increase security.</p><p><div class=image><figure><a href=image-9.png target=_blank><img src=image-9.png alt=screenshot></a></figure></div>For the program to run, we just need to specify to run the file with powershell.exe. On my system, it was trying to default opening the .ps1 in notepad, so I switched to directly running powershell.exe to bypass that.</p><p><div class=image><figure><a href=image-13.png target=_blank><img src=image-13.png alt=screenshot></a></figure></div></p><h2 id=conclusion>Conclusion</h2><p>With this setup, we have an automated flow to update the Out-Of-Office replies outside of business hours. To recap, we have:</p><ul><li>Made an app registration to grant the needed API Permissions to.</li><li>Setup and used an authentication certificate for our script to connect without a user logging in.</li><li>Made a script to invoke the Microsoft Graph API and make our change.</li><li>Used a simple scheduled task that could run on any machine with access to the certificate to make the changes. Mostly just for a scheduling and recurrence mechanism.</li></ul><p>This was just one small example of using the tools at hand, within our current constraints of this customer that doesn&rsquo;t currently have an Azure Subscription to charge against, but it can be used with any tenant.</p><p>What processes are you looking at automating? You could dump a report of user sign-ins every week, fetch email statistics every hour, schedule removing licenses from users who are inactive, run a report of all newly created Teams and Groups in your Tenant and email those out to your admin team, or any number of other things.</p><p>Next time, maybe we can go over some of the serverless options that we could run this on if we have an active subscription, like Azure Functions, or possibly Power Automate.</p><h2 id=where-to-find-me>Where to find me</h2><p>If you have questions, are having problems, or just want to chat over something, you can leave a comment below or reach me on the <a href=https://discord.com/invite/winadmins>WinAdmins Discord</a> at <a href=https://discordapp.com/users/264652399824601088>@PsychoData</a></p><img src=/authors/kevin-crouch/avatar.png alt="Photo of Kevin Crouch"><br><strong>Kevin Crouch</strong>
-<em>Contributor</em><div><a href=https://twitter.com/PsychoData><img src=/img/social/twitter.png></a></div><p>System Administrator</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>
+<em>Contributor</em><div><a href=https://twitter.com/PsychoData><img src=/img/social/twitter.png></a></div><p>System Administrator</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2023 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

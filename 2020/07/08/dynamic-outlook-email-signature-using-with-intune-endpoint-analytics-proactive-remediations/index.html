@@ -63,10 +63,10 @@ In this blog post we will be get familiar with a somewhat novel idea that proact
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># check if signaturefile even exists</span>
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>try</span> {
-</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>if</span> ( (<span style=color:#0086b3>Test-Path</span> <span style=color:teal>$env:APPDATA</span>\microsoft\signatures\<span style=color:teal>$signatureFileName</span> -ErrorAction stop) <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$false</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>if</span> ( (<span style=color:#0086b3>Test-Path</span> <span style=color:teal>$env:APPDATA</span>\microsoft\signatures\<span style=color:teal>$signatureFileName</span> -ErrorAction stop) <span style=color:#000;font-weight:700>-eq</span> $false) {
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;$signatureFileName does not exist&#34;</span>
-</span></span><span style=display:flex><span>        exit 1
+</span></span><span style=display:flex><span>        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;</span><span style=color:teal>$signatureFileName</span><span style=color:#d14> does not exist&#34;</span>
+</span></span><span style=display:flex><span>        exit <span style=color:#099>1</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>}
@@ -74,25 +74,25 @@ In this blog post we will be get familiar with a somewhat novel idea that proact
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>catch</span> {
 </span></span><span style=display:flex><span>    <span style=color:teal>$errmeg</span> = <span style=color:teal>$_</span>.exception.message
 </span></span><span style=display:flex><span>    <span style=color:#0086b3>Write-Error</span> <span style=color:teal>$errmeg</span>
-</span></span><span style=display:flex><span>    exit 1
+</span></span><span style=display:flex><span>    exit <span style=color:#099>1</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># check if the file is out of date</span>
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>try</span> {
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic># check date</span>
-</span></span><span style=display:flex><span>    <span style=color:teal>$lastwritetimeday</span> = (<span style=color:#0086b3>Get-ItemProperty</span> -Path <span style=color:#d14>&#34;$env:APPDATA\microsoft\signatures\$signatureFileName&#34;</span>).LastWriteTime.DayOfYear
+</span></span><span style=display:flex><span>    <span style=color:teal>$lastwritetimeday</span> = (<span style=color:#0086b3>Get-ItemProperty</span> -Path <span style=color:#d14>&#34;</span><span style=color:teal>$env:APPDATA</span><span style=color:#d14>\microsoft\signatures\</span><span style=color:teal>$signatureFileName</span><span style=color:#d14>&#34;</span>).LastWriteTime.DayOfYear
 </span></span><span style=display:flex><span>    <span style=color:teal>$today</span> = (<span style=color:#0086b3>Get-Date</span>).DayOfYear
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$lastwritetimeday</span> <span style=color:#000;font-weight:700>-lt</span> <span style=color:teal>$today</span>) {
 </span></span><span style=display:flex><span>        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;signature is out of date&#34;</span>
-</span></span><span style=display:flex><span>        exit 1
+</span></span><span style=display:flex><span>        exit <span style=color:#099>1</span>
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>catch</span> {
 </span></span><span style=display:flex><span>    <span style=color:teal>$errmeg</span> = <span style=color:teal>$_</span>.exception.message
 </span></span><span style=display:flex><span>    <span style=color:#0086b3>Write-Error</span> <span style=color:teal>$errmeg</span>
-</span></span><span style=display:flex><span>    exit 1
+</span></span><span style=display:flex><span>    exit <span style=color:#099>1</span>
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></td></tr></table></div></div><h2 id=remediation>Remediation</h2><p>Now on to the remediation part. You will need to populate a few variables.</p><p><code>$signatureFileName</code> (same as in the discovery script)</p><p>The information required for these can be found in Azure AD in the app properties, as detailed in Brads blog:<br><code>$clientId</code><br><code>$tenantName</code><br><code>$clientSecret</code>
 <em>Pro Tip: the v1.0 graph will only return a few basic attributes about the user, the beta graph returns a whole lot more.</em></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1> 1</a>
@@ -169,7 +169,7 @@ In this blog post we will be get familiar with a somewhat novel idea that proact
 </span></span><span style=display:flex><span>    Client_Secret = <span style=color:teal>$clientSecret</span>
 </span></span><span style=display:flex><span>} 
 </span></span><span style=display:flex><span> 
-</span></span><span style=display:flex><span><span style=color:teal>$TokenResponse</span> = <span style=color:#0086b3>Invoke-RestMethod</span> -Uri <span style=color:#d14>&#34;https://login.microsoftonline.com/$TenantName/oauth2/v2.0/token&#34;</span> -Method POST -Body <span style=color:teal>$ReqTokenBody</span>
+</span></span><span style=display:flex><span><span style=color:teal>$TokenResponse</span> = <span style=color:#0086b3>Invoke-RestMethod</span> -Uri <span style=color:#d14>&#34;https://login.microsoftonline.com/</span><span style=color:teal>$TenantName</span><span style=color:#d14>/oauth2/v2.0/token&#34;</span> -Method POST -Body <span style=color:teal>$ReqTokenBody</span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># $apiUrl = &#39;https://graph.microsoft.com/beta/users/7b613445-d1b8-4af3-938b-c08a4e5b1160&#39;</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># who is currently logged on to the system</span>
@@ -202,7 +202,7 @@ In this blog post we will be get familiar with a somewhat novel idea that proact
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#EndRegion HTML</span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#Region Output</span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># check if the signatures directory exists, if not, create it</span>
-</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>if</span> ((<span style=color:#0086b3>Test-Path</span> <span style=color:teal>$env:APPDATA</span>\microsoft\signatures) <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$false</span>) {<span style=color:#0086b3>new-item</span> -ItemType directory -Name <span style=color:#d14>&#34;signatures&#34;</span> -Path <span style=color:teal>$env:APPDATA</span>\microsoft\}
+</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>if</span> ((<span style=color:#0086b3>Test-Path</span> <span style=color:teal>$env:APPDATA</span>\microsoft\signatures) <span style=color:#000;font-weight:700>-eq</span> $false) {<span style=color:#0086b3>new-item</span> -ItemType directory -Name <span style=color:#d14>&#34;signatures&#34;</span> -Path <span style=color:teal>$env:APPDATA</span>\microsoft\}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># output the .htm signature file</span>
 </span></span><span style=display:flex><span>
@@ -211,4 +211,4 @@ In this blog post we will be get familiar with a somewhat novel idea that proact
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#EndRegion Output</span>
 </span></span></code></pre></td></tr></table></div></div><h2 id=deployment>Deployment</h2><p>Now you just need to deploy the script package to a group, make sure its set to run with the logged-on credentials and use 64-bit PowerShell. Follow the steps in Jake&rsquo;s post to create a new script and deploy it.</p><p>Once the script package is on a client, the signature will appear in Outlook, though Outlook will not configure it as a default on its own. (perhaps an idea for another blog post).
 <a href="https://www.sysmansquad.com/?attachment_id=1447"><div class=image><figure><a href=outlook-signature.png target=_blank><img src=outlook-signature.png alt=screenshot></a></figure></div></a></p><h3 id=questionsissues>Questions/Issues?</h3><p>If you run into any issues or have questions about anything Intune head over to the<a href=https://aka.ms/winadmins>WinAdmins discord community</a>and go to the <code>#Intune</code> channel, and ask Jake to help you.</p><img src=/authors/johannes/avatar.png alt="Photo of Jóhannes Geir Kristjánsson"><br><strong>Jóhannes Geir Kristjánsson</strong>
-<em>Contributor</em><div><a href=https://twitter.com/jgkps><img src=/img/social/twitter.png></a></div><p>Microsoft MVP, enterprise mobility, Owner of winadmins discord and stunt guy on http://intune.training</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>
+<em>Contributor</em><div><a href=https://twitter.com/jgkps><img src=/img/social/twitter.png></a></div><p>Microsoft MVP, enterprise mobility, Owner of winadmins discord and stunt guy on http://intune.training</p><hr></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2023 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

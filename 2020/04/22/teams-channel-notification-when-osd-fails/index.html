@@ -133,7 +133,7 @@ Open Teams. Select a channel, or create a new channel specific for these notific
 </span></span><span style=display:flex><span>    This script uses Microsoft Teams to notify when a OSD task sequence has failed.
 </span></span><span style=display:flex><span>    .REFERENCE
 </span></span><span style=display:flex><span>    https<span style=color:#a61717;background-color:#e3d2d2>:</span>//docs.microsoft.com/outlook/<span style=color:#0086b3>actionable-messages</span>/<span style=color:#0086b3>message-card</span>-reference
-</span></span><span style=display:flex><span>    https<span style=color:#a61717;background-color:#e3d2d2>:</span>//www.scconfigmgr.com/2017/10/06/<span style=color:#0086b3>configmgr-osd</span>-notification-service-teams/
+</span></span><span style=display:flex><span>    https<span style=color:#a61717;background-color:#e3d2d2>:</span>//www.scconfigmgr.com/<span style=color:#099>2017</span>/<span style=color:#099>10</span>/<span style=color:#099>06</span>/<span style=color:#0086b3>configmgr-osd</span>-notification-service-teams/
 </span></span><span style=display:flex><span>    https<span style=color:#a61717;background-color:#e3d2d2>:</span>//messagecardplayground.azurewebsites.net/
 </span></span><span style=display:flex><span>    ==================================================================
 </span></span><span style=display:flex><span>    .TODO
@@ -158,10 +158,10 @@ Open Teams. Select a channel, or create a new channel specific for these notific
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$TSenv</span>.Value(<span style=color:#d14>&#34;_SMSTSPackageName&#34;</span>) <span style=color:#000;font-weight:700>-ne</span> <span style=color:#d14>&#34;&#34;</span>) { <span style=color:teal>$Name</span> = <span style=color:teal>$TSenv</span>.value(<span style=color:#d14>&#34;OSDComputerName&#34;</span>) } <span style=color:#000;font-weight:700>else</span> { <span style=color:teal>$Name</span> = (<span style=color:#0086b3>Get-WmiObject</span> -Class Win32_ComputerSystem).Name }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># Computer Serial Number</span>
-</span></span><span style=display:flex><span><span style=color:teal>[string]</span><span style=color:teal>$SerialNumber</span> = (<span style=color:#0086b3>Get-WmiObject</span> win32_bios).SerialNumber
+</span></span><span style=display:flex><span>[<span style=color:teal>string</span>]<span style=color:teal>$SerialNumber</span> = (<span style=color:#0086b3>Get-WmiObject</span> win32_bios).SerialNumber
 </span></span><span style=display:flex><span>    
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># IP Address of the Computer</span>
-</span></span><span style=display:flex><span><span style=color:teal>$IPAddress</span> = (<span style=color:#0086b3>Get-WmiObject</span> win32_Networkadapterconfiguration | <span style=color:#0086b3>Where-Object</span> { <span style=color:teal>$_</span>.ipaddress <span style=color:#000;font-weight:700>-notlike</span> <span style=color:teal>$null</span> }).IPaddress | <span style=color:#0086b3>Select-Object</span> -First 1
+</span></span><span style=display:flex><span><span style=color:teal>$IPAddress</span> = (<span style=color:#0086b3>Get-WmiObject</span> win32_Networkadapterconfiguration | <span style=color:#0086b3>Where-Object</span> { <span style=color:teal>$_</span>.ipaddress <span style=color:#000;font-weight:700>-notlike</span> $null }).IPaddress | <span style=color:#0086b3>Select-Object</span> -First <span style=color:#099>1</span>
 </span></span><span style=display:flex><span>    
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#$TS Name</span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#DEBUG# $TSName = &#34;TSName&#34;</span>
@@ -169,7 +169,7 @@ Open Teams. Select a channel, or create a new channel specific for these notific
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic>#Error Code</span>
 </span></span><span style=display:flex><span><span style=color:teal>$TSLastError</span> = (<span style=color:teal>$TSenv</span>.Value(<span style=color:#d14>&#34;ErrorReturnCode&#34;</span>))
-</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>If</span>(<span style=color:teal>[string]</span>::IsNullOrEmpty(<span style=color:teal>$TSLastError</span>)){<span style=color:teal>$TSLastError</span> = <span style=color:#d14>&#34;Unknown Error. Check Logs.&#34;</span>}
+</span></span><span style=display:flex><span><span style=color:#000;font-weight:700>If</span>([<span style=color:teal>string</span>]::IsNullOrEmpty(<span style=color:teal>$TSLastError</span>)){<span style=color:teal>$TSLastError</span> = <span style=color:#d14>&#34;Unknown Error. Check Logs.&#34;</span>}
 </span></span><span style=display:flex><span>    
 </span></span><span style=display:flex><span><span style=color:#998;font-style:italic># JSON for the Teams MessageCard (LEGACY)</span>
 </span></span><span style=display:flex><span><span style=color:teal>$body</span> = <span style=color:#d14>@&#34;
@@ -178,12 +178,12 @@ Open Teams. Select a channel, or create a new channel specific for these notific
 </span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;@context&#34;: &#34;https://schema.org/extensions&#34;,
 </span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;summary&#34;: &#34;OSD Failure Card&#34;,
 </span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;themeColor&#34;: &#34;0078D7&#34;,
-</span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;title&#34;: &#34;$Name Failed to build&#34;,
+</span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;title&#34;: &#34;</span><span style=color:teal>$Name</span><span style=color:#d14> Failed to build&#34;,
 </span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;text&#34;: &#34;&#34;,
 </span></span></span><span style=display:flex><span><span style=color:#d14>        &#34;sections&#34;: [
 </span></span></span><span style=display:flex><span><span style=color:#d14>            {
 </span></span></span><span style=display:flex><span><span style=color:#d14>                &#34;activityTitle&#34;: &#34;Task Sequence&#34;,
-</span></span></span><span style=display:flex><span><span style=color:#d14>                &#34;activitySubtitle&#34;: &#34;$TSName&#34;,
+</span></span></span><span style=display:flex><span><span style=color:#d14>                &#34;activitySubtitle&#34;: &#34;</span><span style=color:teal>$TSName</span><span style=color:#d14>&#34;,
 </span></span></span><span style=display:flex><span><span style=color:#d14>                &#34;activityImage&#34;: &#34;https://media.giphy.com/media/27EhcDHnlkw1O/giphy.gif&#34;
 </span></span></span><span style=display:flex><span><span style=color:#d14>            },
 </span></span></span><span style=display:flex><span><span style=color:#d14>            {
@@ -191,31 +191,31 @@ Open Teams. Select a channel, or create a new channel specific for these notific
 </span></span></span><span style=display:flex><span><span style=color:#d14>                &#34;facts&#34;: [
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    {
 </span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;name&#34;: &#34;Name:&#34;,
-</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;$Name&#34;
+</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;</span><span style=color:teal>$Name</span><span style=color:#d14>&#34;
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    },
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    {
 </span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;name&#34;: &#34;Date Time:&#34;,
-</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;$DateTime&#34;
+</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;</span><span style=color:teal>$DateTime</span><span style=color:#d14>&#34;
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    },
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    {
 </span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;name&#34;: &#34;IP Number:&#34;,
-</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;$IPAddress&#34;
+</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;</span><span style=color:teal>$IPAddress</span><span style=color:#d14>&#34;
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    },
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    {
 </span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;name&#34;: &#34;Make:&#34;,
-</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;$Make&#34;
+</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;</span><span style=color:teal>$Make</span><span style=color:#d14>&#34;
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    },
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    {
 </span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;name&#34;: &#34;Model:&#34;,
-</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;$Model&#34;
+</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;</span><span style=color:teal>$Model</span><span style=color:#d14>&#34;
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    },
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    {
 </span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;name&#34;: &#34;Serial:&#34;,
-</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;$SerialNumber&#34;
+</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;</span><span style=color:teal>$SerialNumber</span><span style=color:#d14>&#34;
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    },
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    {
 </span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;name&#34;: &#34;Last Error&#34;,
-</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;$TSLastError&#34;
+</span></span></span><span style=display:flex><span><span style=color:#d14>                        &#34;value&#34;: &#34;</span><span style=color:teal>$TSLastError</span><span style=color:#d14>&#34;
 </span></span></span><span style=display:flex><span><span style=color:#d14>                    }
 </span></span></span><span style=display:flex><span><span style=color:#d14>                ]
 </span></span></span><span style=display:flex><span><span style=color:#d14>            },
@@ -229,4 +229,4 @@ Open Teams. Select a channel, or create a new channel specific for these notific
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#0086b3>Invoke-RestMethod</span> -uri <span style=color:teal>$uri</span> -Method Post -body <span style=color:teal>$body</span> -ContentType <span style=color:#d14>&#39;application/json&#39;</span>
 </span></span></code></pre></td></tr></table></div></div><h3 id=customizing-the-messagecard>Customizing the MessageCard</h3><p>If you want to change the JSON, there is a reference guide here: <a href=https://docs.microsoft.com/en-us/outlook/actionable-messages/message-card-reference>https://docs.microsoft.com/en-us/outlook/actionable-messages/message-card-reference</a></p><p>And a Playground site: <a href=https://messagecardplayground.azurewebsites.net/>https://messagecardplayground.azurewebsites.net/</a></p><p>This modification of the PowerShell script means you can just copy/paste the JSON as long as it&rsquo;s wrapped inside $body = @" &mldr; &ldquo;@</p><p><strong>NB: Incoming Webconnectors only support the Legacy MessageCard format at this time.</strong></p><h2 id=step-3>Step 3 - Create Package for Script</h2><ul><li>Copy the PowerShell script to your Config Manager package source share.</li><li>In Config Manager Console, create a new Package.</li><li>Give it a <strong>Name</strong>, <strong>Description</strong>, and specify the <strong>source share</strong></li></ul><blockquote><p><em>Removed broken screenshot - editor</em></p></blockquote><ul><li>Select <strong>Do not create a program</strong></li></ul><blockquote><p><em>Removed broken screenshot - editor</em></p></blockquote><ul><li>Complete the wizard.</li><li>Distribute the Package contents.</li></ul><h2 id=step-4>Step 4 - Task Sequence</h2><p>Edit the task sequence for OSD.</p><p>Our TS is set up with logic and a section to run if the task sequence encounters an error. This is where we will put the OSD Failure notification script.</p><p><em>For more information on how to set up Error Handling in OSD Task Sequence, see <a href=https://ccmexec.com/author/jonil/>Jörgen Nilsson&rsquo;s</a> post about it here: <a href=https://ccmexec.com/2016/12/error-handling-in-ts-without-mdt-using-osdbackground/>https://ccmexec.com/2016/12/error-handling-in-ts-without-mdt-using-osdbackground/</a></em></p><blockquote><p><em>Removed broken screenshot - editor</em></p></blockquote><ul><li>After the Gather step, we want to add a Run PowerShell Script task.</li><li>Select the package with our Script.</li><li>Change the PowerShell execution policy to Bypass</li></ul><blockquote><p><em>Removed broken screenshot - editor</em></p></blockquote><ul><li>Click OK and that&rsquo;s it set up!</li></ul><p>If you want to try emulating a failure, create a <strong>Run Command Line</strong> task somewhere in your Task Sequence that runs the following:</p><p>cmd /c exit 8008135</p><blockquote><p><em>Removed broken screenshot - editor</em></p></blockquote><p>So now, if your task sequence runs into an error, you will now get a lovely message straight into your Teams channel:</p><blockquote><p><em>Removed broken screenshot - editor</em></p></blockquote><img src=/authors/grant/avatar.png alt="Photo of Grant Dickins"><br><strong>Grant Dickins</strong>
-<em>Contributor</em><div><a href=https://twitter.com/_G_rant><img src=/img/social/twitter.png></a></div><p>Grant has worked supporting IT in the Oil & Gas industry for 10 years, has a keen interest in Config Manager and trying to bring the industry kicking and screaming into the modern cloud-based world.</p><hr></div><div class=post-share><div class="post-share-box share-comments"></div></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>
+<em>Contributor</em><div><a href=https://twitter.com/_G_rant><img src=/img/social/twitter.png></a></div><p>Grant has worked supporting IT in the Oil & Gas industry for 10 years, has a keen interest in Config Manager and trying to bring the industry kicking and screaming into the modern cloud-based world.</p><hr></div><div class=post-share><div class="post-share-box share-comments"></div></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2023 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>

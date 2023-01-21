@@ -50,22 +50,22 @@ the TaskbarMn DWORD controls this Then it simply uninstalls the appx package for
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic># check the reg key for the taskbar teams app icon</span>
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic># Reg2CI (c) 2021 by Roger Zander</span>
-</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>if</span> ( (<span style=color:#0086b3>Get-ItemPropertyValue</span> -LiteralPath <span style=color:#d14>&#39;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&#39;</span> -Name <span style=color:#d14>&#39;TaskbarMn&#39;</span> -ErrorAction Stop ) <span style=color:#000;font-weight:700>-eq</span> 0 ) { <span style=color:teal>$RegCompliance</span> = <span style=color:teal>$true</span> }
-</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>else</span> { <span style=color:teal>$RegCompliance</span> = <span style=color:teal>$false</span> } 
+</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>if</span> ( (<span style=color:#0086b3>Get-ItemPropertyValue</span> -LiteralPath <span style=color:#d14>&#39;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&#39;</span> -Name <span style=color:#d14>&#39;TaskbarMn&#39;</span> -ErrorAction Stop ) <span style=color:#000;font-weight:700>-eq</span> <span style=color:#099>0</span> ) { <span style=color:teal>$RegCompliance</span> = $true }
+</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>else</span> { <span style=color:teal>$RegCompliance</span> = $false } 
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic># check if the teams app is installed</span>
-</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$null</span> <span style=color:#000;font-weight:700>-eq</span> (<span style=color:#0086b3>Get-AppxPackage</span> -Name MicrosoftTeams) ) { <span style=color:teal>$AppCompliance</span> = <span style=color:teal>$true</span> }
-</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>else</span> { <span style=color:teal>$AppCompliance</span> = <span style=color:teal>$false</span> }
+</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>if</span> ($null <span style=color:#000;font-weight:700>-eq</span> (<span style=color:#0086b3>Get-AppxPackage</span> -Name MicrosoftTeams) ) { <span style=color:teal>$AppCompliance</span> = $true }
+</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>else</span> { <span style=color:teal>$AppCompliance</span> = $false }
 </span></span><span style=display:flex><span>    
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic># evaluate the compliance</span>
-</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$RegCompliance</span> <span style=color:#000;font-weight:700>-and</span> <span style=color:teal>$AppCompliance</span> <span style=color:#000;font-weight:700>-eq</span> <span style=color:teal>$true</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>if</span> (<span style=color:teal>$RegCompliance</span> <span style=color:#000;font-weight:700>-and</span> <span style=color:teal>$AppCompliance</span> <span style=color:#000;font-weight:700>-eq</span> $true) {
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;Success, app/reg removed&#34;</span>
-</span></span><span style=display:flex><span>        exit 0
+</span></span><span style=display:flex><span>        exit <span style=color:#099>0</span>
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>else</span> {
 </span></span><span style=display:flex><span>        <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;Failure, app/reg detected&#34;</span>
-</span></span><span style=display:flex><span>        exit 1
+</span></span><span style=display:flex><span>        exit <span style=color:#099>1</span>
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>   
 </span></span><span style=display:flex><span>    
@@ -73,7 +73,7 @@ the TaskbarMn DWORD controls this Then it simply uninstalls the appx package for
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>catch</span> {
 </span></span><span style=display:flex><span>    <span style=color:teal>$errMsg</span> = _.Exception.Message
 </span></span><span style=display:flex><span>    <span style=color:#0086b3>Write-Host</span> <span style=color:teal>$errMsg</span>
-</span></span><span style=display:flex><span>    exit 1
+</span></span><span style=display:flex><span>    exit <span style=color:#099>1</span>
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></td></tr></table></div></div><p>Here is the remediation code, parts of it were made using the <a href=https://reg2ps.azurewebsites.net/>reg2ps website</a> which i highly recommend.</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1> 1</a>
 </span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2> 2</a>
@@ -106,10 +106,10 @@ the TaskbarMn DWORD controls this Then it simply uninstalls the appx package for
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic># remove the taskbar icon</span>
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic># Reg2CI (c) 2021 by Roger Zander</span>
-</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>if</span> ((<span style=color:#0086b3>Test-Path</span> -LiteralPath <span style=color:#d14>&#34;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&#34;</span>) <span style=color:#000;font-weight:700>-ne</span> <span style=color:teal>$true</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#000;font-weight:700>if</span> ((<span style=color:#0086b3>Test-Path</span> -LiteralPath <span style=color:#d14>&#34;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&#34;</span>) <span style=color:#000;font-weight:700>-ne</span> $true) {
 </span></span><span style=display:flex><span>        <span style=color:#0086b3>New-Item</span> <span style=color:#d14>&#34;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&#34;</span> -Force -ErrorAction Stop 
 </span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    <span style=color:#0086b3>New-ItemProperty</span> -LiteralPath <span style=color:#d14>&#39;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&#39;</span> -Name <span style=color:#d14>&#39;TaskbarMn&#39;</span> -Value 0 -PropertyType DWord -Force -ErrorAction Stop
+</span></span><span style=display:flex><span>    <span style=color:#0086b3>New-ItemProperty</span> -LiteralPath <span style=color:#d14>&#39;HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&#39;</span> -Name <span style=color:#d14>&#39;TaskbarMn&#39;</span> -Value <span style=color:#099>0</span> -PropertyType DWord -Force -ErrorAction Stop
 </span></span><span style=display:flex><span>    
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic># uninstall the teams consumer app</span>
@@ -117,13 +117,13 @@ the TaskbarMn DWORD controls this Then it simply uninstalls the appx package for
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#998;font-style:italic># as nothing errored out, we will report success</span>
 </span></span><span style=display:flex><span>    <span style=color:#0086b3>Write-Host</span> <span style=color:#d14>&#34;Success, regkey set and app uninstalled&#34;</span>
-</span></span><span style=display:flex><span>    exit 0
+</span></span><span style=display:flex><span>    exit <span style=color:#099>0</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#000;font-weight:700>catch</span> {
 </span></span><span style=display:flex><span>    <span style=color:teal>$errMsg</span> = _.Exception.Message
 </span></span><span style=display:flex><span>    <span style=color:#0086b3>Write-Host</span> <span style=color:teal>$errMsg</span>
-</span></span><span style=display:flex><span>    exit 1
+</span></span><span style=display:flex><span>    exit <span style=color:#099>1</span>
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></td></tr></table></div></div><h2 id=setting-it-up>Setting it up</h2><p>Go to the <a href=https://endpoint.microsoft.com/#blade/Microsoft_Intune_Enrollment/UXAnalyticsMenu/proactiveRemediations>Proactive Remediations blade</a> in the Intune admin portal, create a new PR and add the detection and remediation scripts, configure the PR to run in user context and 64bit, and deploy accordingly.</p><p><div class=image><figure><a href=WindowsSandboxClient_EZVCQZGC8M.png target=_blank><img src=WindowsSandboxClient_EZVCQZGC8M.png alt="Windows Sandbox Client"></a><figcaption>Windows Sandbox Client</figcaption></figure></div></p><p>Once the Remediation has run on the targeted endpoints, your users will be happier and slightly less confused.</p><p><div class=image><figure><a href=j4sLKefuYe.png target=_blank><img src=j4sLKefuYe.png alt="┳━┳ ノ( ゜-゜ノ)"></a><figcaption>┳━┳ ノ( ゜-゜ノ)</figcaption></figure></div></p><img src=/authors/johannes/avatar.png alt="Photo of Jóhannes Geir Kristjánsson"><br><strong>Jóhannes Geir Kristjánsson</strong>
-<em>Contributor</em><div><a href=https://twitter.com/jgkps><img src=/img/social/twitter.png></a></div><p>Microsoft MVP, enterprise mobility, Owner of winadmins discord and stunt guy on http://intune.training</p><hr></div><div class=post-share><div class="post-share-box share-comments"></div></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2022 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>
+<em>Contributor</em><div><a href=https://twitter.com/jgkps><img src=/img/social/twitter.png></a></div><p>Microsoft MVP, enterprise mobility, Owner of winadmins discord and stunt guy on http://intune.training</p><hr></div><div class=post-share><div class="post-share-box share-comments"></div></div><comments id=comments><script src=https://utteranc.es/client.js repo=SysManSquad/sysmansquadblog issue-term=title label="blog comment" theme=github-light crossorigin=anonymous async></script></comments></article></div></div></div><footer id=footer><div class=container><div id=footer-copyright><p class=copyright>&copy; 2023 WinAdmins - https://sysmansquad.com - Systems Management Squad</a></p></div></div></footer></div></body></html>
